@@ -10,6 +10,7 @@ public class MatchFinder : MonoBehaviourPunCallbacks
     public Text playButtonText;
     int seconds = 3;
     const byte START_MATCH_EVENT = 0;
+    
 
     [SerializeField]
     private string roomName = "RandomRoom";
@@ -27,7 +28,6 @@ public class MatchFinder : MonoBehaviourPunCallbacks
     {
         playButtonText.text = "Waiting for second player...";
         PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventRecieved;
-        //TODO: Unsubscribe from event at some point
     }
 
     public override void OnJoinedRoom()

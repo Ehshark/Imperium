@@ -1214,6 +1214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11f3ef439dcb3ea4f952ce771c047f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  connectButton: {fileID: 67722637}
+  connectButtonText: {fileID: 225544632}
   playButton: {fileID: 1086369254}
   userName: {fileID: 440715859}
   gameVersion: 0.0.1
