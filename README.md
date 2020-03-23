@@ -1,5 +1,4 @@
-# Imperium
-##### Seneca Final Project
+# Imperium - Final Project
 
 ## Random Matchmaking using Photon - (March 23, 2020):
 
