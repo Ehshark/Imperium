@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class MatchFinder : MonoBehaviourPunCallbacks
 {
     public Text playButtonText;
-    int seconds = 3;
+    int seconds = 5;
     const byte START_MATCH_EVENT = 0;
     const string characters = "abcdefghijklmnopqrstuvwxyz0123456789";
     int charAmount = 10;

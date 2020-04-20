@@ -21,8 +21,5 @@ public class UIManager : MonoBehaviour
             yourName.text = "Client: " + GameManager.userName;
             opponentName.text = "Host: " + PhotonNetwork.PlayerListOthers[0].NickName;
         }
-            
-
-
     }
 }
