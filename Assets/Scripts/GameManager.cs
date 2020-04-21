@@ -1,31 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    static GameManager instance = null;
     public static string UserName { get; set; }
 
-    public static Transform alliedMinionZone;
+    public Transform alliedMinionZone;
+    public Transform instructionsObj;
+    public Transform enemyMinionZone;
+    public bool canPlayCards = true;
 
-    public static GameManager Instance
-    {
-        get
-        {
-            return instance;
-        }
-    }
+    public static GameManager Instance { get; private set; } = null;
 
     private void Awake()
     {
-        if (instance) {
+        if (Instance)
+        {
             DestroyImmediate(gameObject);
             return;
         }
 
-        instance = this;
+        Instance = this;
         DontDestroyOnLoad(gameObject);
-        alliedMinionZone = GameObject.Find("AlliedMinionsPanel").transform;
+    }
+
+    public void CleanUpListeners()
+    {
+        Destroy(enemyMinionZone.gameObject.GetComponent<DestroyMinionListener>());
     }
 }

@@ -6,18 +6,23 @@ using UnityEngine.EventSystems;
 
 public class MinionBehaviour : MonoBehaviour, IPointerDownHandler
 {
+    public bool hasBattlecry;
     GameObject minion;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        minion = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
-        if (minion.transform.parent.name != "AlliedMinionsPanel")
-            StartCoroutine(PlayMinion());
+        if (GameManager.Instance.canPlayCards)
+        {
+            GameManager.Instance.canPlayCards = false;
+            minion = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
+            if (minion.transform.parent.name != "AlliedMinionsPanel")
+                StartCoroutine(PlayMinion());
+        }
     }
 
     IEnumerator PlayMinion()
     {
-        Transform minionZone = GameManager.alliedMinionZone;
+        Transform minionZone = GameManager.Instance.alliedMinionZone;
         Image image = minionZone.GetComponent<Image>();
         Color color = image.color;
         while (image.color.a < 1) //use "< 1" when fading in
@@ -31,5 +36,10 @@ public class MinionBehaviour : MonoBehaviour, IPointerDownHandler
 
         PlayMinionCommand playMinionCmd = new PlayMinionCommand(minion);
         playMinionCmd.AddToQueue();
+    }
+
+    void Start()
+    {
+        hasBattlecry = true;
     }
 }

@@ -22,12 +22,16 @@ public class Command
         // 2) use coroutines (IEnumerator) and WaitFor... to introduce delays, call CommandExecutionComplete() in the end of coroutine
     }
 
-    public static void CommandExecutionComplete()
+    public virtual void CommandExecutionComplete()
     {
         if (CommandQueue.Count > 0)
             PlayFirstCommandFromQueue();
         else
+        {
             playingQueue = false;
+            GameManager.Instance.canPlayCards = true;
+        }
+
         //if (GameManager.Instance.whoseTurn != null)
         //    GameManager.Instance.whoseTurn.HighlightPlayableCards();
     }
