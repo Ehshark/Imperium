@@ -1,11 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PlayMinionCommand : ICommand
+public class PlayMinionCommand : Command
 {
-    public void Execute()
+    readonly GameObject minion;
+
+    public PlayMinionCommand(GameObject m)
     {
-        
+        minion = m;
     }
+
+    public override void StartCommandExecution()
+    {
+        minion.transform.SetParent(GameManager.alliedMinionZone);
+        CommandExecutionComplete();
+    }
+
+
 }

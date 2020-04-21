@@ -5,7 +5,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     static GameManager instance = null;
-    public static string userName { get; set; }
+    public static string UserName { get; set; }
+
+    public static Transform alliedMinionZone;
 
     public static GameManager Instance
     {
@@ -24,5 +26,6 @@ public class GameManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+        alliedMinionZone = GameObject.Find("AlliedMinionsPanel").transform;
     }
 }

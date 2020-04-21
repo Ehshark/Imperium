@@ -17,7 +17,7 @@ public class PhotonConnector : MonoBehaviourPunCallbacks
             return;
 
         PhotonNetwork.NickName = userName.text;
-        GameManager.userName = userName.text;
+        GameManager.UserName = userName.text;
         Debug.Log("Connecting to Photon...");
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = gameVersion;
