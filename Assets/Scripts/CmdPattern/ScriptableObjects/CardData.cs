@@ -65,7 +65,6 @@ public class CardData : ScriptableObject
     public object Effect1 { get => effect1; set => effect1 = value; }
     public string EffectText2 { get => effectText2; set => effectText2 = value; }
     public object Effect2 { get => effect2; set => effect2 = value; }
-    public Image Image { get => image; set => image = value; }
     public int AttackDamage { get => attackDamage; set => attackDamage = value; }
     public string Health { get => health; set => health = value; }
     public string CardClass { get => cardClass; set => cardClass = value; }
