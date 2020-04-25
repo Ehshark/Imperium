@@ -6,8 +6,11 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "New CardData", menuName = "Card Data", order = 51)]
 public class CardData : ScriptableObject
 {
+
     [SerializeField]
     private Color color;
+    [SerializeField]
+    private int minionID;
     [SerializeField]
     private int goldAndManaCost;
     [SerializeField]
@@ -59,6 +62,7 @@ public class CardData : ScriptableObject
 
     public Color Color { get => color; set => color = value; }
     public int GoldAndManaCost { get => goldAndManaCost; set => goldAndManaCost = value; }
+    public int MinionID { get => minionID; set => minionID = value; }
     public string ConditionText { get => conditionText; set => conditionText = value; }
     public object Condition { get => condition; set => condition = value; }
     public string EffectText1 { get => effectText1; set => effectText1 = value; }
@@ -73,4 +77,5 @@ public class CardData : ScriptableObject
     public bool IsSilenced { get => isSilenced; set => isSilenced = value; }
     public object EnemyDamageDealt { get => enemyDamageDealt; set => enemyDamageDealt = value; }
     public string AllyClass { get => allyClass; set => allyClass = value; }
+
 }
