@@ -34,7 +34,7 @@ public class CardData : ScriptableObject
     [SerializeField]
     private int attackDamage;
     [SerializeField]
-    private string health;
+    private int health;
     [SerializeField]
     private Image healthIcon;
     [SerializeField]
@@ -70,7 +70,7 @@ public class CardData : ScriptableObject
     public string EffectText2 { get => effectText2; set => effectText2 = value; }
     public object Effect2 { get => effect2; set => effect2 = value; }
     public int AttackDamage { get => attackDamage; set => attackDamage = value; }
-    public string Health { get => health; set => health = value; }
+    public int Health { get => health; set => health = value; }
     public string CardClass { get => cardClass; set => cardClass = value; }
     public bool IsPromoted { get => isPromoted; set => isPromoted = value; }
     public bool IsTapped { get => isTapped; set => isTapped = value; }
