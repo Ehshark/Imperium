@@ -13,16 +13,13 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         if (PhotonNetwork.IsMasterClient) {
-            yourName.text = "Host: " + GameManager.userName;
+            yourName.text = "Host: " + GameManager.UserName;
             opponentName.text = "Client: " + PhotonNetwork.PlayerListOthers[0].NickName;
         }
             
         else {
-            yourName.text = "Client: " + GameManager.userName;
+            yourName.text = "Client: " + GameManager.UserName;
             opponentName.text = "Host: " + PhotonNetwork.PlayerListOthers[0].NickName;
         }
-            
-
-
     }
 }
