@@ -45,3 +45,6 @@ Thumbs.db
 
 # Art Assets from Unity Asset Store
 Assets/VisualAssets
+
+# All the cards (scriptableObjects)
+Assets/Cards
