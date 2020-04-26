@@ -14,51 +14,36 @@ public class CardData : ScriptableObject
     [SerializeField]
     private int goldAndManaCost;
     [SerializeField]
-    private Image goldOrManaIcon;
-    [SerializeField]
     private string conditionText;
-    [SerializeField]
+
     private object condition;
     [SerializeField]
-    private Image conditionIcon;
-    [SerializeField]
     private string effectText1;
-    [SerializeField]
+
     private object effect1;
+
     [SerializeField]
     private string effectText2;
-    [SerializeField]
+
     private object effect2;
-    [SerializeField]
-    private Image cardArt;
+
     [SerializeField]
     private int attackDamage;
     [SerializeField]
     private int health;
     [SerializeField]
-    private Image healthIcon;
-    [SerializeField]
     private string cardClass;
-    [SerializeField]
-    private Image classIcon;
     [SerializeField]
     private bool isPromoted;
     [SerializeField]
-    private Image promotedIcon;
-    [SerializeField]
     private bool isTapped;
     [SerializeField]
-    private Image tappedIcon;
-    [SerializeField]
     private bool isSilenced;
-    [SerializeField]
-    private Image silencedIcon;
-    [SerializeField]
+
     private object enemyDamageDealt;
+
     [SerializeField]
     private string allyClass;
-    [SerializeField]
-    private Image allyClassIcon;
 
     public Color Color { get => color; set => color = value; }
     public int GoldAndManaCost { get => goldAndManaCost; set => goldAndManaCost = value; }

@@ -8,8 +8,8 @@ using UnityEngine;
 
 public class CreateCardAssets : MonoBehaviour
 {
-    const Int32 BufferSize = 128;
-    private readonly string path = "D:\\UnityProjects\\Unity-Imperium\\Imperium\\Assets\\allMinions.csv";
+    //const Int32 BufferSize = 128;
+    //private readonly string path = "D:\\UnityProjects\\Unity-Imperium\\Imperium\\Assets\\allMinions.csv";
 
     // Start is called before the first frame update
     void Start()
