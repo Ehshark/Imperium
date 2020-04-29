@@ -6,6 +6,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "New CardData", menuName = "Card Data", order = 51)]
 public class CardData : ScriptableObject
 {
+
     [SerializeField]
     private Color color;
     [SerializeField]
@@ -61,4 +62,5 @@ public class CardData : ScriptableObject
     public bool IsSilenced { get => isSilenced; set => isSilenced = value; }
     public object EnemyDamageDealt { get => enemyDamageDealt; set => enemyDamageDealt = value; }
     public string AllyClass { get => allyClass; set => allyClass = value; }
+
 }
