@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
 //using Photon.Pun;
 
 public class UIManager : MonoBehaviour
@@ -13,11 +14,12 @@ public class UIManager : MonoBehaviour
     public List<Sprite> allSprites;
     public List<CardData> cards;
     private CardData tempGo;
+    public GameObject currentCard;
 
-    private int cardIndex = 0;
-    public Text cost;
-    public Text health;
-    public Text damage;
+    public int cardIndex = 0;
+    public TMP_Text cost;
+    public TMP_Text health;
+    public TMP_Text damage;
 
     public Image cardBackground;
     public Image condition;
@@ -26,8 +28,25 @@ public class UIManager : MonoBehaviour
     public Image effect1;
     public Image effect2;
 
+    public static UIManager Instance { get; private set; } = null;
+
+    MinionBehaviour mb;
+
     //public Text yourName;
     //public Text opponentName;
+
+    private void Awake()
+    {
+        if (Instance)
+        {
+            DestroyImmediate(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        mb = currentCard.GetComponent<MinionBehaviour>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +63,8 @@ public class UIManager : MonoBehaviour
         Shuffle();
 
         PopulateCard(cardIndex);
+
+        mb.UpdateCardDescriptions();
 
         //if (PhotonNetwork.IsMasterClient) {
         //    yourName.text = "Host: " + GameManager.UserName;
@@ -201,5 +222,6 @@ public class UIManager : MonoBehaviour
     {
         cardIndex++;
         PopulateCard(cardIndex);
+        mb.UpdateCardDescriptions();
     }
 }
