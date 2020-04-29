@@ -15,6 +15,8 @@ public class SkillTree : MonoBehaviour
     public bool TrashHeroPower = false, PeekHeroPower = false, ExpressedHeroPower = false, RecycleHeroPower = false, HealHeroPower = false, DeathTouchHeroPower = false, UntapHeroPower = false, SilenceHeroPower = false, BuffedAliiedMinionHeroPower = false;
     EventSystem variable;
 
+
+
     public void Trash()
     {
         if (skillTreePanel != null)
