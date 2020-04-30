@@ -12,8 +12,8 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     public List<Sprite> allSprites;
-    public List<CardData> cards;
-    private CardData tempGo;
+    public List<MinionData> cards;
+    private MinionData tempGo;
     public GameObject currentCard;
 
     public int cardIndex = 0;
@@ -53,10 +53,10 @@ public class UIManager : MonoBehaviour
     {
         LoadSprites();
 
-        cards = new List<CardData>();
+        cards = new List<MinionData>();
         for (int i = 0; i < 104; i++)
         {
-            tempGo = Resources.Load("Cards/" + (i + 1)) as CardData;
+            tempGo = Resources.Load("Minions/" + (i + 1)) as MinionData;
             cards.Add(tempGo);
         }
 

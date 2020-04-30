@@ -1,0 +1,11 @@
+Color,ID,Cost,Condition,Effect1,Effect2,Damage,Health,Class,AllyClass
+gray,1,1,,2 Gold,,0,0,,
+gray,2,1,,2 Gold,,0,0,,
+gray,3,1,,2 Gold,,0,0,,
+gray,4,1,,2 Gold,,0,0,,
+gray,5,2,,,,1,2,,
+gray,6,2,,,,1,2,,
+gray,7,0,,1 Health,,0,0,,
+gray,8,0,,1 Health,,0,0,,
+gray,9,0,,1 Mana,,0,0,,
+gray,10,0,,1 Mana,,0,0,,

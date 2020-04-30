@@ -34,7 +34,7 @@ public class MinionBehaviour : MonoBehaviour, IPointerDownHandler
         {
             transform.localScale = new Vector3(4, 4, 4);
             isEnlarged = true;
-            CardData cd = UIManager.Instance.cards[UIManager.Instance.cardIndex];
+            MinionData cd = UIManager.Instance.cards[UIManager.Instance.cardIndex];
             TMP_Text text = descriptions[13].GetComponent<TMP_Text>();
             if (!text.text.Equals(""))
                 foreach (Transform t in descriptions)
@@ -71,7 +71,7 @@ public class MinionBehaviour : MonoBehaviour, IPointerDownHandler
 
     public void UpdateCardDescriptions()
     {
-        CardData cd = UIManager.Instance.cards[UIManager.Instance.cardIndex];
+        MinionData cd = UIManager.Instance.cards[UIManager.Instance.cardIndex];
         TMP_Text text = descriptions[1].GetComponent<TMP_Text>();
         text.text = "This minion's gold and mana cost is " + cd.GoldAndManaCost;
         text = descriptions[3].GetComponent<TMP_Text>();

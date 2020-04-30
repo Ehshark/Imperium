@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "New CardData", menuName = "Card Data", order = 51)]
-public class CardData : ScriptableObject
+[CreateAssetMenu(fileName = "New MinionData", menuName = "Card Data", order = 51)]
+public class MinionData : ScriptableObject
 {
 
     [SerializeField]
