@@ -16,6 +16,10 @@ public class UIManager : MonoBehaviour
     private MinionData tempGo;
     public GameObject currentCard;
 
+    Dictionary<int, string> minionConditions;
+    Dictionary<int, string> minionEffects;
+    Dictionary<int, string> minionClasses;
+
     public int cardIndex = 0;
     public TMP_Text cost;
     public TMP_Text health;
@@ -51,6 +55,47 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        minionConditions = new Dictionary<int, string>
+        {
+            {1,"bleed"},
+            {2,"buy-first-card"},
+            {3,"minion-defeated"},
+            {4,"tap"},
+            {5,"change-shop"},
+            {6,"action-draw"},
+            {7,"passive"}
+        };
+
+        minionEffects = new Dictionary<int, string>
+        {
+            {1,"draw-card"},
+            {2,"peek-shop"},
+            {3,"change-shop"},
+            {4,"express-buy"},
+            {5,"recycle"},
+            {6,"heal-allied-minion"},
+            {7,"poison-touch"},
+            {8,"stealth"},
+            {9,"vigilance"},
+            {10,"lifesteal"},
+            {11,"untap"},
+            {12,"silence"},
+            {13,"shock"},
+            {14,"buff-allied-minion"},
+            {15,"card-discard"},
+            {16,"loot"},
+            {17,"trash"},
+            {18,"coins"},
+            {19,"experience"}
+        };
+
+        minionClasses = new Dictionary<int, string>
+        {
+            {1,"rogue"},
+            {2,"warrior"},
+            {3,"mage"}
+        };
+
         LoadSprites();
 
         cards = new List<MinionData>();
@@ -123,99 +168,24 @@ public class UIManager : MonoBehaviour
         cardBackground.color = cards[index].Color;
 
         //set the condition icon
-        if (cards[index].ConditionText.Equals("If the enemy hero lost health this turn"))
-            condition.sprite = allSprites.Where(x => x.name == "bleed").SingleOrDefault();
-
-        else if (cards[index].ConditionText.Equals("When you buy your first card this turn"))
-            condition.sprite = allSprites.Where(x => x.name == "buy-first-card").SingleOrDefault();
-
-        else if (cards[index].ConditionText.Equals("Whenever you defeat an enemy minion"))
-            condition.sprite = allSprites.Where(x => x.name == "minion-defeated").SingleOrDefault();
-
-        else if (cards[index].ConditionText.Equals("Tap this minion during your action phase to activate its effect"))
-            condition.sprite = allSprites.Where(x => x.name == "tap").SingleOrDefault();
-
-        else if (cards[index].ConditionText.Equals("When you first change a shop card"))
-            condition.sprite = allSprites.Where(x => x.name == "change-shop").SingleOrDefault();
-
-        else if (cards[index].ConditionText.Equals("Whenever you draw a card during your action phase"))
-            condition.sprite = allSprites.Where(x => x.name == "action-draw").SingleOrDefault();
-
-        else if (cards[index].ConditionText.Equals("Constant"))
-            condition.sprite = allSprites.Where(x => x.name == "passive").SingleOrDefault();
+        foreach (KeyValuePair<int, string> entry in minionConditions)
+            if (cards[index].ConditionID == entry.Key)
+                condition.sprite = allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
 
         //set the effect1 icons
-        if (cards[index].EffectText1.Equals("Draw a card"))
-            effect1.sprite = allSprites.Where(x => x.name == "draw-card").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top."))
-            effect1.sprite = allSprites.Where(x => x.name == "peek-shop").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Select a card in the shop. That card goes to the bottom of the respective shop pile and is replaced by a card from the top."))
-            effect1.sprite = allSprites.Where(x => x.name == "change-shop").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("The next card you buy this turn goes straight to your hand"))
-            effect1.sprite = allSprites.Where(x => x.name == "express-buy").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Select a card from your discard pile. It goes on top of your deck."))
-            effect1.sprite = allSprites.Where(x => x.name == "recycle").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Increase target allied minion's health by 1"))
-            effect1.sprite = allSprites.Where(x => x.name == "heal-allied-minion").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("This minion has poison touch.") ||
-            cards[cardIndex].EffectText1.Equals("This minion gains poison touch until the end of your turn."))
-            effect1.sprite = allSprites.Where(x => x.name == "poison-touch").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("This minion has stealth.") ||
-            cards[cardIndex].EffectText1.Equals("This minion gains stealth until the end of your turn."))
-            effect1.sprite = allSprites.Where(x => x.name == "stealth").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("This minion has vigilance.") ||
-            cards[cardIndex].EffectText1.Equals("This minion gains vigilance until the end of your turn."))
-            effect1.sprite = allSprites.Where(x => x.name == "vigilance").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("This minion has lifesteal.") ||
-            cards[cardIndex].EffectText1.Equals("This minion gains lifesteal until the end of your turn."))
-            effect1.sprite = allSprites.Where(x => x.name == "lifesteal").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Untap target allied minion."))
-            effect1.sprite = allSprites.Where(x => x.name == "untap").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Target enemy minion loses its effect(s) until the end of your opponent's next turn."))
-            effect1.sprite = allSprites.Where(x => x.name == "silence").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Your opponent discards a card at the start of their next turn."))
-            effect1.sprite = allSprites.Where(x => x.name == "card-discard").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Draw a card then discard a card"))
-            effect1.sprite = allSprites.Where(x => x.name == "loot").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Select 1 card from your hand or discard pile. Remove that card from the game."))
-            effect1.sprite = allSprites.Where(x => x.name == "trash").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Inflict 1 damage to target minion"))
-            effect1.sprite = allSprites.Where(x => x.name == "shock").SingleOrDefault();
-
-        else if (cards[index].EffectText1.Equals("Target allied minion's damage increases by 1 until the end of your turn"))
-            effect1.sprite = allSprites.Where(x => x.name == "buff-allied-minion").SingleOrDefault();
-
+        foreach (KeyValuePair<int, string> entry in minionEffects)
+            if (cards[index].EffectId1 == entry.Key)
+                effect1.sprite = allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
 
         //set the effect2 icons
-        if (cards[index].EffectText2.Equals("2 Gold"))
-            effect2.sprite = allSprites.Where(x => x.name == "coins").SingleOrDefault();
-        else if (cards[index].EffectText2.Equals("2 Exp"))
-            effect2.sprite = allSprites.Where(x => x.name == "experience").SingleOrDefault();
-        else
-            effect2.enabled = false;
+        foreach (KeyValuePair<int, string> entry in minionEffects)
+            if (cards[index].EffectId2 == entry.Key)
+                effect2.sprite = allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
 
         //set the allied class icon
-        if (cards[index].AllyClass.Equals("Rogue"))
-            allyClass.sprite = allSprites.Where(x => x.name == "rogue").SingleOrDefault();
-        else if (cards[index].AllyClass.Equals("Warrior"))
-            allyClass.sprite = allSprites.Where(x => x.name == "warrior").SingleOrDefault();
-        else if (cards[index].AllyClass.Equals("Mage"))
-            allyClass.sprite = allSprites.Where(x => x.name == "mage").SingleOrDefault();
+        foreach (KeyValuePair<int, string> entry in minionClasses)
+            if (cards[index].AllyClassID == entry.Key)
+                allyClass.sprite = allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
     }
 
     public void NextMinionButton()

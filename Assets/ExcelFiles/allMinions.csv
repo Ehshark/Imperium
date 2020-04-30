@@ -1,105 +1,105 @@
-Color,ID,Cost,Condition,Effect1,Effect2,Damage,Health,Class,AllyClass
-blue,1,3,If the enemy hero lost health this turn,Draw a card,,1,3,Mage,Rogue
-blue,2,3,When you buy your first card this turn,Draw a card,,1,1,Mage,Warrior
-blue,3,3,Whenever you defeat an enemy minion,Draw a card,,1,2,Mage,Rogue
-blue,4,3,Tap this minion during your action phase to activate its effect,Draw a card,,1,3,Mage,Warrior
-blue,5,3,When you first change a shop card,Draw a card,,1,2,Mage,Rogue
-blue,6,3,If the enemy hero lost health this turn,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,,1,3,Mage,Warrior
-blue,7,3,Whenever you draw a card during your action phase,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,,1,3,Mage,Rogue
-blue,8,3,Whenever you defeat an enemy minion,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,,1,2,Mage,Warrior
-blue,9,3,When you first change a shop card,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,,1,2,Mage,Rogue
-blue,10,3,If the enemy hero lost health this turn,Select a card in the shop. That card goes to the bottom of the respective shop pile and is replaced by a card from the top.,,1,3,Mage,Warrior
-blue,11,3,Whenever you draw a card during your action phase,Select a card in the shop. That card goes to the bottom of the respective shop pile and is replaced by a card from the top.,,1,3,Mage,Rogue
-blue,12,3,Whenever you defeat an enemy minion,Select a card in the shop. That card goes to the bottom of the respective shop pile and is replaced by a card from the top.,,1,2,Mage,Warrior
-blue,13,4,Whenever you draw a card during your action phase,The next card you buy this turn goes straight to your hand,,1,3,Mage,Rogue
-blue,14,4,Whenever you defeat an enemy minion,The next card you buy this turn goes straight to your hand,,1,2,Mage,Warrior
-blue,15,4,Tap this minion during your action phase to activate its effect,The next card you buy this turn goes straight to your hand,,1,2,Mage,Rogue
-blue,16,4,When you first change a shop card,The next card you buy this turn goes straight to your hand,,1,2,Mage,Warrior
-blue,17,4,If the enemy hero lost health this turn,Select a card from your discard pile. It goes on top of your deck.,,1,3,Mage,Rogue
-blue,18,4,Whenever you draw a card during your action phase,Select a card from your discard pile. It goes on top of your deck.,,1,3,Mage,Warrior
-blue,19,4,When you buy your first card this turn,Select a card from your discard pile. It goes on top of your deck.,,1,2,Mage,Rogue
-blue,20,4,Whenever you defeat an enemy minion,Select a card from your discard pile. It goes on top of your deck.,,1,2,Mage,Warrior
-blue,21,4,Tap this minion during your action phase to activate its effect,Select a card from your discard pile. It goes on top of your deck.,,1,2,Mage,Rogue
-blue,22,4,When you first change a shop card,Select a card from your discard pile. It goes on top of your deck.,,1,2,Mage,Warrior
-blue,23,4,Whenever you draw a card during your action phase,Increase target allied minion's health by 1,,1,3,Mage,Rogue
-blue,24,4,When you buy your first card this turn,Increase target allied minion's health by 1,,1,2,Mage,Warrior
-blue,25,4,Whenever you defeat an enemy minion,Increase target allied minion's health by 1,,1,2,Mage,Rogue
-blue,26,4,Tap this minion during your action phase to activate its effect,Increase target allied minion's health by 1,,1,3,Mage,Warrior
-blue,27,4,When you first change a shop card,Increase target allied minion's health by 1,,1,2,Mage,Rogue
-blue,28,4,When you first change a shop card,Draw a card,2 Gold,1,3,Mage,Warrior
-blue,29,4,If the enemy hero lost health this turn,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,2 Gold,1,2,Mage,Rogue
-blue,30,5,Whenever you draw a card during your action phase,The next card you buy this turn goes straight to your hand,2 Gold,1,1,Mage,Warrior
-blue,31,5,Whenever you defeat an enemy minion,Select a card from your discard pile. It goes on top of your deck.,2 Gold,1,2,Mage,Rogue
-blue,32,5,When you buy your first card this turn,Increase target allied minion's health by 1,2 Gold,1,2,Mage,Warrior
-blue,33,4,Whenever you draw a card during your action phase,Draw a card,2 Exp,1,3,Mage,Rogue
-blue,34,4,Whenever you defeat an enemy minion,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,2 Exp,1,2,Mage,Warrior
-blue,35,5,When you first change a shop card,The next card you buy this turn goes straight to your hand,2 Exp,1,1,Mage,Rogue
-blue,36,5,If the enemy hero lost health this turn,Select a card from your discard pile. It goes on top of your deck.,2 Exp,1,2,Mage,Warrior
-blue,37,5,When you buy your first card this turn,Increase target allied minion's health by 1,2 Exp,1,2,Mage,Rogue
-red,38,2,Whenever you draw a card during your action phase,This minion gains poison touch until the end of your turn.,,2,1,Warrior,Rogue
-red,39,2,Constant,This minion has poison touch.,,2,1,Warrior,Mage
-red,40,2,When you buy your first card this turn,This minion gains poison touch until the end of your turn.,,2,1,Warrior,Rogue
-red,41,2,When you first change a shop card,This minion gains poison touch until the end of your turn.,,2,1,Warrior,Mage
-red,42,2,Whenever you draw a card during your action phase,This minion gains stealth until the end of your turn.,,2,1,Warrior,Rogue
-red,43,2,Constant,This minion has stealth,,2,1,Warrior,Mage
-red,44,2,When you buy your first card this turn,This minion gains stealth until the end of your turn.,,2,1,Warrior,Rogue
-red,45,2,When you first change a shop card,This minion gains stealth until the end of your turn.,,2,1,Warrior,Mage
-red,46,2,Whenever you draw a card during your action phase,This minion gains vigilance until the end of your opponent's next turn.,,2,1,Warrior,Rogue
-red,47,2,Constant,This minion has vigilance,,2,1,Warrior,Mage
-red,48,2,When you buy your first card this turn,This minion gains vigilance until the end of your opponent's next turn.,,2,1,Warrior,Rogue
-red,49,2,When you first change a shop card,This minion gains vigilance until the end of your opponent's next turn.,,2,1,Warrior,Mage
-red,50,2,Whenever you draw a card during your action phase,This minion gains lifesteal until the end of your turn.,,2,1,Warrior,Rogue
-red,51,2,Constant,This minion has lifesteal,,2,1,Warrior,Mage
-red,52,2,When you buy your first card this turn,This minion gains lifesteal until the end of your turn.,,2,1,Warrior,Rogue
-red,53,2,When you first change a shop card,This minion gains lifesteal until the end of your turn.,,2,1,Warrior,Mage
-red,54,2,Whenever you draw a card during your action phase,Untap target allied minion.,,2,1,Warrior,Rogue
-red,55,2,When you buy your first card this turn,Untap target allied minion.,,2,1,Warrior,Mage
-red,56,2,When you first change a shop card,Untap target allied minion.,,2,1,Warrior,Rogue
-red,57,3,Whenever you draw a card during your action phase,This minion gains poison touch until the end of your turn.,2 Exp,2,1,Warrior,Mage
-red,58,3,When you first change a shop card,This minion gains stealth until the end of your turn.,2 Exp,2,1,Warrior,Rogue
-red,59,3,When you buy your first card this turn,This minion gains vigilance until the end of your opponent's next turn.,2 Exp,2,1,Warrior,Mage
-red,60,3,Whenever you draw a card during your action phase,This minion gains lifesteal until the end of your turn.,2 Exp,2,1,Warrior,Rogue
-red,61,3,Whenever you defeat an enemy minion,Untap target allied minion.,2 Exp,2,1,Warrior,Mage
-red,62,3,When you first change a shop card,This minion gains poison touch until the end of your turn.,2 Gold,2,1,Warrior,Rogue
-red,63,3,Whenever you draw a card during your action phase,This minion gains stealth until the end of your turn.,2 Gold,2,1,Warrior,Mage
-red,64,3,When you buy your first card this turn,This minion gains vigilance until the end of your opponent's next turn.,2 Gold,2,1,Warrior,Rogue
-red,65,3,When you first change a shop card,This minion gains lifesteal until the end of your turn.,2 Gold,2,1,Warrior,Mage
-red,66,3,Whenever you defeat an enemy minion,Untap target allied minion.,2 Gold,2,1,Warrior,Rogue
-green,67,2,Whenever you draw a card during your action phase,Target enemy minion loses its effect(s) until the end of your opponent's next turn.,,1,2,Rogue,Mage
-green,68,2,Whenever you defeat an enemy minion,Target enemy minion loses its effect(s) until the end of your opponent's next turn.,,2,2,Rogue,Warrior
-green,69,2,When you first change a shop card,Target enemy minion loses its effect(s) until the end of your opponent's next turn.,,1,2,Rogue,Mage
-green,70,3,Tap this minion during your action phase to activate its effect,Target enemy minion loses its effect(s) until the end of your opponent's next turn.,,1,2,Rogue,Warrior
-green,71,2,When you buy your first card this turn,Target enemy minion loses its effect(s) until the end of your opponent's next turn.,,1,2,Rogue,Mage
-green,72,3,Whenever you draw a card during your action phase,Inflict 1 damage to target minion,,1,2,Rogue,Warrior
-green,73,3,When you buy your first card this turn,Inflict 1 damage to target minion,,1,2,Rogue,Mage
-green,74,3,When you first change a shop card,Inflict 1 damage to target minion,,1,2,Rogue,Warrior
-green,75,3,Whenever you defeat an enemy minion,Inflict 1 damage to target minion,,2,2,Rogue,Mage
-green,76,3,If the enemy hero lost health this turn,Inflict 1 damage to target minion,,2,2,Rogue,Warrior
-green,77,3,When you first change a shop card,Target allied minion's damage increases by 1 until the end of your turn,,1,2,Rogue,Mage
-green,78,3,Whenever you draw a card during your action phase,Target allied minion's damage increases by 1 until the end of your turn,,1,2,Rogue,Warrior
-green,79,2,When you buy your first card this turn,Target allied minion's damage increases by 1 until the end of your turn,,1,2,Rogue,Mage
-green,80,3,Whenever you defeat an enemy minion,Target allied minion's damage increases by 1 until the end of your turn,,2,2,Rogue,Warrior
-green,81,3,Tap this minion during your action phase to activate its effect,Target allied minion's damage increases by 1 until the end of your turn,,1,2,Rogue,Mage
-green,82,3,If the enemy hero lost health this turn,Your opponent discards a card at the start of their next turn.,,2,2,Rogue,Warrior
-green,83,3,Whenever you draw a card during your action phase,Your opponent discards a card at the start of their next turn.,,1,2,Rogue,Mage
-green,84,3,Whenever you defeat an enemy minion,Your opponent discards a card at the start of their next turn.,,2,2,Rogue,Warrior
-green,85,2,If the enemy hero lost health this turn,Draw a card then discard a card,,2,2,Rogue,Mage
-green,86,2,When you buy your first card this turn,Draw a card then discard a card,,1,2,Rogue,Warrior
-green,87,2,Whenever you defeat an enemy minion,Draw a card then discard a card,,2,2,Rogue,Mage
-green,88,3,Tap this minion during your action phase to activate its effect,Draw a card then discard a card,,1,2,Rogue,Warrior
-green,89,2,When you first change a shop card,Draw a card then discard a card,,1,2,Rogue,Mage
-green,90,2,If the enemy hero lost health this turn,Select 1 card from your hand or discard pile. Remove that card from the game.,,2,2,Rogue,Warrior
-green,91,2,Whenever you draw a card during your action phase,Select 1 card from your hand or discard pile. Remove that card from the game.,,2,2,Rogue,Mage
-green,92,2,Whenever you defeat an enemy minion,Select 1 card from your hand or discard pile. Remove that card from the game.,,2,2,Rogue,Warrior
-green,93,2,Tap this minion during your action phase to activate its effect,Select 1 card from your hand or discard pile. Remove that card from the game.,,1,2,Rogue,Mage
-green,94,2,When you first change a shop card,Select 1 card from your hand or discard pile. Remove that card from the game.,,1,2,Rogue,Warrior
-green,95,4,Whenever you draw a card during your action phase,Inflict 1 damage to target minion,2 Exp,1,2,Rogue,Mage
-green,96,3,When you buy your first card this turn,Target allied minion's damage increases by 1 until the end of your turn,2 Exp,1,2,Rogue,Warrior
-green,97,4,Whenever you defeat an enemy minion,Your opponent discards a card at the start of their next turn.,2 Exp,2,2,Rogue,Mage
-green,98,4,Tap this minion during your action phase to activate its effect,Draw a card then discard a card,2 Exp,1,2,Rogue,Warrior
-green,99,3,When you first change a shop card,Select 1 card from your hand or discard pile. Remove that card from the game.,2 Exp,1,2,Rogue,Mage
-green,100,4,When you first change a shop card,Inflict 1 damage to target minion,2 Gold,1,2,Rogue,Warrior
-green,101,4,Tap this minion during your action phase to activate its effect,Target allied minion's damage increases by 1 until the end of your turn,2 Gold,1,2,Rogue,Mage
-green,102,4,If the enemy hero lost health this turn,Your opponent discards a card at the start of their next turn.,2 Gold,2,2,Rogue,Warrior
-green,103,3,Whenever you defeat an enemy minion,Draw a card then discard a card,2 Gold,2,2,Rogue,Mage
-green,104,3,Whenever you draw a card during your action phase,Select 1 card from your hand or discard pile. Remove that card from the game.,2 Gold,2,2,Rogue,Warrior
+Color,ID,Cost,ConditionID,Condition,Effect-1-ID,Effect1,Effect-2-ID,Effect2,Damage,Health,Class,AllyClassID,AllyClass
+blue,1,3,1,If the enemy hero lost health this turn,1,Draw a card,999,,1,3,Mage,1,Rogue
+blue,2,3,2,When you buy your first card this turn,1,Draw a card,999,,1,1,Mage,2,Warrior
+blue,3,3,3,Whenever you defeat an enemy minion,1,Draw a card,999,,1,2,Mage,1,Rogue
+blue,4,3,4,Tap this minion during your action phase to activate its effect,1,Draw a card,999,,1,3,Mage,2,Warrior
+blue,5,3,5,When you first change a shop card,1,Draw a card,999,,1,2,Mage,1,Rogue
+blue,6,3,1,If the enemy hero lost health this turn,2,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,999,,1,3,Mage,2,Warrior
+blue,7,3,6,Whenever you draw a card during your action phase,2,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,999,,1,3,Mage,1,Rogue
+blue,8,3,3,Whenever you defeat an enemy minion,2,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,999,,1,2,Mage,2,Warrior
+blue,9,3,5,When you first change a shop card,2,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,999,,1,2,Mage,1,Rogue
+blue,10,3,1,If the enemy hero lost health this turn,3,Select a card in the shop. That card goes to the bottom of the respective shop pile and is replaced by a card from the top.,999,,1,3,Mage,2,Warrior
+blue,11,3,6,Whenever you draw a card during your action phase,3,Select a card in the shop. That card goes to the bottom of the respective shop pile and is replaced by a card from the top.,999,,1,3,Mage,1,Rogue
+blue,12,3,3,Whenever you defeat an enemy minion,3,Select a card in the shop. That card goes to the bottom of the respective shop pile and is replaced by a card from the top.,999,,1,2,Mage,2,Warrior
+blue,13,4,6,Whenever you draw a card during your action phase,4,The next card you buy this turn goes straight to your hand,999,,1,3,Mage,1,Rogue
+blue,14,4,3,Whenever you defeat an enemy minion,4,The next card you buy this turn goes straight to your hand,999,,1,2,Mage,2,Warrior
+blue,15,4,4,Tap this minion during your action phase to activate its effect,4,The next card you buy this turn goes straight to your hand,999,,1,2,Mage,1,Rogue
+blue,16,4,5,When you first change a shop card,4,The next card you buy this turn goes straight to your hand,999,,1,2,Mage,2,Warrior
+blue,17,4,1,If the enemy hero lost health this turn,5,Select a card from your discard pile. It goes on top of your deck.,999,,1,3,Mage,1,Rogue
+blue,18,4,6,Whenever you draw a card during your action phase,5,Select a card from your discard pile. It goes on top of your deck.,999,,1,3,Mage,2,Warrior
+blue,19,4,2,When you buy your first card this turn,5,Select a card from your discard pile. It goes on top of your deck.,999,,1,2,Mage,1,Rogue
+blue,20,4,3,Whenever you defeat an enemy minion,5,Select a card from your discard pile. It goes on top of your deck.,999,,1,2,Mage,2,Warrior
+blue,21,4,4,Tap this minion during your action phase to activate its effect,5,Select a card from your discard pile. It goes on top of your deck.,999,,1,2,Mage,1,Rogue
+blue,22,4,5,When you first change a shop card,5,Select a card from your discard pile. It goes on top of your deck.,999,,1,2,Mage,2,Warrior
+blue,23,4,6,Whenever you draw a card during your action phase,6,Increase target allied minion's health by 1,999,,1,3,Mage,1,Rogue
+blue,24,4,2,When you buy your first card this turn,6,Increase target allied minion's health by 1,999,,1,2,Mage,2,Warrior
+blue,25,4,3,Whenever you defeat an enemy minion,6,Increase target allied minion's health by 1,999,,1,2,Mage,1,Rogue
+blue,26,4,4,Tap this minion during your action phase to activate its effect,6,Increase target allied minion's health by 1,999,,1,3,Mage,2,Warrior
+blue,27,4,5,When you first change a shop card,6,Increase target allied minion's health by 1,999,,1,2,Mage,1,Rogue
+blue,28,4,5,When you first change a shop card,1,Draw a card,18,2 Gold,1,3,Mage,2,Warrior
+blue,29,4,1,If the enemy hero lost health this turn,2,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,18,2 Gold,1,2,Mage,1,Rogue
+blue,30,5,6,Whenever you draw a card during your action phase,4,The next card you buy this turn goes straight to your hand,18,2 Gold,1,1,Mage,2,Warrior
+blue,31,5,3,Whenever you defeat an enemy minion,5,Select a card from your discard pile. It goes on top of your deck.,18,2 Gold,1,2,Mage,1,Rogue
+blue,32,5,2,When you buy your first card this turn,6,Increase target allied minion's health by 1,18,2 Gold,1,2,Mage,2,Warrior
+blue,33,4,6,Whenever you draw a card during your action phase,1,Draw a card,19,2 Exp,1,3,Mage,1,Rogue
+blue,34,4,3,Whenever you defeat an enemy minion,2,Select a shop card pile and look at the top 2 cards. Send either/both to the bottom or keep on top.,19,2 Exp,1,2,Mage,2,Warrior
+blue,35,5,5,When you first change a shop card,4,The next card you buy this turn goes straight to your hand,19,2 Exp,1,1,Mage,1,Rogue
+blue,36,5,1,If the enemy hero lost health this turn,5,Select a card from your discard pile. It goes on top of your deck.,19,2 Exp,1,2,Mage,2,Warrior
+blue,37,5,2,When you buy your first card this turn,6,Increase target allied minion's health by 1,19,2 Exp,1,2,Mage,1,Rogue
+red,38,2,6,Whenever you draw a card during your action phase,7,This minion gains poison touch until the end of your turn.,999,,2,1,Warrior,1,Rogue
+red,39,2,7,Constant,7,This minion has poison touch.,999,,2,1,Warrior,3,Mage
+red,40,2,2,When you buy your first card this turn,7,This minion gains poison touch until the end of your turn.,999,,2,1,Warrior,1,Rogue
+red,41,2,5,When you first change a shop card,7,This minion gains poison touch until the end of your turn.,999,,2,1,Warrior,3,Mage
+red,42,2,6,Whenever you draw a card during your action phase,8,This minion gains stealth until the end of your turn.,999,,2,1,Warrior,1,Rogue
+red,43,2,7,Constant,8,This minion has stealth,999,,2,1,Warrior,3,Mage
+red,44,2,2,When you buy your first card this turn,8,This minion gains stealth until the end of your turn.,999,,2,1,Warrior,1,Rogue
+red,45,2,5,When you first change a shop card,8,This minion gains stealth until the end of your turn.,999,,2,1,Warrior,3,Mage
+red,46,2,6,Whenever you draw a card during your action phase,9,This minion gains vigilance until the end of your opponent's next turn.,999,,2,1,Warrior,1,Rogue
+red,47,2,7,Constant,9,This minion has vigilance,999,,2,1,Warrior,3,Mage
+red,48,2,2,When you buy your first card this turn,9,This minion gains vigilance until the end of your opponent's next turn.,999,,2,1,Warrior,1,Rogue
+red,49,2,5,When you first change a shop card,9,This minion gains vigilance until the end of your opponent's next turn.,999,,2,1,Warrior,3,Mage
+red,50,2,6,Whenever you draw a card during your action phase,10,This minion gains lifesteal until the end of your turn.,999,,2,1,Warrior,1,Rogue
+red,51,2,7,Constant,10,This minion has lifesteal,999,,2,1,Warrior,3,Mage
+red,52,2,2,When you buy your first card this turn,10,This minion gains lifesteal until the end of your turn.,999,,2,1,Warrior,1,Rogue
+red,53,2,5,When you first change a shop card,10,This minion gains lifesteal until the end of your turn.,999,,2,1,Warrior,3,Mage
+red,54,2,6,Whenever you draw a card during your action phase,11,Untap target allied minion.,999,,2,1,Warrior,1,Rogue
+red,55,2,2,When you buy your first card this turn,11,Untap target allied minion.,999,,2,1,Warrior,3,Mage
+red,56,2,5,When you first change a shop card,11,Untap target allied minion.,999,,2,1,Warrior,1,Rogue
+red,57,3,6,Whenever you draw a card during your action phase,7,This minion gains poison touch until the end of your turn.,19,2 Exp,2,1,Warrior,3,Mage
+red,58,3,2,When you first change a shop card,8,This minion gains stealth until the end of your turn.,19,2 Exp,2,1,Warrior,1,Rogue
+red,59,3,5,When you buy your first card this turn,9,This minion gains vigilance until the end of your opponent's next turn.,19,2 Exp,2,1,Warrior,3,Mage
+red,60,3,6,Whenever you draw a card during your action phase,10,This minion gains lifesteal until the end of your turn.,19,2 Exp,2,1,Warrior,1,Rogue
+red,61,3,3,Whenever you defeat an enemy minion,11,Untap target allied minion.,19,2 Exp,2,1,Warrior,3,Mage
+red,62,3,5,When you first change a shop card,7,This minion gains poison touch until the end of your turn.,18,2 Gold,2,1,Warrior,1,Rogue
+red,63,3,6,Whenever you draw a card during your action phase,8,This minion gains stealth until the end of your turn.,18,2 Gold,2,1,Warrior,3,Mage
+red,64,3,2,When you buy your first card this turn,9,This minion gains vigilance until the end of your opponent's next turn.,18,2 Gold,2,1,Warrior,1,Rogue
+red,65,3,5,When you first change a shop card,10,This minion gains lifesteal until the end of your turn.,18,2 Gold,2,1,Warrior,3,Mage
+red,66,3,3,Whenever you defeat an enemy minion,11,Untap target allied minion.,18,2 Gold,2,1,Warrior,1,Rogue
+green,67,2,6,Whenever you draw a card during your action phase,12,Target enemy minion loses its effect(s) until the end of your opponent's next turn.,999,,1,2,Rogue,3,Mage
+green,68,2,3,Whenever you defeat an enemy minion,12,Target enemy minion loses its effect(s) until the end of your opponent's next turn.,999,,2,2,Rogue,2,Warrior
+green,69,2,5,When you first change a shop card,12,Target enemy minion loses its effect(s) until the end of your opponent's next turn.,999,,1,2,Rogue,3,Mage
+green,70,3,4,Tap this minion during your action phase to activate its effect,12,Target enemy minion loses its effect(s) until the end of your opponent's next turn.,999,,1,2,Rogue,2,Warrior
+green,71,2,2,When you buy your first card this turn,12,Target enemy minion loses its effect(s) until the end of your opponent's next turn.,999,,1,2,Rogue,3,Mage
+green,72,3,6,Whenever you draw a card during your action phase,13,Inflict 1 damage to target minion,999,,1,2,Rogue,2,Warrior
+green,73,3,2,When you buy your first card this turn,13,Inflict 1 damage to target minion,999,,1,2,Rogue,3,Mage
+green,74,3,5,When you first change a shop card,13,Inflict 1 damage to target minion,999,,1,2,Rogue,2,Warrior
+green,75,3,3,Whenever you defeat an enemy minion,13,Inflict 1 damage to target minion,999,,2,2,Rogue,3,Mage
+green,76,3,1,If the enemy hero lost health this turn,13,Inflict 1 damage to target minion,999,,2,2,Rogue,2,Warrior
+green,77,3,5,When you first change a shop card,14,Target allied minion's damage increases by 1 until the end of your turn,999,,1,2,Rogue,3,Mage
+green,78,3,6,Whenever you draw a card during your action phase,14,Target allied minion's damage increases by 1 until the end of your turn,999,,1,2,Rogue,2,Warrior
+green,79,2,2,When you buy your first card this turn,14,Target allied minion's damage increases by 1 until the end of your turn,999,,1,2,Rogue,3,Mage
+green,80,3,3,Whenever you defeat an enemy minion,14,Target allied minion's damage increases by 1 until the end of your turn,999,,2,2,Rogue,2,Warrior
+green,81,3,4,Tap this minion during your action phase to activate its effect,14,Target allied minion's damage increases by 1 until the end of your turn,999,,1,2,Rogue,3,Mage
+green,82,3,1,If the enemy hero lost health this turn,15,Your opponent discards a card at the start of their next turn.,999,,2,2,Rogue,2,Warrior
+green,83,3,6,Whenever you draw a card during your action phase,15,Your opponent discards a card at the start of their next turn.,999,,1,2,Rogue,3,Mage
+green,84,3,3,Whenever you defeat an enemy minion,15,Your opponent discards a card at the start of their next turn.,999,,2,2,Rogue,2,Warrior
+green,85,2,1,If the enemy hero lost health this turn,16,Draw a card then discard a card,999,,2,2,Rogue,3,Mage
+green,86,2,2,When you buy your first card this turn,16,Draw a card then discard a card,999,,1,2,Rogue,2,Warrior
+green,87,2,3,Whenever you defeat an enemy minion,16,Draw a card then discard a card,999,,2,2,Rogue,3,Mage
+green,88,3,4,Tap this minion during your action phase to activate its effect,16,Draw a card then discard a card,999,,1,2,Rogue,2,Warrior
+green,89,2,5,When you first change a shop card,16,Draw a card then discard a card,999,,1,2,Rogue,3,Mage
+green,90,2,1,If the enemy hero lost health this turn,17,Select 1 card from your hand or discard pile. Remove that card from the game.,999,,2,2,Rogue,2,Warrior
+green,91,2,6,Whenever you draw a card during your action phase,17,Select 1 card from your hand or discard pile. Remove that card from the game.,999,,2,2,Rogue,3,Mage
+green,92,2,3,Whenever you defeat an enemy minion,17,Select 1 card from your hand or discard pile. Remove that card from the game.,999,,2,2,Rogue,2,Warrior
+green,93,2,4,Tap this minion during your action phase to activate its effect,17,Select 1 card from your hand or discard pile. Remove that card from the game.,999,,1,2,Rogue,3,Mage
+green,94,2,5,When you first change a shop card,17,Select 1 card from your hand or discard pile. Remove that card from the game.,999,,1,2,Rogue,2,Warrior
+green,95,4,6,Whenever you draw a card during your action phase,13,Inflict 1 damage to target minion,19,2 Exp,1,2,Rogue,3,Mage
+green,96,3,2,When you buy your first card this turn,14,Target allied minion's damage increases by 1 until the end of your turn,19,2 Exp,1,2,Rogue,2,Warrior
+green,97,4,3,Whenever you defeat an enemy minion,15,Your opponent discards a card at the start of their next turn.,19,2 Exp,2,2,Rogue,3,Mage
+green,98,4,4,Tap this minion during your action phase to activate its effect,16,Draw a card then discard a card,19,2 Exp,1,2,Rogue,2,Warrior
+green,99,3,5,When you first change a shop card,17,Select 1 card from your hand or discard pile. Remove that card from the game.,19,2 Exp,1,2,Rogue,3,Mage
+green,100,4,5,When you first change a shop card,13,Inflict 1 damage to target minion,18,2 Gold,1,2,Rogue,2,Warrior
+green,101,4,4,Tap this minion during your action phase to activate its effect,14,Target allied minion's damage increases by 1 until the end of your turn,18,2 Gold,1,2,Rogue,3,Mage
+green,102,4,1,If the enemy hero lost health this turn,15,Your opponent discards a card at the start of their next turn.,18,2 Gold,2,2,Rogue,2,Warrior
+green,103,3,3,Whenever you defeat an enemy minion,16,Draw a card then discard a card,18,2 Gold,2,2,Rogue,3,Mage
+green,104,3,6,Whenever you draw a card during your action phase,17,Select 1 card from your hand or discard pile. Remove that card from the game.,18,2 Gold,2,2,Rogue,2,Warrior

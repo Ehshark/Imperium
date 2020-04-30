@@ -15,20 +15,18 @@ MonoBehaviour:
   color: {r: 0, g: 1, b: 0, a: 1}
   minionID: 81
   goldAndManaCost: 3
-  goldOrManaIcon: {fileID: 0}
   conditionText: Tap this minion during your action phase to activate its effect
-  conditionIcon: {fileID: 0}
+  conditionID: 4
   effectText1: Target allied minion's damage increases by 1 until the end of your
     turn
+  effectId1: 14
   effectText2: 
-  cardArt: {fileID: 0}
+  effectId2: 999
   attackDamage: 1
   health: 2
-  healthIcon: {fileID: 0}
   cardClass: Rogue
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Mage
-  allyClassIcon: {fileID: 0}
+  allyClassID: 3

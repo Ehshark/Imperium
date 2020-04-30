@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 0, g: 0, b: 1, a: 1}
   minionID: 15
   goldAndManaCost: 4
-  goldOrManaIcon: {fileID: 0}
   conditionText: Tap this minion during your action phase to activate its effect
-  conditionIcon: {fileID: 0}
+  conditionID: 4
   effectText1: The next card you buy this turn goes straight to your hand
+  effectId1: 4
   effectText2: 
-  cardArt: {fileID: 0}
+  effectId2: 999
   attackDamage: 1
   health: 2
-  healthIcon: {fileID: 0}
   cardClass: Mage
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Rogue
-  allyClassIcon: {fileID: 0}
+  allyClassID: 1

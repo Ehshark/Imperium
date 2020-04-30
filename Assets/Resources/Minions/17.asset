@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 0, g: 0, b: 1, a: 1}
   minionID: 17
   goldAndManaCost: 4
-  goldOrManaIcon: {fileID: 0}
   conditionText: If the enemy hero lost health this turn
-  conditionIcon: {fileID: 0}
+  conditionID: 1
   effectText1: Select a card from your discard pile. It goes on top of your deck.
+  effectId1: 5
   effectText2: 
-  cardArt: {fileID: 0}
+  effectId2: 999
   attackDamage: 1
   health: 3
-  healthIcon: {fileID: 0}
   cardClass: Mage
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Rogue
-  allyClassIcon: {fileID: 0}
+  allyClassID: 1

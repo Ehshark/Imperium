@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 1, g: 0, b: 0, a: 1}
   minionID: 57
   goldAndManaCost: 3
-  goldOrManaIcon: {fileID: 0}
   conditionText: Whenever you draw a card during your action phase
-  conditionIcon: {fileID: 0}
+  conditionID: 6
   effectText1: This minion gains poison touch until the end of your turn.
+  effectId1: 7
   effectText2: 2 Exp
-  cardArt: {fileID: 0}
+  effectId2: 19
   attackDamage: 2
   health: 1
-  healthIcon: {fileID: 0}
   cardClass: Warrior
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Mage
-  allyClassIcon: {fileID: 0}
+  allyClassID: 3

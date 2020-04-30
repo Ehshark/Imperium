@@ -15,20 +15,18 @@ MonoBehaviour:
   color: {r: 0, g: 0, b: 1, a: 1}
   minionID: 34
   goldAndManaCost: 4
-  goldOrManaIcon: {fileID: 0}
   conditionText: Whenever you defeat an enemy minion
-  conditionIcon: {fileID: 0}
+  conditionID: 3
   effectText1: Select a shop card pile and look at the top 2 cards. Send either/both
     to the bottom or keep on top.
+  effectId1: 2
   effectText2: 2 Exp
-  cardArt: {fileID: 0}
+  effectId2: 19
   attackDamage: 1
   health: 2
-  healthIcon: {fileID: 0}
   cardClass: Mage
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Warrior
-  allyClassIcon: {fileID: 0}
+  allyClassID: 2

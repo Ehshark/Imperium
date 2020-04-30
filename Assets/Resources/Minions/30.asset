@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 0, g: 0, b: 1, a: 1}
   minionID: 30
   goldAndManaCost: 5
-  goldOrManaIcon: {fileID: 0}
   conditionText: Whenever you draw a card during your action phase
-  conditionIcon: {fileID: 0}
+  conditionID: 6
   effectText1: The next card you buy this turn goes straight to your hand
+  effectId1: 4
   effectText2: 2 Gold
-  cardArt: {fileID: 0}
+  effectId2: 18
   attackDamage: 1
   health: 1
-  healthIcon: {fileID: 0}
   cardClass: Mage
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Warrior
-  allyClassIcon: {fileID: 0}
+  allyClassID: 2

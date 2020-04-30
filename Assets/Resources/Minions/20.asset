@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 0, g: 0, b: 1, a: 1}
   minionID: 20
   goldAndManaCost: 4
-  goldOrManaIcon: {fileID: 0}
   conditionText: Whenever you defeat an enemy minion
-  conditionIcon: {fileID: 0}
+  conditionID: 3
   effectText1: Select a card from your discard pile. It goes on top of your deck.
+  effectId1: 5
   effectText2: 
-  cardArt: {fileID: 0}
+  effectId2: 999
   attackDamage: 1
   health: 2
-  healthIcon: {fileID: 0}
   cardClass: Mage
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Warrior
-  allyClassIcon: {fileID: 0}
+  allyClassID: 2

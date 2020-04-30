@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 0, g: 1, b: 0, a: 1}
   minionID: 88
   goldAndManaCost: 3
-  goldOrManaIcon: {fileID: 0}
   conditionText: Tap this minion during your action phase to activate its effect
-  conditionIcon: {fileID: 0}
+  conditionID: 4
   effectText1: Draw a card then discard a card
+  effectId1: 16
   effectText2: 
-  cardArt: {fileID: 0}
+  effectId2: 999
   attackDamage: 1
   health: 2
-  healthIcon: {fileID: 0}
   cardClass: Rogue
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Warrior
-  allyClassIcon: {fileID: 0}
+  allyClassID: 2

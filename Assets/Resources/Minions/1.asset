@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 0, g: 0, b: 1, a: 1}
   minionID: 1
   goldAndManaCost: 3
-  goldOrManaIcon: {fileID: 0}
   conditionText: If the enemy hero lost health this turn
-  conditionIcon: {fileID: 0}
+  conditionID: 1
   effectText1: Draw a card
+  effectId1: 1
   effectText2: 
-  cardArt: {fileID: 0}
+  effectId2: 999
   attackDamage: 1
   health: 3
-  healthIcon: {fileID: 0}
   cardClass: Mage
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Rogue
-  allyClassIcon: {fileID: 0}
+  allyClassID: 1

@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 1, g: 0, b: 0, a: 1}
   minionID: 50
   goldAndManaCost: 2
-  goldOrManaIcon: {fileID: 0}
   conditionText: Whenever you draw a card during your action phase
-  conditionIcon: {fileID: 0}
+  conditionID: 6
   effectText1: This minion gains lifesteal until the end of your turn.
+  effectId1: 10
   effectText2: 
-  cardArt: {fileID: 0}
+  effectId2: 999
   attackDamage: 2
   health: 1
-  healthIcon: {fileID: 0}
   cardClass: Warrior
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Rogue
-  allyClassIcon: {fileID: 0}
+  allyClassID: 1

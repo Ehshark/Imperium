@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 0, g: 0, b: 1, a: 1}
   minionID: 2
   goldAndManaCost: 3
-  goldOrManaIcon: {fileID: 0}
   conditionText: When you buy your first card this turn
-  conditionIcon: {fileID: 0}
+  conditionID: 2
   effectText1: Draw a card
+  effectId1: 1
   effectText2: 
-  cardArt: {fileID: 0}
+  effectId2: 999
   attackDamage: 1
   health: 1
-  healthIcon: {fileID: 0}
   cardClass: Mage
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Warrior
-  allyClassIcon: {fileID: 0}
+  allyClassID: 2

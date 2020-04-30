@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 1, g: 0, b: 0, a: 1}
   minionID: 58
   goldAndManaCost: 3
-  goldOrManaIcon: {fileID: 0}
   conditionText: When you first change a shop card
-  conditionIcon: {fileID: 0}
+  conditionID: 2
   effectText1: This minion gains stealth until the end of your turn.
+  effectId1: 8
   effectText2: 2 Exp
-  cardArt: {fileID: 0}
+  effectId2: 19
   attackDamage: 2
   health: 1
-  healthIcon: {fileID: 0}
   cardClass: Warrior
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Rogue
-  allyClassIcon: {fileID: 0}
+  allyClassID: 1

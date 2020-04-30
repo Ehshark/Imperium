@@ -18,13 +18,18 @@ public class MinionData : ScriptableObject
 
     private object condition;
     [SerializeField]
-    private string effectText1;
+    private int conditionID;
 
+    [SerializeField]
+    private string effectText1;
+    [SerializeField]
+    private int effectId1;
     private object effect1;
 
     [SerializeField]
     private string effectText2;
-
+    [SerializeField]
+    private int effectId2;
     private object effect2;
 
     [SerializeField]
@@ -44,6 +49,8 @@ public class MinionData : ScriptableObject
 
     [SerializeField]
     private string allyClass;
+    [SerializeField]
+    private int allyClassID;
 
     public Color Color { get => color; set => color = value; }
     public int GoldAndManaCost { get => goldAndManaCost; set => goldAndManaCost = value; }
@@ -62,5 +69,8 @@ public class MinionData : ScriptableObject
     public bool IsSilenced { get => isSilenced; set => isSilenced = value; }
     public object EnemyDamageDealt { get => enemyDamageDealt; set => enemyDamageDealt = value; }
     public string AllyClass { get => allyClass; set => allyClass = value; }
-
+    public int ConditionID { get => conditionID; set => conditionID = value; }
+    public int EffectId1 { get => effectId1; set => effectId1 = value; }
+    public int EffectId2 { get => effectId2; set => effectId2 = value; }
+    public int AllyClassID { get => allyClassID; set => allyClassID = value; }
 }

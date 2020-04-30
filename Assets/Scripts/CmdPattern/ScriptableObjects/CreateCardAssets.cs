@@ -9,7 +9,7 @@ using UnityEngine;
 public class CreateCardAssets : MonoBehaviour
 {
     //const Int32 BufferSize = 128;
-    //private readonly string path = "D:\\UnityProjects\\Unity-Imperium\\Imperium\\Assets\\allMinions.csv";
+    //private readonly string path = "D:\\UnityProjects\\Unity-Imperium\\Imperium\\Assets\\ExcelFiles\\allMinions.csv";
 
     // Start is called before the first frame update
     void Start()
@@ -20,25 +20,29 @@ public class CreateCardAssets : MonoBehaviour
         //line = streamReader.ReadLine();
         //while ((line = streamReader.ReadLine()) != null)
         //{
-        //    string[] lineArr = new string[12];
+        //    string[] lineArr = new string[14];
         //    lineArr = line.Split(',');
 
-        //    CardData newCard = ScriptableObject.CreateInstance<CardData>();
+        //    MinionData newCard = ScriptableObject.CreateInstance<MinionData>();
         //    newCard.Color = ToColor(lineArr[0]);
         //    newCard.MinionID = Int32.Parse(lineArr[1]);
         //    newCard.GoldAndManaCost = Int32.Parse(lineArr[2]);
-        //    newCard.ConditionText = lineArr[3];
-        //    newCard.EffectText1 = lineArr[4];
-        //    newCard.EffectText2 = lineArr[5].ToString();
-        //    newCard.AttackDamage = Int32.Parse(lineArr[6]);
-        //    newCard.Health = Int32.Parse(lineArr[7]);
-        //    newCard.CardClass = lineArr[8];
+        //    newCard.ConditionID = Int32.Parse(lineArr[3]);
+        //    newCard.ConditionText = lineArr[4];
+        //    newCard.EffectId1 = Int32.Parse(lineArr[5]);
+        //    newCard.EffectText1 = lineArr[6];
+        //    newCard.EffectId2 = Int32.Parse(lineArr[7]);
+        //    newCard.EffectText2 = lineArr[8].ToString();
+        //    newCard.AttackDamage = Int32.Parse(lineArr[9]);
+        //    newCard.Health = Int32.Parse(lineArr[10]);
+        //    newCard.CardClass = lineArr[11];
         //    newCard.IsPromoted = false;
         //    newCard.IsTapped = false;
         //    newCard.IsSilenced = false;
-        //    newCard.AllyClass = lineArr[9];
+        //    newCard.AllyClassID = Int32.Parse(lineArr[12]);
+        //    newCard.AllyClass = lineArr[13];
 
-        //    AssetDatabase.CreateAsset(newCard, "Assets/Cards/" + lineArr[1] + ".asset");
+        //    AssetDatabase.CreateAsset(newCard, "Assets/Resources/Minions/" + lineArr[1] + ".asset");
         //}
     }
 

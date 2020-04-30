@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 0, g: 1, b: 0, a: 1}
   minionID: 74
   goldAndManaCost: 3
-  goldOrManaIcon: {fileID: 0}
   conditionText: When you first change a shop card
-  conditionIcon: {fileID: 0}
+  conditionID: 5
   effectText1: Inflict 1 damage to target minion
+  effectId1: 13
   effectText2: 
-  cardArt: {fileID: 0}
+  effectId2: 999
   attackDamage: 1
   health: 2
-  healthIcon: {fileID: 0}
   cardClass: Rogue
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Warrior
-  allyClassIcon: {fileID: 0}
+  allyClassID: 2

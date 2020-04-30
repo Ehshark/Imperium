@@ -15,20 +15,18 @@ MonoBehaviour:
   color: {r: 0, g: 1, b: 0, a: 1}
   minionID: 90
   goldAndManaCost: 2
-  goldOrManaIcon: {fileID: 0}
   conditionText: If the enemy hero lost health this turn
-  conditionIcon: {fileID: 0}
+  conditionID: 1
   effectText1: Select 1 card from your hand or discard pile. Remove that card from
     the game.
+  effectId1: 17
   effectText2: 
-  cardArt: {fileID: 0}
+  effectId2: 999
   attackDamage: 2
   health: 2
-  healthIcon: {fileID: 0}
   cardClass: Rogue
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Warrior
-  allyClassIcon: {fileID: 0}
+  allyClassID: 2

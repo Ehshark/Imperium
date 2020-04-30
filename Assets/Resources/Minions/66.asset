@@ -15,19 +15,17 @@ MonoBehaviour:
   color: {r: 1, g: 0, b: 0, a: 1}
   minionID: 66
   goldAndManaCost: 3
-  goldOrManaIcon: {fileID: 0}
   conditionText: Whenever you defeat an enemy minion
-  conditionIcon: {fileID: 0}
+  conditionID: 3
   effectText1: Untap target allied minion.
+  effectId1: 11
   effectText2: 2 Gold
-  cardArt: {fileID: 0}
+  effectId2: 18
   attackDamage: 2
   health: 1
-  healthIcon: {fileID: 0}
   cardClass: Warrior
   isPromoted: 0
   isTapped: 0
   isSilenced: 0
-  silencedIcon: {fileID: 0}
   allyClass: Rogue
-  allyClassIcon: {fileID: 0}
+  allyClassID: 1
