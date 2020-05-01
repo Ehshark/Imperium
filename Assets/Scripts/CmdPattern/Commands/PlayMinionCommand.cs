@@ -16,13 +16,13 @@ public class PlayMinionCommand : Command
     {
         minion.transform.SetParent(GameManager.Instance.alliedMinionZone);
 
-        MinionBehaviour mb = minion.GetComponent<MinionBehaviour>();
-        if (mb.hasBattlecry)
-        {
-            GameManager.Instance.enemyMinionZone.gameObject.AddComponent<DestroyMinionListener>();
-            EventManager.Instance.AddListener(EVENT_TYPE.DESTROY_MINION, GameManager.Instance.enemyMinionZone.gameObject.GetComponent<DestroyMinionListener>());
-            EventManager.Instance.PostNotification(EVENT_TYPE.DESTROY_MINION);
-        }
+        MinionVisual mv = minion.GetComponent<MinionVisual>();
+        //if (mb.hasBattlecry)
+        //{
+        //    GameManager.Instance.enemyMinionZone.gameObject.AddComponent<DestroyMinionListener>();
+        //    EventManager.Instance.AddListener(EVENT_TYPE.DESTROY_MINION, GameManager.Instance.enemyMinionZone.gameObject.GetComponent<DestroyMinionListener>());
+        //    EventManager.Instance.PostNotification(EVENT_TYPE.DESTROY_MINION);
+        //}
 
         CommandExecutionComplete();
     }
