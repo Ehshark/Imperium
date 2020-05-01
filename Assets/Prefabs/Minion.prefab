@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 5361649606923715718}
   - component: {fileID: 526668538614641341}
   m_Layer: 0
-  m_Name: NewCard
+  m_Name: Minion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127,7 +127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b668f9f7e4379e49b3081a5f0e811bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasBattlecry: 0
   descriptions:
   - {fileID: 5361649608067796741}
   - {fileID: 5361649608379456300}
@@ -143,6 +142,15 @@ MonoBehaviour:
   - {fileID: 5361649607342456148}
   - {fileID: 5361649608898509267}
   - {fileID: 5361649607515448368}
+  cost: {fileID: 5361649607378099703}
+  health: {fileID: 5361649608773061276}
+  damage: {fileID: 5361649608923231243}
+  cardBackground: {fileID: 5361649607802625128}
+  condition: {fileID: 5361649608214357139}
+  allyClass: {fileID: 5361649608489491309}
+  silenceIcon: {fileID: 5361649607211962120}
+  effect1: {fileID: 5361649608726143381}
+  effect2: {fileID: 5361649607857650548}
 --- !u!1 &5361649607057006654
 GameObject:
   m_ObjectHideFlags: 0
@@ -990,8 +998,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2850,7 +2858,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -4.3}
+  m_AnchoredPosition: {x: 0, y: -1}
   m_SizeDelta: {x: 30.901962, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5361649608489491299
@@ -3187,8 +3195,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3750,8 +3758,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
