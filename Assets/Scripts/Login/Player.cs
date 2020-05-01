@@ -7,6 +7,8 @@ public class Player
 {
     public int PLAYER_ID { get; set; }
 
+    public int LEADERBOARD_LEVEL { get; set; }
+
     public string PLAYER_USERNAME { get; set; }
 
     public byte[] PLAYER_AVATAR { get; set; }
@@ -15,7 +17,7 @@ public class Player
 
     public string PLAYER_PASSWORD { get; set; }
 
-    public int PLAYER_PASSWORDCOUNT { get; set; }
+    //public int PLAYER_PASSWORDCOUNT { get; set; }
 
     public string PLAYER_EMAIL { get; set; }
 

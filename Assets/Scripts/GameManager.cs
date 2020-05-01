@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    //Player
     public static string UserName { get; set; }
+    public static Player player { get; set; } = null;
 
     public Transform alliedMinionZone;
     public Transform instructionsObj;
