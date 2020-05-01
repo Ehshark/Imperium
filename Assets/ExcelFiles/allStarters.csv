@@ -1,11 +1,11 @@
-Color,ID,Cost,Condition,Effect1,Effect2,Damage,Health,Class,AllyClass
-gray,1,1,,2 Gold,,0,0,,
-gray,2,1,,2 Gold,,0,0,,
-gray,3,1,,2 Gold,,0,0,,
-gray,4,1,,2 Gold,,0,0,,
-gray,5,2,,,,1,2,,
-gray,6,2,,,,1,2,,
-gray,7,0,,1 Health,,0,0,,
-gray,8,0,,1 Health,,0,0,,
-gray,9,0,,1 Mana,,0,0,,
-gray,10,0,,1 Mana,,0,0,,
+Color,ID,Cost,EffectID1,Effect1,EffectID2,Effect2,Damage,Health
+gray,1,1,18,2 Gold,19,1 Exp,0,0
+gray,2,1,18,2 Gold,19,1 Exp,0,0
+gray,3,1,18,2 Gold,19,1 Exp,0,0
+gray,4,1,18,2 Gold,19,1 Exp,0,0
+gray,5,2,999,,999,,1,2
+gray,6,2,999,,999,,1,2
+gray,7,0,20,1 Health,999,,0,0
+gray,8,0,20,1 Health,999,,0,0
+gray,9,0,21,1 Mana,999,,0,0
+gray,10,0,21,1 Mana,999,,0,0

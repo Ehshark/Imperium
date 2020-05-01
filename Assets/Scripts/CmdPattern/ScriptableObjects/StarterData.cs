@@ -1,35 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "New MinionData", menuName = "Minion Data", order = 51)]
-public class MinionData : ScriptableObject
+[CreateAssetMenu(fileName = "New StarterData", menuName = "Starter Data", order = 51)]
+public class StarterData : ScriptableObject
 {
-
     [SerializeField]
     private Color color;
     [SerializeField]
-    private int minionID;
+    private int starterID;
     [SerializeField]
-    private int goldAndManaCost;
-    [SerializeField]
-    private string conditionText;
-
-    private object condition;
-    [SerializeField]
-    private int conditionID;
+    private int manaCost;
 
     [SerializeField]
     private string effectText1;
     [SerializeField]
     private int effectId1;
+
     private object effect1;
 
     [SerializeField]
     private string effectText2;
     [SerializeField]
     private int effectId2;
+
     private object effect2;
 
     [SerializeField]
@@ -47,20 +41,11 @@ public class MinionData : ScriptableObject
 
     private object enemyDamageDealt;
 
-    [SerializeField]
-    private string allyClass;
-    [SerializeField]
-    private int allyClassID;
-
-    public Color Color { get => color; set => color = value; }
-    public int GoldAndManaCost { get => goldAndManaCost; set => goldAndManaCost = value; }
-    public int MinionID { get => minionID; set => minionID = value; }
-    public string ConditionText { get => conditionText; set => conditionText = value; }
-    public object Condition { get => condition; set => condition = value; }
+    public int StarterID { get => starterID; set => starterID = value; }
+    public int ManaCost { get => manaCost; set => manaCost = value; }
     public string EffectText1 { get => effectText1; set => effectText1 = value; }
+    public int EffectId1 { get => effectId1; set => effectId1 = value; }
     public object Effect1 { get => effect1; set => effect1 = value; }
-    public string EffectText2 { get => effectText2; set => effectText2 = value; }
-    public object Effect2 { get => effect2; set => effect2 = value; }
     public int AttackDamage { get => attackDamage; set => attackDamage = value; }
     public int Health { get => health; set => health = value; }
     public string CardClass { get => cardClass; set => cardClass = value; }
@@ -68,9 +53,8 @@ public class MinionData : ScriptableObject
     public bool IsTapped { get => isTapped; set => isTapped = value; }
     public bool IsSilenced { get => isSilenced; set => isSilenced = value; }
     public object EnemyDamageDealt { get => enemyDamageDealt; set => enemyDamageDealt = value; }
-    public string AllyClass { get => allyClass; set => allyClass = value; }
-    public int ConditionID { get => conditionID; set => conditionID = value; }
-    public int EffectId1 { get => effectId1; set => effectId1 = value; }
+    public string EffectText2 { get => effectText2; set => effectText2 = value; }
     public int EffectId2 { get => effectId2; set => effectId2 = value; }
-    public int AllyClassID { get => allyClassID; set => allyClassID = value; }
+    public object Effect2 { get => effect2; set => effect2 = value; }
+    public Color Color { get => color; set => color = value; }
 }

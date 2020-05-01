@@ -1,40 +1,29 @@
-﻿//This script uses a magic number - the number of ScriptableObjects inside Assets/Resources/Cards
+﻿//This script uses magic numbers - the number of ScriptableObjects inside Assets/Resources/Minions/, etc.
 
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Linq;
-using TMPro;
 //using Photon.Pun;
 
 public class UIManager : MonoBehaviour
 {
     public List<Sprite> allSprites;
-    public List<MinionData> cards;
-    private MinionData tempGo;
-    public GameObject currentCard;
 
-    Dictionary<int, string> minionConditions;
-    Dictionary<int, string> minionEffects;
-    Dictionary<int, string> minionClasses;
+    private List<MinionData> minions;
+    public MinionData currentMinion;
+    private List<StarterData> starters;
+    public StarterData currentStarter;
+    private List<EssentialsData> essentials;
+    public EssentialsData currentEssential;
 
-    public int cardIndex = 0;
-    public TMP_Text cost;
-    public TMP_Text health;
-    public TMP_Text damage;
+    private MinionData tempMinion;
+    private StarterData tempStarter;
+    private EssentialsData tempEssential;
 
-    public Image cardBackground;
-    public Image condition;
-    public Image allyClass;
-    public Image silenceIcon;
-    public Image effect1;
-    public Image effect2;
+    public Dictionary<int, string> minionConditions;
+    public Dictionary<int, string> minionEffects;
+    public Dictionary<int, string> minionClasses;
 
     public static UIManager Instance { get; private set; } = null;
-
-    MinionBehaviour mb;
 
     //public Text yourName;
     //public Text opponentName;
@@ -49,7 +38,6 @@ public class UIManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        mb = currentCard.GetComponent<MinionBehaviour>();
     }
 
     // Start is called before the first frame update
@@ -86,7 +74,9 @@ public class UIManager : MonoBehaviour
             {16,"loot"},
             {17,"trash"},
             {18,"coins"},
-            {19,"experience"}
+            {19,"experience"},
+            {20,"health"},
+            {21,"mana"}
         };
 
         minionClasses = new Dictionary<int, string>
@@ -96,20 +86,35 @@ public class UIManager : MonoBehaviour
             {3,"mage"}
         };
 
+        //Load all the icon sprites to display on the cards
         LoadSprites();
 
-        cards = new List<MinionData>();
+        //Load all the minion scriptable objects from the resources folder and add them to the minions list
+        minions = new List<MinionData>();
         for (int i = 0; i < 104; i++)
         {
-            tempGo = Resources.Load("Minions/" + (i + 1)) as MinionData;
-            cards.Add(tempGo);
+            tempMinion = Resources.Load("Minions/" + (i + 1)) as MinionData;
+            minions.Add(tempMinion);
         }
 
+        //Do the same for the starter cards
+        starters = new List<StarterData>();
+        for (int i = 0; i < 10; i++)
+        {
+            tempStarter = Resources.Load("Starters/" + (i + 1)) as StarterData;
+            starters.Add(tempStarter);
+        }
+
+        //Do the same for the essentials cards
+        essentials = new List<EssentialsData>();
+        for (int i = 0; i < 10; i++)
+        {
+            tempEssential = Resources.Load("Essentials/" + (i + 1)) as EssentialsData;
+            essentials.Add(tempEssential);
+        }
+
+        //Shuffle each list holding the scriptable objects
         Shuffle();
-
-        PopulateCard(cardIndex);
-
-        mb.UpdateCardDescriptions();
 
         //if (PhotonNetwork.IsMasterClient) {
         //    yourName.text = "Host: " + GameManager.UserName;
@@ -124,12 +129,28 @@ public class UIManager : MonoBehaviour
 
     private void Shuffle()
     {
-        for (int i = 0; i < cards.Count; i++)
+        for (int i = 0; i < minions.Count; i++)
         {
-            int rnd = Random.Range(0, cards.Count);
-            tempGo = cards[rnd];
-            cards[rnd] = cards[i];
-            cards[i] = tempGo;
+            int rnd = Random.Range(0, minions.Count);
+            tempMinion = minions[rnd];
+            minions[rnd] = minions[i];
+            minions[i] = tempMinion;
+        }
+
+        for (int i = 0; i < starters.Count; i++)
+        {
+            int rnd = Random.Range(0, starters.Count);
+            tempStarter = starters[rnd];
+            starters[rnd] = starters[i];
+            starters[i] = tempStarter;
+        }
+
+        for (int i = 0; i < essentials.Count; i++)
+        {
+            int rnd = Random.Range(0, essentials.Count);
+            tempEssential = essentials[rnd];
+            essentials[rnd] = essentials[i];
+            essentials[i] = tempEssential;
         }
     }
 
@@ -151,47 +172,5 @@ public class UIManager : MonoBehaviour
         loadedIcons = Resources.LoadAll("VisualAssets/game-icons-net/Game-UI", typeof(Sprite));
         for (int i = 0; i < loadedIcons.Length; i++)
             allSprites.Add((Sprite)loadedIcons[i]);
-    }
-
-    void PopulateCard(int index)
-    {
-        //set the cost
-        cost.text = cards[index].GoldAndManaCost.ToString();
-
-        //set the health
-        health.text = cards[index].Health.ToString();
-
-        //set the damage
-        damage.text = cards[index].AttackDamage.ToString();
-
-        //set the card's color
-        cardBackground.color = cards[index].Color;
-
-        //set the condition icon
-        foreach (KeyValuePair<int, string> entry in minionConditions)
-            if (cards[index].ConditionID == entry.Key)
-                condition.sprite = allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-
-        //set the effect1 icons
-        foreach (KeyValuePair<int, string> entry in minionEffects)
-            if (cards[index].EffectId1 == entry.Key)
-                effect1.sprite = allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-
-        //set the effect2 icons
-        foreach (KeyValuePair<int, string> entry in minionEffects)
-            if (cards[index].EffectId2 == entry.Key)
-                effect2.sprite = allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-
-        //set the allied class icon
-        foreach (KeyValuePair<int, string> entry in minionClasses)
-            if (cards[index].AllyClassID == entry.Key)
-                allyClass.sprite = allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-    }
-
-    public void NextMinionButton()
-    {
-        cardIndex++;
-        PopulateCard(cardIndex);
-        mb.UpdateCardDescriptions();
     }
 }
