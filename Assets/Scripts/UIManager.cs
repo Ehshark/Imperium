@@ -8,6 +8,10 @@ public class UIManager : MonoBehaviour
 {
     public List<Sprite> allSprites;
 
+    public GameObject minionPrefab;
+    public GameObject starterPrefab;
+    public GameObject itemPrefab;
+
     private List<MinionData> minions;
     public MinionData currentMinion;
     private List<StarterData> starters;

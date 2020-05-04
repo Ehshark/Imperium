@@ -1205,6 +1205,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allSprites: []
+  minionPrefab: {fileID: 5361649606923715719, guid: eefefb9f2c5af18409cebc6556cf53cc,
+    type: 3}
+  starterPrefab: {fileID: 5361649606923715719, guid: c8387c34ebd795e4b833c190710f38a1,
+    type: 3}
+  itemPrefab: {fileID: 5361649606923715719, guid: f53d67fcfa4cfac48b2e09198bb3be39,
+    type: 3}
   currentMinion: {fileID: 0}
   currentStarter: {fileID: 0}
   currentEssential: {fileID: 0}
