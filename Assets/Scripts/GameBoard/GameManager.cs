@@ -9,13 +9,29 @@ public class GameManager : MonoBehaviour
     public static string UserName { get; set; }
     public static Player player { get; set; } = null;
 
-    public Transform alliedMinionZone;
     public Transform instructionsObj;
+
+    public Transform alliedMinionZone;
+    public Transform alliedHand;
+    public Transform alliedDeck;
+    public Transform alliedDiscardPile;
+    
     public Transform enemyMinionZone;
-    public bool canPlayCards = true;
+    public Transform enemyHand;
+    public Transform enemyDeck;
+    public Transform enemyDiscardPile;
+
+    public Transform warriorShopPile;
+    public Transform rogueShopPile;
+    public Transform mageShopPile;
+
+    public List<Hero> heroes;
+
+    private float turnTimer;
+    public float TurnTimer { get => turnTimer; set => turnTimer = value; }
 
     public static GameManager Instance { get; private set; } = null;
-
+    
     private void Awake()
     {
         if (Instance)

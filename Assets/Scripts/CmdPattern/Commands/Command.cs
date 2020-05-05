@@ -29,7 +29,7 @@ public class Command
         else
         {
             playingQueue = false;
-            GameManager.Instance.canPlayCards = true;
+            //GameManager.Instance.canPlayCards = true;
         }
 
         //if (GameManager.Instance.whoseTurn != null)
