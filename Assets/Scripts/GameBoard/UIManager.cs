@@ -1,5 +1,6 @@
 ﻿//This script uses magic numbers - the number of ScriptableObjects inside Assets/Resources/Minions/, etc.
 
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using UnityEngine;
 //using Photon.Pun;
@@ -13,7 +14,14 @@ public class UIManager : MonoBehaviour
     public GameObject itemPrefab;
 
     private List<MinionData> minions;
+    private List<MinionData> warriorMinions;
+    private List<MinionData> rogueMinions;
+    private List<MinionData> mageMinions;
     public MinionData currentMinion;
+    public GameObject tempPrefab;
+    public List<MinionData> currentShopCards;
+    public bool shopFull = false;
+
     private List<StarterData> starters;
     public StarterData currentStarter;
     private List<EssentialsData> essentials;
@@ -123,6 +131,16 @@ public class UIManager : MonoBehaviour
         currentMinion = minions[0];
         currentStarter = starters[0];
 
+        //Sort all the minion cards into 3 piles corresponding with their classes: warrior, rogue, mage
+        SortPiles();
+
+        //Sets all 9 cards in the shop, 3 cards per pile
+        currentShopCards = new List<MinionData>();
+        SetWarriorMinion();
+        SetRogueMinion();
+        SetMageMinion();
+        shopFull = true;
+
         //if (PhotonNetwork.IsMasterClient) {
         //    yourName.text = "Host: " + GameManager.UserName;
         //    opponentName.text = "Client: " + PhotonNetwork.PlayerListOthers[0].NickName;
@@ -180,4 +198,85 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < loadedIcons.Length; i++)
             allSprites.Add((Sprite)loadedIcons[i]);
     }
+
+    private void SortPiles()
+    {
+        warriorMinions = new List<MinionData>();
+        rogueMinions = new List<MinionData>();
+        mageMinions = new List<MinionData>();
+
+        for (int i = 0; i < minions.Count; i++)
+        {
+            if (minions[i].CardClass == "Warrior")
+            {
+                warriorMinions.Add(minions[i]);
+            }
+
+            if (minions[i].CardClass == "Rogue")
+            {
+                rogueMinions.Add(minions[i]);
+            }
+
+            if (minions[i].CardClass == "Mage")
+            {
+                mageMinions.Add(minions[i]);
+            }
+        }
+    }
+
+    public void SetWarriorMinion()
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            currentMinion = warriorMinions[i];
+            currentShopCards.Add(currentMinion);
+
+            GameObject tmp = Instantiate(tempPrefab, new Vector3(0,0,0), Quaternion.identity) as GameObject;
+            tmp.transform.SetParent(GameObject.Find("WarriorBoard/DealtMinions").transform);
+            tmp.transform.localScale = new Vector3(1f, 1f, 1f);
+            tmp.transform.localPosition = new Vector3(0, 0, 0);
+            tmp.SetActive(true);
+            tmp.name = "" + i;
+        }
+        Debug.Log("warrior func works");
+    }
+
+    public void SetRogueMinion()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            currentMinion = rogueMinions[i];
+            currentShopCards.Add(currentMinion);
+
+            GameObject tmp = Instantiate(tempPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+            tmp.transform.SetParent(GameObject.Find("RogueBoard/DealtMinions").transform);
+            tmp.transform.localScale = new Vector3(1f, 1f, 1f);
+            tmp.transform.localPosition = new Vector3(0, 0, 0);
+            tmp.SetActive(true);
+            tmp.name = "" + (3 + i);
+        }
+        Debug.Log("rogue func works");
+    }
+
+    public void SetMageMinion()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            currentMinion = mageMinions[i];
+            currentShopCards.Add(currentMinion);
+
+            GameObject tmp = Instantiate(tempPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+            tmp.transform.SetParent(GameObject.Find("MageBoard/DealtMinions").transform);
+            tmp.transform.localScale = new Vector3(1f, 1f, 1f);
+            tmp.transform.localPosition = new Vector3(0, 0, 0);
+            tmp.SetActive(true);
+            tmp.name = "" + (6 + i);
+        }
+        Debug.Log("mage func works");
+    }
+    //make 3 different functions
+    //each function will loop 3 times for each pile: warrior,rogue,mage cards
+    //the function will loop through the pile and change the current minion to each element
+    //then call the instantiate function for the prefab
+    //call all 3 functions in start()
 }
