@@ -5,11 +5,12 @@ using UnityEngine.EventSystems;
 
 public class ShowShopCard : MonoBehaviour, IPointerDownHandler
 {
-    public GameObject rightShopUI;
     public GameObject shop;
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        GameObject rightShopUI = shop.GetComponent<ShopController>().rightShopUI;
+
         if (!rightShopUI.activeSelf)
         {
             rightShopUI.SetActive(true);

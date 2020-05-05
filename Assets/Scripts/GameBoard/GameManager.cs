@@ -14,18 +14,19 @@ public class GameManager : MonoBehaviour
     public Transform alliedMinionZone;
     public Transform alliedHand;
     public Transform alliedDeck;
-    public Transform alliedDiscardPile;
+    public List<GameObject> alliedDiscardPile;
     
     public Transform enemyMinionZone;
     public Transform enemyHand;
     public Transform enemyDeck;
-    public Transform enemyDiscardPile;
+    public List<GameObject> enemyDiscardPile;
 
     public Transform warriorShopPile;
     public Transform rogueShopPile;
     public Transform mageShopPile;
 
-    public List<Hero> heroes;
+    public Hero bottomHero { get; set; }
+    public Hero topHero { get; set; }
 
     private float turnTimer;
     public float TurnTimer { get => turnTimer; set => turnTimer = value; }

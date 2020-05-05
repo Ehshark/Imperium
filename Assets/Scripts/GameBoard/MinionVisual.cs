@@ -176,6 +176,8 @@ using System.Linq;
 
 public class MinionVisual : MonoBehaviour, IPointerClickHandler
 {
+    public MinionData minionData { get; private set; }
+
     //bool isEnlarged = false;
     public List<Transform> descriptions;
 
@@ -197,6 +199,8 @@ public class MinionVisual : MonoBehaviour, IPointerClickHandler
 
     void OnEnable()
     {
+        minionData = UIManager.Instance.currentMinion;
+
         PopulateCard();
         UpdateCardDescriptions();
     }
