@@ -29,9 +29,30 @@ public class ShopController : MonoBehaviour
         GameManager.Instance.topHero.MyTurn = false;
         GameManager.Instance.topHero.Gold = 4;
 
-        GameManager.Instance.bottomHero = new Hero();
+        //Test
+        GameManager.Instance.bottomHero = GameObject.Find("HeroPortrait").GetComponent<Hero>();
         GameManager.Instance.bottomHero.MyTurn = true;
+        GameManager.Instance.bottomHero.CurrentHealth = 5;
+        GameManager.Instance.bottomHero.TotalHealth = 5;
+        GameManager.Instance.bottomHero.SetHealth();
+
+        GameManager.Instance.bottomHero.Experience = 5;
+        GameManager.Instance.bottomHero.RequredExp = 10;
+        GameManager.Instance.bottomHero.SetExp();
+        GameManager.Instance.bottomHero.GainExp(1);
+
+        GameManager.Instance.bottomHero.CurrentMana = 3;
+        GameManager.Instance.bottomHero.TotalMana = 6;
+        GameManager.Instance.bottomHero.SetMana();
+        GameManager.Instance.bottomHero.AdjustMana(4, false);
+
         GameManager.Instance.bottomHero.Gold = 5;
+        GameManager.Instance.bottomHero.SetGold();
+
+        GameManager.Instance.bottomHero.SetPlayerName("C067");
+
+        GameManager.Instance.bottomHero.Level = 5;
+        GameManager.Instance.bottomHero.SetLevel();
     }
 
     public void UpdateShopCard(GameObject selectedMinionObject)
@@ -85,7 +106,7 @@ public class ShopController : MonoBehaviour
                 MinionVisual minion = selectedCard.GetComponent<MinionVisual>() as MinionVisual;
 
                 //Subtract the Hero's current Gold
-                GameManager.Instance.bottomHero.Gold -= costForCard;
+                GameManager.Instance.bottomHero.AdjustGold(costForCard, false);
                 //Update the Gold UI
                 herosGold.text = GameManager.Instance.bottomHero.Gold.ToString();
 
@@ -112,7 +133,7 @@ public class ShopController : MonoBehaviour
                 MinionVisual minion = selectedCard.GetComponent<MinionVisual>() as MinionVisual;
 
                 //Subtract the Hero's current Gold
-                GameManager.Instance.topHero.Gold -= costForCard;
+                GameManager.Instance.topHero.AdjustGold(costForCard, false);
                 //Update the Gold UI
                 herosGold.text = GameManager.Instance.topHero.Gold.ToString();
 
@@ -141,8 +162,8 @@ public class ShopController : MonoBehaviour
         {
             if (GameManager.Instance.bottomHero.Gold >= costToChangeCard)
             {
-                //Subtract the Current Gold and Update the UI
-                GameManager.Instance.bottomHero.Gold -= costToChangeCard;
+                //Subtract the Current Gold and Update the UI                
+                GameManager.Instance.bottomHero.AdjustGold(costToChangeCard, false);
                 herosGold.text = GameManager.Instance.bottomHero.Gold.ToString();
 
                 //Destroy the Object
@@ -161,7 +182,7 @@ public class ShopController : MonoBehaviour
             if (GameManager.Instance.topHero.Gold >= costToChangeCard)
             {
                 //Subtract the Current Gold and Update the UI
-                GameManager.Instance.topHero.Gold -= costToChangeCard;
+                GameManager.Instance.topHero.AdjustGold(costToChangeCard, false);
                 herosGold.text = GameManager.Instance.topHero.Gold.ToString();
 
                 //Destroy the Object
@@ -235,7 +256,7 @@ public class ShopController : MonoBehaviour
 
     public void PopulateShop()
     {
-        int num = Random.Range(1, 45);
+        int num = Random.Range(1, 100);
 
         UIManager.Instance.currentMinion = Resources.Load("Minions/" + num) as MinionData;
         GameObject tmp = Instantiate(minionPrefab) as GameObject;
