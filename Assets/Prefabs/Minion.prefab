@@ -464,8 +464,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0232399, y: 1.0232399, z: 1.0232399}
   m_Children:
-  - {fileID: 5361649607802625129}
   - {fileID: 5361649607602109166}
+  - {fileID: 5361649607802625129}
   - {fileID: 5361649608484436033}
   - {fileID: 5361649608814709188}
   - {fileID: 9174111617202879247}
@@ -509,7 +509,7 @@ MonoBehaviour:
   cost: {fileID: 5361649607378099703}
   health: {fileID: 5361649608773061276}
   damage: {fileID: 5361649608923231243}
-  cardBackground: {fileID: 5361649607802625128}
+  cardBackground: {fileID: 5361649607602109161}
   condition: {fileID: 5361649608214357139}
   allyClass: {fileID: 5361649608489491309}
   silenceIcon: {fileID: 5361649607211962120}
@@ -1787,7 +1787,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5361649606923715718}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2083,7 +2083,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5361649606923715718}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2117,7 +2117,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4310b74d7992eb84c91048ed352caaf7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c430351465fe1fc42a6bef5878a08253, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
