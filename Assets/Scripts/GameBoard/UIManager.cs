@@ -255,6 +255,9 @@ public class UIManager : MonoBehaviour
             MinionVisual mv = GameManager.Instance.warriorShopPile.GetChild(i).GetComponent<MinionVisual>();
             mv.Md = currentMinion;
             GameManager.Instance.warriorShopPile.GetChild(i).gameObject.SetActive(true);
+
+            //Pop added
+            warriorMinions.Remove(warriorMinions[i]);
         }
     }
 
@@ -267,6 +270,9 @@ public class UIManager : MonoBehaviour
             MinionVisual mv = GameManager.Instance.rogueShopPile.GetChild(i).GetComponent<MinionVisual>();
             mv.Md = currentMinion;
             GameManager.Instance.rogueShopPile.GetChild(i).gameObject.SetActive(true);
+
+            //Pop added
+            rogueMinions.Remove(rogueMinions[i]);
         }
     }
 
@@ -279,7 +285,93 @@ public class UIManager : MonoBehaviour
             MinionVisual mv = GameManager.Instance.mageShopPile.GetChild(i).GetComponent<MinionVisual>();
             mv.Md = currentMinion;
             GameManager.Instance.mageShopPile.GetChild(i).gameObject.SetActive(true);
+
+            //Pop added
+            mageMinions.Remove(mageMinions[i]);
         }
+    }
+
+    public GameObject GetNextShopCard(string cardType, bool change, MinionData minion = null)
+    {
+        GameObject tmp = Instantiate(minionPrefab);
+        tmp.SetActive(false);
+
+        if (cardType.Equals("Warrior"))
+        {
+            if (warriorMinions.Count != 0)
+            {
+                tmp.GetComponent<MinionVisual>().Md = warriorMinions[0];
+                warriorMinions.Remove(warriorMinions[0]);
+
+                if (change)
+                {
+                    warriorMinions.Add(minion);
+                }
+            }
+        }
+        else if (cardType.Equals("Rogue"))
+        {
+            if (rogueMinions.Count != 0)
+            {
+                tmp.GetComponent<MinionVisual>().Md = rogueMinions[0];
+                rogueMinions.Remove(rogueMinions[0]);
+
+                if (change)
+                {
+                    rogueMinions.Add(minion);
+                }
+            }
+        }
+        else
+        {
+            if (mageMinions.Count != 0)
+            {
+                tmp.GetComponent<MinionVisual>().Md = mageMinions[0];
+                mageMinions.Remove(mageMinions[0]);
+
+                if (change)
+                {
+                    mageMinions.Add(minion);
+                }
+            }
+        }
+
+        if (tmp.GetComponent<MinionVisual>().Md != null)
+        {
+            tmp.AddComponent<ShowShopCard>();
+            tmp.SetActive(true);
+        }
+
+        return tmp;
+    }
+
+    public bool CanChangeShopCard(string cardType)
+    {
+        bool result = false;
+
+        if (cardType.Equals("Warrior"))
+        {
+            if (warriorMinions.Count != 0)
+            {
+                result = true;
+            }
+        }
+        else if (cardType.Equals("Rogue"))
+        {
+            if (rogueMinions.Count != 0)
+            {
+                result = true;
+            }
+        }
+        else
+        {
+            if (mageMinions.Count != 0)
+            {
+                result = true;
+            }
+        }
+
+        return result;
     }
     
     public void ShuffleStarterDeck()
