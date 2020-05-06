@@ -7,6 +7,9 @@ using System.Linq;
 
 public class EssentialVisual : MonoBehaviour
 {
+    private EssentialsData ed;
+    public EssentialsData Ed { get => ed; set => ed = value; }
+
     //bool isEnlarged = false;
     public List<Transform> descriptions;
 
@@ -25,33 +28,33 @@ public class EssentialVisual : MonoBehaviour
     public void UpdateCardDescriptions()
     {
         TMP_Text text = descriptions[1].GetComponent<TMP_Text>();
-        text.text = "This card's mana cost is " + UIManager.Instance.currentStarter.ManaCost;
+        text.text = "This card's mana cost is " + ed.ManaCost;
         text = descriptions[3].GetComponent<TMP_Text>();
-        text.text = UIManager.Instance.currentStarter.EffectText1;
+        text.text = ed.EffectText1;
         text = descriptions[5].GetComponent<TMP_Text>();
-        text.text = UIManager.Instance.currentStarter.EffectText2;
+        text.text = ed.EffectText2;
     }
 
     void PopulateCard()
     {
         //set the cost
-        cost.text = UIManager.Instance.currentStarter.ManaCost.ToString();
+        cost.text = ed.ManaCost.ToString();
 
         //set the card's color
-        cardBackground.color = UIManager.Instance.currentStarter.Color;
+        cardBackground.color = ed.Color;
 
         //set the effect1 icons
         foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
-            if (UIManager.Instance.currentStarter.EffectId1 == entry.Key)
+            if (ed.EffectId1 == entry.Key)
                 effect1.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
 
         //set the effect2 icons
-        if (!(UIManager.Instance.currentStarter.EffectText2.Equals("")))
+        if (!(ed.EffectText2.Equals("")))
             effect2.gameObject.SetActive(false);
         else
         {
             foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
-                if (UIManager.Instance.currentStarter.EffectId2 == entry.Key)
+                if (ed.EffectId2 == entry.Key)
                     effect2.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
         }
     }

@@ -13,21 +13,21 @@ public class UIManager : MonoBehaviour
     public GameObject starterPrefab;
     public GameObject itemPrefab;
 
-    private List<MinionData> minions;
     private List<MinionData> warriorMinions;
     private List<MinionData> rogueMinions;
     private List<MinionData> mageMinions;
 
     public MinionData currentMinion;
+    private EssentialsData currentEssential;
+    private StarterData currentStarter;
 
     public List<MinionData> dealtWarriorCards;
     public List<MinionData> dealtRogueCards;
     public List<MinionData> dealtMageCards;
 
     private List<StarterData> starters;
-    public StarterData currentStarter;
     private List<EssentialsData> essentials;
-    public EssentialsData currentEssential;
+    private List<MinionData> minions;
 
     private MinionData tempMinion;
     private StarterData tempStarter;
