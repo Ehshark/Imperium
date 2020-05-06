@@ -70,7 +70,7 @@ public class ShopController : MonoBehaviour
         MinionVisual selectedMinion = selectedMinionObject.GetComponent<MinionVisual>();
 
         //Spawn Card
-        UIManager.Instance.currentMinion = selectedMinion.minionData;
+        UIManager.Instance.currentMinion = selectedMinion.Md;
         GameObject tmp = Instantiate(minionPrefab, Vector3.zero, Quaternion.identity) as GameObject;
         tmp.transform.SetParent(shopCardGroup.transform);
         tmp.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -214,11 +214,6 @@ public class ShopController : MonoBehaviour
         return player;
     }
 
-    public void CloseShop()
-    {
-        rightShopUI.SetActive(false);
-    }
-
     private void RemoveCard()
     {
         //Destroy the Object
@@ -234,7 +229,7 @@ public class ShopController : MonoBehaviour
             tmp.transform.SetParent(GameObject.Find("DiscardPile").transform, false);
             tmp.transform.localScale = new Vector3(1f, 1f, 1f);
 
-            GameManager.Instance.alliedDiscardPile.Add(tmp);
+            GameManager.Instance.alliedDiscardPileList.Add(tmp);
         }
         else
         {
@@ -242,28 +237,15 @@ public class ShopController : MonoBehaviour
             tmp.transform.SetParent(GameObject.Find("EnemyDiscardPile").transform, false);
             tmp.transform.localScale = new Vector3(1f, 1f, 1f);
 
-            GameManager.Instance.enemyDiscardPile.Add(tmp);
+            GameManager.Instance.enemyDiscardPileList.Add(tmp);
         }
     }
 
     private GameObject SpawnMinion(MinionVisual minion)
     {
-        UIManager.Instance.currentMinion = minion.minionData;
+        UIManager.Instance.currentMinion = minion.Md;
         GameObject tmp = Instantiate(minionPrefab) as GameObject;
 
         return tmp;
-    }
-
-    public void PopulateShop()
-    {
-        int num = Random.Range(1, 100);
-
-        UIManager.Instance.currentMinion = Resources.Load("Minions/" + num) as MinionData;
-        GameObject tmp = Instantiate(minionPrefab) as GameObject;
-        tmp.transform.SetParent(GameObject.Find("DealtMinions").transform, false);
-        tmp.transform.localScale = new Vector3(1f, 1f, 1f);
-
-        tmp.AddComponent<ShowShopCard>();
-        tmp.GetComponent<ShowShopCard>().shop = this.gameObject;
     }
 }

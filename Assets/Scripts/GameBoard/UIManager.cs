@@ -19,14 +19,10 @@ public class UIManager : MonoBehaviour
     private List<MinionData> mageMinions;
 
     public MinionData currentMinion;
-    //public GameObject tempPrefab;
 
-    //public List<MinionData> currentShopCards;
     public List<MinionData> dealtWarriorCards;
     public List<MinionData> dealtRogueCards;
     public List<MinionData> dealtMageCards;
-
-    //public bool shopFull = false;
 
     private List<StarterData> starters;
     public StarterData currentStarter;

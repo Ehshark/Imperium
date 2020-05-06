@@ -194,10 +194,7 @@ public class MinionVisual : MonoBehaviour, IPointerClickHandler
     public Image allyClass;
     public Image silenceIcon;
     public Image effect1;
-    public Image effect2;
-
-    private int shopCounter = 0;
-
+    public Image effect2;
     void OnEnable()
     {
         if (md != null)
@@ -284,44 +281,36 @@ public class MinionVisual : MonoBehaviour, IPointerClickHandler
     }
 
     void PopulateCard()
-    {
-        //set the cost
+    {
+        //set the cost
         cost.text = Md.GoldAndManaCost.ToString();
-
-        //set the health
+        //set the health
         health.text = Md.Health.ToString();
-
-        //set the damage
+        //set the damage
         damage.text = Md.AttackDamage.ToString();
-
-        //set the card's color
+        //set the card's color
         cardBackground.color = Md.Color;
-
-        //set the condition icon
-        foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionConditions)
-            if (Md.ConditionID == entry.Key)
+        //set the condition icon
+        foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionConditions)
+            if (Md.ConditionID == entry.Key)
                 condition.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-
-        //set the effect1 icons
-        foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
-            if (Md.EffectId1 == entry.Key)
+        //set the effect1 icons
+        foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
+            if (Md.EffectId1 == entry.Key)
                 effect1.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-
-        //set the effect2 icons
-        if (Md.EffectText2.Equals(""))
+        //set the effect2 icons
+        if (Md.EffectText2.Equals(""))
             effect2.gameObject.SetActive(false);
-        else
-        {
-            foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
-                if (Md.EffectId2 == entry.Key)
-                    effect2.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+        else
+        {
+            foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
+                if (Md.EffectId2 == entry.Key)
+                    effect2.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
         }
-
-        //set the allied class icon
-        foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionClasses)
-            if (Md.AllyClassID == entry.Key)
+        //set the allied class icon
+        foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionClasses)
+            if (Md.AllyClassID == entry.Key)
                 allyClass.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-        //}
     }
 
     //void CollapseMinionCard()

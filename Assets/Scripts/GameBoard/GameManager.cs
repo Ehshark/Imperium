@@ -14,14 +14,16 @@ public class GameManager : MonoBehaviour
     public Transform alliedMinionZone;
     public Transform alliedHand;
     public Transform alliedDeck;
-    public List<GameObject> alliedDiscardPile;
+    public Transform alliedDiscardPile;
+    public List<GameObject> alliedDiscardPileList;
     
     public Transform enemyMinionZone;
     public Transform enemyHand;
     public Transform enemyDeck;
-    public List<GameObject> enemyDiscardPile;
+    public Transform enemyDiscardPile;
+    public List<GameObject> enemyDiscardPileList;
 
-    public Transform shop; //new
+    public Transform shop;
     public Transform warriorShopPile;
     public Transform rogueShopPile;
     public Transform mageShopPile;
