@@ -1079,16 +1079,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   instructionsObj: {fileID: 0}
   alliedMinionZone: {fileID: 1176135651}
-  alliedHand: {fileID: 0}
-  alliedDeck: {fileID: 0}
-  alliedDiscardPile: {fileID: 0}
-  enemyMinionZone: {fileID: 0}
-  enemyHand: {fileID: 0}
-  enemyDeck: {fileID: 0}
-  enemyDiscardPile: {fileID: 0}
-  warriorShopPile: {fileID: 0}
-  rogueShopPile: {fileID: 0}
-  mageShopPile: {fileID: 0}
+  alliedHand: {fileID: 1722948513}
+  alliedDeck: {fileID: 2047779241}
+  alliedDiscardPile: {fileID: 1648791732}
+  enemyMinionZone: {fileID: 964206218}
+  enemyHand: {fileID: 1339266554}
+  enemyDeck: {fileID: 262941049}
+  enemyDiscardPile: {fileID: 53789185}
+  shop: {fileID: 536721380}
+  warriorShopPile: {fileID: 2048055305}
+  rogueShopPile: {fileID: 2048055304}
+  mageShopPile: {fileID: 2048055303}
   heroes: []
 --- !u!1001 &716297919
 PrefabInstance:
@@ -2943,9 +2944,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 536721379}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1586695288}
+        m_MethodName: DisplayShop
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3876,7 +3877,6 @@ MonoBehaviour:
   itemPrefab: {fileID: 5361649606923715719, guid: f53d67fcfa4cfac48b2e09198bb3be39,
     type: 3}
   currentMinion: {fileID: 0}
-  tempPrefab: {fileID: 1781766635}
   currentShopCards: []
   shopFull: 0
   currentStarter: {fileID: 0}
@@ -4063,12 +4063,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1722948512}
   m_CullTransparentMesh: 0
---- !u!1 &1781766635 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4217457266789373585, guid: fbcde54896aabfd4d97f926c661e36b5,
-    type: 3}
-  m_PrefabInstance: {fileID: 2048055302}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1826332210
 GameObject:
   m_ObjectHideFlags: 0
@@ -5963,7 +5957,7 @@ PrefabInstance:
     - target: {fileID: 8137737222608895784, guid: fbcde54896aabfd4d97f926c661e36b5,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8137737222608895785, guid: fbcde54896aabfd4d97f926c661e36b5,
         type: 3}
@@ -6092,6 +6086,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbcde54896aabfd4d97f926c661e36b5, type: 3}
+--- !u!224 &2048055303 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8137737221003228456, guid: fbcde54896aabfd4d97f926c661e36b5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2048055302}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &2048055304 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8137737220968415087, guid: fbcde54896aabfd4d97f926c661e36b5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2048055302}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &2048055305 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8137737222799235302, guid: fbcde54896aabfd4d97f926c661e36b5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2048055302}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2065291703
 GameObject:
   m_ObjectHideFlags: 0

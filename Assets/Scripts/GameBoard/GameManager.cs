@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public Transform enemyDeck;
     public List<GameObject> enemyDiscardPile;
 
+    public Transform shop; //new
     public Transform warriorShopPile;
     public Transform rogueShopPile;
     public Transform mageShopPile;

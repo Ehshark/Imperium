@@ -17,10 +17,16 @@ public class UIManager : MonoBehaviour
     private List<MinionData> warriorMinions;
     private List<MinionData> rogueMinions;
     private List<MinionData> mageMinions;
+
     public MinionData currentMinion;
-    public GameObject tempPrefab;
-    public List<MinionData> currentShopCards;
-    public bool shopFull = false;
+    //public GameObject tempPrefab;
+
+    //public List<MinionData> currentShopCards;
+    public List<MinionData> dealtWarriorCards;
+    public List<MinionData> dealtRogueCards;
+    public List<MinionData> dealtMageCards;
+
+    //public bool shopFull = false;
 
     private List<StarterData> starters;
     public StarterData currentStarter;
@@ -49,7 +55,7 @@ public class UIManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     // Start is called before the first frame update
@@ -134,12 +140,9 @@ public class UIManager : MonoBehaviour
         //Sort all the minion cards into 3 piles corresponding with their classes: warrior, rogue, mage
         SortPiles();
 
-        //Sets all 9 cards in the shop, 3 cards per pile
-        currentShopCards = new List<MinionData>();
-        SetWarriorMinion();
-        SetRogueMinion();
-        SetMageMinion();
-        shopFull = true;
+        dealtWarriorCards = new List<MinionData>();
+        dealtRogueCards = new List<MinionData>();
+        dealtMageCards = new List<MinionData>();
 
         //if (PhotonNetwork.IsMasterClient) {
         //    yourName.text = "Host: " + GameManager.UserName;
@@ -150,6 +153,16 @@ public class UIManager : MonoBehaviour
         //    yourName.text = "Client: " + GameManager.UserName;
         //    opponentName.text = "Host: " + PhotonNetwork.PlayerListOthers[0].NickName;
         //}
+    }
+
+    public void DisplayShop()
+    {
+        GameManager.Instance.shop.gameObject.SetActive(true);
+
+        //Sets all 9 cards in the shop, 3 cards per pile
+        SetWarriorMinion();
+        SetRogueMinion();
+        SetMageMinion();
     }
 
     private void Shuffle()
@@ -207,17 +220,17 @@ public class UIManager : MonoBehaviour
 
         for (int i = 0; i < minions.Count; i++)
         {
-            if (minions[i].CardClass == "Warrior")
+            if (minions[i].CardClass.Equals("Warrior"))
             {
                 warriorMinions.Add(minions[i]);
             }
 
-            if (minions[i].CardClass == "Rogue")
+            if (minions[i].CardClass.Equals("Rogue"))
             {
                 rogueMinions.Add(minions[i]);
             }
 
-            if (minions[i].CardClass == "Mage")
+            if (minions[i].CardClass.Equals("Mage"))
             {
                 mageMinions.Add(minions[i]);
             }
@@ -226,19 +239,14 @@ public class UIManager : MonoBehaviour
 
     public void SetWarriorMinion()
     {
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             currentMinion = warriorMinions[i];
-            currentShopCards.Add(currentMinion);
-
-            GameObject tmp = Instantiate(tempPrefab, new Vector3(0,0,0), Quaternion.identity) as GameObject;
-            tmp.transform.SetParent(GameObject.Find("WarriorBoard/DealtMinions").transform);
-            tmp.transform.localScale = new Vector3(1f, 1f, 1f);
-            tmp.transform.localPosition = new Vector3(0, 0, 0);
-            tmp.SetActive(true);
-            tmp.name = "" + i;
+            dealtWarriorCards.Add(currentMinion);
+            MinionVisual mv = GameManager.Instance.warriorShopPile.GetChild(i).GetComponent<MinionVisual>();
+            mv.Md = currentMinion;
+            GameManager.Instance.warriorShopPile.GetChild(i).gameObject.SetActive(true);
         }
-        Debug.Log("warrior func works");
     }
 
     public void SetRogueMinion()
@@ -246,16 +254,11 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             currentMinion = rogueMinions[i];
-            currentShopCards.Add(currentMinion);
-
-            GameObject tmp = Instantiate(tempPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-            tmp.transform.SetParent(GameObject.Find("RogueBoard/DealtMinions").transform);
-            tmp.transform.localScale = new Vector3(1f, 1f, 1f);
-            tmp.transform.localPosition = new Vector3(0, 0, 0);
-            tmp.SetActive(true);
-            tmp.name = "" + (3 + i);
+            dealtRogueCards.Add(currentMinion);
+            MinionVisual mv = GameManager.Instance.rogueShopPile.GetChild(i).GetComponent<MinionVisual>();
+            mv.Md = currentMinion;
+            GameManager.Instance.rogueShopPile.GetChild(i).gameObject.SetActive(true);
         }
-        Debug.Log("rogue func works");
     }
 
     public void SetMageMinion()
@@ -263,20 +266,10 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             currentMinion = mageMinions[i];
-            currentShopCards.Add(currentMinion);
-
-            GameObject tmp = Instantiate(tempPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-            tmp.transform.SetParent(GameObject.Find("MageBoard/DealtMinions").transform);
-            tmp.transform.localScale = new Vector3(1f, 1f, 1f);
-            tmp.transform.localPosition = new Vector3(0, 0, 0);
-            tmp.SetActive(true);
-            tmp.name = "" + (6 + i);
+            dealtMageCards.Add(currentMinion);
+            MinionVisual mv = GameManager.Instance.mageShopPile.GetChild(i).GetComponent<MinionVisual>();
+            mv.Md = currentMinion;
+            GameManager.Instance.mageShopPile.GetChild(i).gameObject.SetActive(true);
         }
-        Debug.Log("mage func works");
     }
-    //make 3 different functions
-    //each function will loop 3 times for each pile: warrior,rogue,mage cards
-    //the function will loop through the pile and change the current minion to each element
-    //then call the instantiate function for the prefab
-    //call all 3 functions in start()
 }

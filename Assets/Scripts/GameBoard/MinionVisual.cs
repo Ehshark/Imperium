@@ -176,7 +176,8 @@ using System.Linq;
 
 public class MinionVisual : MonoBehaviour, IPointerClickHandler
 {
-    public MinionData minionData { get; private set; }
+    private MinionData md;
+    public MinionData Md { get => md; set => md = value; }
 
     //bool isEnlarged = false;
     public List<Transform> descriptions;
@@ -195,17 +196,15 @@ public class MinionVisual : MonoBehaviour, IPointerClickHandler
     public Image effect1;
     public Image effect2;
 
-    private GameObject minion;
-
+    private int shopCounter = 0;
+
     void OnEnable()
-    private int shopCounter = 0;
-
-    void Start()
     {
-        minionData = UIManager.Instance.currentMinion;
-
-        PopulateCard();
-        UpdateCardDescriptions();
+        if (md != null)
+        {
+            PopulateCard();
+            UpdateCardDescriptions();
+        }
     }
 
 
@@ -285,125 +284,44 @@ public class MinionVisual : MonoBehaviour, IPointerClickHandler
     }
 
     void PopulateCard()
-    {
-        if (UIManager.Instance.shopFull)
-        {
-            switch(this.name)
-            {
-                case "0":
-                    shopCounter = 0;
-                    break;
-                case "1":
-                    shopCounter = 1;
-                    break;
-                case "2":
-                    shopCounter = 2;
-                    break;
-                case "3":
-                    shopCounter = 3;
-                    break;
-                case "4":
-                    shopCounter = 4;
-                    break;
-                case "5":
-                    shopCounter = 5;
-                    break;
-                case "6":
-                    shopCounter = 6;
-                    break;
-                case "7":
-                    shopCounter = 7;
-                    break;
-                case "8":
-                    shopCounter = 8;
-                    break;
-            }
+    {
+        //set the cost
+        cost.text = Md.GoldAndManaCost.ToString();
 
-            //set the cost
-            cost.text = UIManager.Instance.currentShopCards[shopCounter].GoldAndManaCost.ToString();
+        //set the health
+        health.text = Md.Health.ToString();
 
-            //set the health
-            health.text = UIManager.Instance.currentShopCards[shopCounter].Health.ToString();
+        //set the damage
+        damage.text = Md.AttackDamage.ToString();
 
-            //set the damage
-            damage.text = UIManager.Instance.currentShopCards[shopCounter].AttackDamage.ToString();
+        //set the card's color
+        cardBackground.color = Md.Color;
 
-            //set the card's color
-            cardBackground.color = UIManager.Instance.currentShopCards[shopCounter].Color;
-            //////////////
-            //Debug.Log("Card type: " + UIManager.Instance.currentShopCards[shopCounter].CardClass + " and: " + shopCounter);
-            //shopCounter++;
-            //EACH CARD PREFAB IS CALLING A MINOINVISUAL.CS SCRIPT AT THE EXACT SAME TIME, SO COUNTER INCREMENTS WILL NOT WORK!!!
-            //Debug.Log("Prefab name: " + this.name);
+        //set the condition icon
+        foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionConditions)
+            if (Md.ConditionID == entry.Key)
+                condition.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
 
-            //set the condition icon
-            foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionConditions)
-                if (UIManager.Instance.currentShopCards[shopCounter].ConditionID == entry.Key)
-                    condition.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+        //set the effect1 icons
+        foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
+            if (Md.EffectId1 == entry.Key)
+                effect1.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
 
-            //set the effect1 icons
-            foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
-                if (UIManager.Instance.currentShopCards[shopCounter].EffectId1 == entry.Key)
-                    effect1.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-
-            //set the effect2 icons
-            if (UIManager.Instance.currentShopCards[shopCounter].EffectText2.Equals(""))
-                effect2.gameObject.SetActive(false);
-            else
-            {
-                foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
-                    if (UIManager.Instance.currentShopCards[shopCounter].EffectId2 == entry.Key)
-                        effect2.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-            }
-
-
-            //set the allied class icon
-            foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionClasses)
-                if (UIManager.Instance.currentShopCards[shopCounter].AllyClassID == entry.Key)
-                    allyClass.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-        }
+        //set the effect2 icons
+        if (Md.EffectText2.Equals(""))
+            effect2.gameObject.SetActive(false);
         else
         {
-
-            Debug.Log("shop populate not working");
-            //set the cost
-            cost.text = UIManager.Instance.currentMinion.GoldAndManaCost.ToString();
-
-            //set the health
-            health.text = UIManager.Instance.currentMinion.Health.ToString();
-
-            //set the damage
-            damage.text = UIManager.Instance.currentMinion.AttackDamage.ToString();
-
-            //set the card's color
-            cardBackground.color = UIManager.Instance.currentMinion.Color;
-
-            //set the condition icon
-            foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionConditions)
-                if (UIManager.Instance.currentMinion.ConditionID == entry.Key)
-                    condition.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-
-            //set the effect1 icons
             foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
-                if (UIManager.Instance.currentMinion.EffectId1 == entry.Key)
-                    effect1.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+                if (Md.EffectId2 == entry.Key)
+                    effect2.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+        }
 
-            //set the effect2 icons
-            if (UIManager.Instance.currentMinion.EffectText2.Equals(""))
-                effect2.gameObject.SetActive(false);
-            else
-            {
-                foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
-                    if (UIManager.Instance.currentMinion.EffectId2 == entry.Key)
-                        effect2.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-            }
-
-
-            //set the allied class icon
-            foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionClasses)
-                if (UIManager.Instance.currentMinion.AllyClassID == entry.Key)
-                    allyClass.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-        }
+        //set the allied class icon
+        foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionClasses)
+            if (Md.AllyClassID == entry.Key)
+                allyClass.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+        //}
     }
 
     //void CollapseMinionCard()

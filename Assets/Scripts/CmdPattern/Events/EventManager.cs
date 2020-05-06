@@ -20,7 +20,7 @@ public class EventManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     //Function to add listener to array of listeners
