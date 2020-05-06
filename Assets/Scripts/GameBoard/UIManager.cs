@@ -119,6 +119,9 @@ public class UIManager : MonoBehaviour
 
         //Shuffle each list holding the scriptable objects
         Shuffle();
+        currentEssential = essentials[0];
+        currentMinion = minions[0];
+        currentStarter = starters[0];
 
         //if (PhotonNetwork.IsMasterClient) {
         //    yourName.text = "Host: " + GameManager.UserName;

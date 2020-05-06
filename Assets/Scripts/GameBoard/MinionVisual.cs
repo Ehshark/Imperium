@@ -6,10 +6,13 @@ using UnityEngine.EventSystems;
 using TMPro;
 using System.Linq;
 
-public class MinionVisual : MonoBehaviour
+public class MinionVisual : MonoBehaviour, IPointerClickHandler
 {
     //bool isEnlarged = false;
     public List<Transform> descriptions;
+
+    public GameObject summonPanel;
+    private bool isPanelEnabled = false;
 
     public TMP_Text cost;
     public TMP_Text health;
@@ -22,22 +25,37 @@ public class MinionVisual : MonoBehaviour
     public Image effect1;
     public Image effect2;
 
-    void Start()
+    private GameObject minion;
+
+    void OnEnable()
     {
         PopulateCard();
         UpdateCardDescriptions();
     }
 
-    //public void OnPointerDown(PointerEventData eventData)
-    //{
-    //    if (GameManager.Instance.canPlayCards)
-    //    {
-    //        GameManager.Instance.canPlayCards = false;
-    //        minion = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
-    //        if (minion.transform.parent.name != "AlliedMinionsPanel")
-    //            StartCoroutine(PlayMinion());
-    //    }
-    //}
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        minion = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
+        if (minion.transform.parent.name.Equals("Hand"))
+        {
+            if (!isPanelEnabled)
+            {
+                summonPanel.SetActive(true);
+                isPanelEnabled = true;
+            }
+
+            else
+            {
+                summonPanel.SetActive(false);
+                isPanelEnabled = false;
+            }
+
+        }
+
+        //if (minion.transform.parent.name != "AlliedMinionsPanel")
+        //    StartCoroutine(PlayMinion());
+
+    }
 
     //IEnumerator PlayMinion()
     //{
