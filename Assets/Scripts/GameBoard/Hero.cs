@@ -20,9 +20,29 @@ public class Hero : MonoBehaviour
     private char clan;
     //private List<Ability> abilities;
     private bool hasExpressBuy;
-    private bool hasToDiscard;
+    private int hasToDiscard;
     private bool myTurn;
     private bool canPlayCards;
+
+    //Components
+    [SerializeField]
+    private TMP_Text healthText;
+    [SerializeField]
+    private Slider healthBar;
+    [SerializeField]
+    private TMP_Text expText;
+    [SerializeField]
+    private Slider expBar;
+    [SerializeField]
+    private TMP_Text manaText;
+    [SerializeField]
+    private Slider manaBar;
+    [SerializeField]
+    private TMP_Text levelText;
+    [SerializeField]
+    private TMP_Text goldText;
+    [SerializeField]
+    private TMP_Text playerName;
 
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int TotalHealth { get => totalHealth; set => totalHealth = value; }
@@ -35,30 +55,10 @@ public class Hero : MonoBehaviour
     public int HandSize { get => handSize; set => handSize = value; }
     public char Clan { get => clan; set => clan = value; }
     public bool HasExpressBuy { get => hasExpressBuy; set => hasExpressBuy = value; }
-    public bool HasToDiscard { get => hasToDiscard; set => hasToDiscard = value; }
+    public int HasToDiscard { get => hasToDiscard; set => hasToDiscard = value; }
     public bool MyTurn { get => myTurn; set => myTurn = value; }
     public int RequredExp { get => requredExp; set => requredExp = value; }
     public bool CanPlayCards { get => canPlayCards; set => canPlayCards = value; }
-
-    //Components
-    [SerializeField]
-    private TextMeshProUGUI healthText;
-    [SerializeField]
-    private Slider healthBar;
-    [SerializeField]
-    private TextMeshProUGUI expText;
-    [SerializeField]
-    private Slider expBar;
-    [SerializeField]
-    private TextMeshProUGUI manaText;
-    [SerializeField]
-    private Slider manaBar;
-    [SerializeField]
-    private TextMeshProUGUI levelText;
-    [SerializeField]
-    private TextMeshProUGUI goldText;
-    [SerializeField]
-    private TextMeshProUGUI playerName;
 
     public void SetHealth()
     {

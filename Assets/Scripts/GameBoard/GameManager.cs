@@ -29,14 +29,18 @@ public class GameManager : MonoBehaviour
     public Transform mageShopPile;
     public Transform essentialsPile;
 
-    public Hero bottomHero { get; set; }
-    public Hero topHero { get; set; }
+    public Hero bottomHero;
+    public Hero topHero;
+
+    private GameObject minionToPromote;
+    public GameObject MinionToPromote { get => minionToPromote; set => minionToPromote = value; }
 
     private float turnTimer;
     public float TurnTimer { get => turnTimer; set => turnTimer = value; }
 
     public static GameManager Instance { get; private set; } = null;
     
+
     private void Awake()
     {
         if (Instance)
@@ -52,5 +56,11 @@ public class GameManager : MonoBehaviour
     public void CleanUpListeners()
     {
         Destroy(enemyMinionZone.gameObject.GetComponent<DestroyMinionListener>());
+    }
+
+    private void Start()
+    {
+        bottomHero.CanPlayCards = true;
+        topHero.CanPlayCards = false;
     }
 }

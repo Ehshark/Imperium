@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,15 +15,10 @@ public class DestroyMinionCommand : Command
 
     public override void StartCommandExecution()
     {
-        Text text = GameManager.Instance.instructionsObj.gameObject.GetComponent<Text>();
+        TMP_Text text = GameManager.Instance.instructionsObj.GetComponent<TMP_Text>();
         text.text = "";
-        Transform emz = GameManager.Instance.enemyMinionZone;
-        foreach (Transform obj in emz)
-        {
-            Image img = obj.GetComponentInChildren<Image>();
-            img.color = Color.white;
-            GameManager.Instance.CleanUpListeners();
-        }
+        minion.transform.SetParent(GameManager.Instance.alliedDiscardPile);
+        minion.transform.position = GameManager.Instance.alliedDiscardPile.position;
         CommandExecutionComplete();
     }
 }

@@ -42,6 +42,9 @@ public class UIManager : MonoBehaviour
 
     public static UIManager Instance { get; private set; } = null;
 
+    private GameObject lastSelectedMinion;
+    public GameObject LastSelectedMinion { get => lastSelectedMinion; set => lastSelectedMinion = value; }
+
     //public Text yourName;
     //public Text opponentName;
 

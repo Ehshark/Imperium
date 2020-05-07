@@ -32,12 +32,9 @@ public class DestroyMinionListener : MonoBehaviour, IListener, IPointerDownHandl
 
     IEnumerator SelectEnemyMinion()
     {
-        DelayCommand dc = new DelayCommand();
-        dc.AddToQueue();
         Text text = GameManager.Instance.instructionsObj.gameObject.GetComponent<Text>();
         text.text = "Please select an enemy minion to destroy";
         yield return new WaitUntil(() => inputReceived == true);
-        dc.CommandExecutionComplete();
     }
 
     IEnumerator DestroyMinionPlayback()
