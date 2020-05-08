@@ -622,6 +622,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerRow: {fileID: 530961552}
+  rowPrefab: {fileID: 3255691642606911414, guid: e26097e3c450a36469a7880f88c3b71d,
+    type: 3}
 --- !u!222 &362758296
 CanvasRenderer:
   m_ObjectHideFlags: 0

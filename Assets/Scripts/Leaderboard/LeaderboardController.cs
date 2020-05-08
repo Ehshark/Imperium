@@ -11,6 +11,7 @@ public class LeaderboardController : MonoBehaviour
     private int playerRank = 0;
     [SerializeField]
     private GameObject playerRow;
+    public GameObject rowPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -46,8 +47,8 @@ public class LeaderboardController : MonoBehaviour
             }
 
             //Get, Instantiate and change the location of the Prefab 
-            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Row.prefab", typeof(Object));
-            GameObject tmp = Instantiate(prefab) as GameObject;
+            //Object prefab = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Row.prefab", typeof(Object));
+            GameObject tmp = Instantiate(rowPrefab) as GameObject;
             tmp.transform.SetParent(transform);
             tmp.transform.localPosition = new Vector3(0f, -rowHeight * cnt, 0f);
 
