@@ -22,10 +22,13 @@ public class StarterVisual : MonoBehaviour
     public Image effect1;
     public Image effect2;
 
-    void Start()
+    void OnEnable()
     {
-        PopulateCard();
-        UpdateCardDescriptions();
+        if (sd != null)
+        {
+            PopulateCard();
+            UpdateCardDescriptions();
+        }
     }
 
     public void UpdateCardDescriptions()

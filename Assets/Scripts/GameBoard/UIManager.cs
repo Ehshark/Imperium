@@ -25,6 +25,9 @@ public class UIManager : MonoBehaviour
     public List<MinionData> dealtRogueCards;
     public List<MinionData> dealtMageCards;
 
+    public List<StarterData> allyStarters;
+    public List<StarterData> enemyStarters;
+
     private List<StarterData> starters;
     private List<EssentialsData> essentials;
     private List<MinionData> minions;
@@ -140,6 +143,12 @@ public class UIManager : MonoBehaviour
         dealtRogueCards = new List<MinionData>();
         dealtMageCards = new List<MinionData>();
 
+        //Set the starter cards for both players
+        SetStarterDeck();
+
+        //Deals 5 starter cards into the hand of the player
+        DealHand();
+
         //if (PhotonNetwork.IsMasterClient) {
         //    yourName.text = "Host: " + GameManager.UserName;
         //    opponentName.text = "Client: " + PhotonNetwork.PlayerListOthers[0].NickName;
@@ -159,6 +168,7 @@ public class UIManager : MonoBehaviour
         SetWarriorMinion();
         SetRogueMinion();
         SetMageMinion();
+        SetEssentials();
     }
 
     private void Shuffle()
@@ -267,5 +277,67 @@ public class UIManager : MonoBehaviour
             mv.Md = currentMinion;
             GameManager.Instance.mageShopPile.GetChild(i).gameObject.SetActive(true);
         }
+    }
+    
+    public void ShuffleStarterDeck()
+    {
+        for (int i = 0; i < starters.Count; i++)
+        {
+            int rnd = Random.Range(0, starters.Count);
+            tempStarter = starters[rnd];
+            starters[rnd] = starters[i];
+            starters[i] = tempStarter;
+        }
+    }
+
+    public void SetStarterDeck()
+    {
+        allyStarters = new List<StarterData>();
+        enemyStarters = new List<StarterData>();
+
+        for(int i = 0; i < starters.Count; i++)
+        {
+            allyStarters.Add(starters[i]);
+        }
+
+        ShuffleStarterDeck();
+
+        for (int i = 0; i < starters.Count; i++)
+        {
+            enemyStarters.Add(starters[i]);
+        }
+    }
+    public void DealHand()
+    {
+        for(int i = 0; i < 5; i++)
+        {
+            currentStarter = allyStarters[i];
+
+            StarterVisual sv = GameManager.Instance.alliedHand.GetChild(i).GetComponent<StarterVisual>();
+            sv.Sd = currentStarter;
+            GameManager.Instance.alliedHand.GetChild(i).gameObject.SetActive(true);
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            currentStarter = enemyStarters[i];
+
+            StarterVisual sv2 = GameManager.Instance.enemyHand.GetChild(i).GetComponent<StarterVisual>();
+            sv2.Sd = currentStarter;
+            GameManager.Instance.enemyHand.GetChild(i).gameObject.SetActive(true);
+        }
+    }
+
+    public void SetEssentials()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            currentEssential = essentials[i];
+
+            EssentialVisual ev = GameManager.Instance.essentialsPile.GetChild(i).GetComponent<EssentialVisual>();
+            ev.Ed = currentEssential;
+            GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
+        }
+        Debug.Log("Essentials work");
     }
 }

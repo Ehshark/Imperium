@@ -19,10 +19,13 @@ public class EssentialVisual : MonoBehaviour
     public Image effect1;
     public Image effect2;
 
-    void Start()
+    void OnEnable()
     {
-        PopulateCard();
-        UpdateCardDescriptions();
+        if (Ed != null)
+        {
+            PopulateCard();
+            UpdateCardDescriptions();
+        }
     }
 
     public void UpdateCardDescriptions()

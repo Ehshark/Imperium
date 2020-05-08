@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public Transform warriorShopPile;
     public Transform rogueShopPile;
     public Transform mageShopPile;
+    public Transform essentialsPile;
 
     public Hero bottomHero { get; set; }
     public Hero topHero { get; set; }
