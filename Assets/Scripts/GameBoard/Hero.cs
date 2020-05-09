@@ -43,6 +43,8 @@ public class Hero : MonoBehaviour
     private TMP_Text goldText;
     [SerializeField]
     private TMP_Text playerName;
+    [SerializeField]
+    private Image heroImage;
 
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int TotalHealth { get => totalHealth; set => totalHealth = value; }
@@ -203,5 +205,10 @@ public class Hero : MonoBehaviour
     public void SetLevel()
     {
         levelText.text = level.ToString();
+    }
+
+    public void SetSprite(Sprite sprite)
+    {
+        heroImage.sprite = sprite;
     }
 }
