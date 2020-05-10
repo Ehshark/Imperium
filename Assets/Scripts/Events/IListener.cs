@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum EVENT_TYPE { 
-    DESTROY_MINION
+    SACRIFICE_MINION,
+    SACRIFICE_SELECTED,
+    DESTROY_MINION,
+    TAP_MINION
 }
 
 public interface IListener

@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public Transform alliedDeck;
     public Transform alliedDiscardPile;
     public List<GameObject> alliedDiscardPileList;
-    
+
     public Transform enemyMinionZone;
     public Transform enemyHand;
     public Transform enemyDeck;
@@ -32,11 +32,18 @@ public class GameManager : MonoBehaviour
     public Hero bottomHero;
     public Hero topHero;
 
-    private GameObject minionToPromote;
-    public GameObject MinionToPromote { get => minionToPromote; set => minionToPromote = value; }
+    public Button buyButton;
+    public Button changeButton;
 
+    private bool isPromoting = false;
+    private GameObject minionToPromote;
+    private GameObject minionToSacrifice;
     private float turnTimer;
+
+    public bool IsPromoting { get => isPromoting; set => isPromoting = value; }
+    public GameObject MinionToPromote { get => minionToPromote; set => minionToPromote = value; }
     public float TurnTimer { get => turnTimer; set => turnTimer = value; }
+    public GameObject MinionToSacrifice { get => minionToSacrifice; set => minionToSacrifice = value; }
 
     public static GameManager Instance { get; private set; } = null;
     
@@ -53,14 +60,50 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void CleanUpListeners()
-    {
-        Destroy(enemyMinionZone.gameObject.GetComponent<DestroyMinionListener>());
-    }
-
     private void Start()
     {
         bottomHero.CanPlayCards = true;
+        bottomHero.MyTurn = true;
         topHero.CanPlayCards = false;
+        topHero.MyTurn = false;
     }
+
+    //TODO:
+    //public void CleanUpListeners()
+    //{
+    //    Destroy(enemyMinionZone.gameObject.GetComponent<SacrificeMinionListener>());
+    //}
+
+    public void MoveCard(GameObject go, Transform from, Transform to)
+    {
+        go.transform.SetParent(to);
+        if (from.name.Equals("Hand") || from.name.Equals("EnemyHand"))
+            Destroy(go.GetComponent<PlayCard>());
+    }
+
+    public Hero ActiveHero()
+    {
+        if (bottomHero.MyTurn)
+            return bottomHero;
+        else
+            return topHero;
+    }
+
+    public void EnableOrDisablePlayerControl(bool enable)
+    {
+        if (enable)
+        {
+            buyButton.interactable = true;
+            changeButton.interactable = true;
+            ActiveHero().CanPlayCards = true;
+        }
+        else
+        {
+            buyButton.interactable = false;
+            changeButton.interactable = false;
+            ActiveHero().CanPlayCards = false;
+        }
+    }
+
+    //TODO: Function to disable play card contol 
 }
