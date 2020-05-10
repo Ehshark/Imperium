@@ -160,12 +160,15 @@ public class StartGameController : MonoBehaviour
                 GameManager.Instance.bottomHero.TotalMana = 4;
                 GameManager.Instance.bottomHero.Damage = 1;
                 GameManager.Instance.bottomHero.RequredExp = 6;
+                GameManager.Instance.bottomHero.HandSize = 5;
 
                 GameManager.Instance.bottomHero.SetHealth();
                 GameManager.Instance.bottomHero.SetMana();
                 GameManager.Instance.bottomHero.SetExp();
                 GameManager.Instance.bottomHero.SetGold();
                 GameManager.Instance.bottomHero.SetSprite(warriorImage);
+                GameManager.Instance.bottomHero.SetDamage();
+                GameManager.Instance.bottomHero.SetClan('W');
             }
             else
             {
@@ -175,12 +178,15 @@ public class StartGameController : MonoBehaviour
                 GameManager.Instance.topHero.TotalMana = 4;
                 GameManager.Instance.topHero.Damage = 1;
                 GameManager.Instance.topHero.RequredExp = 6;
+                GameManager.Instance.topHero.HandSize = 5;
 
                 GameManager.Instance.topHero.SetHealth();
                 GameManager.Instance.topHero.SetMana();
                 GameManager.Instance.topHero.SetExp();
                 GameManager.Instance.topHero.SetGold();
                 GameManager.Instance.topHero.SetSprite(warriorImage);
+                GameManager.Instance.topHero.SetDamage();
+                GameManager.Instance.topHero.SetClan('W');
             }
 
             warrior.SetActive(false);
@@ -196,12 +202,15 @@ public class StartGameController : MonoBehaviour
                 GameManager.Instance.bottomHero.TotalMana = 4;
                 GameManager.Instance.bottomHero.Damage = 2;
                 GameManager.Instance.bottomHero.RequredExp = 6;
+                GameManager.Instance.bottomHero.HandSize = 5;
 
                 GameManager.Instance.bottomHero.SetHealth();
                 GameManager.Instance.bottomHero.SetMana();
                 GameManager.Instance.bottomHero.SetExp();
                 GameManager.Instance.bottomHero.SetGold();
                 GameManager.Instance.bottomHero.SetSprite(rogueImage);
+                GameManager.Instance.bottomHero.SetDamage();
+                GameManager.Instance.bottomHero.SetClan('R');
             }
             else
             {
@@ -211,12 +220,15 @@ public class StartGameController : MonoBehaviour
                 GameManager.Instance.topHero.TotalMana = 4;
                 GameManager.Instance.topHero.Damage = 2;
                 GameManager.Instance.topHero.RequredExp = 6;
+                GameManager.Instance.topHero.HandSize = 5;
 
                 GameManager.Instance.topHero.SetHealth();
                 GameManager.Instance.topHero.SetMana();
                 GameManager.Instance.topHero.SetExp();
                 GameManager.Instance.topHero.SetGold();
                 GameManager.Instance.topHero.SetSprite(rogueImage);
+                GameManager.Instance.topHero.SetDamage();
+                GameManager.Instance.topHero.SetClan('R');
             }
 
             rogue.SetActive(false);
@@ -232,12 +244,15 @@ public class StartGameController : MonoBehaviour
                 GameManager.Instance.bottomHero.TotalMana = 4;
                 GameManager.Instance.bottomHero.Damage = 1;
                 GameManager.Instance.bottomHero.RequredExp = 6;
+                GameManager.Instance.bottomHero.HandSize = 6;
 
                 GameManager.Instance.bottomHero.SetHealth();
                 GameManager.Instance.bottomHero.SetMana();
                 GameManager.Instance.bottomHero.SetExp();
                 GameManager.Instance.bottomHero.SetGold();
                 GameManager.Instance.bottomHero.SetSprite(mageImage);
+                GameManager.Instance.bottomHero.SetDamage();
+                GameManager.Instance.bottomHero.SetClan('M');
             }
             else
             {
@@ -247,12 +262,15 @@ public class StartGameController : MonoBehaviour
                 GameManager.Instance.topHero.TotalMana = 4;
                 GameManager.Instance.topHero.Damage = 1;
                 GameManager.Instance.topHero.RequredExp = 6;
+                GameManager.Instance.topHero.HandSize = 5;
 
                 GameManager.Instance.topHero.SetHealth();
                 GameManager.Instance.topHero.SetMana();
                 GameManager.Instance.topHero.SetExp();
                 GameManager.Instance.topHero.SetGold();
                 GameManager.Instance.topHero.SetSprite(mageImage);
+                GameManager.Instance.topHero.SetDamage();
+                GameManager.Instance.topHero.SetClan('M');
             }
 
             mage.SetActive(false);

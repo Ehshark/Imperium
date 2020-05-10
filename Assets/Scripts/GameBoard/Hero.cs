@@ -45,6 +45,10 @@ public class Hero : MonoBehaviour
     private TMP_Text playerName;
     [SerializeField]
     private Image heroImage;
+    [SerializeField]
+    private Image heroClan;
+    [SerializeField]
+    private TMP_Text damageText;
 
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int TotalHealth { get => totalHealth; set => totalHealth = value; }
@@ -210,5 +214,28 @@ public class Hero : MonoBehaviour
     public void SetSprite(Sprite sprite)
     {
         heroImage.sprite = sprite;
+    }
+
+    public void SetDamage()
+    {
+        damageText.text = damage.ToString();
+    }
+
+    public void SetClan(char clanType)
+    {
+        clan = clanType;
+
+        if (clan == 'W')
+        {
+            heroClan.color = new Color32(255, 60, 60, 255);
+        }
+        else if (clan == 'R')
+        {
+            heroClan.color = new Color32(75, 255, 150, 255);
+        }
+        else if (clan == 'M')
+        {
+            heroClan.color = new Color32(15, 129, 162, 255);
+        }
     }
 }
