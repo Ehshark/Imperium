@@ -36,7 +36,7 @@ public class StartGameController : MonoBehaviour
     private int cnt = 0;
 
     //Variables 
-    private enum Coin { TAILS, HEADS }
+    private enum Coin { IDLE, TAILS, HEADS }
     private Coin coinValue;
 
     // Start is called before the first frame update
@@ -58,6 +58,8 @@ public class StartGameController : MonoBehaviour
             reactionText.text = "Player 2 Chooses...";
             turn = 1;
         }
+
+        coinValue = Coin.IDLE;
 
         //Setup each Player
         GameManager.Instance.bottomHero = bottomHero.GetComponent<Hero>();
@@ -83,11 +85,13 @@ public class StartGameController : MonoBehaviour
             {
                 reactionText.text = "You Win!";
                 GameManager.Instance.bottomHero.MyTurn = true;
+                GameManager.Instance.topHero.MyTurn = false;
             }
             else
             {
                 reactionText.text = "You Lose!";
                 GameManager.Instance.topHero.MyTurn = true;
+                GameManager.Instance.bottomHero.MyTurn = false;
             }
         }
         else
@@ -96,11 +100,13 @@ public class StartGameController : MonoBehaviour
             {
                 reactionText.text = "You Win!";
                 GameManager.Instance.topHero.MyTurn = true;
+                GameManager.Instance.bottomHero.MyTurn = false;
             }
             else
             {
                 reactionText.text = "You Lose!";
                 GameManager.Instance.bottomHero.MyTurn = true;
+                GameManager.Instance.topHero.MyTurn = false;
             }
         }
 
@@ -153,40 +159,12 @@ public class StartGameController : MonoBehaviour
         if (hero == 0)
         {
             if (GameManager.Instance.bottomHero.MyTurn)
-            {
-                GameManager.Instance.bottomHero.CurrentHealth = 4;
-                GameManager.Instance.bottomHero.TotalHealth = 4;
-                GameManager.Instance.bottomHero.CurrentMana = 4;
-                GameManager.Instance.bottomHero.TotalMana = 4;
-                GameManager.Instance.bottomHero.Damage = 1;
-                GameManager.Instance.bottomHero.RequredExp = 6;
-                GameManager.Instance.bottomHero.HandSize = 5;
-
-                GameManager.Instance.bottomHero.SetHealth();
-                GameManager.Instance.bottomHero.SetMana();
-                GameManager.Instance.bottomHero.SetExp();
-                GameManager.Instance.bottomHero.SetGold();
-                GameManager.Instance.bottomHero.SetSprite(warriorImage);
-                GameManager.Instance.bottomHero.SetDamage();
-                GameManager.Instance.bottomHero.SetClan('W');
+            { 
+                GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
             }
             else
             {
-                GameManager.Instance.topHero.CurrentHealth = 4;
-                GameManager.Instance.topHero.TotalHealth = 4;
-                GameManager.Instance.topHero.CurrentMana = 4;
-                GameManager.Instance.topHero.TotalMana = 4;
-                GameManager.Instance.topHero.Damage = 1;
-                GameManager.Instance.topHero.RequredExp = 6;
-                GameManager.Instance.topHero.HandSize = 5;
-
-                GameManager.Instance.topHero.SetHealth();
-                GameManager.Instance.topHero.SetMana();
-                GameManager.Instance.topHero.SetExp();
-                GameManager.Instance.topHero.SetGold();
-                GameManager.Instance.topHero.SetSprite(warriorImage);
-                GameManager.Instance.topHero.SetDamage();
-                GameManager.Instance.topHero.SetClan('W');
+                GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
             }
 
             warrior.SetActive(false);
@@ -196,39 +174,11 @@ public class StartGameController : MonoBehaviour
         {
             if (GameManager.Instance.bottomHero.MyTurn)
             {
-                GameManager.Instance.bottomHero.CurrentHealth = 4;
-                GameManager.Instance.bottomHero.TotalHealth = 4;
-                GameManager.Instance.bottomHero.CurrentMana = 4;
-                GameManager.Instance.bottomHero.TotalMana = 4;
-                GameManager.Instance.bottomHero.Damage = 2;
-                GameManager.Instance.bottomHero.RequredExp = 6;
-                GameManager.Instance.bottomHero.HandSize = 5;
-
-                GameManager.Instance.bottomHero.SetHealth();
-                GameManager.Instance.bottomHero.SetMana();
-                GameManager.Instance.bottomHero.SetExp();
-                GameManager.Instance.bottomHero.SetGold();
-                GameManager.Instance.bottomHero.SetSprite(rogueImage);
-                GameManager.Instance.bottomHero.SetDamage();
-                GameManager.Instance.bottomHero.SetClan('R');
+                GameManager.Instance.bottomHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
             }
             else
             {
-                GameManager.Instance.topHero.CurrentHealth = 4;
-                GameManager.Instance.topHero.TotalHealth = 4;
-                GameManager.Instance.topHero.CurrentMana = 4;
-                GameManager.Instance.topHero.TotalMana = 4;
-                GameManager.Instance.topHero.Damage = 2;
-                GameManager.Instance.topHero.RequredExp = 6;
-                GameManager.Instance.topHero.HandSize = 5;
-
-                GameManager.Instance.topHero.SetHealth();
-                GameManager.Instance.topHero.SetMana();
-                GameManager.Instance.topHero.SetExp();
-                GameManager.Instance.topHero.SetGold();
-                GameManager.Instance.topHero.SetSprite(rogueImage);
-                GameManager.Instance.topHero.SetDamage();
-                GameManager.Instance.topHero.SetClan('R');
+                GameManager.Instance.topHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
             }
 
             rogue.SetActive(false);
@@ -238,45 +188,17 @@ public class StartGameController : MonoBehaviour
         {
             if (GameManager.Instance.bottomHero.MyTurn)
             {
-                GameManager.Instance.bottomHero.CurrentHealth = 4;
-                GameManager.Instance.bottomHero.TotalHealth = 4;
-                GameManager.Instance.bottomHero.CurrentMana = 4;
-                GameManager.Instance.bottomHero.TotalMana = 4;
-                GameManager.Instance.bottomHero.Damage = 1;
-                GameManager.Instance.bottomHero.RequredExp = 6;
-                GameManager.Instance.bottomHero.HandSize = 6;
-
-                GameManager.Instance.bottomHero.SetHealth();
-                GameManager.Instance.bottomHero.SetMana();
-                GameManager.Instance.bottomHero.SetExp();
-                GameManager.Instance.bottomHero.SetGold();
-                GameManager.Instance.bottomHero.SetSprite(mageImage);
-                GameManager.Instance.bottomHero.SetDamage();
-                GameManager.Instance.bottomHero.SetClan('M');
+                GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
             }
             else
             {
-                GameManager.Instance.topHero.CurrentHealth = 4;
-                GameManager.Instance.topHero.TotalHealth = 4;
-                GameManager.Instance.topHero.CurrentMana = 4;
-                GameManager.Instance.topHero.TotalMana = 4;
-                GameManager.Instance.topHero.Damage = 1;
-                GameManager.Instance.topHero.RequredExp = 6;
-                GameManager.Instance.topHero.HandSize = 5;
-
-                GameManager.Instance.topHero.SetHealth();
-                GameManager.Instance.topHero.SetMana();
-                GameManager.Instance.topHero.SetExp();
-                GameManager.Instance.topHero.SetGold();
-                GameManager.Instance.topHero.SetSprite(mageImage);
-                GameManager.Instance.topHero.SetDamage();
-                GameManager.Instance.topHero.SetClan('M');
+                GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
             }
 
             mage.SetActive(false);
         }
 
-        SwitchTurn();
+        GameManager.Instance.SwitchTurn();
         cnt++;
 
         if (cnt == 2)
@@ -288,19 +210,5 @@ public class StartGameController : MonoBehaviour
         {
             ShowHeroUI();
         }        
-    }
-
-    private void SwitchTurn()
-    {
-        if (GameManager.Instance.bottomHero.MyTurn)
-        {
-            GameManager.Instance.bottomHero.MyTurn = false;
-            GameManager.Instance.topHero.MyTurn = true;            
-        }
-        else
-        {            
-            GameManager.Instance.topHero.MyTurn = false;
-            GameManager.Instance.bottomHero.MyTurn = true;            
-        }
     }
 }

@@ -434,4 +434,5 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
         }
     }
+
 }

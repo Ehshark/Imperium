@@ -65,6 +65,30 @@ public class Hero : MonoBehaviour
     public bool MyTurn { get => myTurn; set => myTurn = value; }
     public int RequredExp { get => requredExp; set => requredExp = value; }
     public bool CanPlayCards { get => canPlayCards; set => canPlayCards = value; }
+    
+    public void SetHero(int health, int mana, int damage, int reqExp, int hand, char clan, Sprite image)
+    {
+        //Variables 
+        CurrentHealth = health;
+        TotalHealth = health;
+        CurrentMana = mana;
+        TotalMana = mana;
+        Damage = damage;
+        RequredExp = reqExp;
+        HandSize = hand;
+
+        //Test
+        Gold = 5;
+
+        //UI
+        SetHealth();
+        SetMana();
+        SetExp();
+        SetGold();
+        SetSprite(image);
+        SetDamage();
+        SetClan(clan);
+    }
 
     public void SetHealth()
     {

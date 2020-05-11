@@ -106,5 +106,73 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SwitchTurn()
+    {
+        if (bottomHero.MyTurn)
+        {
+            bottomHero.MyTurn = false;
+            topHero.MyTurn = true;
+        }
+        else
+        {
+            topHero.MyTurn = false;
+            bottomHero.MyTurn = true;
+        }
+    }
+
+    public int GetCurrentPlayer()
+    {
+        int player = 0;
+
+        if (bottomHero.MyTurn)
+        {
+            player = 0; //bottom player
+        }
+        else
+        {
+            player = 1; //top player
+        }
+
+        return player;
+    }
+
+    public void MoveCardToDiscard(MinionVisual minion)
+    {
+        int currentPlayer = GetCurrentPlayer();
+
+        GameObject tmp = SpawnCard(minion);
+
+        if (currentPlayer == 0)
+        {
+            tmp.transform.SetParent(alliedDiscardPile, false);
+            tmp.transform.localScale = new Vector3(1f, 1f, 1f);
+
+            alliedDiscardPileList.Add(tmp);
+        }
+        else
+        {
+            tmp.transform.SetParent(enemyDiscardPile, false);
+            tmp.transform.localScale = new Vector3(1f, 1f, 1f);
+
+            enemyDiscardPileList.Add(tmp);
+        }
+    }
+
+    public GameObject SpawnCard(MinionVisual minion)
+    {
+        GameObject tmp;
+
+        if (minion != null)
+        {
+            tmp = Instantiate(UIManager.Instance.minionPrefab) as GameObject;
+            tmp.SetActive(false);
+            tmp.GetComponent<MinionVisual>().Md = minion.Md;
+            tmp.SetActive(true);
+            return tmp;
+        }
+
+        return null;
+    }
+
     //TODO: Function to disable play card contol 
 }
