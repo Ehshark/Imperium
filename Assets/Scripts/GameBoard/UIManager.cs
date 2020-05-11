@@ -192,13 +192,13 @@ public class UIManager : MonoBehaviour
             starters[i] = tempStarter;
         }
 
-        for (int i = 0; i < essentials.Count; i++)
-        {
-            int rnd = Random.Range(0, essentials.Count);
-            tempEssential = essentials[rnd];
-            essentials[rnd] = essentials[i];
-            essentials[i] = tempEssential;
-        }
+        //for (int i = 0; i < essentials.Count; i++)
+        //{
+        //    int rnd = Random.Range(0, essentials.Count);
+        //    tempEssential = essentials[rnd];
+        //    essentials[rnd] = essentials[i];
+        //    essentials[i] = tempEssential;
+        //}
     }
 
     void LoadSprites()
