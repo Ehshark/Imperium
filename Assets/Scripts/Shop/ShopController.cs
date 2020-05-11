@@ -22,36 +22,6 @@ public class ShopController : MonoBehaviour
 
     public void Start()
     {
-        //Test
-        GameManager.Instance.topHero = new Hero();
-        GameManager.Instance.topHero.MyTurn = false;
-        GameManager.Instance.topHero.Gold = 4;
-
-        //Test
-        GameManager.Instance.bottomHero = GameObject.Find("HeroPortrait").GetComponent<Hero>();
-        GameManager.Instance.bottomHero.MyTurn = true;
-        GameManager.Instance.bottomHero.CurrentHealth = 5;
-        GameManager.Instance.bottomHero.TotalHealth = 5;
-        GameManager.Instance.bottomHero.SetHealth();
-
-        GameManager.Instance.bottomHero.Experience = 5;
-        GameManager.Instance.bottomHero.RequredExp = 10;
-        GameManager.Instance.bottomHero.SetExp();
-        GameManager.Instance.bottomHero.GainExp(1);
-
-        GameManager.Instance.bottomHero.CurrentMana = 3;
-        GameManager.Instance.bottomHero.TotalMana = 6;
-        GameManager.Instance.bottomHero.SetMana();
-        GameManager.Instance.bottomHero.AdjustMana(4, false);
-
-        GameManager.Instance.bottomHero.Gold = 999;
-        GameManager.Instance.bottomHero.SetGold();
-
-        GameManager.Instance.bottomHero.SetPlayerName("C067");
-
-        GameManager.Instance.bottomHero.Level = 5;
-        GameManager.Instance.bottomHero.SetLevel();
-
         //Update Hero's Current Gold in Shop
         int currentPlayer = GetPlayer();
         if (currentPlayer == 0)
