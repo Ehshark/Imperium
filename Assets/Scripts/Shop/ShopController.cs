@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class ShopController : MonoBehaviour
@@ -10,13 +11,14 @@ public class ShopController : MonoBehaviour
     private GameObject cardGroup;
     [SerializeField]
     private TextMeshProUGUI herosGold;
+    [SerializeField]
+    private Button changeShop;
 
     //Big Shop Card
     private GameObject bigShopCard;
 
     //Selected Card
     private GameObject selectedCard;
-
 
     public void Start()
     {
@@ -25,7 +27,7 @@ public class ShopController : MonoBehaviour
         herosGold.text = active.Gold.ToString();
     }
 
-    public void UpdateShopCard(GameObject selectedMinionObject)
+    public void UpdateShopCard(GameObject selectedObject)
     {
         //Delete the bigShopCard if there is an instance of it
         if (bigShopCard != null)
@@ -34,19 +36,41 @@ public class ShopController : MonoBehaviour
             bigShopCard = null;
         }
 
-        if (selectedMinionObject != null)
+        if (selectedObject != null)
         {
             //Store the selected minion's object
             selectedCard = selectedMinionObject;
             //Get the CardVisual from the GameObject
             CardVisual selectedMinion = selectedMinionObject.GetComponent<CardVisual>();
 
-            //Spawn Card
-            GameObject tmp = GameManager.Instance.SpawnCard(selectedMinion);
-            tmp.transform.SetParent(cardGroup.transform, false);
+            if (selectedObject.GetComponent<MinionVisual>() != null)
+            {
+                //Get the MinionVisual from the GameObject
+                MinionVisual selectedMinion = selectedObject.GetComponent<MinionVisual>();
 
-            //Set the BigShopCard object with the spawned card
-            bigShopCard = tmp;
+                //Spawn Card
+                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedMinion);
+
+                //Set the BigShopCard object with the spawned card
+                bigShopCard = tmp;
+
+                //Set ChangeShop to active 
+                changeShop.interactable = true;
+            }
+            else if (selectedObject.GetComponent<EssentialVisual>() != null)
+            {
+                //Get the MinionVisual from the GameObject
+                EssentialVisual selectedEssential = selectedObject.GetComponent<EssentialVisual>();                
+
+                //Spawn Card
+                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, null, selectedEssential, true);
+
+                //Set the BigShopCard object with the spawned card
+                bigShopCard = tmp;
+
+                //Set ChangeShop to inactive 
+                changeShop.interactable = false;
+            }
         }
     }
 
@@ -57,7 +81,6 @@ public class ShopController : MonoBehaviour
             int costForCard = int.Parse(selectedCard.GetComponent<CardVisual>().cost.text);
             int currentPlayer = GetPlayer();
 
-            Hero active = GameManager.Instance.ActiveHero();
             if (active.Gold >= costForCard)
             {
                 if (GameManager.Instance.bottomHero.Gold >= costForCard)
@@ -66,19 +89,36 @@ public class ShopController : MonoBehaviour
                     //Get the Purchased Minion
                     CardVisual minion = selectedCard.GetComponent<CardVisual>() as CardVisual;
 
+                if (selectedCard.GetComponent<MinionVisual>() != null)
+                {
+                    //Get the Purchased Minion
+                    MinionVisual minion = selectedCard.GetComponent<MinionVisual>() as MinionVisual;
+
+                    //Spawn a new card from the correct deck
+                    SpawnShopMinion(minion.Md.CardClass, false);
+
+                    //Move Card to the Correct Discard Pile
+                    GameManager.Instance.MoveCardToDiscard(selectedCard);
+
+                    //Destroy the Object
+                    RemoveCard(true);
+                }
+                else if (selectedCard.GetComponent<EssentialVisual>() != null)
+                {
+                    //Get the Purchased Essential
+                    EssentialVisual essential = selectedCard.GetComponent<EssentialVisual>() as EssentialVisual;
+
+                    //Move Card to the Correct Discard Pile
+                    GameManager.Instance.MoveCardToDiscard(selectedCard);
+
+                    //Destroy the Object
+                    RemoveCard(false);
+                }
+
                 //Subtract the Hero's current Gold
                 active.AdjustGold(costForCard, false);
                 //Update the Gold UI
                 herosGold.text = active.Gold.ToString();
-
-                //Move Minion in the Correct Discard Pile
-                GameManager.Instance.MoveCardToDiscard(minion);
-
-                //Destroy the Object
-                RemoveCard();
-
-                //Spawn a new card from the correct deck
-                SpawnShopMinion(minion.Md.CardClass, false);
             }
             else
             {
@@ -133,7 +173,7 @@ public class ShopController : MonoBehaviour
                     herosGold.text = active.Gold.ToString();
 
                     //Destroy the Object
-                    RemoveCard();
+                    RemoveCard(true);
                 }
                 else
                 {
@@ -170,11 +210,18 @@ public class ShopController : MonoBehaviour
         }
     }
 
-    private void RemoveCard()
+    private void RemoveCard(bool destroyMinion)
     {
-        //Destroy the Selected Card Object
-        Destroy(selectedCard.gameObject);
-        selectedCard = null;
+        if (destroyMinion)
+        {
+            //Destroy the Selected Card Object
+            Destroy(selectedCard.gameObject);
+            selectedCard = null;
+        }
+        else
+        {
+            selectedCard = null;
+        }
 
         //Destroy the Big Card Object
         Destroy(bigShopCard.gameObject);
@@ -238,6 +285,22 @@ public class ShopController : MonoBehaviour
         {
             tmp.transform.SetParent(GameManager.Instance.mageShopPile, false);
             tmp.transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+    }
+
+    private int GetCostForCard(GameObject card)
+    {
+        if (card.GetComponent<MinionVisual>() != null)
+        {
+            return card.GetComponent<MinionVisual>().Md.GoldAndManaCost;
+        }
+        else if (card.GetComponent<EssentialVisual>() != null)
+        {
+            return card.GetComponent<EssentialVisual>().Ed.GoldCost;
+        }
+        else
+        {
+            return 0;
         }
     }
 }

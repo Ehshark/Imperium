@@ -7,11 +7,11 @@ public class ShowShopCard : MonoBehaviour, IPointerDownHandler
 {
     public void OnPointerDown(PointerEventData eventData)
     {
-        GameObject minion = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
+        GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
 
         if (minion.GetComponent<CardVisual>() != null)
         {
-            GameManager.Instance.shop.GetComponent<ShopController>().UpdateShopCard(minion);
+            GameManager.Instance.shop.GetComponent<ShopController>().UpdateShopCard(card);
         }
     }
 }

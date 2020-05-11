@@ -500,6 +500,7 @@ MonoBehaviour:
   silenceIcon: {fileID: 5361649607211962120}
   effect1: {fileID: 5361649608726143381}
   effect2: {fileID: 5361649607857650548}
+  inShop: 0
 --- !u!1 &5361649607211962126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1182,7 +1183,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f01273ac05d66934e8a5c0c3627e8768, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b8fae1e1a74a91f4a9b1115367d8efb6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

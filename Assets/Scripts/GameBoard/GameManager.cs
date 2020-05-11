@@ -136,11 +136,23 @@ public class GameManager : MonoBehaviour
         return player;
     }
 
-    public void MoveCardToDiscard(MinionVisual minion)
+    public void MoveCardToDiscard(GameObject card)
     {
         int currentPlayer = GetCurrentPlayer();
+        GameObject tmp;
 
-        GameObject tmp = SpawnCard(minion);
+        if (card.GetComponent<MinionVisual>() != null)
+        {
+            tmp = SpawnCard(null, card.GetComponent<MinionVisual>());
+        }
+        else if (card.GetComponent<EssentialVisual>() != null)
+        {
+            tmp = SpawnCard(null, null, card.GetComponent<EssentialVisual>());
+        }
+        else
+        {
+            tmp = null;
+        }
 
         if (currentPlayer == 0)
         {
@@ -158,7 +170,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public GameObject SpawnCard(MinionVisual minion)
+    public GameObject SpawnCard(Transform to, MinionVisual minion = null, EssentialVisual essential = null, bool inShop = false)
     {
         GameObject tmp;
 
@@ -168,6 +180,22 @@ public class GameManager : MonoBehaviour
             tmp.SetActive(false);
             tmp.GetComponent<MinionVisual>().Md = minion.Md;
             tmp.SetActive(true);
+            tmp.transform.SetParent(to, false);
+            return tmp;
+        }
+        else if (essential != null)
+        {
+            tmp = Instantiate(UIManager.Instance.itemPrefab) as GameObject;
+            tmp.SetActive(false);
+            tmp.GetComponent<EssentialVisual>().Ed = essential.Ed;
+
+            if (inShop)
+            {
+                tmp.GetComponent<EssentialVisual>().inShop = true;
+            }
+
+            tmp.SetActive(true);
+            tmp.transform.SetParent(to, false);
             return tmp;
         }
 

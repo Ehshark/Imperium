@@ -127,7 +127,7 @@ public class UIManager : MonoBehaviour
 
         //Do the same for the essentials cards
         essentials = new List<EssentialsData>();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 4; i++)
         {
             tempEssential = Resources.Load("Essentials/" + (i + 1)) as EssentialsData;
             essentials.Add(tempEssential);

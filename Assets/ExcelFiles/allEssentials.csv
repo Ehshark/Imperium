@@ -1,5 +1,5 @@
-Color,ID,Cost,EffectID1,Effect1,EffectID2,Effect2
-gray,1,2,18,4 Gold,19,2 Exp
-gray,2,0,20,2 Health,999,
-gray,3,0,21,2 Mana,999,
-gray,4,2,14,Your hero's damage increases by 1 until the end of the turn,999,
+Color,ID,Gold,Cost,EffectID1,Effect1,EffectID2,Effect2
+gray,1,2,2,18,4 Gold,19,2 Exp
+gray,2,2,0,20,2 Health,999,
+gray,3,2,0,21,2 Mana,999,
+gray,4,2,2,14,Your hero's damage increases by 1 until the end of the turn,999,
