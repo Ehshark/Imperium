@@ -82,6 +82,36 @@ public class GameManager : MonoBehaviour
             Destroy(go.GetComponent<PlayCard>());
     }
 
+    public void MoveCard(GameObject card, Transform to, List<GameObject> list = null)
+    {
+        GameObject tmp;
+
+        if (card.GetComponent<MinionVisual>() != null)
+        {
+            tmp = SpawnCard(null, card.GetComponent<MinionVisual>().Md);
+        }
+        else if (card.GetComponent<EssentialVisual>() != null)
+        {
+            tmp = SpawnCard(null, null, card.GetComponent<EssentialVisual>().Ed);
+        }
+        else if (card.GetComponent<StarterVisual>() != null)
+        {
+            tmp = SpawnCard(null, null, null, card.GetComponent<StarterVisual>().Sd, false);
+        }
+        else
+        {
+            tmp = null;
+        }
+        
+        tmp.transform.SetParent(to, false);
+        tmp.transform.localScale = new Vector3(1, 1, 1);
+
+        if (list != null)
+        {
+            list.Add(tmp);
+        }
+    }
+
     public Hero ActiveHero()
     {
         if (bottomHero.MyTurn)
@@ -136,41 +166,7 @@ public class GameManager : MonoBehaviour
         return player;
     }
 
-    public void MoveCardToDiscard(GameObject card)
-    {
-        int currentPlayer = GetCurrentPlayer();
-        GameObject tmp;
-
-        if (card.GetComponent<MinionVisual>() != null)
-        {
-            tmp = SpawnCard(null, card.GetComponent<MinionVisual>());
-        }
-        else if (card.GetComponent<EssentialVisual>() != null)
-        {
-            tmp = SpawnCard(null, null, card.GetComponent<EssentialVisual>());
-        }
-        else
-        {
-            tmp = null;
-        }
-
-        if (currentPlayer == 0)
-        {
-            tmp.transform.SetParent(alliedDiscardPile, false);
-            tmp.transform.localScale = new Vector3(1f, 1f, 1f);
-
-            alliedDiscardPileList.Add(tmp);
-        }
-        else
-        {
-            tmp.transform.SetParent(enemyDiscardPile, false);
-            tmp.transform.localScale = new Vector3(1f, 1f, 1f);
-
-            enemyDiscardPileList.Add(tmp);
-        }
-    }
-
-    public GameObject SpawnCard(Transform to, MinionVisual minion = null, EssentialVisual essential = null, bool inShop = false)
+    public GameObject SpawnCard(Transform to, MinionData minion = null, EssentialsData essential = null, StarterData starter = null, bool inShop = false)
     {
         GameObject tmp;
 
@@ -178,7 +174,7 @@ public class GameManager : MonoBehaviour
         {
             tmp = Instantiate(UIManager.Instance.minionPrefab) as GameObject;
             tmp.SetActive(false);
-            tmp.GetComponent<MinionVisual>().Md = minion.Md;
+            tmp.GetComponent<MinionVisual>().Md = minion;
             tmp.SetActive(true);
             tmp.transform.SetParent(to, false);
             return tmp;
@@ -187,13 +183,22 @@ public class GameManager : MonoBehaviour
         {
             tmp = Instantiate(UIManager.Instance.itemPrefab) as GameObject;
             tmp.SetActive(false);
-            tmp.GetComponent<EssentialVisual>().Ed = essential.Ed;
+            tmp.GetComponent<EssentialVisual>().Ed = essential;
 
             if (inShop)
             {
                 tmp.GetComponent<EssentialVisual>().inShop = true;
             }
 
+            tmp.SetActive(true);
+            tmp.transform.SetParent(to, false);
+            return tmp;
+        }
+        else if (starter != null)
+        {
+            tmp = Instantiate(UIManager.Instance.starterPrefab) as GameObject;
+            tmp.SetActive(false);
+            tmp.GetComponent<StarterVisual>().Sd = starter;
             tmp.SetActive(true);
             tmp.transform.SetParent(to, false);
             return tmp;

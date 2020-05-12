@@ -49,7 +49,7 @@ public class ShopController : MonoBehaviour
                 MinionVisual selectedMinion = selectedObject.GetComponent<MinionVisual>();
 
                 //Spawn Card
-                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedMinion);
+                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedMinion.Md);
 
                 //Set the BigShopCard object with the spawned card
                 bigShopCard = tmp;
@@ -63,7 +63,7 @@ public class ShopController : MonoBehaviour
                 EssentialVisual selectedEssential = selectedObject.GetComponent<EssentialVisual>();                
 
                 //Spawn Card
-                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, null, selectedEssential, true);
+                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, null, selectedEssential.Ed, null, true);
 
                 //Set the BigShopCard object with the spawned card
                 bigShopCard = tmp;
@@ -98,7 +98,7 @@ public class ShopController : MonoBehaviour
                     SpawnShopMinion(minion.Md.CardClass, false);
 
                     //Move Card to the Correct Discard Pile
-                    GameManager.Instance.MoveCardToDiscard(selectedCard);
+                    MoveShopCardToDiscard(selectedCard);
 
                     //Destroy the Object
                     RemoveCard(true);
@@ -109,7 +109,7 @@ public class ShopController : MonoBehaviour
                     EssentialVisual essential = selectedCard.GetComponent<EssentialVisual>() as EssentialVisual;
 
                     //Move Card to the Correct Discard Pile
-                    GameManager.Instance.MoveCardToDiscard(selectedCard);
+                    MoveShopCardToDiscard(selectedCard);
 
                     //Destroy the Object
                     RemoveCard(false);
@@ -301,6 +301,20 @@ public class ShopController : MonoBehaviour
         else
         {
             return 0;
+        }
+    }
+
+    private void MoveShopCardToDiscard(GameObject card)
+    {
+        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
+
+        if (currentPlayer == 0)
+        {
+            GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
+        }
+        else
+        {
+            GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
         }
     }
 }
