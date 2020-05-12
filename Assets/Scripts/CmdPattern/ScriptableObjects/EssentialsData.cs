@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New EssentialsData", menuName = "Essential Data", order = 51)]
-public class EssentialsData : ScriptableObject
+public class EssentialsData : Card
 {
     [SerializeField]
     private Color color;

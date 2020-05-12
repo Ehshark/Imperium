@@ -66,6 +66,13 @@ public class StartGameController : MonoBehaviour
         GameManager.Instance.topHero = topHero.GetComponent<Hero>();
         GameManager.Instance.bottomHero.SetPlayerName("Player 1");
         GameManager.Instance.topHero.SetPlayerName("Player 2");
+
+
+        //Begin the intial draw
+        for (int i = 0; i < 5; i++)
+        {
+            GameManager.Instance.DrawCard(UIManager.Instance.allyDeck[i]);
+        }
     }
 
     public void FlipCoin(int value)

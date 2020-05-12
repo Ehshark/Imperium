@@ -169,6 +169,48 @@ public class GameManager : MonoBehaviour
         }
 
         return player;
+    //draws a single card, takes in a Card parameter and determines what kind of card it is and instantiate + populates it
+    //TODO: change the instatiate prefab for cards to the enemy's hand as well
+    //TODO: remove/pop cards out of the deck when drawn
+    public void DrawCard(Card topCard)
+    {
+        GameObject tmp;
+        MinionData minion;
+        StarterData starter;
+        EssentialsData essentials;
+
+        if (UIManager.Instance.allyDeck.Count > 0) //checks if deck is not empty
+        {
+            if (topCard is MinionData) //Card is a minion
+            {
+                minion = (MinionData)topCard;
+                tmp = Instantiate(UIManager.Instance.minionPrefab, alliedHand) as GameObject;
+                tmp.SetActive(false);
+                tmp.GetComponent<MinionVisual>().Md = minion;
+                tmp.SetActive(true);
+            }
+            else if (topCard is StarterData) //Card is a starter
+            {
+                starter = (StarterData)topCard;
+                tmp = Instantiate(UIManager.Instance.starterPrefab, alliedHand) as GameObject;
+                tmp.SetActive(false);
+                tmp.GetComponent<StarterVisual>().Sd = starter;
+                tmp.SetActive(true);
+            }
+            else if (topCard is EssentialsData) //Card is a essential
+            {
+                essentials = (EssentialsData)topCard;
+                tmp = Instantiate(UIManager.Instance.itemPrefab, alliedHand) as GameObject;
+                tmp.SetActive(false);
+                tmp.GetComponent<EssentialVisual>().Ed = essentials;
+                tmp.SetActive(true);
+            }
+        }
+        else //no cards left in the deck, add the discard pile, reshuffle and continue the draw
+        {
+            Debug.Log("no cards in deck, please shuffle in discard pile and continue draw");
+            //TODO: add discard pile to deck, shuffle the deck, continue the draw
+        }
     }
 
     public GameObject SpawnCard(Transform to, MinionData minion = null, EssentialsData essential = null, StarterData starter = null, bool inShop = false)

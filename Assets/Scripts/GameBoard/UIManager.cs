@@ -1,7 +1,9 @@
 ﻿//This script uses magic numbers - the number of ScriptableObjects inside Assets/Resources/Minions/, etc.
 
 using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 
@@ -35,6 +37,9 @@ public class UIManager : MonoBehaviour
     private List<EssentialsData> essentials;
     private List<MinionData> minions;
 
+    public List<Card> allyDeck; //decklist to test adding starters
+    public List<Card> enemyDeck;
+
     private MinionData tempMinion;
     private StarterData tempStarter;
     private EssentialsData tempEssential;
@@ -64,7 +69,7 @@ public class UIManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         minionConditions = new Dictionary<int, string>
         {
@@ -440,10 +445,12 @@ public class UIManager : MonoBehaviour
     {
         allyStarters = new List<StarterData>();
         enemyStarters = new List<StarterData>();
+        allyDeck = new List<Card>();
 
         for (int i = 0; i < starters.Count; i++)
         {
             allyStarters.Add(starters[i]);
+            allyDeck.Add(starters[i]); //add starter cards to decklist
         }
 
         ShuffleStarterDeck();
@@ -451,28 +458,42 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < starters.Count; i++)
         {
             enemyStarters.Add(starters[i]);
+            enemyDeck.Add(starters[i]);
+
         }
     }
-    //public void DealHand()
-    //{
-    //    for(int i = 0; i < 5; i++)
-    //    {
-    //        currentStarter = allyStarters[i];
 
-    //        StarterVisual sv = GameManager.Instance.alliedHand.GetChild(i).GetComponent<StarterVisual>();
-    //        sv.Sd = currentStarter;
-    //        GameManager.Instance.alliedHand.GetChild(i).gameObject.SetActive(true);
-    //    }
+    //Function to formerly deal the starting hand full of starter cards
+    /*public void DealHand()
+    {
+        for(int i = 0; i < 5; i++)
+        {
+            currentStarter = (StarterData)allyDeck[i];
 
-    //    for (int i = 0; i < 5; i++)
-    //    {
-    //        currentStarter = enemyStarters[i];
+            GameObject tmp = Instantiate(starterPrefab, GameManager.Instance.alliedHand) as GameObject;
+            tmp.SetActive(false);
+            tmp.GetComponent<StarterVisual>().Sd = currentStarter;
+            tmp.SetActive(true);
+            //StarterVisual sv = GameManager.Instance.alliedHand.GetChild(i).GetComponent<StarterVisual>();
+            //sv.Sd = currentStarter;
+            //GameManager.Instance.alliedHand.GetChild(i).gameObject.SetActive(true); 
 
-    //        StarterVisual sv2 = GameManager.Instance.enemyHand.GetChild(i).GetComponent<StarterVisual>();
-    //        sv2.Sd = currentStarter;
-    //        GameManager.Instance.enemyHand.GetChild(i).gameObject.SetActive(true);
-    //    }
-    //}
+        } 
+
+        for (int i = 0; i < 5; i++)
+        {
+            currentStarter = (StarterData)enemyDeck[i];
+
+            GameObject tmp2 = Instantiate(starterPrefab, GameManager.Instance.enemyHand) as GameObject;
+            tmp2.SetActive(false);
+            tmp2.GetComponent<StarterVisual>().Sd = currentStarter;
+            tmp2.SetActive(true);
+
+            //StarterVisual sv2 = GameManager.Instance.enemyHand.GetChild(i).GetComponent<StarterVisual>();
+            //sv2.Sd = currentStarter;
+            //GameManager.Instance.enemyHand.GetChild(i).gameObject.SetActive(true);
+        }
+    }*/
 
     public void SetEssentials()
     {
