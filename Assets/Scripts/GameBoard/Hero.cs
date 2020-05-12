@@ -49,6 +49,9 @@ public class Hero : MonoBehaviour
     private Image heroClan;
     [SerializeField]
     private TMP_Text damageText;
+    [SerializeField]
+    public Image heroImageBoarder;
+    public Image HeroImageBoarder { get => heroImageBoarder; set => heroImageBoarder = value; }
 
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int TotalHealth { get => totalHealth; set => totalHealth = value; }

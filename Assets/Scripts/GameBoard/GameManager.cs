@@ -71,6 +71,12 @@ public class GameManager : MonoBehaviour
         bottomHero.MyTurn = true;
         topHero.CanPlayCards = false;
         topHero.MyTurn = false;
+
+        Debug.Log(GameObject.Find("Hand").GetComponentsInChildren<MinionVisual>());
+        Debug.Log(GameObject.Find("Hand").GetComponentsInChildren<Transform>());
+
+
+
     }
 
     //TODO:

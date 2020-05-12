@@ -1,8 +1,10 @@
 ﻿//This script uses magic numbers - the number of ScriptableObjects inside Assets/Resources/Minions/, etc.
 
-using JetBrains.Annotations;
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+
 //using Photon.Pun;
 
 public class UIManager : MonoBehaviour
@@ -11,7 +13,8 @@ public class UIManager : MonoBehaviour
 
     public GameObject minionPrefab;
     public GameObject starterPrefab;
-    public GameObject itemPrefab;
+    public GameObject itemPrefab;
+    private GameObject glowPanel;
 
     private List<MinionData> warriorMinions;
     private List<MinionData> rogueMinions;
@@ -42,7 +45,7 @@ public class UIManager : MonoBehaviour
 
     public static UIManager Instance { get; private set; } = null;
 
-    private GameObject lastSelectedCard;
+    private GameObject lastSelectedCard;
     public GameObject LastSelectedCard { get => lastSelectedCard; set => lastSelectedCard = value; }
 
     //public Text yourName;
@@ -142,36 +145,114 @@ public class UIManager : MonoBehaviour
         //Sort all the minion cards into 3 piles corresponding with their classes: warrior, rogue, mage
         SortPiles();
 
-        dealtWarriorCards = new List<MinionData>();
-        dealtRogueCards = new List<MinionData>();
+        dealtWarriorCards = new List<MinionData>();
+        dealtRogueCards = new List<MinionData>();
         dealtMageCards = new List<MinionData>();
 
         //Set the starter cards for both players
-        SetStarterDeck();
-
-        //Deals 5 starter cards into the hand of the player
-        //DealHand();
-
-        //if (PhotonNetwork.IsMasterClient) {
-        //    yourName.text = "Host: " + GameManager.UserName;
-        //    opponentName.text = "Client: " + PhotonNetwork.PlayerListOthers[0].NickName;
-        //}
-
-        //else {
-        //    yourName.text = "Client: " + GameManager.UserName;
-        //    opponentName.text = "Host: " + PhotonNetwork.PlayerListOthers[0].NickName;
-        //}
+        SetStarterDeck();
+
+        //Deals 5 starter cards into the hand of the player
+        // DealHand();
+
+        //if (PhotonNetwork.IsMasterClient) {
+        //    yourName.text = "Host: " + GameManager.UserName;
+        //    opponentName.text = "Client: " + PhotonNetwork.PlayerListOthers[0].NickName;
+        //}
+
+        //else {
+        //    yourName.text = "Client: " + GameManager.UserName;
+        //    opponentName.text = "Host: " + PhotonNetwork.PlayerListOthers[0].NickName;
+        //}
+
+
+
+
+        //If its not your turn 
+        Debug.Log(GameManager.Instance.ActiveHero().CanPlayCards);
+
+        if (!GameManager.Instance.ActiveHero().CanPlayCards)
+        {
+            List<Transform> minionsInHand = new List<Transform>();
+            Transform minions = GameObject.Find("Hand").transform;
+
+            GameManager.Instance.bottomHero.heroImageBoarder.color = Color.green;
+
+            foreach (Transform t in minions)
+            {
+                Debug.Log(t.name);
+                minionsInHand.Add(t);
+
+            }
+            //disable shop buy button
+           // GameManager.Instance.EnableOrDisablePlayerControl(false);
+            //loop and disable all the panels
+            for (int i = 0; i < minionsInHand.Count; i++)
+            {
+                
+                //if(minionsInHand[i] >= ) 
+                //string mystr = TMP_Text.GetParsedText(mv.getcomponentinchildren[i].cost);
+                //int mvcost = system.int32.parse(mystr);
+                //if (gamemanager.instance.bottomhero.currenthealth > mvcost)
+                //{
+
+                //    mv.getcomponentinchildren[i].setactive;
+                //}
+            }
+        }
+        else
+        {
+           
+           // GameManager.Instance.EnableOrDisablePlayerControl(true);
+            //Change the hero color 
+            GameManager.Instance.bottomHero.heroImageBoarder.color = Color.green;
+            //loop and enable all the cards that are available
+            int heroManaCost = GameManager.Instance.bottomHero.CurrentMana;
+            List<Transform> arrOfMins = new List<Transform>();
+            Transform minions = GameObject.Find("Hand").transform;
+
+            List<MinionVisual> mvArr = new List<MinionVisual>();
+            MinionVisual mv = gameObject.GetComponent<MinionVisual>();
+            //foreach (MinionVisual m in mv)
+            //{
+            //    Debug.Log(arrOfMins.GetType());
+            //    mvArr.Add(m);
+            //    Debug.Log(m.transform.gameObject.name);
+            //}
+            Debug.Log(mv.name);
+
+            //foreach (Transform t in minions)
+            //{
+            //    Debug.Log(arrOfMins.GetType());
+            //    arrOfMins.Add(t);
+            //    Debug.Log(t.transform.gameObject.name);
+            //}
+            for (int i = 0; i < GameManager.Instance.bottomHero.HandSize; i++)
+            {
+                //if (GameManager.Instance.bottomHero.CurrentMana <= minionsInHand[i])
+                //{
+
+                //}
+                //string mystr = TMP_Text.GetParsedText(mv.getcomponentinchildren[i].cost);
+                //int mvcost = system.int32.parse(mystr);
+                //if (gamemanager.instance.bottomhero.currenthealth > mvcost)
+                // {
+
+                    //     mv.getcomponentinchildren[i].setactive;
+                    // }  
+            }
+        }
     }
 
-    public void DisplayShop()
-    {
-        GameManager.Instance.shop.gameObject.SetActive(true);
-
-        //Sets all 9 cards in the shop, 3 cards per pile
+    public void DisplayShop()
+    {
+        GameManager.Instance.shop.gameObject.SetActive(true);
+
+        //Sets all 9 cards in the shop, 3 cards per pile
         SetWarriorMinion();
         SetRogueMinion();
-        SetMageMinion();
-        SetEssentials();
+        SetMageMinion();
+        SetEssentials();
     }
 
     private void Shuffle()
@@ -244,195 +325,195 @@ public class UIManager : MonoBehaviour
                 mageMinions.Add(minions[i]);
             }
         }
-    }
-
-    public void SetWarriorMinion()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            currentMinion = warriorMinions[i];
-            dealtWarriorCards.Add(currentMinion);
-            CardVisual mv = GameManager.Instance.warriorShopPile.GetChild(i).GetComponent<CardVisual>();
-            mv.Md = currentMinion;
-            GameManager.Instance.warriorShopPile.GetChild(i).gameObject.SetActive(true);
-
-            //Pop added
-            warriorMinions.Remove(warriorMinions[i]);
-        }
-    }
-
-    public void SetRogueMinion()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            currentMinion = rogueMinions[i];
-            dealtRogueCards.Add(currentMinion);
-            CardVisual mv = GameManager.Instance.rogueShopPile.GetChild(i).GetComponent<CardVisual>();
-            mv.Md = currentMinion;
-            GameManager.Instance.rogueShopPile.GetChild(i).gameObject.SetActive(true);
-
-            //Pop added
-            rogueMinions.Remove(rogueMinions[i]);
-        }
-    }
-
-    public void SetMageMinion()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            currentMinion = mageMinions[i];
-            dealtMageCards.Add(currentMinion);
-            CardVisual mv = GameManager.Instance.mageShopPile.GetChild(i).GetComponent<CardVisual>();
-            mv.Md = currentMinion;
-            GameManager.Instance.mageShopPile.GetChild(i).gameObject.SetActive(true);
-
-            //Pop added
-            mageMinions.Remove(mageMinions[i]);
-        }
-    }
-
-    public GameObject GetNextShopCard(string cardType, bool change, MinionData minion = null)
-    {
-        GameObject tmp = Instantiate(minionPrefab);
-        tmp.SetActive(false);
-
-        if (cardType.Equals("Warrior"))
-        {
-            if (warriorMinions.Count != 0)
-            {
-                tmp.GetComponent<CardVisual>().Md = warriorMinions[0];
-                warriorMinions.Remove(warriorMinions[0]);
-
-                if (change)
-                {
-                    warriorMinions.Add(minion);
-                }
-            }
-        }
-        else if (cardType.Equals("Rogue"))
-        {
-            if (rogueMinions.Count != 0)
-            {
-                tmp.GetComponent<CardVisual>().Md = rogueMinions[0];
-                rogueMinions.Remove(rogueMinions[0]);
-
-                if (change)
-                {
-                    rogueMinions.Add(minion);
-                }
-            }
-        }
-        else
-        {
-            if (mageMinions.Count != 0)
-            {
-                tmp.GetComponent<CardVisual>().Md = mageMinions[0];
-                mageMinions.Remove(mageMinions[0]);
-
-                if (change)
-                {
-                    mageMinions.Add(minion);
-                }
-            }
-        }
-
-        if (tmp.GetComponent<CardVisual>().Md != null)
-        {
-            tmp.GetComponent<MinionVisual>().inShop = true;
-            tmp.AddComponent<ShowShopCard>();
-            tmp.SetActive(true);
-        }
-
-        return tmp;
-    }
-
-    public bool CanChangeShopCard(string cardType)
-    {
-        bool result = false;
-
-        if (cardType.Equals("Warrior"))
-        {
-            if (warriorMinions.Count != 0)
-            {
-                result = true;
-            }
-        }
-        else if (cardType.Equals("Rogue"))
-        {
-            if (rogueMinions.Count != 0)
-            {
-                result = true;
-            }
-        }
-        else
-        {
-            if (mageMinions.Count != 0)
-            {
-                result = true;
-            }
-        }
-
-        return result;
-    }
-
-    public void ShuffleStarterDeck()
-    {
+    }
+
+    public void SetWarriorMinion()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            currentMinion = warriorMinions[i];
+            dealtWarriorCards.Add(currentMinion);
+            CardVisual mv = GameManager.Instance.warriorShopPile.GetChild(i).GetComponent<CardVisual>();
+            mv.Md = currentMinion;
+            GameManager.Instance.warriorShopPile.GetChild(i).gameObject.SetActive(true);
+
+            //Pop added
+            warriorMinions.Remove(warriorMinions[i]);
+        }
+    }
+
+    public void SetRogueMinion()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            currentMinion = rogueMinions[i];
+            dealtRogueCards.Add(currentMinion);
+            CardVisual mv = GameManager.Instance.rogueShopPile.GetChild(i).GetComponent<CardVisual>();
+            mv.Md = currentMinion;
+            GameManager.Instance.rogueShopPile.GetChild(i).gameObject.SetActive(true);
+
+            //Pop added
+            rogueMinions.Remove(rogueMinions[i]);
+        }
+    }
+
+    public void SetMageMinion()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            currentMinion = mageMinions[i];
+            dealtMageCards.Add(currentMinion);
+            CardVisual mv = GameManager.Instance.mageShopPile.GetChild(i).GetComponent<CardVisual>();
+            mv.Md = currentMinion;
+            GameManager.Instance.mageShopPile.GetChild(i).gameObject.SetActive(true);
+
+            //Pop added
+            mageMinions.Remove(mageMinions[i]);
+        }
+    }
+
+    public GameObject GetNextShopCard(string cardType, bool change, MinionData minion = null)
+    {
+        GameObject tmp = Instantiate(minionPrefab);
+        tmp.SetActive(false);
+
+        if (cardType.Equals("Warrior"))
+        {
+            if (warriorMinions.Count != 0)
+            {
+                tmp.GetComponent<CardVisual>().Md = warriorMinions[0];
+                warriorMinions.Remove(warriorMinions[0]);
+
+                if (change)
+                {
+                    warriorMinions.Add(minion);
+                }
+            }
+        }
+        else if (cardType.Equals("Rogue"))
+        {
+            if (rogueMinions.Count != 0)
+            {
+                tmp.GetComponent<CardVisual>().Md = rogueMinions[0];
+                rogueMinions.Remove(rogueMinions[0]);
+
+                if (change)
+                {
+                    rogueMinions.Add(minion);
+                }
+            }
+        }
+        else
+        {
+            if (mageMinions.Count != 0)
+            {
+                tmp.GetComponent<CardVisual>().Md = mageMinions[0];
+                mageMinions.Remove(mageMinions[0]);
+
+                if (change)
+                {
+                    mageMinions.Add(minion);
+                }
+            }
+        }
+
+        if (tmp.GetComponent<CardVisual>().Md != null)
+        {
+            tmp.GetComponent<MinionVisual>().inShop = true;
+            tmp.AddComponent<ShowShopCard>();
+            tmp.SetActive(true);
+        }
+
+        return tmp;
+    }
+
+    public bool CanChangeShopCard(string cardType)
+    {
+        bool result = false;
+
+        if (cardType.Equals("Warrior"))
+        {
+            if (warriorMinions.Count != 0)
+            {
+                result = true;
+            }
+        }
+        else if (cardType.Equals("Rogue"))
+        {
+            if (rogueMinions.Count != 0)
+            {
+                result = true;
+            }
+        }
+        else
+        {
+            if (mageMinions.Count != 0)
+            {
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
+    public void ShuffleStarterDeck()
+    {
         for (int i = 0; i < starters.Count; i++)
         {
             int rnd = Random.Range(0, starters.Count);
             tempStarter = starters[rnd];
             starters[rnd] = starters[i];
-            starters[i] = tempStarter;
-        }
-    }
-
-    public void SetStarterDeck()
-    {
+            starters[i] = tempStarter;
+        }
+    }
+
+    public void SetStarterDeck()
+    {
         allyStarters = new List<StarterData>();
-        enemyStarters = new List<StarterData>();
-
-        for (int i = 0; i < starters.Count; i++)
-        {
-            allyStarters.Add(starters[i]);
-        }
-
-        ShuffleStarterDeck();
-
-        for (int i = 0; i < starters.Count; i++)
-        {
-            enemyStarters.Add(starters[i]);
-        }
-    }
-    public void DealHand()
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            currentStarter = allyStarters[i];
-
-            CardVisual sv = GameManager.Instance.alliedHand.GetChild(i).GetComponent<CardVisual>();
-            sv.Sd = currentStarter;
-            GameManager.Instance.alliedHand.GetChild(i).gameObject.SetActive(true);
-        }
-
-        for (int i = 0; i < 5; i++)
-        {
-            currentStarter = enemyStarters[i];
-
-            CardVisual sv2 = GameManager.Instance.enemyHand.GetChild(i).GetComponent<CardVisual>();
-            sv2.Sd = currentStarter;
-            GameManager.Instance.enemyHand.GetChild(i).gameObject.SetActive(true);
-        }
-    }
-
-    public void SetEssentials()
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            currentEssential = essentials[i];
-
-            CardVisual cv = GameManager.Instance.essentialsPile.GetChild(i).GetComponent<CardVisual>();
-            cv.Ed = currentEssential;
-            GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
-        }
-    }
+        enemyStarters = new List<StarterData>();
+
+        for (int i = 0; i < starters.Count; i++)
+        {
+            allyStarters.Add(starters[i]);
+        }
+
+        ShuffleStarterDeck();
+
+        for (int i = 0; i < starters.Count; i++)
+        {
+            enemyStarters.Add(starters[i]);
+        }
+    }
+    //public void DealHand()
+    //{
+    //    for(int i = 0; i < 5; i++)
+    //    {
+    //        currentStarter = allyStarters[i];
+
+    //        StarterVisual sv = GameManager.Instance.alliedHand.GetChild(i).GetComponent<StarterVisual>();
+    //        sv.Sd = currentStarter;
+    //        GameManager.Instance.alliedHand.GetChild(i).gameObject.SetActive(true);
+    //    }
+
+    //    for (int i = 0; i < 5; i++)
+    //    {
+    //        currentStarter = enemyStarters[i];
+
+    //        StarterVisual sv2 = GameManager.Instance.enemyHand.GetChild(i).GetComponent<StarterVisual>();
+    //        sv2.Sd = currentStarter;
+    //        GameManager.Instance.enemyHand.GetChild(i).gameObject.SetActive(true);
+    //    }
+    //}
+
+    public void SetEssentials()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            currentEssential = essentials[i];
+
+            CardVisual cv = GameManager.Instance.essentialsPile.GetChild(i).GetComponent<CardVisual>();
+            cv.Ed = currentEssential;
+            GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
+        }
+    }
 }

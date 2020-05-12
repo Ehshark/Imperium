@@ -8,6 +8,7 @@ public class PlayCard : MonoBehaviour
     private GameObject card;
     private GameObject summonPanel;
     private CardVisual cv;
+    private GameObject glowPanel;
 
     private void Start()
     {
@@ -69,6 +70,7 @@ public class PlayCard : MonoBehaviour
             }
         }
 
+       
     }
 
     //Connected to the play button in summon panel
@@ -76,6 +78,11 @@ public class PlayCard : MonoBehaviour
     {
         summonPanel.SetActive(false);
         StartCoroutine(MoveCardFromHand(true));
+        //turns off glowpanel when moving minion
+        if (glowPanel != null){
+            glowPanel.SetActive(false);
+        }
+        StartCoroutine(MoveMinion());
     }
 
     //Connected to the promote button in summon panel
@@ -107,6 +114,8 @@ public class PlayCard : MonoBehaviour
 
         else
             summonPanel.SetActive(true);
+
+        
     }
 
     public void StartPromotion()
