@@ -169,10 +169,11 @@ public class GameManager : MonoBehaviour
         }
 
         return player;
+    }
     //draws a single card, takes in a Card parameter and determines what kind of card it is and instantiate + populates it
     //TODO: change the instatiate prefab for cards to the enemy's hand as well
     //TODO: remove/pop cards out of the deck when drawn
-    public void DrawCard(Card topCard)
+    public void DrawCard(Card topCard)
     {
         GameObject tmp;
         MinionData minion;
