@@ -76,7 +76,8 @@ public class GameManager : MonoBehaviour
 
     public void MoveCard(GameObject go, Transform from, Transform to)
     {
-        go.transform.SetParent(to);
+        go.transform.SetParent(to, false);
+        go.transform.position = to.position;
         if (from.name.Equals("Hand") || from.name.Equals("EnemyHand"))
             Destroy(go.GetComponent<PlayCard>());
     }

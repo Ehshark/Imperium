@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayMinionCommand : Command
+public class MoveCardCommand : Command
 {
-    readonly GameObject minion;
+    readonly GameObject card;
     readonly Transform from;
     readonly Transform to;
 
-    public PlayMinionCommand(GameObject m, Transform f, Transform t)
+    public MoveCardCommand(GameObject m, Transform f, Transform t)
     {
-        minion = m;
+        card = m;
         from = f;
         to = t;
     }
 
     public override void StartCommandExecution()
     {
-        GameManager.Instance.MoveCard(minion, from, to);
+        GameManager.Instance.MoveCard(card, from, to);
         CommandExecutionComplete();
     }
 }

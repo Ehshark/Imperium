@@ -10,7 +10,7 @@ public class StarterVisual : MonoBehaviour
     private StarterData sd;
     public StarterData Sd { get => sd; set => sd = value; }
 
-    //bool isEnlarged = false;
+    bool isEnlarged = false;
     public List<Transform> descriptions;
 
     public TMP_Text cost;

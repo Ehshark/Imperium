@@ -5,46 +5,74 @@ using TMPro;
 
 public class PlayCard : MonoBehaviour
 {
-    private GameObject minion;
-    private GameObject item;
+    private GameObject card;
     private GameObject summonPanel;
 
     private void Start()
     {
-        foreach (Transform t in transform)
+        if (gameObject.CompareTag("Minion"))
         {
-            if (t.name.Equals("SummonPanel"))
-                summonPanel = t.gameObject;
+            foreach (Transform t in transform)
+                if (t.name.Equals("SummonPanel"))
+                    summonPanel = t.gameObject;
+
+            foreach (Transform t in summonPanel.transform)
+            {
+                if (t.name.Equals("PlayMinionButton"))
+                    t.GetComponent<Button>().onClick.AddListener(PlayMinion);
+
+                else if (t.name.Equals("PromoteMinionButton"))
+                    t.GetComponent<Button>().onClick.AddListener(StartPromoteMinion);
+            }
         }
 
-        foreach (Transform t in summonPanel.transform)
+        else if (gameObject.CompareTag("Essential"))
         {
-            if (t.name.Equals("PlayMinionButton"))
-            {
-                t.GetComponent<Button>().onClick.AddListener(PlayMinion);
-                t.gameObject.SetActive(true);
-            }
+            foreach (Transform t in transform)
+                if (t.name.Equals("UsePanel"))
+                    summonPanel = t.gameObject;
 
-            else if (t.name.Equals("PromoteMinionButton"))
-            {
-                t.GetComponent<Button>().onClick.AddListener(StartPromoteMinion);
-                t.gameObject.SetActive(true);
-            }
-
-            else if (t.name.Equals("UseButton"))
-            {
-                t.GetComponent<Button>().onClick.AddListener(PlayItem);
-                t.gameObject.SetActive(true);
-            }
-
+            foreach (Transform t in summonPanel.transform)
+                if (t.name.Equals("UseButton"))
+                    t.GetComponent<Button>().onClick.AddListener(PlayItem);
         }
+
+        else if (gameObject.CompareTag("Starter")) {
+            StarterVisual sv = gameObject.GetComponent<StarterVisual>();
+            if (sv.Sd.AttackDamage == 0)
+            {
+                foreach (Transform t in transform)
+                    if (t.name.Equals("UsePanel"))
+                        summonPanel = t.gameObject;
+
+                foreach (Transform t in summonPanel.transform)
+                    if (t.name.Equals("UseButton"))
+                        t.GetComponent<Button>().onClick.AddListener(PlayItem);
+            }
+
+            else {
+                foreach (Transform t in transform)
+                    if (t.name.Equals("SummonPanel"))
+                        summonPanel = t.gameObject;
+
+                foreach (Transform t in summonPanel.transform)
+                {
+                    if (t.name.Equals("PlayMinionButton"))
+                        t.GetComponent<Button>().onClick.AddListener(PlayMinion);
+
+                    else if (t.name.Equals("PromoteMinionButton"))
+                        t.GetComponent<Button>().onClick.AddListener(StartPromoteMinion);
+                }
+            }
+        }
+
     }
 
     //Connected to the play button in summon panel
     public void PlayMinion()
     {
         summonPanel.SetActive(false);
-        StartCoroutine(MoveMinion());
+        StartCoroutine(MoveCardFromHand(true));
     }
 
     //Connected to the promote button in summon panel
@@ -62,9 +90,9 @@ public class PlayCard : MonoBehaviour
     public void ShowSummonPanel()
     {
         //minion = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
-        if (gameObject != UIManager.Instance.LastSelectedMinion && UIManager.Instance.LastSelectedMinion != null)
+        if (gameObject != UIManager.Instance.LastSelectedCard && UIManager.Instance.LastSelectedCard != null)
         {
-            foreach (Transform t in UIManager.Instance.LastSelectedMinion.transform)
+            foreach (Transform t in UIManager.Instance.LastSelectedCard.transform)
             {
                 if (t.name.Equals("SummonPanel"))
                     t.gameObject.SetActive(false);
@@ -83,7 +111,7 @@ public class PlayCard : MonoBehaviour
         StartCoroutine(PromoteMinionWithPlayback());
     }
 
-    IEnumerator MoveMinion()
+    IEnumerator MoveCardFromHand(bool isMinion)
     {
         Transform minionZone = GameManager.Instance.alliedHand;
         Image image = minionZone.GetComponent<Image>();
@@ -97,18 +125,29 @@ public class PlayCard : MonoBehaviour
         color.a = .4f;
         image.color = color;
 
-        minion = gameObject;
+        card = gameObject;
 
-        if (GameManager.Instance.IsPromoting)
+        if (isMinion)
         {
-            minion = GameManager.Instance.MinionToPromote;
-            GameManager.Instance.IsPromoting = false;
-            GameManager.Instance.EnableOrDisablePlayerControl(true);
-            EventManager.Instance.PostNotification(EVENT_TYPE.SACRIFICE_MINION);
+            if (GameManager.Instance.IsPromoting)
+            {
+                card = GameManager.Instance.MinionToPromote;
+                GameManager.Instance.IsPromoting = false;
+                GameManager.Instance.EnableOrDisablePlayerControl(true);
+                TMP_Text text = GameManager.Instance.instructionsObj.GetComponent<TMP_Text>();
+                text.text = "";
+                EventManager.Instance.PostNotification(EVENT_TYPE.SACRIFICE_MINION);
+            }
+
+            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedMinionZone);
+            mc.AddToQueue();
         }
 
-        PlayMinionCommand pmc = new PlayMinionCommand(minion, GameManager.Instance.alliedHand, GameManager.Instance.alliedMinionZone);
-        pmc.AddToQueue();
+        else
+        {
+            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedDiscardPile);
+            mc.AddToQueue();
+        }
     }
 
     IEnumerator PromoteMinionWithPlayback()
@@ -125,29 +164,15 @@ public class PlayCard : MonoBehaviour
         color.a = .4f;
         image.color = color;
 
-        DestroyMinionCommand dmc = new DestroyMinionCommand(GameManager.Instance.MinionToSacrifice);
-        dmc.AddToQueue();
-        StartCoroutine(MoveMinion());
+        MoveCardCommand mc = new MoveCardCommand(GameManager.Instance.MinionToSacrifice,
+            GameManager.Instance.alliedMinionZone, GameManager.Instance.alliedDiscardPile);
+        mc.AddToQueue();
+        StartCoroutine(MoveCardFromHand(true));
     }
 
     public void PlayItem()
     {
         summonPanel.SetActive(false);
-        StartCoroutine(MoveItem());
-    }
-
-    IEnumerator MoveItem()
-    {
-        Transform minionZone = GameManager.Instance.alliedHand;
-        Image image = minionZone.GetComponent<Image>();
-        Color color = image.color;
-        while (image.color.a < 1) //use "< 1" when fading in
-        {
-            color.a += Time.deltaTime / 1; //fades out over 1 second. change to += to fade in
-            image.color = color;
-            yield return null;
-        }
-        color.a = .4f;
-        image.color = color;
+        StartCoroutine(MoveCardFromHand(false));
     }
 }

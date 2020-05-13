@@ -6,6 +6,9 @@ TagManager:
   tags:
   - EnemyMinion
   - MinionArea
+  - Essential
+  - Starter
+  - Minion
   layers:
   - Default
   - TransparentFX

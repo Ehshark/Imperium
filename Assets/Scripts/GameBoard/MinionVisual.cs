@@ -123,7 +123,7 @@ public class MinionVisual : MonoBehaviour, IPointerClickHandler
             if (pc)
                 pc.ShowSummonPanel();
 
-            UIManager.Instance.LastSelectedMinion = gameObject;
+            UIManager.Instance.LastSelectedCard = gameObject;
         }
     }
 
