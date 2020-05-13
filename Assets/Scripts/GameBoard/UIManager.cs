@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     public GameObject minionPrefab;
     public GameObject starterPrefab;
     public GameObject itemPrefab;
-    private GameObject glowPanel;
+    public GameObject glowPanel;
 
     private List<MinionData> warriorMinions;
     private List<MinionData> rogueMinions;
@@ -167,81 +167,72 @@ public class UIManager : MonoBehaviour
 
 
 
-
-        //If its not your turn 
-        Debug.Log(GameManager.Instance.ActiveHero().CanPlayCards);
-
-        if (!GameManager.Instance.ActiveHero().CanPlayCards)
+        //Debug.Log(minions[0].GoldAndManaCost + "gold and mana");
+        //Debug.Log(GameManager.Instance.ActiveHero().CanPlayCards);
+        //If its your turn 
+        if (GameManager.Instance.ActiveHero().CanPlayCards)
         {
-            List<Transform> minionsInHand = new List<Transform>();
-            Transform minions = GameObject.Find("Hand").transform;
-
-            GameManager.Instance.bottomHero.heroImageBoarder.color = Color.green;
-
-            foreach (Transform t in minions)
-            {
-                Debug.Log(t.name);
-                minionsInHand.Add(t);
-
-            }
-            //disable shop buy button
-           // GameManager.Instance.EnableOrDisablePlayerControl(false);
-            //loop and disable all the panels
-            for (int i = 0; i < minionsInHand.Count; i++)
-            {
-                
-                //if(minionsInHand[i] >= ) 
-                //string mystr = TMP_Text.GetParsedText(mv.getcomponentinchildren[i].cost);
-                //int mvcost = system.int32.parse(mystr);
-                //if (gamemanager.instance.bottomhero.currenthealth > mvcost)
-                //{
-
-                //    mv.getcomponentinchildren[i].setactive;
-                //}
-            }
-        }
-        else
-        {
-           
-           // GameManager.Instance.EnableOrDisablePlayerControl(true);
+            // GameManager.Instance.EnableOrDisablePlayerControl(true);
+            
             //Change the hero color 
             GameManager.Instance.bottomHero.heroImageBoarder.color = Color.green;
             //loop and enable all the cards that are available
-            int heroManaCost = GameManager.Instance.bottomHero.CurrentMana;
-            List<Transform> arrOfMins = new List<Transform>();
+            int heroManaCost = GameManager.Instance.bottomHero.CurrentMana;   
+
             Transform minions = GameObject.Find("Hand").transform;
 
             List<MinionVisual> mvArr = new List<MinionVisual>();
             MinionVisual mv = gameObject.GetComponent<MinionVisual>();
+            //  Debug.Log(mv.Md.GoldAndManaCost);
             //foreach (MinionVisual m in mv)
             //{
             //    Debug.Log(arrOfMins.GetType());
             //    mvArr.Add(m);
             //    Debug.Log(m.transform.gameObject.name);
             //}
-            Debug.Log(mv.name);
-
-            //foreach (Transform t in minions)
-            //{
-            //    Debug.Log(arrOfMins.GetType());
-            //    arrOfMins.Add(t);
-            //    Debug.Log(t.transform.gameObject.name);
-            //}
-            for (int i = 0; i < GameManager.Instance.bottomHero.HandSize; i++)
+            //Debug.Log(minionPrefab.transform.Find("GlowPanel"));
+            //Debug.Log("prefab");
+            foreach (Transform t in minions)
             {
-                //if (GameManager.Instance.bottomHero.CurrentMana <= minionsInHand[i])
-                //{
+                Debug.Log(t.name);
+                foreach (Transform glow in t)
+                {
+                    Debug.Log(glow.gameObject.name + "why my glasses broke");
 
-                //}
-                //string mystr = TMP_Text.GetParsedText(mv.getcomponentinchildren[i].cost);
-                //int mvcost = system.int32.parse(mystr);
-                //if (gamemanager.instance.bottomhero.currenthealth > mvcost)
-                // {
+                    if(glow.GetComponent<MinionVisual>().cost.GetParsedText() != null)
+                    {
+                        string minionCost = glow.GetComponent<MinionVisual>().cost.GetParsedText();
+                        int mvCost = int.Parse(minionCost);
 
-                    //     mv.getcomponentinchildren[i].setactive;
-                    // }  
-            }
-        }
+                        if (mvCost >= GameManager.Instance.bottomHero.CurrentMana)
+                        {
+                            if (glow.gameObject.name.Equals("GlowPanel") && glow.gameObject != null)
+                            {
+                                Debug.Log(glow.gameObject.name + "i am one with nature");
+                                glow.gameObject.SetActive(true);
+                            }
+                            else
+                            {
+                                Debug.Log(glow.gameObject.name + "i am one with nature2");
+                                glow.gameObject.SetActive(false);
+                            }
+                        }
+                    }
+                   
+                 
+                  
+                }
+
+            }  
+        }
+        else
+        {
+
+            //disable shop buy button
+            // GameManager.Instance.EnableOrDisablePlayerControl(false);
+        }
+
+
     }
 
     public void DisplayShop()
