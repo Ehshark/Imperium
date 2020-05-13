@@ -82,7 +82,7 @@ public class PlayCard : MonoBehaviour
         if (glowPanel != null){
             glowPanel.SetActive(false);
         }
-        StartCoroutine(MoveMinion());
+        StartCoroutine(MoveCardFromHand(true));
     }
 
     //Connected to the promote button in summon panel

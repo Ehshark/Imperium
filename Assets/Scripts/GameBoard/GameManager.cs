@@ -87,21 +87,21 @@ public class GameManager : MonoBehaviour
             Destroy(go.GetComponent<PlayCard>());
     }
 
-    public void MoveCard(GameObject card, Transform to, List<GameObject> list = null)
+    public void MoveCard(GameObject card, Transform to, List<GameObject> list = null, Transform from = null)
     {
         GameObject tmp;
 
-        if (card.GetComponent<MinionVisual>() != null)
+        if (card.GetComponent<CardVisual>().Md != null)
         {
-            tmp = SpawnCard(null, card.GetComponent<MinionVisual>().Md);
+            tmp = SpawnCard(null, card.GetComponent<CardVisual>().Md);
         }
-        else if (card.GetComponent<EssentialVisual>() != null)
+        else if (card.GetComponent<CardVisual>().Ed != null)
         {
-            tmp = SpawnCard(null, null, card.GetComponent<EssentialVisual>().Ed);
+            tmp = SpawnCard(null, null, card.GetComponent<CardVisual>().Ed);
         }
-        else if (card.GetComponent<StarterVisual>() != null)
+        else if (card.GetComponent<CardVisual>().Sd != null)
         {
-            tmp = SpawnCard(null, null, null, card.GetComponent<StarterVisual>().Sd, false);
+            tmp = SpawnCard(null, null, null, card.GetComponent<CardVisual>().Sd, false);
         }
         else
         {
@@ -187,7 +187,7 @@ public class GameManager : MonoBehaviour
                 minion = (MinionData)topCard;
                 tmp = Instantiate(UIManager.Instance.minionPrefab, alliedHand) as GameObject;
                 tmp.SetActive(false);
-                tmp.GetComponent<MinionVisual>().Md = minion;
+                tmp.GetComponent<CardVisual>().Md = minion;
                 tmp.SetActive(true);
             }
             else if (topCard is StarterData) //Card is a starter
@@ -195,7 +195,7 @@ public class GameManager : MonoBehaviour
                 starter = (StarterData)topCard;
                 tmp = Instantiate(UIManager.Instance.starterPrefab, alliedHand) as GameObject;
                 tmp.SetActive(false);
-                tmp.GetComponent<StarterVisual>().Sd = starter;
+                tmp.GetComponent<CardVisual>().Sd = starter;
                 tmp.SetActive(true);
             }
             else if (topCard is EssentialsData) //Card is a essential
@@ -203,7 +203,7 @@ public class GameManager : MonoBehaviour
                 essentials = (EssentialsData)topCard;
                 tmp = Instantiate(UIManager.Instance.itemPrefab, alliedHand) as GameObject;
                 tmp.SetActive(false);
-                tmp.GetComponent<EssentialVisual>().Ed = essentials;
+                tmp.GetComponent<CardVisual>().Ed = essentials;
                 tmp.SetActive(true);
             }
         }
@@ -222,11 +222,11 @@ public class GameManager : MonoBehaviour
         {
             tmp = Instantiate(UIManager.Instance.minionPrefab) as GameObject;
             tmp.SetActive(false);
-            tmp.GetComponent<MinionVisual>().Md = minion;
+            tmp.GetComponent<CardVisual>().Md = minion;
 
             if (inShop)
             {
-                tmp.GetComponent<MinionVisual>().inShop = true;
+                tmp.GetComponent<CardVisual>().inShop = true;
             }
 
             tmp.SetActive(true);
@@ -237,11 +237,11 @@ public class GameManager : MonoBehaviour
         {
             tmp = Instantiate(UIManager.Instance.itemPrefab) as GameObject;
             tmp.SetActive(false);
-            tmp.GetComponent<EssentialVisual>().Ed = essential;
+            tmp.GetComponent<CardVisual>().Ed = essential;
 
             if (inShop)
             {
-                tmp.GetComponent<EssentialVisual>().inShop = true;
+                tmp.GetComponent<CardVisual>().inShop = true;
             }
 
             tmp.SetActive(true);
@@ -252,7 +252,7 @@ public class GameManager : MonoBehaviour
         {
             tmp = Instantiate(UIManager.Instance.starterPrefab) as GameObject;
             tmp.SetActive(false);
-            tmp.GetComponent<StarterVisual>().Sd = starter;
+            tmp.GetComponent<CardVisual>().Sd = starter;
             tmp.SetActive(true);
             tmp.transform.SetParent(to, false);
             return tmp;

@@ -32,12 +32,12 @@ public class StartCombat : MonoBehaviour
             StartCombatListener scl = t.gameObject.GetComponent<StartCombatListener>();
             if (scl)
             {
-                MinionVisual mv = t.GetComponent<MinionVisual>();
+                CardVisual cv = t.GetComponent<CardVisual>();
                 Destroy(scl);
 
-                if (mv)
+                if (cv.Md)
                 {
-                    ChangeCardColour(t.gameObject, mv.Md.Color);
+                    ChangeCardColour(t.gameObject, cv.Md.Color);
                 }
                 else
                 {
@@ -71,16 +71,15 @@ public class StartCombat : MonoBehaviour
 
     public static void ChangeCardColour(GameObject card, Color color)
     {
-        MinionVisual mv = card.GetComponent<MinionVisual>();
-        StarterVisual sv = card.GetComponent<StarterVisual>();
+        CardVisual cv = card.GetComponent<CardVisual>();
 
-        if (mv)
+        if (cv.Md)
         {
-            mv.cardBackground.color = color;
+            cv.cardBackground.color = color;
         }
-        else if (sv)
+        else if (cv.Sd)
         {
-            sv.cardBackground.color = color;
+            cv.cardBackground.color = color;
         }
     }
 

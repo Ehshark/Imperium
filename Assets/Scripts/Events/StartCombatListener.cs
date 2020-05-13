@@ -12,73 +12,70 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
     {
         GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
 
-        MinionVisual mv = card.GetComponent<MinionVisual>();
-        StarterVisual sv = card.GetComponent<StarterVisual>();
+        CardVisual cv = card.GetComponent<CardVisual>();
 
-        TapMinion(mv, sv, card);
+        TapMinion(cv, card);
     }
 
-    private void TapMinion(MinionVisual mv, StarterVisual sv, GameObject card)
+    private void TapMinion(CardVisual cv, GameObject card)
     {
-        if (mv)
+        if (cv.Md)
         {
             if (tapped)
             {
-                StartCombat.ChangeCardColour(card, mv.Md.Color);
-                mv.Md.IsTapped = false;
+                StartCombat.ChangeCardColour(card, cv.Md.Color);
+                cv.Md.IsTapped = false;
                 tapped = false;
 
                 //Decrease damage counter
-                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) - mv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) - cv.Md.AttackDamage).ToString();
             }
             else
             {
                 StartCombat.ChangeCardColour(card, Color.cyan);
-                mv.Md.IsTapped = true;
+                cv.Md.IsTapped = true;
                 tapped = true;
 
                 //Increase damage counter
-                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) + mv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) + cv.Md.AttackDamage).ToString();
             }
 
-            HasAbilites(mv);
+            HasAbilites(cv.Md);
         }
-        else if (sv)
+        else if (cv.Sd)
         {
-            Debug.Log(sv.Sd.AttackDamage);
-
             if (tapped)
             {
                 StartCombat.ChangeCardColour(card, Color.gray);
-                sv.Sd.IsTapped = false;
+                cv.Sd.IsTapped = false;
                 tapped = false;
 
                 //Decrease damage counter
-                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) - sv.Sd.AttackDamage).ToString();
+                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) - cv.Sd.AttackDamage).ToString();
             }
             else
             {
                 StartCombat.ChangeCardColour(card, Color.cyan);
-                sv.Sd.IsTapped = true;
+                cv.Sd.IsTapped = true;
                 tapped = true;
 
                 //Increase damage counter
-                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) + sv.Sd.AttackDamage).ToString(); 
+                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) + cv.Sd.AttackDamage).ToString(); 
             }
         }
     }
 
-    private void HasAbilites(MinionVisual mv)
+    private void HasAbilites(MinionData md)
     {
-        if (mv.Md.EffectId1 == 8)
+        if (md.EffectId1 == 8)
         {
             if (tapped)
             {
-                GameManager.Instance.alliedStealthDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text) + mv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedStealthDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text) + md.AttackDamage).ToString();
             }
             else
             {
-                GameManager.Instance.alliedStealthDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text) - mv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedStealthDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text) - md.AttackDamage).ToString();
             }
         }
     }

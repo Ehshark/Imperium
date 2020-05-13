@@ -64,7 +64,7 @@ void start()
         //Debug.Log(mv);
         Debug.Log(transform.parent.name.Equals("Hand"));
 
-        MinionVisual mv = gameObject.GetComponent<MinionVisual>();
+        CardVisual mv = gameObject.GetComponent<CardVisual>();
         Debug.Log(mv);
 
         //loop the hand and 

@@ -489,11 +489,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b668f9f7e4379e49b3081a5f0e811bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardData: {fileID: 0}
-  descriptions: []
+  descriptions:
+  - {fileID: 5361649608067796741}
+  - {fileID: 5361649608379456300}
+  - {fileID: 5361649608891643753}
+  - {fileID: 5361649607342456148}
+  - {fileID: 5361649608898509267}
+  - {fileID: 5361649607515448368}
   cost: {fileID: 5361649607378099703}
   health: {fileID: 0}
   damage: {fileID: 0}
+  costImage: {fileID: 5361649607611210297}
   cardBackground: {fileID: 5361649607802625128}
   condition: {fileID: 0}
   allyClass: {fileID: 0}

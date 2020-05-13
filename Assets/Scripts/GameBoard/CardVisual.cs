@@ -11,7 +11,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     private MinionData md;
     public MinionData Md { get => md; set => md = value; }
 
-    public StarterData sd;
+    private StarterData sd;
     public StarterData Sd { get => sd; set => sd = value; }
 
     private EssentialsData ed;
@@ -43,8 +43,11 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         else if (sd != null)
             cardData = sd;
 
-        PopulateCard();
-        UpdateCardDescriptions();
+        if (md != null || sd != null || ed != null)
+        {
+            PopulateCard();
+            UpdateCardDescriptions();
+        }
     }
 
     public void UpdateCardDescriptions()

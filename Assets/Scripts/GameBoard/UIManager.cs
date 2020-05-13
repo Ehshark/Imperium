@@ -175,15 +175,22 @@ public class UIManager : MonoBehaviour
 
         //If its your turn 
         if (GameManager.Instance.ActiveHero().CanPlayCards)
-        {
-           //  GameManager.Instance.EnableOrDisablePlayerControl(true);
-            
-            //Change the hero color 
+        {
+
+            //  GameManager.Instance.EnableOrDisablePlayerControl(true);
+
+
+
+            //Change the hero color 
+
             GameManager.Instance.bottomHero.heroImageBoarder.color = Color.green;
             //loop and enable all the cards that are available
-            int heroManaCost = GameManager.Instance.bottomHero.CurrentMana;   
-            Transform minions = GameObject.Find("Hand").transform;
-           
+            int heroManaCost = GameManager.Instance.bottomHero.CurrentMana;
+
+            Transform minions = GameObject.Find("Hand").transform;
+
+
+
             foreach (Transform minion in minions)
             {
                 if (minion != null)
@@ -195,18 +202,21 @@ public class UIManager : MonoBehaviour
                     int mvCost = int.Parse(cost);
                     Debug.Log(mvCost);
 
-                    if  (mvCost <= heroManaCost)
+                    if (mvCost <= heroManaCost)
                     {
                         minion.Find("GlowPanel").gameObject.SetActive(true);
                     }
                     else
                     {
                         minion.Find("GlowPanel").gameObject.SetActive(false);
-                    }
-                   
+                    }
+
+
+
                 }
 
-            }  
+            }
+
         }
         else
         {
@@ -393,14 +403,12 @@ public class UIManager : MonoBehaviour
 
         if (tmp.GetComponent<CardVisual>().Md != null)
         {
-            tmp.GetComponent<MinionVisual>().inShop = true;
+            tmp.GetComponent<CardVisual>().inShop = true;
             tmp.AddComponent<ShowShopCard>();
             tmp.SetActive(true);
         }
-
-        return tmp;
+        return tmp;
     }
-
     public bool CanChangeShopCard(string cardType)
     {
         bool result = false;
@@ -494,16 +502,14 @@ public class UIManager : MonoBehaviour
             //GameManager.Instance.enemyHand.GetChild(i).gameObject.SetActive(true);
         }
     }*/
-
-    public void SetEssentials()
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            currentEssential = essentials[i];
-
-            CardVisual cv = GameManager.Instance.essentialsPile.GetChild(i).GetComponent<CardVisual>();
-            cv.Ed = currentEssential;
-            GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
-        }
-    }
+    public void SetEssentials()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            currentEssential = essentials[i];
+            CardVisual cv = GameManager.Instance.essentialsPile.GetChild(i).GetComponent<CardVisual>();
+            cv.Ed = currentEssential;
+            GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
+        }
+    }
 }
