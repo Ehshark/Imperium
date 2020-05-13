@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class GameManager : MonoBehaviour
     public static Player player { get; set; } = null;
 
     public Transform instructionsObj;
+
+    public Transform StartCombatDamageUI;
+    public TMP_Text alliedDamageCounter;
+    public TMP_Text alliedStealthDamageCounter;
 
     public Transform alliedMinionZone;
     public Transform alliedHand;
@@ -175,6 +180,12 @@ public class GameManager : MonoBehaviour
             tmp = Instantiate(UIManager.Instance.minionPrefab) as GameObject;
             tmp.SetActive(false);
             tmp.GetComponent<MinionVisual>().Md = minion;
+
+            if (inShop)
+            {
+                tmp.GetComponent<MinionVisual>().inShop = true;
+            }
+
             tmp.SetActive(true);
             tmp.transform.SetParent(to, false);
             return tmp;

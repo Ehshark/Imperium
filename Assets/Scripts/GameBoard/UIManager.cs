@@ -338,6 +338,7 @@ public class UIManager : MonoBehaviour
 
         if (tmp.GetComponent<CardVisual>().Md != null)
         {
+            tmp.GetComponent<MinionVisual>().inShop = true;
             tmp.AddComponent<ShowShopCard>();
             tmp.SetActive(true);
         }
@@ -434,5 +435,4 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
         }
     }
-
 }

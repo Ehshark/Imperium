@@ -49,7 +49,7 @@ public class ShopController : MonoBehaviour
                 MinionVisual selectedMinion = selectedObject.GetComponent<MinionVisual>();
 
                 //Spawn Card
-                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedMinion.Md);
+                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedMinion.Md, null, null, true);
 
                 //Set the BigShopCard object with the spawned card
                 bigShopCard = tmp;

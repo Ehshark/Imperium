@@ -27,12 +27,13 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     public TMP_Text health;
     public TMP_Text damage;
 
+    public Image costImage;
     public Image cardBackground;
     public Image condition;
     public Image allyClass;
     public Image silenceIcon;
     public Image effect1;
-    public Image effect2;    private PlayCard pc;
+    public Image effect2;    public bool inShop;    private PlayCard pc;
     void OnEnable()
     {
         if (md != null)
@@ -93,6 +94,12 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     void PopulateCard()
     {
+        if (!inShop)
+        {
+            //Display mana image if the card is present in the shop
+            costImage.sprite = UIManager.Instance.allSprites.Where(x => x.name == "mana").SingleOrDefault();
+        }
+
         //set the cost
         cost.text = CardData.GoldAndManaCost.ToString();
         //set the health

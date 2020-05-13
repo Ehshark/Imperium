@@ -46,7 +46,7 @@ public class StartGameController : MonoBehaviour
         animator = coin.GetComponent<Animator>();
 
         //Generate a random number and see which Player goes first
-        int value = Random.Range(0, 1000);        
+        int value = Random.Range(0, 10000);
 
         if (value % 2 == 0)
         {

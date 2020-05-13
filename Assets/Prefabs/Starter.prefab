@@ -550,6 +550,8 @@ MonoBehaviour:
   cost: {fileID: 5361649607378099703}
   health: {fileID: 5361649608773061276}
   damage: {fileID: 5361649608923231243}
+  healthImage: {fileID: 5361649608897679612}
+  damageImage: {fileID: 5361649608054139160}
   cardBackground: {fileID: 5361649607802625128}
   condition: {fileID: 0}
   allyClass: {fileID: 0}
