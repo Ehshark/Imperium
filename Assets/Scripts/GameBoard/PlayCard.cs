@@ -6,6 +6,7 @@ using TMPro;
 public class PlayCard : MonoBehaviour
 {
     private GameObject minion;
+    private GameObject item;
     private GameObject summonPanel;
 
     private void Start()
@@ -19,9 +20,23 @@ public class PlayCard : MonoBehaviour
         foreach (Transform t in summonPanel.transform)
         {
             if (t.name.Equals("PlayMinionButton"))
+            {
                 t.GetComponent<Button>().onClick.AddListener(PlayMinion);
-            if (t.name.Equals("PromoteMinionButton"))
+                t.gameObject.SetActive(true);
+            }
+
+            else if (t.name.Equals("PromoteMinionButton"))
+            {
                 t.GetComponent<Button>().onClick.AddListener(StartPromoteMinion);
+                t.gameObject.SetActive(true);
+            }
+
+            else if (t.name.Equals("UseButton"))
+            {
+                t.GetComponent<Button>().onClick.AddListener(PlayItem);
+                t.gameObject.SetActive(true);
+            }
+
         }
     }
 
@@ -31,12 +46,12 @@ public class PlayCard : MonoBehaviour
         summonPanel.SetActive(false);
         StartCoroutine(MoveMinion());
     }
-    
+
     //Connected to the promote button in summon panel
     public void StartPromoteMinion()
     {
         TMP_Text text = GameManager.Instance.instructionsObj.GetComponent<TMP_Text>();
-        text.text = "Please select an enemy minion to destroy";
+        text.text = "Please select an enemy minion to sacrifice";
         GameManager.Instance.EnableOrDisablePlayerControl(false);
         GameManager.Instance.MinionToPromote = gameObject;
         GameManager.Instance.IsPromoting = true;
@@ -89,6 +104,7 @@ public class PlayCard : MonoBehaviour
             minion = GameManager.Instance.MinionToPromote;
             GameManager.Instance.IsPromoting = false;
             GameManager.Instance.EnableOrDisablePlayerControl(true);
+            EventManager.Instance.PostNotification(EVENT_TYPE.SACRIFICE_MINION);
         }
 
         PlayMinionCommand pmc = new PlayMinionCommand(minion, GameManager.Instance.alliedHand, GameManager.Instance.alliedMinionZone);
@@ -112,5 +128,26 @@ public class PlayCard : MonoBehaviour
         DestroyMinionCommand dmc = new DestroyMinionCommand(GameManager.Instance.MinionToSacrifice);
         dmc.AddToQueue();
         StartCoroutine(MoveMinion());
+    }
+
+    public void PlayItem()
+    {
+        summonPanel.SetActive(false);
+        StartCoroutine(MoveItem());
+    }
+
+    IEnumerator MoveItem()
+    {
+        Transform minionZone = GameManager.Instance.alliedHand;
+        Image image = minionZone.GetComponent<Image>();
+        Color color = image.color;
+        while (image.color.a < 1) //use "< 1" when fading in
+        {
+            color.a += Time.deltaTime / 1; //fades out over 1 second. change to += to fade in
+            image.color = color;
+            yield return null;
+        }
+        color.a = .4f;
+        image.color = color;
     }
 }
