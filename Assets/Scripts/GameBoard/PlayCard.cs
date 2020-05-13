@@ -7,10 +7,13 @@ public class PlayCard : MonoBehaviour
 {
     private GameObject card;
     private GameObject summonPanel;
+    private CardVisual cv;
 
     private void Start()
     {
-        if (gameObject.CompareTag("Minion"))
+        cv = gameObject.GetComponent<CardVisual>();
+
+        if (cv.Md != null)
         {
             foreach (Transform t in transform)
                 if (t.name.Equals("SummonPanel"))
@@ -26,7 +29,7 @@ public class PlayCard : MonoBehaviour
             }
         }
 
-        else if (gameObject.CompareTag("Essential"))
+        else if (cv.Ed != null)
         {
             foreach (Transform t in transform)
                 if (t.name.Equals("UsePanel"))
@@ -37,9 +40,9 @@ public class PlayCard : MonoBehaviour
                     t.GetComponent<Button>().onClick.AddListener(PlayItem);
         }
 
-        else if (gameObject.CompareTag("Starter")) {
-            StarterVisual sv = gameObject.GetComponent<StarterVisual>();
-            if (sv.Sd.AttackDamage == 0)
+        else if (cv.Sd != null) {
+            CardVisual cv = gameObject.GetComponent<CardVisual>();
+            if (cv.Sd.AttackDamage == 0)
             {
                 foreach (Transform t in transform)
                     if (t.name.Equals("UsePanel"))

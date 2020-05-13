@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   id: 4
-  manaCost: 2
+  goldAndManaCost: 2
   effectText1: Your hero's damage increases by 1 until the end of the turn
   effectId1: 14
   effectText2: 

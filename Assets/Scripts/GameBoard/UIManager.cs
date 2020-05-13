@@ -150,7 +150,7 @@ public class UIManager : MonoBehaviour
         SetStarterDeck();
 
         //Deals 5 starter cards into the hand of the player
-        DealHand();
+        //DealHand();
 
         //if (PhotonNetwork.IsMasterClient) {
         //    yourName.text = "Host: " + GameManager.UserName;
@@ -252,7 +252,7 @@ public class UIManager : MonoBehaviour
         {
             currentMinion = warriorMinions[i];
             dealtWarriorCards.Add(currentMinion);
-            MinionVisual mv = GameManager.Instance.warriorShopPile.GetChild(i).GetComponent<MinionVisual>();
+            CardVisual mv = GameManager.Instance.warriorShopPile.GetChild(i).GetComponent<CardVisual>();
             mv.Md = currentMinion;
             GameManager.Instance.warriorShopPile.GetChild(i).gameObject.SetActive(true);
 
@@ -267,7 +267,7 @@ public class UIManager : MonoBehaviour
         {
             currentMinion = rogueMinions[i];
             dealtRogueCards.Add(currentMinion);
-            MinionVisual mv = GameManager.Instance.rogueShopPile.GetChild(i).GetComponent<MinionVisual>();
+            CardVisual mv = GameManager.Instance.rogueShopPile.GetChild(i).GetComponent<CardVisual>();
             mv.Md = currentMinion;
             GameManager.Instance.rogueShopPile.GetChild(i).gameObject.SetActive(true);
 
@@ -282,7 +282,7 @@ public class UIManager : MonoBehaviour
         {
             currentMinion = mageMinions[i];
             dealtMageCards.Add(currentMinion);
-            MinionVisual mv = GameManager.Instance.mageShopPile.GetChild(i).GetComponent<MinionVisual>();
+            CardVisual mv = GameManager.Instance.mageShopPile.GetChild(i).GetComponent<CardVisual>();
             mv.Md = currentMinion;
             GameManager.Instance.mageShopPile.GetChild(i).gameObject.SetActive(true);
 
@@ -300,7 +300,7 @@ public class UIManager : MonoBehaviour
         {
             if (warriorMinions.Count != 0)
             {
-                tmp.GetComponent<MinionVisual>().Md = warriorMinions[0];
+                tmp.GetComponent<CardVisual>().Md = warriorMinions[0];
                 warriorMinions.Remove(warriorMinions[0]);
 
                 if (change)
@@ -313,7 +313,7 @@ public class UIManager : MonoBehaviour
         {
             if (rogueMinions.Count != 0)
             {
-                tmp.GetComponent<MinionVisual>().Md = rogueMinions[0];
+                tmp.GetComponent<CardVisual>().Md = rogueMinions[0];
                 rogueMinions.Remove(rogueMinions[0]);
 
                 if (change)
@@ -326,7 +326,7 @@ public class UIManager : MonoBehaviour
         {
             if (mageMinions.Count != 0)
             {
-                tmp.GetComponent<MinionVisual>().Md = mageMinions[0];
+                tmp.GetComponent<CardVisual>().Md = mageMinions[0];
                 mageMinions.Remove(mageMinions[0]);
 
                 if (change)
@@ -336,7 +336,7 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        if (tmp.GetComponent<MinionVisual>().Md != null)
+        if (tmp.GetComponent<CardVisual>().Md != null)
         {
             tmp.AddComponent<ShowShopCard>();
             tmp.SetActive(true);
@@ -373,7 +373,7 @@ public class UIManager : MonoBehaviour
 
         return result;
     }
-    
+
     public void ShuffleStarterDeck()
     {
         for (int i = 0; i < starters.Count; i++)
@@ -390,7 +390,7 @@ public class UIManager : MonoBehaviour
         allyStarters = new List<StarterData>();
         enemyStarters = new List<StarterData>();
 
-        for(int i = 0; i < starters.Count; i++)
+        for (int i = 0; i < starters.Count; i++)
         {
             allyStarters.Add(starters[i]);
         }
@@ -404,11 +404,11 @@ public class UIManager : MonoBehaviour
     }
     public void DealHand()
     {
-        for(int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
         {
             currentStarter = allyStarters[i];
 
-            StarterVisual sv = GameManager.Instance.alliedHand.GetChild(i).GetComponent<StarterVisual>();
+            CardVisual sv = GameManager.Instance.alliedHand.GetChild(i).GetComponent<CardVisual>();
             sv.Sd = currentStarter;
             GameManager.Instance.alliedHand.GetChild(i).gameObject.SetActive(true);
         }
@@ -417,7 +417,7 @@ public class UIManager : MonoBehaviour
         {
             currentStarter = enemyStarters[i];
 
-            StarterVisual sv2 = GameManager.Instance.enemyHand.GetChild(i).GetComponent<StarterVisual>();
+            CardVisual sv2 = GameManager.Instance.enemyHand.GetChild(i).GetComponent<CardVisual>();
             sv2.Sd = currentStarter;
             GameManager.Instance.enemyHand.GetChild(i).gameObject.SetActive(true);
         }
@@ -429,10 +429,9 @@ public class UIManager : MonoBehaviour
         {
             currentEssential = essentials[i];
 
-            EssentialVisual ev = GameManager.Instance.essentialsPile.GetChild(i).GetComponent<EssentialVisual>();
-            ev.Ed = currentEssential;
+            CardVisual cv = GameManager.Instance.essentialsPile.GetChild(i).GetComponent<CardVisual>();
+            cv.Ed = currentEssential;
             GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
         }
-        Debug.Log("Essentials work");
     }
 }

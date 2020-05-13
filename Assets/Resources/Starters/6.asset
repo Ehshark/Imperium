@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   starterID: 6
-  manaCost: 2
-  effectText1: 
+  goldAndManaCost: 2
+  effectText1: 2
   effectId1: 999
   effectText2: 
   effectId2: 999

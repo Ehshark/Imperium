@@ -47,8 +47,8 @@ public class ShopController : MonoBehaviour
         {
             //Store the selected minion's object
             selectedCard = selectedMinionObject;
-            //Get the MinionVisual from the GameObject
-            MinionVisual selectedMinion = selectedMinionObject.GetComponent<MinionVisual>();
+            //Get the CardVisual from the GameObject
+            CardVisual selectedMinion = selectedMinionObject.GetComponent<CardVisual>();
 
             //Spawn Card
             GameObject tmp = SpawnMinion(selectedMinion);
@@ -63,7 +63,7 @@ public class ShopController : MonoBehaviour
     {
         if (selectedCard != null)
         {
-            int costForCard = int.Parse(selectedCard.GetComponent<MinionVisual>().cost.text);
+            int costForCard = int.Parse(selectedCard.GetComponent<CardVisual>().cost.text);
             int currentPlayer = GetPlayer();
 
             //Compare the cost of the Card
@@ -73,7 +73,7 @@ public class ShopController : MonoBehaviour
                 {
                     Debug.Log("Can Buy");
                     //Get the Purchased Minion
-                    MinionVisual minion = selectedCard.GetComponent<MinionVisual>() as MinionVisual;
+                    CardVisual minion = selectedCard.GetComponent<CardVisual>() as CardVisual;
 
                     //Subtract the Hero's current Gold
                     GameManager.Instance.bottomHero.AdjustGold(costForCard, false);
@@ -100,7 +100,7 @@ public class ShopController : MonoBehaviour
                 {
                     Debug.Log("Can Buy");
                     //Get the Purchased Minion
-                    MinionVisual minion = selectedCard.GetComponent<MinionVisual>() as MinionVisual;
+                    CardVisual minion = selectedCard.GetComponent<CardVisual>() as CardVisual;
 
                     //Subtract the Hero's current Gold
                     GameManager.Instance.topHero.AdjustGold(costForCard, false);
@@ -128,7 +128,7 @@ public class ShopController : MonoBehaviour
     {
         if (selectedCard != null)
         {
-            int costToChangeCard = int.Parse(selectedCard.GetComponent<MinionVisual>().cost.text) / 2;
+            int costToChangeCard = int.Parse(selectedCard.GetComponent<CardVisual>().cost.text) / 2;
             int currentPlayer = GetPlayer();
 
             if (currentPlayer == 0)
@@ -136,10 +136,10 @@ public class ShopController : MonoBehaviour
                 if (GameManager.Instance.bottomHero.Gold >= costToChangeCard)
                 {
                     //Compare if there is Card's to change the shop
-                    if (UIManager.Instance.CanChangeShopCard(selectedCard.GetComponent<MinionVisual>().Md.CardClass))
+                    if (UIManager.Instance.CanChangeShopCard(selectedCard.GetComponent<CardVisual>().Md.CardClass))
                     {
                         //Spawn a new card from the correct deck
-                        SpawnShopMinion(selectedCard.GetComponent<MinionVisual>().Md.CardClass, true, selectedCard.GetComponent<MinionVisual>().Md);
+                        SpawnShopMinion(selectedCard.GetComponent<CardVisual>().Md.CardClass, true, selectedCard.GetComponent<CardVisual>().Md);
 
                         //Subtract the Current Gold and Update the UI                
                         GameManager.Instance.bottomHero.AdjustGold(costToChangeCard, false);
@@ -163,10 +163,10 @@ public class ShopController : MonoBehaviour
                 if (GameManager.Instance.topHero.Gold >= costToChangeCard)
                 {
                     //Compare if there is Card's to change the shop
-                    if (UIManager.Instance.CanChangeShopCard(selectedCard.GetComponent<MinionVisual>().Md.CardClass))
+                    if (UIManager.Instance.CanChangeShopCard(selectedCard.GetComponent<CardVisual>().Md.CardClass))
                     {
                         //Spawn a new card from the correct deck
-                        SpawnShopMinion(selectedCard.GetComponent<MinionVisual>().Md.CardClass, true, selectedCard.GetComponent<MinionVisual>().Md);
+                        SpawnShopMinion(selectedCard.GetComponent<CardVisual>().Md.CardClass, true, selectedCard.GetComponent<CardVisual>().Md);
 
                         //Subtract the Current Gold and Update the UI
                         GameManager.Instance.topHero.AdjustGold(costToChangeCard, false);
@@ -215,7 +215,7 @@ public class ShopController : MonoBehaviour
         bigShopCard = null;
     }
 
-    private void MoveMinionToDiscard(MinionVisual minion, int currentPlayer)
+    private void MoveMinionToDiscard(CardVisual minion, int currentPlayer)
     {
         if (currentPlayer == 0)
         {
@@ -235,11 +235,11 @@ public class ShopController : MonoBehaviour
         }
     }
 
-    private GameObject SpawnMinion(MinionVisual minion)
+    private GameObject SpawnMinion(CardVisual minion)
     {
         GameObject tmp = Instantiate(minionPrefab) as GameObject;
         tmp.SetActive(false);
-        tmp.GetComponent<MinionVisual>().Md = minion.Md;
+        tmp.GetComponent<CardVisual>().Md = minion.Md;
         tmp.SetActive(true);
 
         return tmp;

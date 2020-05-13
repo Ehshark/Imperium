@@ -448,7 +448,7 @@ GameObject:
   - component: {fileID: 526668538614641341}
   m_Layer: 0
   m_Name: Minion
-  m_TagString: Minion
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -490,6 +490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b668f9f7e4379e49b3081a5f0e811bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardData: {fileID: 0}
   descriptions:
   - {fileID: 5361649608067796741}
   - {fileID: 5361649608379456300}

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   id: 2
-  manaCost: 0
+  goldAndManaCost: 2
   effectText1: 2 Health
   effectId1: 20
   effectText2: 

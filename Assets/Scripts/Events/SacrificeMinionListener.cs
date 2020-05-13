@@ -9,7 +9,7 @@ public class SacrificeMinionListener : MonoBehaviour, IPointerDownHandler
     public void Start()
     {
         //TODO: Highlight this minion properly
-        MinionVisual mv = gameObject.GetComponent<MinionVisual>();
+        CardVisual mv = gameObject.GetComponent<CardVisual>();
         mv.cardBackground.color = Color.cyan;
     }
 
@@ -21,7 +21,7 @@ public class SacrificeMinionListener : MonoBehaviour, IPointerDownHandler
 
     private void OnDestroy()
     {
-        MinionVisual mv = gameObject.GetComponent<MinionVisual>();
+        CardVisual mv = gameObject.GetComponent<CardVisual>();
         mv.cardBackground.color = Color.white;
     }
 }
