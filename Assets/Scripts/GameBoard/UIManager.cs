@@ -167,60 +167,38 @@ public class UIManager : MonoBehaviour
 
 
 
-        //Debug.Log(minions[0].GoldAndManaCost + "gold and mana");
-        //Debug.Log(GameManager.Instance.ActiveHero().CanPlayCards);
+
         //If its your turn 
         if (GameManager.Instance.ActiveHero().CanPlayCards)
         {
-            // GameManager.Instance.EnableOrDisablePlayerControl(true);
+           //  GameManager.Instance.EnableOrDisablePlayerControl(true);
             
             //Change the hero color 
             GameManager.Instance.bottomHero.heroImageBoarder.color = Color.green;
             //loop and enable all the cards that are available
             int heroManaCost = GameManager.Instance.bottomHero.CurrentMana;   
-
             Transform minions = GameObject.Find("Hand").transform;
-
-            List<MinionVisual> mvArr = new List<MinionVisual>();
-            MinionVisual mv = gameObject.GetComponent<MinionVisual>();
-            //  Debug.Log(mv.Md.GoldAndManaCost);
-            //foreach (MinionVisual m in mv)
-            //{
-            //    Debug.Log(arrOfMins.GetType());
-            //    mvArr.Add(m);
-            //    Debug.Log(m.transform.gameObject.name);
-            //}
-            //Debug.Log(minionPrefab.transform.Find("GlowPanel"));
-            //Debug.Log("prefab");
-            foreach (Transform t in minions)
+           
+            foreach (Transform minion in minions)
             {
-                Debug.Log(t.name);
-                foreach (Transform glow in t)
+                if (minion != null)
                 {
-                    Debug.Log(glow.gameObject.name + "why my glasses broke");
+                    Transform ribbon = minion.Find("Ribbon");
+                    Transform minionCost = ribbon.Find("Cost");
+                    Transform costAmount = minionCost.Find("CostAmount");
+                    string cost = costAmount.GetComponent<TMP_Text>().text;
+                    int mvCost = int.Parse(cost);
+                    Debug.Log(mvCost);
 
-                    if(glow.GetComponent<MinionVisual>().cost.GetParsedText() != null)
+                    if  (mvCost <= heroManaCost)
                     {
-                        string minionCost = glow.GetComponent<MinionVisual>().cost.GetParsedText();
-                        int mvCost = int.Parse(minionCost);
-
-                        if (mvCost >= GameManager.Instance.bottomHero.CurrentMana)
-                        {
-                            if (glow.gameObject.name.Equals("GlowPanel") && glow.gameObject != null)
-                            {
-                                Debug.Log(glow.gameObject.name + "i am one with nature");
-                                glow.gameObject.SetActive(true);
-                            }
-                            else
-                            {
-                                Debug.Log(glow.gameObject.name + "i am one with nature2");
-                                glow.gameObject.SetActive(false);
-                            }
-                        }
+                        minion.Find("GlowPanel").gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        minion.Find("GlowPanel").gameObject.SetActive(false);
                     }
                    
-                 
-                  
                 }
 
             }  
