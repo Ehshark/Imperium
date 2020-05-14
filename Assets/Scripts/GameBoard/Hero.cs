@@ -81,7 +81,7 @@ public class Hero : MonoBehaviour
         HandSize = hand;
 
         //Test
-        Gold = 5;
+        Gold = 999;
 
         //UI
         SetHealth();

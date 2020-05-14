@@ -20,7 +20,7 @@ public class ShopController : MonoBehaviour
     //Selected Card
     private GameObject selectedCard;
 
-    public void Start()
+    public void OnEnable()
     {
         //Update Hero's Current Gold in Shop
         Hero active = GameManager.Instance.ActiveHero();
@@ -38,6 +38,12 @@ public class ShopController : MonoBehaviour
 
         if (selectedObject != null)
         {
+            //Delete selectedCard if there's an instance of it 
+            if (selectedCard != null)
+            {                 
+                selectedCard = null;
+            }
+
             //Store the selected minion's object
             selectedCard = selectedObject;
             //Get the CardVisual from the GameObject
@@ -124,6 +130,8 @@ public class ShopController : MonoBehaviour
 
             if (active.Gold >= costToChangeCard)
             {
+                Debug.Log(selectedCard.GetComponent<CardVisual>().Md.CardClass);
+
                 //Compare if there is Card's to change the shop
                 if (UIManager.Instance.CanChangeShopCard(selectedCard.GetComponent<CardVisual>().Md.CardClass))
                 {
@@ -199,11 +207,11 @@ public class ShopController : MonoBehaviour
 
     private int GetCostForCard(GameObject card)
     {
-        if (card.GetComponent<CardVisual>() != null)
+        if (card.GetComponent<CardVisual>().Md != null)
         {
             return card.GetComponent<CardVisual>().Md.GoldAndManaCost;
         }
-        else if (card.GetComponent<CardVisual>() != null)
+        else if (card.GetComponent<CardVisual>().Ed != null)
         {
             return card.GetComponent<CardVisual>().Ed.GoldAndManaCost;
         }

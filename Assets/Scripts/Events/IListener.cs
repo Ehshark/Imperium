@@ -7,7 +7,8 @@ public enum EVENT_TYPE {
     SACRIFICE_SELECTED,
     DESTROY_MINION,
     TAP_MINION,
-    START_COMBAT
+    START_COMBAT,
+    ATTACK
 }
 
 public interface IListener

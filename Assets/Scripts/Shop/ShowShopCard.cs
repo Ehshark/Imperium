@@ -7,7 +7,7 @@ public class ShowShopCard : MonoBehaviour, IPointerDownHandler
 {
     public void OnPointerDown(PointerEventData eventData)
     {
-        GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
+        GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;        
 
         if (card.GetComponent<CardVisual>() != null)
         {

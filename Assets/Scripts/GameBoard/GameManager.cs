@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public Transform StartCombatDamageUI;
     public TMP_Text alliedDamageCounter;
     public TMP_Text alliedStealthDamageCounter;
+    public TMP_Text alliedLifestealDamageCounter;
+    public TMP_Text alliedPoisonTouchDamageCounter;
 
     public Transform alliedMinionZone;
     public Transform alliedHand;
@@ -43,12 +45,14 @@ public class GameManager : MonoBehaviour
     private bool isPromoting = false;
     private GameObject minionToPromote;
     private GameObject minionToSacrifice;
+    private List<GameObject> minionsAttacking = new List<GameObject>();
     private float turnTimer;
 
     public bool IsPromoting { get => isPromoting; set => isPromoting = value; }
     public GameObject MinionToPromote { get => minionToPromote; set => minionToPromote = value; }
     public float TurnTimer { get => turnTimer; set => turnTimer = value; }
     public GameObject MinionToSacrifice { get => minionToSacrifice; set => minionToSacrifice = value; }
+    public List<GameObject> MinionsAttacking { get => minionsAttacking; set => minionsAttacking = value; }
 
     public static GameManager Instance { get; private set; } = null;
     
@@ -87,7 +91,7 @@ public class GameManager : MonoBehaviour
             Destroy(go.GetComponent<PlayCard>());
     }
 
-    public void MoveCard(GameObject card, Transform to, List<GameObject> list = null, Transform from = null)
+    public void MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool destroy = false)
     {
         GameObject tmp;
 
@@ -114,6 +118,11 @@ public class GameManager : MonoBehaviour
         if (list != null)
         {
             list.Add(tmp);
+        }
+
+        if (destroy)
+        {
+            Destroy(card);
         }
     }
 

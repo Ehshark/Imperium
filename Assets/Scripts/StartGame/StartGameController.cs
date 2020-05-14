@@ -32,12 +32,17 @@ public class StartGameController : MonoBehaviour
     private GameObject bottomHero;
     [SerializeField]
     private GameObject topHero;
-    private int turn = 0;
-    private int cnt = 0;
+
+    [SerializeField]
+    private Button tailsButton;
+    [SerializeField]
+    private Button headsButton;
 
     //Variables 
     private enum Coin { IDLE, TAILS, HEADS }
     private Coin coinValue;
+    private int turn = 0;
+    private int cnt = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -66,17 +71,13 @@ public class StartGameController : MonoBehaviour
         GameManager.Instance.topHero = topHero.GetComponent<Hero>();
         GameManager.Instance.bottomHero.SetPlayerName("Player 1");
         GameManager.Instance.topHero.SetPlayerName("Player 2");
-
-
-        //Begin the intial draw
-        for (int i = 0; i < 5; i++)
-        {
-            GameManager.Instance.DrawCard(UIManager.Instance.allyDeck[i]);
-        }
     }
 
     public void FlipCoin(int value)
     {
+        tailsButton.interactable = false;
+        headsButton.interactable = false;
+
         StartCoroutine(FlipCoinAnimation(value));
     }
 
@@ -212,6 +213,12 @@ public class StartGameController : MonoBehaviour
         {
             heroUI.SetActive(false);
             reactionText.text = "";
+
+            //Begin the intial draw
+            for (int i = 0; i < 5; i++)
+            {
+                GameManager.Instance.DrawCard(UIManager.Instance.allyDeck[i]);
+            }
         }
         else
         {

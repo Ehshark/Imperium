@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 public class CardVisual : MonoBehaviour, IPointerClickHandler
 {
-    private MinionData md;
+    public MinionData md;
     public MinionData Md { get => md; set => md = value; }
 
     private StarterData sd;
@@ -22,6 +22,12 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     bool isEnlarged = false;
     public List<Transform> descriptions;
+
+    private int currentHealth;
+    private int totalHealth;
+
+    public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
+    public int TotalHealth { get => totalHealth; set => totalHealth = value; }
 
     public TMP_Text cost;
     public TMP_Text health;
@@ -109,7 +115,11 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         if (health != null)
         {
             if (CardData.Health != 0)
+            {
                 health.text = CardData.Health.ToString();
+                totalHealth = CardData.Health;
+                currentHealth = CardData.Health;
+            }
             else
                 health.transform.parent.gameObject.SetActive(false);
         }
