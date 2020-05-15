@@ -310,7 +310,7 @@ public class PlayCard : MonoBehaviour
             canPlay = false;
         }
 
-        else if (GameManager.Instance.ActiveHero().CurrentMana < thisCard.GoldAndManaCost)
+        else if (GameManager.Instance.ActiveHero().CurrentMana <= thisCard.GoldAndManaCost)
         {
             instructionsText.text = "Not enough Mana!";
             GameManager.Instance.ClearInstructionsText(3f);
