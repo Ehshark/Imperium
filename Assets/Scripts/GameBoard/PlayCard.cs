@@ -9,13 +9,19 @@ public class PlayCard : MonoBehaviour
     private GameObject summonPanel;
     private CardVisual cv;
     private GameObject glowPanel;
+    private TMP_Text promoteButtonText;
+    private TMP_Text instructionsText;
+    private Button promoteButton;
+    private Card thisCard;
 
     private void Start()
     {
+        instructionsText = GameManager.Instance.instructionsObj.GetComponent<TMP_Text>();
         cv = gameObject.GetComponent<CardVisual>();
 
         if (cv.Md != null)
         {
+            thisCard = cv.Md;
             foreach (Transform t in transform)
                 if (t.name.Equals("SummonPanel"))
                     summonPanel = t.gameObject;
@@ -26,12 +32,18 @@ public class PlayCard : MonoBehaviour
                     t.GetComponent<Button>().onClick.AddListener(PlayMinion);
 
                 else if (t.name.Equals("PromoteMinionButton"))
-                    t.GetComponent<Button>().onClick.AddListener(StartPromoteMinion);
+                {
+                    promoteButton = t.GetComponent<Button>();
+                    promoteButton.onClick.AddListener(StartPromoteButtonFunction);
+                    promoteButtonText = t.GetComponentInChildren<TMP_Text>();
+                }
+
             }
         }
 
         else if (cv.Ed != null)
         {
+            thisCard = cv.Ed;
             foreach (Transform t in transform)
                 if (t.name.Equals("UsePanel"))
                     summonPanel = t.gameObject;
@@ -41,8 +53,9 @@ public class PlayCard : MonoBehaviour
                     t.GetComponent<Button>().onClick.AddListener(PlayItem);
         }
 
-        else if (cv.Sd != null) {
-            CardVisual cv = gameObject.GetComponent<CardVisual>();
+        else if (cv.Sd != null)
+        {
+            thisCard = cv.Sd;
             if (cv.Sd.AttackDamage == 0)
             {
                 foreach (Transform t in transform)
@@ -54,7 +67,8 @@ public class PlayCard : MonoBehaviour
                         t.GetComponent<Button>().onClick.AddListener(PlayItem);
             }
 
-            else {
+            else
+            {
                 foreach (Transform t in transform)
                     if (t.name.Equals("SummonPanel"))
                         summonPanel = t.gameObject;
@@ -65,46 +79,97 @@ public class PlayCard : MonoBehaviour
                         t.GetComponent<Button>().onClick.AddListener(PlayMinion);
 
                     else if (t.name.Equals("PromoteMinionButton"))
-                        t.GetComponent<Button>().onClick.AddListener(StartPromoteMinion);
+                    {
+                        promoteButton = t.GetComponent<Button>();
+                        promoteButton.onClick.AddListener(StartPromoteButtonFunction);
+                        promoteButtonText = t.GetComponentInChildren<TMP_Text>();
+                    }
                 }
             }
         }
-
-       
     }
 
     //Connected to the play button in summon panel
     public void PlayMinion()
     {
+        if (!CanPlayItem())
+            return;
         summonPanel.SetActive(false);
         StartCoroutine(MoveCardFromHand(true));
         //turns off glowpanel when moving minion
-        if (glowPanel != null){
+        if (glowPanel != null)
+        {
             glowPanel.SetActive(false);
         }
         StartCoroutine(MoveCardFromHand(true));
     }
 
     //Connected to the promote button in summon panel
-    public void StartPromoteMinion()
+    public void StartPromoteButtonFunction()
     {
-        TMP_Text text = GameManager.Instance.instructionsObj.GetComponent<TMP_Text>();
-        text.text = "Please select an enemy minion to sacrifice";
-        GameManager.Instance.EnableOrDisablePlayerControl(false);
-        GameManager.Instance.MinionToPromote = gameObject;
-        GameManager.Instance.IsPromoting = true;
-        EventManager.Instance.PostNotification(EVENT_TYPE.SACRIFICE_MINION);
-        summonPanel.SetActive(false);
+        if (!CanPlayItem())
+            return;
+        if (!GameManager.Instance.IsPromoting)
+        {
+            StartOrCancelPromotionEvent(true);
+            GameManager.Instance.MinionToPromote = gameObject;
+        }
+
+        else
+        {
+            StartOrCancelPromotionEvent(false);
+            GameManager.Instance.MinionToPromote = null;
+        }
+    }
+
+    private void StartOrCancelPromotionEvent(bool promoting)
+    {
+        if (GameManager.Instance.alliedMinionZone.childCount == 0)
+        {
+            instructionsText.text = "No minions to sacrifice!";
+            GameManager.Instance.ClearInstructionsText(3f);
+            return;
+        }
+
+        //We want to start the promoting process
+        if (promoting)
+        {
+            //Change the color of the button to red
+            ColorBlock cb = promoteButton.colors;
+            cb.normalColor = Color.red;
+            promoteButton.colors = cb;
+
+            promoteButtonText.text = "Cancel";
+            instructionsText.text = "Please select an enemy minion to sacrifice";
+            GameManager.Instance.EnableOrDisablePlayerControl(!promoting);
+            GameManager.Instance.IsPromoting = promoting;
+            EventManager.Instance.PostNotification(EVENT_TYPE.SACRIFICE_MINION);
+        }
+
+        //We want to cancel the promoting process
+        else
+        {
+            //Change the color of the button to white
+            ColorBlock cb = promoteButton.colors;
+            cb.normalColor = Color.white;
+            promoteButton.colors = cb;
+
+            promoteButtonText.text = "Promote";
+            instructionsText.text = "";
+            GameManager.Instance.EnableOrDisablePlayerControl(!promoting);
+            GameManager.Instance.IsPromoting = promoting;
+            EventManager.Instance.PostNotification(EVENT_TYPE.SACRIFICE_MINION);
+        }
     }
 
     public void ShowSummonPanel()
     {
-        //minion = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
+        //if this card was not clicked last and is not the very first clicked card this game
         if (gameObject != UIManager.Instance.LastSelectedCard && UIManager.Instance.LastSelectedCard != null)
         {
             foreach (Transform t in UIManager.Instance.LastSelectedCard.transform)
             {
-                if (t.name.Equals("SummonPanel"))
+                if ((t.name.Equals("SummonPanel") || t.name.Equals("UsePanel")) && t.gameObject.activeSelf)
                     t.gameObject.SetActive(false);
             }
         }
@@ -114,11 +179,10 @@ public class PlayCard : MonoBehaviour
 
         else
             summonPanel.SetActive(true);
-
-        
     }
 
-    public void StartPromotion()
+    //This function is called when PostNotification is called on the SACRIFICE_SELECTED event and isPromoting is true
+    public void StartPromotionCoroutine()
     {
         StartCoroutine(PromoteMinionWithPlayback());
     }
@@ -144,11 +208,8 @@ public class PlayCard : MonoBehaviour
             if (GameManager.Instance.IsPromoting)
             {
                 card = GameManager.Instance.MinionToPromote;
-                GameManager.Instance.IsPromoting = false;
-                GameManager.Instance.EnableOrDisablePlayerControl(true);
-                TMP_Text text = GameManager.Instance.instructionsObj.GetComponent<TMP_Text>();
-                text.text = "";
-                EventManager.Instance.PostNotification(EVENT_TYPE.SACRIFICE_MINION);
+                StartOrCancelPromotionEvent(false);
+                summonPanel.SetActive(false);
             }
 
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedMinionZone);
@@ -160,6 +221,8 @@ public class PlayCard : MonoBehaviour
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedDiscardPile);
             mc.AddToQueue();
         }
+
+        AdjustHeroResources();
     }
 
     IEnumerator PromoteMinionWithPlayback()
@@ -184,7 +247,79 @@ public class PlayCard : MonoBehaviour
 
     public void PlayItem()
     {
+        if (!CanPlayItem())
+            return;
         summonPanel.SetActive(false);
         StartCoroutine(MoveCardFromHand(false));
+    }
+
+    private void AdjustHeroResources()
+    {
+        if (thisCard.GoldAndManaCost == 0)
+        {
+            if (thisCard is StarterData)
+            {
+                if (thisCard.EffectId1 == 20)
+                    GameManager.Instance.ActiveHero().AdjustHealth(1, true);
+                else if (thisCard.EffectId1 == 21)
+                    GameManager.Instance.ActiveHero().AdjustMana(1, true);
+            }
+            else if (thisCard is EssentialsData)
+            {
+                if (thisCard.EffectId1 == 20)
+                    GameManager.Instance.ActiveHero().AdjustHealth(2, true);
+                else if (thisCard.EffectId1 == 21)
+                    GameManager.Instance.ActiveHero().AdjustMana(2, true);
+            }
+        }
+        else if (thisCard.GoldAndManaCost > 0)
+        {
+            GameManager.Instance.ActiveHero().AdjustMana(thisCard.GoldAndManaCost, false);
+            if (thisCard.EffectId1 == 18 && thisCard is StarterData)
+            {
+                GameManager.Instance.ActiveHero().AdjustGold(2, true);
+                GameManager.Instance.ActiveHero().GainExp(1);
+            }
+            else if (thisCard.EffectId1 == 18 && thisCard is EssentialsData)
+            {
+                GameManager.Instance.ActiveHero().AdjustGold(4, true);
+                GameManager.Instance.ActiveHero().GainExp(2);
+            }
+            else if (thisCard.EffectId1 == 14 && thisCard is EssentialsData)
+            {
+                GameManager.Instance.ActiveHero().AdjustDamage(1);
+                //TODO: Take away 1 damage at the end of the turn.
+            }
+        }
+    }
+
+    private bool CanPlayItem()
+    {
+        bool canPlay = true;
+        if (GameManager.Instance.ActiveHero().CurrentHealth == GameManager.Instance.ActiveHero().TotalHealth && thisCard.EffectId1 == 20)
+        {
+            instructionsText.text = "Health is already full!";
+            GameManager.Instance.ClearInstructionsText(3f);
+            canPlay = false;
+        }
+
+        else if (GameManager.Instance.ActiveHero().CurrentMana == GameManager.Instance.ActiveHero().TotalMana && thisCard.EffectId1 == 21)
+        {
+            instructionsText.text = "Mana is already full!";
+            GameManager.Instance.ClearInstructionsText(3f);
+            canPlay = false;
+        }
+
+        else if (GameManager.Instance.ActiveHero().CurrentMana < thisCard.GoldAndManaCost)
+        {
+            instructionsText.text = "Not enough Mana!";
+            GameManager.Instance.ClearInstructionsText(3f);
+            canPlay = false;
+        }
+
+        else
+            canPlay = true;
+
+        return canPlay;
     }
 }

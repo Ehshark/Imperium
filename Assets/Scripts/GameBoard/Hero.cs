@@ -267,4 +267,10 @@ public class Hero : MonoBehaviour
             heroClan.color = new Color32(15, 129, 162, 255);
         }
     }
+
+    public void AdjustDamage(int amount)
+    {
+        damage += amount;
+        SetDamage();
+    }
 }

@@ -1,12 +1,11 @@
 ﻿//This script uses magic numbers - the number of ScriptableObjects inside Assets/Resources/Minions/, etc.
 
-using JetBrains.Annotations;
-using System.Collections;
+using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq;
 using UnityEngine;
-using TMPro;
-
+using TMPro;
 //using Photon.Pun;
 
 public class UIManager : MonoBehaviour

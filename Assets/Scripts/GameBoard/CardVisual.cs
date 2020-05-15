@@ -8,7 +8,8 @@ using UnityEngine.EventSystems;
 
 public class CardVisual : MonoBehaviour, IPointerClickHandler
 {
-    public MinionData md;
+    [SerializeField]
+    private MinionData md;
     public MinionData Md { get => md; set => md = value; }
 
     private StarterData sd;

@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> MinionsAttacking { get => minionsAttacking; set => minionsAttacking = value; }
 
     public static GameManager Instance { get; private set; } = null;
-    
+
 
     private void Awake()
     {
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
         {
             tmp = null;
         }
-        
+
         tmp.transform.SetParent(to, false);
         tmp.transform.localScale = new Vector3(1, 1, 1);
 
