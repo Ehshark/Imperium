@@ -55,6 +55,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             PopulateCard();
             UpdateCardDescriptions();
         }
+
     }
 
     public void UpdateCardDescriptions()
@@ -107,7 +108,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         if (!inShop)
         {
             //Display mana image if the card is present in the shop
-            costImage.sprite = UIManager.Instance.allSprites.Where(x => x.name == "mana").SingleOrDefault();
+           // costImage.sprite = UIManager.Instance.allSprites.Where(x => x.name == "mana").SingleOrDefault();
         }
 
         //set the cost

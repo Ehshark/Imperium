@@ -74,6 +74,8 @@ public class StartGameController : MonoBehaviour
         GameManager.Instance.topHero = topHero.GetComponent<Hero>();
         GameManager.Instance.bottomHero.SetPlayerName("Player 1");
         GameManager.Instance.topHero.SetPlayerName("Player 2");
+
+        
     }
 
     public void FlipCoin(int value)

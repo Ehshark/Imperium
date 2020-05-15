@@ -81,6 +81,8 @@ public class GameManager : MonoBehaviour
         bottomHero.MyTurn = true;
         topHero.CanPlayCards = false;
         topHero.MyTurn = false;
+
+
     }
 
     //TODO:

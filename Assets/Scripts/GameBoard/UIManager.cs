@@ -15,11 +15,9 @@ public class UIManager : MonoBehaviour
     public GameObject minionPrefab;
     public GameObject starterPrefab;
     public GameObject itemPrefab;
-    public GameObject glowPanel;
-
-    public List<MinionData> warriorMinions;
-    public List<MinionData> rogueMinions;
-    public List<MinionData> mageMinions;
+    private List<MinionData> warriorMinions;
+    private List<MinionData> rogueMinions;
+    private List<MinionData> mageMinions;
 
     public MinionData currentMinion;
     private EssentialsData currentEssential;
@@ -142,28 +140,24 @@ public class UIManager : MonoBehaviour
         SetWarriorMinion();
         SetRogueMinion();
         SetMageMinion();
-        SetEssentials();
-        //if (GameManager.Instance.ActiveHero().CanPlayCards)
-        //{
-        //    //GameManager.Instance.EnableOrDisablePlayerControl(true);
-        //    //Change the hero color 
-        //    GameManager.Instance.bottomHero.heroImageBoarder.color = Color.green;
-        //    //loop and enable all the cards that are available
-        //    int heroManaCost = GameManager.Instance.bottomHero.CurrentMana;
-        //    Transform minions = GameObject.Find("Hand").transform;
+        SetEssentials();
 
-        //    foreach (Transform minion in minions)
-        //    {
-        //        CardVisual cv = minion.GetComponent<CardVisual>();
-        //        if (cv.Md != null)
-        //        {
-        //            if (cv.Md.GoldAndManaCost <= heroManaCost)
-        //                minion.Find("GlowPanel").gameObject.SetActive(true);
-        //            else
-        //                minion.Find("GlowPanel").gameObject.SetActive(false);
-        //        }
-        //    }
-        //}
+        
+
+
+        Debug.Log(GameManager.Instance.bottomHero.CanPlayCards);
+        if (GameManager.Instance.bottomHero.CanPlayCards)
+        {
+            GameManager.Instance.bottomHero.heroImageBoarder.color = Color.green;
+            UIManager.Instance.glowCards();
+            UIManager.Instance.attachPlayCard();
+            GameManager.Instance.EnableOrDisablePlayerControl(true);
+        }
+        else
+        {
+            GameManager.Instance.EnableOrDisablePlayerControl(false);
+        }
+
     }
 
     private void LoadScriptableObjectsToLists()
@@ -283,7 +277,51 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void DisplayShop()
+
+    public void glowCards()
+    {
+        //GameManager.Instance.EnableOrDisablePlayerControl(true);
+        //Change the hero color 
+        //loop and enable all the cards that are available
+        int heroManaCost = GameManager.Instance.bottomHero.CurrentMana;
+        Transform minions = GameObject.Find("Hand").transform;
+
+        foreach (Transform m in minions)
+        {
+            if (m != null)
+            {
+                Transform ribbon = m.Find("Ribbon");
+                Transform minionCost = ribbon.Find("Cost");
+                Transform costAmount = minionCost.Find("CostAmount");
+                string cost = costAmount.GetComponent<TMP_Text>().text;
+                int mvCost = int.Parse(cost);
+                Debug.Log(mvCost);
+                if (mvCost <= heroManaCost)
+                {
+                    m.Find("GlowPanel").gameObject.SetActive(true);
+                }
+                else
+                {
+                    m.Find("GlowPanel").gameObject.SetActive(false);
+                }
+            }
+            }
+    }
+
+    public void attachPlayCard()
+    {
+        Transform minions = GameObject.Find("Hand").transform;
+        foreach (Transform m in minions)
+        {
+            Debug.Log(m.name);
+            PlayCard pc = m.gameObject.AddComponent<PlayCard>();
+
+        }
+
+    }
+
+
+    public void DisplayShop()
     {
         GameManager.Instance.shop.gameObject.SetActive(true);
     }
