@@ -32,6 +32,9 @@ public class StartGameController : MonoBehaviour
     private GameObject bottomHero;
     [SerializeField]
     private GameObject topHero;
+    private int turn = 0;
+    private int cnt = 0;
+    private int mulliganCount = 0;
 
     [SerializeField]
     private Button tailsButton;
@@ -167,7 +170,7 @@ public class StartGameController : MonoBehaviour
         if (hero == 0)
         {
             if (GameManager.Instance.bottomHero.MyTurn)
-            { 
+            {
                 GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
             }
             else
@@ -214,15 +217,98 @@ public class StartGameController : MonoBehaviour
             heroUI.SetActive(false);
             reactionText.text = "";
 
-            //Begin the intial draw
-            for (int i = 0; i < 5; i++)
-            {
-                GameManager.Instance.DrawCard(UIManager.Instance.allyDeck[i]);
-            }
+            //Begin the initial draw
+            InitialDraw();
+
+            //Determine which player has the mulligan button to show first
+            SetActiveMulligan();
         }
         else
         {
             ShowHeroUI();
-        }        
+        }
+    }
+
+    public void InitialDraw()
+    {
+        //intial draw for bottom player
+        for (int i = 0; i < 5; i++)
+        {
+            GameManager.Instance.DrawCard(UIManager.Instance.allyDeck, GameManager.Instance.alliedHand);
+        }
+
+        //intial draw for top player
+        for (int i = 0; i < 5; i++)
+        {
+            GameManager.Instance.DrawCard(UIManager.Instance.enemyDeck, GameManager.Instance.enemyHand);
+        }
+    }
+
+    public void Mulligan()
+    { 
+        if (GameManager.Instance.GetCurrentPlayer() == 0)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                UIManager.Instance.allyDeck.Add(UIManager.Instance.allyHand[i]);
+                Destroy(GameManager.Instance.alliedHand.GetChild(i).gameObject);
+            }
+
+            UIManager.Instance.allyHand.Clear();
+            GameManager.Instance.ShuffleCurrentDeck(UIManager.Instance.allyDeck);
+
+            for (int i = 0; i < 5; i++)
+            {
+                GameManager.Instance.DrawCard(UIManager.Instance.allyDeck, GameManager.Instance.alliedHand);
+            }
+
+            Debug.Log("ally mulligan working");
+
+            GameManager.Instance.SwitchTurn();
+            mulliganCount++;
+            SetActiveMulligan();
+        }
+        else
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                UIManager.Instance.enemyDeck.Add(UIManager.Instance.enemyHand[i]);
+                Destroy(GameManager.Instance.enemyHand.GetChild(i).gameObject);
+            }
+
+            UIManager.Instance.enemyHand.Clear();
+            GameManager.Instance.ShuffleCurrentDeck(UIManager.Instance.enemyDeck);
+
+            for (int i = 0; i < 5; i++)
+            {
+                GameManager.Instance.DrawCard(UIManager.Instance.enemyDeck, GameManager.Instance.enemyHand);
+            }
+
+            Debug.Log("enemy mulligan working");
+
+            GameManager.Instance.SwitchTurn();
+            mulliganCount++;
+            SetActiveMulligan();
+        }
+    }
+
+    public void SetActiveMulligan()
+    {
+        if (mulliganCount < 2)
+        {
+            if (GameManager.Instance.GetCurrentPlayer() == 0)
+            {
+                GameManager.Instance.allyMulliganButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                GameManager.Instance.enemyMulliganButton.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            GameManager.Instance.allyMulliganButton.gameObject.SetActive(false);
+            GameManager.Instance.enemyMulliganButton.gameObject.SetActive(false);
+        }
     }
 }

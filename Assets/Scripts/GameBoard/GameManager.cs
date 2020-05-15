@@ -18,6 +18,12 @@ public class GameManager : MonoBehaviour
     public TMP_Text alliedLifestealDamageCounter;
     public TMP_Text alliedPoisonTouchDamageCounter;
 
+    public TMP_Text allyDeckCounter;
+    public TMP_Text enemyDeckCounter;
+
+    public Transform allyMulliganButton;
+    public Transform enemyMulliganButton;
+
     public Transform alliedMinionZone;
     public Transform alliedHand;
     public Transform alliedDeck;
@@ -179,48 +185,67 @@ public class GameManager : MonoBehaviour
 
         return player;
     }
-    //draws a single card, takes in a Card parameter and determines what kind of card it is and instantiate + populates it
+    //draws a single card, takes in a list of Card parameter and determines what kind of card it is and instantiate + populates it
     //TODO: change the instatiate prefab for cards to the enemy's hand as well
-    //TODO: remove/pop cards out of the deck when drawn
-    public void DrawCard(Card topCard)
+    //TODO: add deck counter and decrement
+    public void DrawCard(List<Card> deck, Transform playerHand)
     {
         GameObject tmp;
         MinionData minion;
         StarterData starter;
         EssentialsData essentials;
 
-        if (UIManager.Instance.allyDeck.Count > 0) //checks if deck is not empty
+        if (deck.Count > 0) //checks if deck is not empty
         {
-            if (topCard is MinionData) //Card is a minion
+            if (deck[0] is MinionData) //Card is a minion
             {
-                minion = (MinionData)topCard;
-                tmp = Instantiate(UIManager.Instance.minionPrefab, alliedHand) as GameObject;
+                minion = (MinionData)deck[0];
+                tmp = Instantiate(UIManager.Instance.minionPrefab, playerHand) as GameObject;
                 tmp.SetActive(false);
                 tmp.GetComponent<CardVisual>().Md = minion;
                 tmp.SetActive(true);
             }
-            else if (topCard is StarterData) //Card is a starter
+            else if (deck[0] is StarterData) //Card is a starter
             {
-                starter = (StarterData)topCard;
-                tmp = Instantiate(UIManager.Instance.starterPrefab, alliedHand) as GameObject;
+                starter = (StarterData)deck[0];
+                tmp = Instantiate(UIManager.Instance.starterPrefab, playerHand) as GameObject;
                 tmp.SetActive(false);
                 tmp.GetComponent<CardVisual>().Sd = starter;
                 tmp.SetActive(true);
             }
-            else if (topCard is EssentialsData) //Card is a essential
+            else if (deck[0] is EssentialsData) //Card is a essential
             {
-                essentials = (EssentialsData)topCard;
-                tmp = Instantiate(UIManager.Instance.itemPrefab, alliedHand) as GameObject;
+                essentials = (EssentialsData)deck[0];
+                tmp = Instantiate(UIManager.Instance.itemPrefab, playerHand) as GameObject;
                 tmp.SetActive(false);
                 tmp.GetComponent<CardVisual>().Ed = essentials;
                 tmp.SetActive(true);
-            }
-        }
+            }                        if(playerHand == alliedHand)
+            {
+                UIManager.Instance.allyHand.Add(deck[0]); //adds cards to the hand, used to remember the cards drawn for the mulligan in order to add them back into the deck                deck.Remove(deck[0]);                allyDeckCounter.text = deck.Count.ToString();            }            else
+            {
+                UIManager.Instance.enemyHand.Add(deck[0]);
+                deck.Remove(deck[0]);                enemyDeckCounter.text = deck.Count.ToString();
+            }
+        }
+
         else //no cards left in the deck, add the discard pile, reshuffle and continue the draw
         {
             Debug.Log("no cards in deck, please shuffle in discard pile and continue draw");
             //TODO: add discard pile to deck, shuffle the deck, continue the draw
         }
+    }
+
+    //Shuffle deck
+    public void ShuffleCurrentDeck(List<Card> deck)
+    {
+        for (int i = 0; i < deck.Count; i++)
+        {
+            int rnd = Random.Range(0, deck.Count);
+            UIManager.Instance.tempCard = deck[rnd];
+            deck[rnd] = deck[i];
+            deck[i] = UIManager.Instance.tempCard;
+        }
     }
 
     public GameObject SpawnCard(Transform to, MinionData minion = null, EssentialsData essential = null, StarterData starter = null, bool inShop = false)
