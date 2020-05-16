@@ -126,8 +126,8 @@ public class PlayCard : MonoBehaviour
     {
         if (GameManager.Instance.alliedMinionZone.childCount == 0)
         {
-            instructionsText.text = "No minions to sacrifice!";
-            GameManager.Instance.ClearInstructionsText(3f);
+            string cantPromote = "No minions to sacrifice!";
+            StartCoroutine(GameManager.Instance.SetInstructionsText(cantPromote));
             return;
         }
 
@@ -295,25 +295,26 @@ public class PlayCard : MonoBehaviour
 
     private bool CanPlayItem()
     {
+        string message;
         bool canPlay = true;
         if (GameManager.Instance.ActiveHero().CurrentHealth == GameManager.Instance.ActiveHero().TotalHealth && thisCard.EffectId1 == 20)
         {
-            instructionsText.text = "Health is already full!";
-            GameManager.Instance.ClearInstructionsText(3f);
+            message = "Health is already full!";
+            StartCoroutine(GameManager.Instance.SetInstructionsText(message));
             canPlay = false;
         }
 
         else if (GameManager.Instance.ActiveHero().CurrentMana == GameManager.Instance.ActiveHero().TotalMana && thisCard.EffectId1 == 21)
         {
-            instructionsText.text = "Mana is already full!";
-            GameManager.Instance.ClearInstructionsText(3f);
+            message = "Mana is already full!";
+            StartCoroutine(GameManager.Instance.SetInstructionsText(message));
             canPlay = false;
         }
 
         else if (GameManager.Instance.ActiveHero().CurrentMana <= thisCard.GoldAndManaCost)
         {
-            instructionsText.text = "Not enough Mana!";
-            GameManager.Instance.ClearInstructionsText(3f);
+            message = "Not enough Mana!";
+            StartCoroutine(GameManager.Instance.SetInstructionsText(message));
             canPlay = false;
         }
 

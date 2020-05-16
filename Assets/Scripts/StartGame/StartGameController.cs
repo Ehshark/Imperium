@@ -44,8 +44,6 @@ public class StartGameController : MonoBehaviour
     //Variables 
     private enum Coin { IDLE, TAILS, HEADS }
     private Coin coinValue;
-    private int turn = 0;
-    private int cnt = 0;
 
     // Start is called before the first frame update
     void Start()

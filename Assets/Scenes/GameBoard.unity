@@ -2575,9 +2575,6 @@ MonoBehaviour:
   alliedStealthDamageCounter: {fileID: 1689487773}
   alliedLifestealDamageCounter: {fileID: 1500769211}
   alliedPoisonTouchDamageCounter: {fileID: 532124834}
-  StartCombatDamageUI: {fileID: 0}
-  alliedDamageCounter: {fileID: 0}
-  alliedStealthDamageCounter: {fileID: 0}
   allyDeckCounter: {fileID: 681376984}
   enemyDeckCounter: {fileID: 43544771}
   allyMulliganButton: {fileID: 1235774035}
@@ -3103,7 +3100,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6.5, y: 10.6}
+  m_AnchoredPosition: {x: -6.5, y: 10.600006}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &735825876
@@ -6493,10 +6490,6 @@ MonoBehaviour:
     type: 3}
   itemPrefab: {fileID: 5361649606923715719, guid: f53d67fcfa4cfac48b2e09198bb3be39,
     type: 3}
-  glowPanel: {fileID: 0}
-  warriorMinions: []
-  rogueMinions: []
-  mageMinions: []
   currentMinion: {fileID: 0}
   dealtWarriorCards: []
   dealtRogueCards: []
@@ -7155,7 +7148,6 @@ RectTransform:
   - {fileID: 748998977}
   - {fileID: 601867264}
   - {fileID: 1868391786}
-  - {fileID: 536721380}
   - {fileID: 782486530}
   - {fileID: 499023790}
   - {fileID: 536721380}
