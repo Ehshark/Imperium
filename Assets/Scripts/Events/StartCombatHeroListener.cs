@@ -12,7 +12,7 @@ public class StartCombatHeroListener : MonoBehaviour, IPointerDownHandler
 
     public void Start()
     {
-        active = GameManager.Instance.ActiveHero();
+        active = GameManager.Instance.ActiveHero();        
     }
 
     public void OnPointerDown(PointerEventData eventData)

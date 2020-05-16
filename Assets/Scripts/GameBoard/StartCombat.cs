@@ -59,7 +59,16 @@ public class StartCombat : MonoBehaviour
             }
         }
 
+        //Reset Hero 
+        Hero active = GameManager.Instance.ActiveHero();
         StartCombatHeroListener schl = heroImage.GetComponent<StartCombatHeroListener>();
+
+        if (active.IsAttacking)
+        {
+            active.AdjustMana(active.Damage, true);
+            active.IsAttacking = false;
+        }
+
         if (schl)
         {
             Destroy(schl);
@@ -125,6 +134,9 @@ public class StartCombat : MonoBehaviour
                     GameManager.Instance.MoveCard(card, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList, true);
                 }
             }
+
+            //Set current Hero is false
+            GameManager.Instance.ActiveHero().IsAttacking = false;
 
             //Add Damage
             StartCombat.totalDamage["stealth"] = Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text);
