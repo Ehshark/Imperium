@@ -21,14 +21,14 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
         {
             if (tapped)
             {
-                StartCombat.ChangeCardColour(card, cv.Md.Color);
+                GameManager.Instance.ChangeCardColour(card, cv.Md.Color);
                 cv.Md.IsTapped = false;
                 tapped = false;
                 GameManager.Instance.MinionsAttacking.Remove(card);
             }
             else
             {
-                StartCombat.ChangeCardColour(card, Color.cyan);
+                GameManager.Instance.ChangeCardColour(card, Color.cyan);
                 cv.Md.IsTapped = true;
                 tapped = true;
                 GameManager.Instance.MinionsAttacking.Add(card);
@@ -40,7 +40,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
         {
             if (tapped)
             {
-                StartCombat.ChangeCardColour(card, Color.gray);
+                GameManager.Instance.ChangeCardColour(card, Color.gray);
                 cv.Sd.IsTapped = false;
                 tapped = false;
 
@@ -50,7 +50,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
             }
             else
             {
-                StartCombat.ChangeCardColour(card, Color.cyan);
+                GameManager.Instance.ChangeCardColour(card, Color.cyan);
                 cv.Sd.IsTapped = true;
                 tapped = true;
 

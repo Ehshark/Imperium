@@ -23,6 +23,7 @@ public class Hero : MonoBehaviour
     private int hasToDiscard;
     private bool myTurn;
     private bool canPlayCards;
+    private bool isAttacking;
 
     //Components
     [SerializeField]
@@ -68,7 +69,8 @@ public class Hero : MonoBehaviour
     public bool MyTurn { get => myTurn; set => myTurn = value; }
     public int RequredExp { get => requredExp; set => requredExp = value; }
     public bool CanPlayCards { get => canPlayCards; set => canPlayCards = value; }
-    
+    public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
+
     public void SetHero(int health, int mana, int damage, int reqExp, int hand, char clan, Sprite image)
     {
         //Variables 

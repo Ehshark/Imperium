@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class StartCombatEventDistributor : MonoBehaviour, IListener
 {
+    [SerializeField]
+    private GameObject heroImage;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +19,8 @@ public class StartCombatEventDistributor : MonoBehaviour, IListener
         {
             t.gameObject.AddComponent<StartCombatListener>();
         }
+
+        heroImage.AddComponent<StartCombatHeroListener>();
     }
 
     

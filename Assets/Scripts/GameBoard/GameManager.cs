@@ -270,5 +270,30 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    public IEnumerator SetInstructionsText(string message)
+    {
+        TMP_Text text = instructionsObj.GetComponent<TMP_Text>();
+        text.text = message;
+
+        yield return new WaitForSeconds(2);
+
+        text.text = "";
+    }
+
+    public void ChangeCardColour(GameObject card, Color color)
+    {
+        CardVisual cv = card.GetComponent<CardVisual>();
+
+        if (cv.Md)
+        {
+            cv.cardBackground.color = color;
+        }
+        else if (cv.Sd)
+        {
+            cv.cardBackground.color = color;
+        }
+    }
+
+
     //TODO: Function to disable play card contol 
 }
