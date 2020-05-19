@@ -133,6 +133,12 @@ public class Hero : MonoBehaviour
             if (total >= 0)
             {
                 currentHealth -= amount;
+
+                //Compare if any minions are attacking 
+                if (GameManager.Instance.MinionsAttacking.Count != 0)
+                {
+                    EventManager.Instance.PostNotification(EVENT_TYPE.BLEED);
+                }
             }
             else
             {

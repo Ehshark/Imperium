@@ -7,8 +7,7 @@ using TMPro;
 public class ShopController : MonoBehaviour
 {
     //Components 
-    [SerializeField]
-    private GameObject cardGroup;
+    public GameObject cardGroup;
     [SerializeField]
     private TextMeshProUGUI herosGold;
     [SerializeField]

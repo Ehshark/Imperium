@@ -112,28 +112,7 @@ public class StartCombat : MonoBehaviour
     {
         if (GameManager.Instance.MinionsAttacking.Count != 0 || GameManager.Instance.ActiveHero().IsAttacking)
         {
-            foreach (GameObject card in GameManager.Instance.MinionsAttacking)
-            {
-                CardVisual cv = card.GetComponent<CardVisual>();
-
-                cv.health.text = (Int32.Parse(cv.health.text) - 1).ToString();
-
-                if (cv.Md != null)
-                {
-                    cv.CurrentHealth = cv.CurrentHealth - 1;
-                }
-                else if (cv.Sd != null && cv.Sd.Health != 0)
-                {
-                    cv.CurrentHealth = cv.CurrentHealth - 1;
-                }
-
-                if (cv.CurrentHealth <= 0)
-                {
-                    cv.health.text = cv.TotalHealth.ToString();
-                    cv.CurrentHealth = cv.TotalHealth;
-                    GameManager.Instance.MoveCard(card, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList, true);
-                }
-            }
+            AssignDamageToMinions();
 
             //Set current Hero is false
             GameManager.Instance.ActiveHero().IsAttacking = false;
@@ -150,6 +129,31 @@ public class StartCombat : MonoBehaviour
         {
             //Update the instructions text
             StartCoroutine(GameManager.Instance.SetInstructionsText("No Minions or Hero Selected to Attack"));
+        }
+    }
+    private void AssignDamageToMinions()
+    {
+        foreach (GameObject card in GameManager.Instance.MinionsAttacking)
+        {
+            CardVisual cv = card.GetComponent<CardVisual>();
+
+            cv.health.text = (Int32.Parse(cv.health.text) - 1).ToString();
+
+            if (cv.Md != null)
+            {
+                cv.CurrentHealth = cv.CurrentHealth - 1;
+            }
+            else if (cv.Sd != null)
+            {
+                cv.CurrentHealth = cv.CurrentHealth - 1;
+            }
+
+            if (cv.CurrentHealth <= 0)
+            {
+                cv.health.text = cv.TotalHealth.ToString();
+                cv.CurrentHealth = cv.TotalHealth;
+                GameManager.Instance.MoveCard(card, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList, true);
+            }
         }
     }
 }

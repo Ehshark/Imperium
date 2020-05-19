@@ -465,4 +465,89 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.bottomHero.AttackButton.gameObject, false, true);
         }
     }
+
+    public List<MinionData> GetTopCardsFromDeck(string cardType)
+    {
+        List<MinionData> mList = new List<MinionData>();
+
+        if (cardType.Equals("Warrior"))
+        {
+            if (warriorMinions.Count != 0)
+            {
+                mList.Add(warriorMinions[0]);
+                mList.Add(warriorMinions[1]);
+            }
+        }
+        else if (cardType.Equals("Rogue"))
+        {
+            if (rogueMinions.Count != 0)
+            {
+                mList.Add(rogueMinions[0]);
+                mList.Add(rogueMinions[1]);
+            }
+        }
+        else
+        {
+            if (mageMinions.Count != 0)
+            {
+                mList.Add(mageMinions[0]);
+                mList.Add(mageMinions[1]);
+            }
+        }
+
+        return mList;
+    }
+
+    public List<MinionData> MoveTopCardsToBottom(string cardType, List<MinionData> data)
+    {
+        List<MinionData> mList = new List<MinionData>();
+
+        if (cardType.Equals("Warrior"))
+        {
+            if (warriorMinions.Count != 0)
+            {
+                foreach(MinionData md in data)
+                {
+                    warriorMinions.Remove(md);
+                }
+
+                foreach (MinionData md in data)
+                {
+                    warriorMinions.Add(md);
+                }
+            }
+        }
+        else if (cardType.Equals("Rogue"))
+        {
+            if (rogueMinions.Count != 0)
+            {
+                foreach (MinionData md in data)
+                {
+                    rogueMinions.Remove(md);
+                }
+
+                foreach (MinionData md in data)
+                {
+                    rogueMinions.Add(md);
+                }
+            }
+        }
+        else
+        {
+            if (mageMinions.Count != 0)
+            {
+                foreach (MinionData md in data)
+                {
+                    mageMinions.Remove(md);
+                }
+
+                foreach (MinionData md in data)
+                {
+                    mageMinions.Add(md);
+                }
+            }
+        }
+
+        return mList;
+    }
 }
