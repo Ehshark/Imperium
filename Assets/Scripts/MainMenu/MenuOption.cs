@@ -12,27 +12,31 @@ public class MenuOption : MonoBehaviour
 
     private void Start()
     {
-        resolutions = Screen.resolutions;
-        resolutionDropDown.ClearOptions();
-        List<string> options = new List<string>();
-
-        int currentResolutionIndex = 0;
-
-        for (int i =0; i< resolutions.Length; i++)
+        if(resolutionDropDown != null)
         {
-            string option = resolutions[i].width + " x " + resolutions[i].height;
-            options.Add(option);
+            resolutions = Screen.resolutions;
+            resolutionDropDown.ClearOptions();
+            List<string> options = new List<string>();
 
-            if (resolutions[i].width == Screen.currentResolution.width && 
-                resolutions[i].height == Screen.currentResolution.height)
+            int currentResolutionIndex = 0;
+
+            for (int i = 0; i < resolutions.Length; i++)
             {
-                currentResolutionIndex = i;
-            }
-        }
+                string option = resolutions[i].width + " x " + resolutions[i].height;
+                options.Add(option);
 
-        resolutionDropDown.AddOptions(options);
-        resolutionDropDown.value = currentResolutionIndex;
-        resolutionDropDown.RefreshShownValue();
+                if (resolutions[i].width == Screen.currentResolution.width &&
+                    resolutions[i].height == Screen.currentResolution.height)
+                {
+                    currentResolutionIndex = i;
+                }
+            }
+
+            resolutionDropDown.AddOptions(options);
+            resolutionDropDown.value = currentResolutionIndex;
+            resolutionDropDown.RefreshShownValue();
+        }
+      
     }
     public void setResolution(int resolutionIndex)
     {

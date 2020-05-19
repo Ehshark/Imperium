@@ -46,6 +46,9 @@ public class GameManager : MonoBehaviour
     public Transform rogueShopPile;
     public Transform mageShopPile;
     public Transform essentialsPile;
+    public Transform option;
+    public Transform menu;
+    public Transform pMenu;
 
     public Hero bottomHero;
     public Hero topHero;

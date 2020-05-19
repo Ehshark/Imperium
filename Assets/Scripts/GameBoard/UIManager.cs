@@ -231,6 +231,33 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.shop.gameObject.SetActive(true);
     }
 
+
+    public void DisplayOption()
+    {
+        Debug.Log(GameManager.Instance.menu.gameObject);
+        if (GameManager.Instance.menu.gameObject.activeSelf)
+        {
+            GameManager.Instance.menu.gameObject.SetActive(false);
+        }
+        else
+        {
+            GameManager.Instance.menu.gameObject.SetActive(true);
+        }
+        
+    }
+
+    public void optionMenu()
+    {
+            GameManager.Instance.pMenu.gameObject.SetActive(false);
+            GameManager.Instance.option.gameObject.SetActive(true);
+    }
+
+    public void optionMenuBack()
+    {
+
+        GameManager.Instance.pMenu.gameObject.SetActive(true);
+        GameManager.Instance.option.gameObject.SetActive(false);
+    }
     private void Shuffle()
     {
         for (int i = 0; i < minions.Count; i++)
