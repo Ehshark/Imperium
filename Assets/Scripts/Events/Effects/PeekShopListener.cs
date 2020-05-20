@@ -30,7 +30,7 @@ public class PeekShopListener : MonoBehaviour, IPointerDownHandler
 
             //Destroy Listener Scripts 
             GameManager.Instance.GetComponent<PeekShopEventStarter>().DestroyPeekShopListener();
-            GameManager.Instance.GetComponent<PeekShopEventStarter>().moveButton.interactable = true;
+            GameManager.Instance.moveButton.interactable = true;
         }
         else
         {

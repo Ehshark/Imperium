@@ -19,6 +19,10 @@ public class ShopController : MonoBehaviour
     //Selected Card
     private GameObject selectedCard;
 
+    public Transform warriorDeck;
+    public Transform rogueDeck;
+    public Transform mageDeck;
+
     public void OnEnable()
     {
         //Update Hero's Current Gold in Shop

@@ -4,23 +4,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PeekShopEventStarter : MonoBehaviour, IListener
+public class PeekShopEventStarter : MonoBehaviour
 {
-    public Transform warriorDeck;
-    public Transform rogueDeck;
-    public Transform mageDeck;
-
-    public Button moveButton;
-
     public List<MinionData> moveCards = new List<MinionData>();
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        EventManager.Instance.AddListener(EVENT_TYPE.PEEK_SHOP, this);
-    }
-
-    public void OnEvent(EVENT_TYPE Event_Type)
+    public void StartEvent()
     {
         //Disable features in Shop
         DisableShop();
@@ -41,17 +29,17 @@ public class PeekShopEventStarter : MonoBehaviour, IListener
         GameManager.Instance.buyButton.gameObject.SetActive(false);
         GameManager.Instance.changeButton.gameObject.SetActive(false);
         GameManager.Instance.exitShopButton.gameObject.SetActive(false);
-        moveButton.gameObject.SetActive(true);
+        GameManager.Instance.moveButton.gameObject.SetActive(true);
 
         //Add PeekShopListener scripts
-        warriorDeck.gameObject.AddComponent<PeekShopListener>();
-        rogueDeck.gameObject.AddComponent<PeekShopListener>();
-        mageDeck.gameObject.AddComponent<PeekShopListener>();
+        GameManager.Instance.shop.GetComponent<ShopController>().warriorDeck.gameObject.AddComponent<PeekShopListener>();
+        GameManager.Instance.shop.GetComponent<ShopController>().rogueDeck.gameObject.AddComponent<PeekShopListener>();
+        GameManager.Instance.shop.GetComponent<ShopController>().mageDeck.gameObject.AddComponent<PeekShopListener>();
 
         //Add class type to the scripts
-        warriorDeck.gameObject.GetComponent<PeekShopListener>().minionClass = "Warrior";
-        rogueDeck.gameObject.GetComponent<PeekShopListener>().minionClass = "Rogue";
-        mageDeck.gameObject.GetComponent<PeekShopListener>().minionClass = "Mage";
+        GameManager.Instance.shop.GetComponent<ShopController>().warriorDeck.gameObject.GetComponent<PeekShopListener>().minionClass = "Warrior";
+        GameManager.Instance.shop.GetComponent<ShopController>().rogueDeck.gameObject.GetComponent<PeekShopListener>().minionClass = "Rogue";
+        GameManager.Instance.shop.GetComponent<ShopController>().mageDeck.gameObject.GetComponent<PeekShopListener>().minionClass = "Mage";
 
         //Delete all GameObjects inside of the BigCard View in the shop
         GameObject cardGroup = GameManager.Instance.shop.gameObject.GetComponent<ShopController>().cardGroup;
@@ -74,16 +62,16 @@ public class PeekShopEventStarter : MonoBehaviour, IListener
         GameManager.Instance.buyButton.gameObject.SetActive(true);
         GameManager.Instance.changeButton.gameObject.SetActive(true);
         GameManager.Instance.exitShopButton.gameObject.SetActive(true);
-        moveButton.gameObject.SetActive(false);
+        GameManager.Instance.moveButton.gameObject.SetActive(false);
         GameManager.Instance.shop.gameObject.SetActive(false);
     }
 
     public void DestroyPeekShopListener()
     {
         //Destroy PeekShopListener scripts
-        Destroy(warriorDeck.gameObject.GetComponent<PeekShopListener>());
-        Destroy(rogueDeck.gameObject.GetComponent<PeekShopListener>());
-        Destroy(mageDeck.gameObject.GetComponent<PeekShopListener>());
+        Destroy(GameManager.Instance.shop.GetComponent<ShopController>().warriorDeck.gameObject.GetComponent<PeekShopListener>());
+        Destroy(GameManager.Instance.shop.GetComponent<ShopController>().rogueDeck.gameObject.GetComponent<PeekShopListener>());
+        Destroy(GameManager.Instance.shop.GetComponent<ShopController>().mageDeck.gameObject.GetComponent<PeekShopListener>());
     }
 
     private void AddDestroyShowShop(Transform pile, bool destroy)

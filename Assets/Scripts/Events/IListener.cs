@@ -9,9 +9,7 @@ public enum EVENT_TYPE {
     TAP_MINION,
     START_COMBAT,
     ATTACK,
-    BLEED,
-    DRAW_CARD,
-    PEEK_SHOP
+    ASSIGN_CONDITIONS    
 }
 
 public interface IListener

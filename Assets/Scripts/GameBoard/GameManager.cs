@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
     public Button endButton;
     public Button shopButton;
     public Button exitShopButton;
+    public Button moveButton;
 
     private bool isPromoting = false;
     private GameObject minionToPromote;

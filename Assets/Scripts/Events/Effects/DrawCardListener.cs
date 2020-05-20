@@ -2,15 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DrawCardListener : MonoBehaviour, IListener
+public class DrawCardListener : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        EventManager.Instance.AddListener(EVENT_TYPE.DRAW_CARD, this);
-    }
-
-    public void OnEvent(EVENT_TYPE DRAWCARD)
+    public void StartEvent()
     {
         Debug.Log("Draw Card Effect");
 

@@ -214,6 +214,14 @@ public class PlayCard : MonoBehaviour
 
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedMinionZone);
             mc.AddToQueue();
+
+            //Add Condition Scripts 
+            if (thisCard is MinionData)
+            {
+                GameManager.Instance.GetComponent<ConditionListener>().Md = thisCard as MinionData;
+                GameManager.Instance.GetComponent<ConditionListener>().Card = card;
+                EventManager.Instance.PostNotification(EVENT_TYPE.ASSIGN_CONDITIONS);
+            }
         }
 
         else
