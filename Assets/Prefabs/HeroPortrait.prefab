@@ -2224,6 +2224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fe3b4c4317c7ba498ee6f930bf5ed2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackButton: {fileID: 3605539867037342265}
   healthText: {fileID: 3000498519355967860}
   healthBar: {fileID: 5648482458694664300}
   expText: {fileID: 6504935966459719788}
@@ -2236,7 +2237,8 @@ MonoBehaviour:
   heroImage: {fileID: 3484463691399022972}
   heroClan: {fileID: 3484463692210055285}
   damageText: {fileID: 8241731532960262063}
-  heroImageBoarder: {fileID: 0}
+  heroImageBorder: {fileID: 3484463692210055285}
+  playerNameBox: {fileID: 7759320906028745796}
 --- !u!1 &3484463692992176327
 GameObject:
   m_ObjectHideFlags: 0
@@ -3497,7 +3499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5438717872753901708
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3535,6 +3537,7 @@ MonoBehaviour:
   attackButton: {fileID: 61379873104034311}
   cancelButton: {fileID: 1441379210373443445}
   submitButton: {fileID: 3029299673303426035}
+  heroImage: {fileID: 0}
 --- !u!1 &7417273211069502176
 GameObject:
   m_ObjectHideFlags: 0

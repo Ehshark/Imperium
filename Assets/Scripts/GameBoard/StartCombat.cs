@@ -122,7 +122,7 @@ public class StartCombat : MonoBehaviour
                 {
                     cv.CurrentHealth = cv.CurrentHealth - 1;
                 }
-                else if (cv.Sd != null)
+                else if (cv.Sd != null && cv.Sd.Health != 0)
                 {
                     cv.CurrentHealth = cv.CurrentHealth - 1;
                 }

@@ -27,6 +27,8 @@ public class Hero : MonoBehaviour
 
     //Components
     [SerializeField]
+    private Transform attackButton;
+    [SerializeField]
     private TMP_Text healthText;
     [SerializeField]
     private Slider healthBar;
@@ -51,8 +53,12 @@ public class Hero : MonoBehaviour
     [SerializeField]
     private TMP_Text damageText;
     [SerializeField]
-    public Image heroImageBoarder;
-    public Image HeroImageBoarder { get => heroImageBoarder; set => heroImageBoarder = value; }
+    private Image heroImageBorder;
+    public Image HeroImageBorder { get => heroImageBorder; set => heroImageBorder = value; }
+
+    [SerializeField]
+    private Image playerNameBox;
+    public Image PlayerNameBox { get => playerNameBox; set => playerNameBox = value; }
 
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int TotalHealth { get => totalHealth; set => totalHealth = value; }
@@ -70,6 +76,7 @@ public class Hero : MonoBehaviour
     public int RequredExp { get => requredExp; set => requredExp = value; }
     public bool CanPlayCards { get => canPlayCards; set => canPlayCards = value; }
     public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
+    public Transform AttackButton { get => attackButton; set => attackButton = value; }
 
     public void SetHero(int health, int mana, int damage, int reqExp, int hand, char clan, Sprite image)
     {
@@ -133,7 +140,7 @@ public class Hero : MonoBehaviour
             }
         }
 
-        SetHealth();        
+        SetHealth();
     }
 
     public void SetExp()
@@ -254,18 +261,18 @@ public class Hero : MonoBehaviour
     {
         clan = clanType;
 
-        if (clan == 'W')
-        {
-            heroClan.color = new Color32(255, 60, 60, 255);
-        }
-        else if (clan == 'R')
-        {
-            heroClan.color = new Color32(75, 255, 150, 255);
-        }
-        else if (clan == 'M')
-        {
-            heroClan.color = new Color32(15, 129, 162, 255);
-        }
+        //if (clan == 'W')
+        //{
+        //    heroClan.color = new Color32(255, 60, 60, 255);
+        //}
+        //else if (clan == 'R')
+        //{
+        //    heroClan.color = new Color32(75, 255, 150, 255);
+        //}
+        //else if (clan == 'M')
+        //{
+        //    heroClan.color = new Color32(15, 129, 162, 255);
+        //}
     }
 
     public void AdjustDamage(int amount)

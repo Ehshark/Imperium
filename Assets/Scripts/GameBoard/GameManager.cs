@@ -6,11 +6,14 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public bool longBoardSetup = true;
+
     //Player
     public static string UserName { get; set; }
     public static Player player { get; set; } = null;
 
     public Transform instructionsObj;
+    public Transform canvas;
 
     public Transform StartCombatDamageUI;
     public TMP_Text alliedDamageCounter;
@@ -47,6 +50,8 @@ public class GameManager : MonoBehaviour
 
     public Button buyButton;
     public Button changeButton;
+    public Button endButton;
+    public Button shopButton;
 
     private bool isPromoting = false;
     private GameObject minionToPromote;
@@ -62,7 +67,6 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; } = null;
 
-
     private void Awake()
     {
         if (Instance)
@@ -74,22 +78,6 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
-    private void Start()
-    {
-        bottomHero.CanPlayCards = true;
-        bottomHero.MyTurn = true;
-        topHero.CanPlayCards = false;
-        topHero.MyTurn = false;
-
-
-    }
-
-    //TODO:
-    //public void CleanUpListeners()
-    //{
-    //    Destroy(enemyMinionZone.gameObject.GetComponent<SacrificeMinionListener>());
-    //}
 
     public void MoveCard(GameObject go, Transform from, Transform to)
     {
@@ -144,18 +132,9 @@ public class GameManager : MonoBehaviour
 
     public void EnableOrDisablePlayerControl(bool enable)
     {
-        if (enable)
-        {
-            buyButton.interactable = true;
-            changeButton.interactable = true;
-            ActiveHero().CanPlayCards = true;
-        }
-        else
-        {
-            buyButton.interactable = false;
-            changeButton.interactable = false;
-            ActiveHero().CanPlayCards = false;
-        }
+        //buyButton.interactable = enable;
+        //changeButton.interactable = enable;
+        ActiveHero().CanPlayCards = enable;
     }
 
     public void SwitchTurn()
@@ -170,6 +149,12 @@ public class GameManager : MonoBehaviour
             topHero.MyTurn = false;
             bottomHero.MyTurn = true;
         }
+
+        UIManager.Instance.HighlightHeroPortraitAndName();
+        UIManager.Instance.ShowHideAttackButton();
+        UIManager.Instance.GlowCards();
+        UIManager.Instance.AttachPlayCard();
+        EnableOrDisablePlayerControl(true);
     }
 
     public int GetCurrentPlayer()
@@ -191,51 +176,61 @@ public class GameManager : MonoBehaviour
     //TODO: change the instatiate prefab for cards to the enemy's hand as well
     //TODO: add deck counter and decrement
     public void DrawCard(List<Card> deck, Transform playerHand)
-    {
-        GameObject tmp;
-        MinionData minion;
-        StarterData starter;
-        EssentialsData essentials;
-
-        if (deck.Count > 0) //checks if deck is not empty
-        {
-            if (deck[0] is MinionData) //Card is a minion
-            {
-                minion = (MinionData)deck[0];
-                tmp = Instantiate(UIManager.Instance.minionPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Md = minion;
-                tmp.SetActive(true);
-            }
-            else if (deck[0] is StarterData) //Card is a starter
-            {
-                starter = (StarterData)deck[0];
-                tmp = Instantiate(UIManager.Instance.starterPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Sd = starter;
-                tmp.SetActive(true);
-            }
-            else if (deck[0] is EssentialsData) //Card is a essential
-            {
-                essentials = (EssentialsData)deck[0];
-                tmp = Instantiate(UIManager.Instance.itemPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Ed = essentials;
-                tmp.SetActive(true);
-            }                        if(playerHand == alliedHand)
+    {
+        GameObject tmp;
+        MinionData minion;
+        StarterData starter;
+        EssentialsData essentials;
+
+        if (deck.Count > 0) //checks if deck is not empty
+        {
+            if (deck[0] is MinionData) //Card is a minion
             {
-                UIManager.Instance.allyHand.Add(deck[0]); //adds cards to the hand, used to remember the cards drawn for the mulligan in order to add them back into the deck                deck.Remove(deck[0]);                allyDeckCounter.text = deck.Count.ToString();            }            else
+                minion = (MinionData)deck[0];
+                tmp = Instantiate(UIManager.Instance.minionPrefab, playerHand) as GameObject;
+                tmp.SetActive(false);
+                tmp.GetComponent<CardVisual>().Md = minion;
+                tmp.SetActive(true);
+            }
+
+            else if (deck[0] is StarterData) //Card is a starter
+            {
+                starter = (StarterData)deck[0];
+                tmp = Instantiate(UIManager.Instance.starterPrefab, playerHand) as GameObject;
+                tmp.SetActive(false);
+                tmp.GetComponent<CardVisual>().Sd = starter;
+                tmp.SetActive(true);
+            }
+
+            else if (deck[0] is EssentialsData) //Card is a essential
+            {
+                essentials = (EssentialsData)deck[0];
+                tmp = Instantiate(UIManager.Instance.itemPrefab, playerHand) as GameObject;
+                tmp.SetActive(false);
+                tmp.GetComponent<CardVisual>().Ed = essentials;
+                tmp.SetActive(true);
+            }
+
+            if (playerHand == alliedHand)
+            {
+                UIManager.Instance.allyHand.Add(deck[0]); //adds cards to the hand, used to remember the cards drawn for the mulligan in order to add them back into the deck
+                deck.Remove(deck[0]);
+                allyDeckCounter.text = deck.Count.ToString();
+            }
+            else
             {
                 UIManager.Instance.enemyHand.Add(deck[0]);
-                deck.Remove(deck[0]);                enemyDeckCounter.text = deck.Count.ToString();
-            }
+                deck.Remove(deck[0]);
+                enemyDeckCounter.text = deck.Count.ToString();
+            }
         }
 
-        else //no cards left in the deck, add the discard pile, reshuffle and continue the draw
-        {
-            Debug.Log("no cards in deck, please shuffle in discard pile and continue draw");
-            //TODO: add discard pile to deck, shuffle the deck, continue the draw
-        }
+        else //no cards left in the deck, add the discard pile, reshuffle and continue the draw
+        {
+            Debug.Log("no cards in deck, please shuffle in discard pile and continue draw");
+            //TODO: add discard pile to deck, shuffle the deck, continue the draw
+        }
+
     }
 
     //Shuffle deck
@@ -321,6 +316,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public int EnableOrDisableChildren(GameObject obj, bool enable, bool enableParent = false)
+    {
+        if (enableParent)
+        {
+            obj.SetActive(enable);
+        }
+        int numChildren = 0;
+        GameObject parentObj = obj;
+        if (parentObj != null)
+        {
+            numChildren = parentObj.transform.childCount;
+            foreach (Transform t in parentObj.transform)
+            {
+                t.gameObject.SetActive(enable);
+                if (EnableOrDisableChildren(t.gameObject, enable) == 0)
+                {
+                    continue;
+                }
+            }
+        }
+        return numChildren;
+    }
 
     //TODO: Function to disable play card contol 
 }

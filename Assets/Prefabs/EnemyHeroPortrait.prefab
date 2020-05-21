@@ -2285,7 +2285,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5634358456038456559
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2497,7 +2497,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 32.83972, y: -173.67432}
+  m_AnchoredPosition: {x: 0.40000153, y: -92.5}
   m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7585996840043040199
@@ -3092,6 +3092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fe3b4c4317c7ba498ee6f930bf5ed2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackButton: {fileID: 5372260697997575070}
   healthText: {fileID: 8124066200353885645}
   healthBar: {fileID: 4432892574771221335}
   expText: {fileID: 241996328680027349}
@@ -3104,7 +3105,8 @@ MonoBehaviour:
   heroImage: {fileID: 7585996840043040197}
   heroClan: {fileID: 7585996840856235212}
   damageText: {fileID: 7968248931080624537}
-  heroImageBoarder: {fileID: 0}
+  heroImageBorder: {fileID: 7585996840856235212}
+  playerNameBox: {fileID: 3653325208784109821}
 --- !u!1 &7585996841638880382
 GameObject:
   m_ObjectHideFlags: 0

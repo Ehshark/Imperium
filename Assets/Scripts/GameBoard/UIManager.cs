@@ -14,7 +14,8 @@ public class UIManager : MonoBehaviour
 
     public GameObject minionPrefab;
     public GameObject starterPrefab;
-    public GameObject itemPrefab;
+    public GameObject itemPrefab;
+
     private List<MinionData> warriorMinions;
     private List<MinionData> rogueMinions;
     private List<MinionData> mageMinions;
@@ -51,7 +52,8 @@ public class UIManager : MonoBehaviour
 
     public static UIManager Instance { get; private set; } = null;
 
-    private GameObject lastSelectedCard;
+    private GameObject lastSelectedCard;
+
     public GameObject LastSelectedCard { get => lastSelectedCard; set => lastSelectedCard = value; }
 
     //public Text yourName;
@@ -66,7 +68,6 @@ public class UIManager : MonoBehaviour
         }
 
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
     }
 
     // Start is called before the first frame update
@@ -141,23 +142,6 @@ public class UIManager : MonoBehaviour
         SetRogueMinion();
         SetMageMinion();
         SetEssentials();
-
-        
-
-
-        Debug.Log(GameManager.Instance.bottomHero.CanPlayCards);
-        if (GameManager.Instance.bottomHero.CanPlayCards)
-        {
-            GameManager.Instance.bottomHero.heroImageBoarder.color = Color.green;
-            UIManager.Instance.glowCards();
-            UIManager.Instance.attachPlayCard();
-            GameManager.Instance.EnableOrDisablePlayerControl(true);
-        }
-        else
-        {
-            GameManager.Instance.EnableOrDisablePlayerControl(false);
-        }
-
     }
 
     private void LoadScriptableObjectsToLists()
@@ -185,106 +169,18 @@ public class UIManager : MonoBehaviour
             tempEssential = Resources.Load("Essentials/" + (i + 1)) as EssentialsData;
             essentials.Add(tempEssential);
         }
-
-        //Shuffle each list holding the scriptable objects
-        Shuffle();
-        currentEssential = essentials[0];
-        currentMinion = minions[0];
-        currentStarter = starters[0];
-
-        //Sort all the minion cards into 3 piles corresponding with their classes: warrior, rogue, mage
-        SortPiles();
-
-        dealtWarriorCards = new List<MinionData>();
-        dealtRogueCards = new List<MinionData>();
-        dealtMageCards = new List<MinionData>();
-
-        //Set the starter cards for both players
-        SetStarterDeck();
-        //Sets all 9 cards in the shop, 3 cards per pile
-        SetWarriorMinion();
-        SetRogueMinion();
-        SetMageMinion();
-        SetEssentials();
-        //Deals 5 starter cards into the hand of the player
-        // DealHand();
-
-        //if (PhotonNetwork.IsMasterClient) {
-        //    yourName.text = "Host: " + GameManager.UserName;
-        //    opponentName.text = "Client: " + PhotonNetwork.PlayerListOthers[0].NickName;
-        //}
-
-        //else {
-        //    yourName.text = "Client: " + GameManager.UserName;
-        //    opponentName.text = "Host: " + PhotonNetwork.PlayerListOthers[0].NickName;
-        //}
-
-
-
-
-        //If its your turn 
-        if (GameManager.Instance.ActiveHero().CanPlayCards)
-        {
-
-            //  GameManager.Instance.EnableOrDisablePlayerControl(true);
-
-
-
-            //Change the hero color 
-
-            GameManager.Instance.bottomHero.heroImageBoarder.color = Color.green;
-            //loop and enable all the cards that are available
-            int heroManaCost = GameManager.Instance.bottomHero.CurrentMana;
-
-            Transform minions = GameObject.Find("Hand").transform;
-
-
-
-            foreach (Transform minion in minions)
-            {
-                if (minion != null)
-                {
-                    Transform ribbon = minion.Find("Ribbon");
-                    Transform minionCost = ribbon.Find("Cost");
-                    Transform costAmount = minionCost.Find("CostAmount");
-                    string cost = costAmount.GetComponent<TMP_Text>().text;
-                    int mvCost = int.Parse(cost);
-                    Debug.Log(mvCost);
-
-                    if (mvCost <= heroManaCost)
-                    {
-                        minion.Find("GlowPanel").gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        minion.Find("GlowPanel").gameObject.SetActive(false);
-                    }
-
-
-
-                }
-
-            }
-
-        }
-        else
-        {
-
-            //disable shop buy button
-            // GameManager.Instance.EnableOrDisablePlayerControl(false);
-        }
-
-
     }
 
-
-    public void glowCards()
+    public void GlowCards()
     {
-        //GameManager.Instance.EnableOrDisablePlayerControl(true);
+        Transform minions;
         //Change the hero color 
         //loop and enable all the cards that are available
-        int heroManaCost = GameManager.Instance.bottomHero.CurrentMana;
-        Transform minions = GameObject.Find("Hand").transform;
+        int heroManaCost = GameManager.Instance.ActiveHero().CurrentMana;
+        if (GameManager.Instance.GetCurrentPlayer() == 0)
+            minions = GameManager.Instance.alliedHand;
+        else
+            minions = GameManager.Instance.enemyHand;
 
         foreach (Transform m in minions)
         {
@@ -295,7 +191,7 @@ public class UIManager : MonoBehaviour
                 Transform costAmount = minionCost.Find("CostAmount");
                 string cost = costAmount.GetComponent<TMP_Text>().text;
                 int mvCost = int.Parse(cost);
-                Debug.Log(mvCost);
+                //Debug.Log(mvCost);
                 if (mvCost <= heroManaCost)
                 {
                     m.Find("GlowPanel").gameObject.SetActive(true);
@@ -305,21 +201,22 @@ public class UIManager : MonoBehaviour
                     m.Find("GlowPanel").gameObject.SetActive(false);
                 }
             }
-            }
+        }
     }
 
-    public void attachPlayCard()
+    public void AttachPlayCard()
     {
-        Transform minions = GameObject.Find("Hand").transform;
+        Transform minions;
+        if (GameManager.Instance.GetCurrentPlayer() == 0)
+            minions = GameManager.Instance.alliedHand;
+        else
+            minions = GameManager.Instance.enemyHand;
+
         foreach (Transform m in minions)
         {
-            Debug.Log(m.name);
-            PlayCard pc = m.gameObject.AddComponent<PlayCard>();
-
+            m.gameObject.AddComponent<PlayCard>();
         }
-
     }
-
 
     public void DisplayShop()
     {
@@ -382,7 +279,8 @@ public class UIManager : MonoBehaviour
             if (minions[i].CardClass.Equals("Mage"))
                 mageMinions.Add(minions[i]);
         }
-    }
+    }
+
     public void SetWarriorMinion()
     {
         for (int i = 0; i < 3; i++)
@@ -395,7 +293,8 @@ public class UIManager : MonoBehaviour
             //Pop added
             warriorMinions.Remove(warriorMinions[i]);
         }
-    }
+    }
+
     public void SetRogueMinion()
     {
         for (int i = 0; i < 3; i++)
@@ -408,7 +307,8 @@ public class UIManager : MonoBehaviour
             //Pop added
             rogueMinions.Remove(rogueMinions[i]);
         }
-    }
+    }
+
     public void SetMageMinion()
     {
         for (int i = 0; i < 3; i++)
@@ -421,7 +321,8 @@ public class UIManager : MonoBehaviour
             //Pop added
             mageMinions.Remove(mageMinions[i]);
         }
-    }
+    }
+
     public GameObject GetNextShopCard(string cardType, bool change, MinionData minion = null)
     {
         GameObject tmp = Instantiate(minionPrefab);
@@ -455,15 +356,18 @@ public class UIManager : MonoBehaviour
                 if (change)
                     mageMinions.Add(minion);
             }
-        }
+        }
+
         if (tmp.GetComponent<CardVisual>().Md != null)
         {
             tmp.GetComponent<CardVisual>().inShop = true;
             tmp.AddComponent<ShowShopCard>();
             tmp.SetActive(true);
-        }
+        }
+
         return tmp;
-    }
+    }
+
     public bool CanChangeShopCard(string cardType)
     {
         bool result = false;
@@ -484,7 +388,8 @@ public class UIManager : MonoBehaviour
         }
 
         return result;
-    }
+    }
+
     public void ShuffleStarterDeck()
     {
         for (int i = 0; i < starters.Count; i++)
@@ -494,7 +399,8 @@ public class UIManager : MonoBehaviour
             starters[rnd] = starters[i];
             starters[i] = tempStarter;
         }
-    }
+    }
+
     public void SetStarterDeck()
     {
         allyStarters = new List<StarterData>();
@@ -504,14 +410,17 @@ public class UIManager : MonoBehaviour
         {
             allyStarters.Add(starters[i]);
             allyDeck.Add(starters[i]); //add starter cards to decklist
-        }
-        ShuffleStarterDeck();
+        }
+
+        ShuffleStarterDeck();
+
         for (int i = 0; i < starters.Count; i++)
         {
             enemyStarters.Add(starters[i]);
             enemyDeck.Add(starters[i]);
         }
-    }
+    }
+
     public void SetEssentials()
     {
         for (int i = 0; i < 4; i++)
@@ -520,6 +429,40 @@ public class UIManager : MonoBehaviour
             CardVisual cv = GameManager.Instance.essentialsPile.GetChild(i).GetComponent<CardVisual>();
             cv.Ed = currentEssential;
             GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
+        }
+    }
+
+    public void HighlightHeroPortraitAndName() {
+        if (GameManager.Instance.GetCurrentPlayer() == 0)
+        {
+            GameManager.Instance.bottomHero.HeroImageBorder.color = Color.green;
+            GameManager.Instance.bottomHero.PlayerNameBox.color = Color.green;
+            GameManager.Instance.topHero.HeroImageBorder.color = Color.white;
+            GameManager.Instance.topHero.PlayerNameBox.color = Color.white;
+        }
+        else {
+            GameManager.Instance.bottomHero.HeroImageBorder.color = Color.white;
+            GameManager.Instance.bottomHero.PlayerNameBox.color = Color.white;
+            GameManager.Instance.topHero.HeroImageBorder.color = Color.green;
+            GameManager.Instance.topHero.PlayerNameBox.color = Color.green;
+        }
+    }
+
+    public void ShowHideAttackButton()
+    {
+        if (GameManager.Instance.GetCurrentPlayer() == 0)
+        {
+            GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(true);
+            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.bottomHero.AttackButton.gameObject, true, true);
+            GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(false);
+            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.topHero.AttackButton.gameObject, false, true);
+        }
+        else
+        {
+            GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(true);
+            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.topHero.AttackButton.gameObject, true, true);
+            GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(false);
+            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.bottomHero.AttackButton.gameObject, false, true);
         }
     }
 }

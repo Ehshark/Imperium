@@ -19,7 +19,7 @@ public class Card : ScriptableObject
     public virtual bool IsPromoted { get; set; }
     public virtual bool IsTapped { get; set; }
     public virtual bool IsSilenced { get; set; }
-    public virtual object EnemyDamageDealt { get; set; }
+    public virtual Damage EnemyDamageDealt { get; set; }
     public virtual string AllyClass { get; set; }
     public virtual int ConditionID { get; set; }
     public virtual int EffectId1 { get; set; }

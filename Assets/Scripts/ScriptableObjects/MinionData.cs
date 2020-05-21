@@ -6,7 +6,6 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "New MinionData", menuName = "Minion Data", order = 51)]
 public class MinionData : Card
 {
-
     [SerializeField]
     private Color color;
     [SerializeField]
@@ -45,7 +44,7 @@ public class MinionData : Card
     [SerializeField]
     private bool isSilenced;
 
-    private object enemyDamageDealt;
+    private Damage enemyDamageDealt;
 
     [SerializeField]
     private string allyClass;
@@ -67,7 +66,7 @@ public class MinionData : Card
     public override bool IsPromoted { get => isPromoted; set => isPromoted = value; }
     public override bool IsTapped { get => isTapped; set => isTapped = value; }
     public override bool IsSilenced { get => isSilenced; set => isSilenced = value; }
-    public override object EnemyDamageDealt { get => enemyDamageDealt; set => enemyDamageDealt = value; }
+    public override Damage EnemyDamageDealt { get => enemyDamageDealt; set => enemyDamageDealt = value; }
     public override string AllyClass { get => allyClass; set => allyClass = value; }
     public override int ConditionID { get => conditionID; set => conditionID = value; }
     public override int EffectId1 { get => effectId1; set => effectId1 = value; }

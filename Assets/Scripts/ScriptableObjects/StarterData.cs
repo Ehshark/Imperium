@@ -39,7 +39,7 @@ public class StarterData : Card
     [SerializeField]
     private bool isSilenced;
 
-    private object enemyDamageDealt;
+    private Damage enemyDamageDealt;
 
     public int StarterID { get => starterID; set => starterID = value; }
     public override int GoldAndManaCost { get => goldAndManaCost; set => goldAndManaCost = value; }
@@ -52,7 +52,7 @@ public class StarterData : Card
     public override bool IsPromoted { get => isPromoted; set => isPromoted = value; }
     public override bool IsTapped { get => isTapped; set => isTapped = value; }
     public override bool IsSilenced { get => isSilenced; set => isSilenced = value; }
-    public override object EnemyDamageDealt { get => enemyDamageDealt; set => enemyDamageDealt = value; }
+    public override Damage EnemyDamageDealt { get => enemyDamageDealt; set => enemyDamageDealt = value; }
     public override string EffectText2 { get => effectText2; set => effectText2 = value; }
     public override int EffectId2 { get => effectId2; set => effectId2 = value; }
     public override object Effect2 { get => effect2; set => effect2 = value; }
