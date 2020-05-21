@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BleedListener : MonoBehaviour
+public class BleedListener : MonoBehaviour, IListener
 {
     public MinionData md;
     private GameObject card;
 
     public MinionData Md { get => md; set => md = value; }
-    public GameObject Card { get => card; set => card = value; }    
+    public GameObject Card { get => card; set => card = value; }
 
-    public void StartEvent()
+    public void Start()
+    {
+        EventManager.Instance.AddListener(EVENT_TYPE.BLEED, this);
+    }
+
+    public void OnEvent(EVENT_TYPE Bleed)
     {
         Debug.Log("In event");
 

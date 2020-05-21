@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ConditionListener : MonoBehaviour, IListener
@@ -10,13 +11,28 @@ public class ConditionListener : MonoBehaviour, IListener
     public MinionData Md { get => md; set => md = value; }
     public GameObject Card { get => card; set => card = value; }
 
+    private Dictionary<int, EVENT_TYPE> Conditions;
+    private Dictionary<int, EVENT_TYPE> Effects;
+
     public void Start()
     {
+        Conditions = new Dictionary<int, EVENT_TYPE>()
+        {
+            { 1, EVENT_TYPE.ASSIGN_BLEED }
+        };
+
+        Effects = new Dictionary<int, EVENT_TYPE>()
+        {
+            { 1, EVENT_TYPE.ASSIGN_DRAW_CARD },
+            { 2, EVENT_TYPE.ASSIGN_PEEK_SHOP }
+        };
+
         EventManager.Instance.AddListener(EVENT_TYPE.ASSIGN_CONDITIONS, this);
     }
 
     public void OnEvent(EVENT_TYPE Event_Type)
     {
+        //Conditions
         //1,"bleed"
         //2,"buy-first-card"
         //3,"minion-defeated"
@@ -25,14 +41,7 @@ public class ConditionListener : MonoBehaviour, IListener
         //6,"action-draw"
         //7,"passive"
 
-        //Check Conditions
-        if (md.ConditionID == 1)
-        {
-            card.AddComponent<BleedListener>();
-            card.GetComponent<BleedListener>().Md = md;
-            card.GetComponent<BleedListener>().Card = card;
-        }
-
+        //Effects
         //1,"draw-card"
         //2,"peek-shop"
         //3,"change-shop"
@@ -55,29 +64,20 @@ public class ConditionListener : MonoBehaviour, IListener
         //20,"health"
         //21,"mana"
 
-        //Check Effects
-        if (md.EffectId1 == 1)
+        if (md != null)
         {
-            card.AddComponent<DrawCardListener>();
-        }
-        else if (md.EffectId1 == 2)
-        {
-            card.AddComponent<PeekShopEventStarter>();
+            if (md.ConditionID != 0 && md.EffectId1 != 0)
+            {
+                EventManager.Instance.PostNotification(Conditions[md.ConditionID]);
+                EventManager.Instance.PostNotification(Effects[md.EffectId1]);
+            }
         }
     }
 
-    //public void AttackHero()
-    //{
-    //    GameManager.Instance.topHero.AdjustHealth(1, false);
+    public void AttackHero()
+    {
+        GameManager.Instance.topHero.AdjustHealth(1, false);
 
-    //    foreach (Transform t in GameManager.Instance.alliedMinionZone)
-    //    {
-    //        BleedListener bl = t.gameObject.GetComponent<BleedListener>();
-
-    //        if (bl)
-    //        {
-    //            bl.StartEvent();
-    //        }
-    //    }
-    //}
+        EventManager.Instance.PostNotification(EVENT_TYPE.BLEED);
+    }
 }

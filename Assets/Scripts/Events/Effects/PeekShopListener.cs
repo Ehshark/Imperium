@@ -7,6 +7,7 @@ public class PeekShopListener : MonoBehaviour, IPointerDownHandler
 {
     public string minionClass = "";
     public bool inDeck = true;
+    public GameObject card;
 
     private bool tapped;
 
@@ -26,25 +27,27 @@ public class PeekShopListener : MonoBehaviour, IPointerDownHandler
                 tmp.AddComponent<PeekShopListener>();
                 tmp.GetComponent<PeekShopListener>().inDeck = false;
                 tmp.GetComponent<PeekShopListener>().minionClass = minionClass;
+                tmp.GetComponent<PeekShopListener>().card = this.card;
             }
 
             //Destroy Listener Scripts 
-            GameManager.Instance.GetComponent<PeekShopEventStarter>().DestroyPeekShopListener();
+            card.GetComponent<PeekShopEventStarter>().DestroyPeekShopListener();
             GameManager.Instance.moveButton.interactable = true;
+            GameManager.Instance.moveButton.onClick.AddListener(card.GetComponent<PeekShopEventStarter>().MoveCardsToBottom);
         }
         else
         {
-            MinionData card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject.GetComponent<CardVisual>().Md;
+            MinionData minion = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject.GetComponent<CardVisual>().Md;
 
             if (tapped)
             {
-                GameManager.Instance.GetComponent<PeekShopEventStarter>().moveCards.Remove(card);
-                GameManager.Instance.ChangeCardColour(eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject, card.Color);
+                GameManager.Instance.GetComponent<PeekShopEventStarter>().moveCards.Remove(minion);
+                GameManager.Instance.ChangeCardColour(eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject, minion.Color);
                 tapped = false;                
             }
             else
             {
-                GameManager.Instance.GetComponent<PeekShopEventStarter>().moveCards.Add(card);
+                card.GetComponent<PeekShopEventStarter>().moveCards.Add(minion);
                 GameManager.Instance.ChangeCardColour(eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject, Color.cyan);
                 tapped = true;                
             }

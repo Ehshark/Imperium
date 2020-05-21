@@ -7,9 +7,12 @@ using UnityEngine.UI;
 public class PeekShopEventStarter : MonoBehaviour
 {
     public List<MinionData> moveCards = new List<MinionData>();
+    private GameObject card;
 
     public void StartEvent()
     {
+        card = gameObject;
+
         //Disable features in Shop
         DisableShop();
 
@@ -41,6 +44,11 @@ public class PeekShopEventStarter : MonoBehaviour
         GameManager.Instance.shop.GetComponent<ShopController>().rogueDeck.gameObject.GetComponent<PeekShopListener>().minionClass = "Rogue";
         GameManager.Instance.shop.GetComponent<ShopController>().mageDeck.gameObject.GetComponent<PeekShopListener>().minionClass = "Mage";
 
+        //Add current card to script
+        GameManager.Instance.shop.GetComponent<ShopController>().warriorDeck.gameObject.GetComponent<PeekShopListener>().card = this.card;
+        GameManager.Instance.shop.GetComponent<ShopController>().rogueDeck.gameObject.GetComponent<PeekShopListener>().card = this.card;
+        GameManager.Instance.shop.GetComponent<ShopController>().mageDeck.gameObject.GetComponent<PeekShopListener>().card = this.card;
+
         //Delete all GameObjects inside of the BigCard View in the shop
         GameObject cardGroup = GameManager.Instance.shop.gameObject.GetComponent<ShopController>().cardGroup;
 
@@ -63,6 +71,7 @@ public class PeekShopEventStarter : MonoBehaviour
         GameManager.Instance.changeButton.gameObject.SetActive(true);
         GameManager.Instance.exitShopButton.gameObject.SetActive(true);
         GameManager.Instance.moveButton.gameObject.SetActive(false);
+        GameManager.Instance.moveButton.interactable = false;
         GameManager.Instance.shop.gameObject.SetActive(false);
     }
 
