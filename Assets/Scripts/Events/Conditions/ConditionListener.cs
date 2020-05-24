@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,13 +7,13 @@ using UnityEngine;
 public class ConditionListener : MonoBehaviour, IListener
 {
     private MinionData md;
-    private GameObject card;
+    private GameObject card;    
 
     public MinionData Md { get => md; set => md = value; }
     public GameObject Card { get => card; set => card = value; }
 
-    private Dictionary<int, EVENT_TYPE> Conditions;
-    private Dictionary<int, EVENT_TYPE> Effects;
+    public Dictionary<int, EVENT_TYPE> Conditions;
+    public Dictionary<int, EVENT_TYPE> Effects;
 
     public void Start()
     {

@@ -41,7 +41,7 @@ public class PeekShopListener : MonoBehaviour, IPointerDownHandler
 
             if (tapped)
             {
-                GameManager.Instance.GetComponent<PeekShopEventStarter>().moveCards.Remove(minion);
+                card.GetComponent<PeekShopEventStarter>().moveCards.Remove(minion);
                 GameManager.Instance.ChangeCardColour(eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject, minion.Color);
                 tapped = false;                
             }

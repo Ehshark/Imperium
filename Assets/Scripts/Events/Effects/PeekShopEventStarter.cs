@@ -117,5 +117,8 @@ public class PeekShopEventStarter : MonoBehaviour
 
         //Re-enable the shop view
         EnableShop();
+
+        //Delete all objects in moveCards
+        moveCards.Clear();
     }
 }
