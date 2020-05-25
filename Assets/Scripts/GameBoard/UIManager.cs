@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Events;
 //using Photon.Pun;
 
 public class UIManager : MonoBehaviour
@@ -41,10 +42,16 @@ public class UIManager : MonoBehaviour
     public List<Card> allyHand; //list of cards in hand
     public List<Card> enemyHand;
 
+    public List<Card> allyDiscards;
+    public List<Card> enemyDiscards;
+
     private MinionData tempMinion;
     private StarterData tempStarter;
     private EssentialsData tempEssential;
     public Card tempCard;
+
+    private bool allyDiscardClosed = true;
+    private bool enemyDiscardClosed = true;
 
     public Dictionary<int, string> minionConditions;
     public Dictionary<int, string> minionEffects;
@@ -122,6 +129,7 @@ public class UIManager : MonoBehaviour
         LoadScriptableObjectsToLists();
 
         //Shuffle each list holding the scriptable objects
+        /* MOVED INTO LoadScriptableObjectsToLists FUNCTION
         Shuffle();
         currentEssential = essentials[0];
         currentMinion = minions[0];
@@ -406,6 +414,8 @@ public class UIManager : MonoBehaviour
         allyStarters = new List<StarterData>();
         enemyStarters = new List<StarterData>();
         allyDeck = new List<Card>();
+        enemyDeck = new List<Card>();
+
         for (int i = 0; i < starters.Count; i++)
         {
             allyStarters.Add(starters[i]);
@@ -549,5 +559,63 @@ public class UIManager : MonoBehaviour
         }
 
         return mList;
+    }
+
+    //displays discard pile for bottom player
+    public void DisplayAllyDiscards()
+    {
+        if(allyDiscardClosed) //checks to see if discard UI is open or closed
+        {
+            List<GameObject> tmp = new List<GameObject>(); 
+            tmp = GameManager.Instance.alliedDiscardPileList; //copies the cards gameobjects
+
+            GameManager.Instance.alliedDiscardUI.gameObject.SetActive(true); 
+
+            for (int i = 0; i < allyDiscards.Count; i++)
+            {
+                //display cards in the UI equal to the amount of cards in the discard pile
+                Instantiate(tmp[i], GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards")); 
+            }
+
+            allyDiscardClosed = false; //sets shop to "open" state
+        }
+        else
+        {
+            for (int i = 0; i < GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards").childCount; i++) 
+            {
+                Destroy(GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards").GetChild(i).gameObject); //destroys all cards in the UI
+            }
+
+            allyDiscardClosed = true; //sets shop to "closed" state
+        }
+    }
+
+    //displays discard pile for top player
+    public void DisplayEnemyDiscards()
+    {
+        if (enemyDiscardClosed) //checks to see if discard UI is open or closed
+        {
+            List<GameObject> tmp = new List<GameObject>();
+            tmp = GameManager.Instance.enemyDiscardPileList; //copies the cards gameobjects
+
+            GameManager.Instance.enemyDiscardUI.gameObject.SetActive(true);
+
+            for (int i = 0; i < enemyDiscards.Count; i++)
+            {
+                //display cards in the UI equal to the amount of cards in the discard pile
+                Instantiate(tmp[i], GameManager.Instance.enemyDiscardUI.transform.Find("CardPile/Cards"));
+            }
+
+            enemyDiscardClosed = false; //sets shop to "open" state
+        }
+        else
+        {
+            for (int i = 0; i < GameManager.Instance.enemyDiscardUI.transform.Find("CardPile/Cards").childCount; i++)
+            {
+                Destroy(GameManager.Instance.enemyDiscardUI.transform.Find("CardPile/Cards").GetChild(i).gameObject); //destroys all cards in the UI
+            }
+
+            enemyDiscardClosed = true; //sets shop to "closed" state
+        }
     }
 }

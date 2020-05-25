@@ -231,10 +231,30 @@ public class ShopController : MonoBehaviour
         if (currentPlayer == 0)
         {
             GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
+
+            //adds card data to the respective players discard pile data
+            if (card.GetComponent<CardVisual>().Md != null)
+            {
+                UIManager.Instance.allyDiscards.Add(card.GetComponent<CardVisual>().Md);
+            }
+            else
+            {
+                UIManager.Instance.allyDiscards.Add(card.GetComponent<CardVisual>().Ed);
+            }
         }
         else
         {
             GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
+
+            //adds card data to the respective players discard pile data
+            if (card.GetComponent<CardVisual>().Md != null)
+            {
+                UIManager.Instance.enemyDiscards.Add(card.GetComponent<CardVisual>().Md);
+            }
+            else
+            {
+                UIManager.Instance.enemyDiscards.Add(card.GetComponent<CardVisual>().Ed);
+            }
         }
     }
 }
