@@ -183,37 +183,42 @@ public class GameManager : MonoBehaviour
     //TODO: change the instatiate prefab for cards to the enemy's hand as well
     //TODO: add deck counter and decrement
     public void DrawCard(List<Card> deck, Transform playerHand)
-    {
-        GameObject tmp;
-        MinionData minion;
-        StarterData starter;
-        EssentialsData essentials;
-        if (deck.Count > 0) //checks if deck is not empty
-        {
-            if (deck[0] is MinionData) //Card is a minion
-            {
-                minion = (MinionData)deck[0];
-                tmp = Instantiate(UIManager.Instance.minionPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Md = minion;
-                tmp.SetActive(true);
-            }
-            else if (deck[0] is StarterData) //Card is a starter
-            {
-                starter = (StarterData)deck[0];
-                tmp = Instantiate(UIManager.Instance.starterPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Sd = starter;
-                tmp.SetActive(true);
-            }
-            else if (deck[0] is EssentialsData) //Card is a essential
-            {
-                essentials = (EssentialsData)deck[0];
-                tmp = Instantiate(UIManager.Instance.itemPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Ed = essentials;
-                tmp.SetActive(true);
-            }                        if(playerHand == alliedHand)
+    {
+        GameObject tmp;
+        MinionData minion;
+        StarterData starter;
+        EssentialsData essentials;
+
+        if (deck.Count > 0) //checks if deck is not empty
+        {
+            if (deck[0] is MinionData) //Card is a minion
+            {
+                minion = (MinionData)deck[0];
+                tmp = Instantiate(UIManager.Instance.minionPrefab, playerHand) as GameObject;
+                tmp.SetActive(false);
+                tmp.GetComponent<CardVisual>().Md = minion;
+                tmp.SetActive(true);
+            }
+
+            else if (deck[0] is StarterData) //Card is a starter
+            {
+                starter = (StarterData)deck[0];
+                tmp = Instantiate(UIManager.Instance.starterPrefab, playerHand) as GameObject;
+                tmp.SetActive(false);
+                tmp.GetComponent<CardVisual>().Sd = starter;
+                tmp.SetActive(true);
+            }
+
+            else if (deck[0] is EssentialsData) //Card is a essential
+            {
+                essentials = (EssentialsData)deck[0];
+                tmp = Instantiate(UIManager.Instance.itemPrefab, playerHand) as GameObject;
+                tmp.SetActive(false);
+                tmp.GetComponent<CardVisual>().Ed = essentials;
+                tmp.SetActive(true);
+            }
+            
+            if(playerHand == alliedHand)
             {
                 minion = (MinionData)deck[0];
                 tmp = Instantiate(UIManager.Instance.minionPrefab, playerHand) as GameObject;
@@ -254,7 +259,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        else //no cards left in the deck, add the discard pile, reshuffle and continue the draw
+        else //no cards left in the deck, add the discard pile, reshuffle and continue the draw
+
         {
 
             //Debug.Log("no cards in deck, please shuffle in discard pile and continue draw");
@@ -268,7 +274,9 @@ public class GameManager : MonoBehaviour
                     deck.Add(UIManager.Instance.allyDiscards[0]);
                     UIManager.Instance.allyDiscards.Remove(UIManager.Instance.allyDiscards[0]);
                     ShuffleCurrentDeck(deck);
-                }            }            else
+                }
+            }
+            else
             {
                 for (int i = 0; i < UIManager.Instance.enemyDiscards.Count; i++)
                 {
@@ -280,7 +288,8 @@ public class GameManager : MonoBehaviour
 
             //function calls itself to continue the draw since deck is no longer empty
             DrawCard(deck, playerHand);
-        }
+        }
+
     }
 
     //Shuffle deck

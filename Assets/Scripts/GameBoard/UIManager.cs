@@ -129,7 +129,6 @@ public class UIManager : MonoBehaviour
         LoadScriptableObjectsToLists();
 
         //Shuffle each list holding the scriptable objects
-        /* MOVED INTO LoadScriptableObjectsToLists FUNCTION
         Shuffle();
         currentEssential = essentials[0];
         currentMinion = minions[0];

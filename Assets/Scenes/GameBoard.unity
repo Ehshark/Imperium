@@ -555,7 +555,7 @@ RectTransform:
   m_Children:
   - {fileID: 1262242772}
   m_Father: {fileID: 601867264}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -1310,7 +1310,7 @@ RectTransform:
   - {fileID: 735825875}
   - {fileID: 43544770}
   m_Father: {fileID: 601867264}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -2538,8 +2538,8 @@ RectTransform:
   - {fileID: 964206218}
   - {fileID: 1339266554}
   - {fileID: 479640065}
-  - {fileID: 813417422}
   - {fileID: 262941049}
+  - {fileID: 813417422}
   - {fileID: 53789185}
   - {fileID: 1641835366}
   - {fileID: 9037089067657318559}
@@ -2675,7 +2675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33a68258f87868448b56e6050e82abf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  longBoardSetup: 0
+  longBoardSetup: 1
   instructionsObj: {fileID: 1868391786}
   canvas: {fileID: 1826332214}
   StartCombatDamageUI: {fileID: 499023790}
@@ -2711,8 +2711,10 @@ MonoBehaviour:
   topHero: {fileID: 4782119944451117261}
   buyButton: {fileID: 856497343}
   changeButton: {fileID: 456985363}
+  endButton: {fileID: 538851834}
+  shopButton: {fileID: 2047321967}
   exitShopButton: {fileID: 997198842}
-  moveButton: {fileID: 1859409478}
+  moveButton: {fileID: 1138923036}
 --- !u!114 &645210548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4809,6 +4811,18 @@ RectTransform:
   m_AnchoredPosition: {x: -290, y: 0}
   m_SizeDelta: {x: 175, y: 175}
   m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &1138923036 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6484159078614295569, guid: fbcde54896aabfd4d97f926c661e36b5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2048055302}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1174920696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4919,7 +4933,7 @@ PrefabInstance:
     - target: {fileID: 8507337876691748972, guid: 40af64ebedd0c1d438aafde374a0cd2d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8507337876691748972, guid: 40af64ebedd0c1d438aafde374a0cd2d,
         type: 3}
@@ -7442,7 +7456,7 @@ RectTransform:
   - {fileID: 542792739}
   - {fileID: 524829047}
   m_Father: {fileID: 601867264}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -11377,7 +11391,7 @@ PrefabInstance:
     - target: {fileID: 7585996841627639047, guid: 186ca6cd93214524b9e039b36db8af31,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7585996841627639047, guid: 186ca6cd93214524b9e039b36db8af31,
         type: 3}
