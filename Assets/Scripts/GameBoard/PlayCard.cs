@@ -218,8 +218,8 @@ public class PlayCard : MonoBehaviour
             //Add Condition Scripts 
             if (thisCard is MinionData)
             {
-                GameManager.Instance.GetComponent<ConditionListener>().Md = thisCard as MinionData;
-                GameManager.Instance.GetComponent<ConditionListener>().Card = card;
+                GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Md = thisCard as MinionData;
+                GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Card = card;
                 EventManager.Instance.PostNotification(EVENT_TYPE.ASSIGN_CONDITIONS);
             }
         }

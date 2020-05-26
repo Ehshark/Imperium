@@ -217,33 +217,6 @@ public class GameManager : MonoBehaviour
                 tmp.GetComponent<CardVisual>().Ed = essentials;
                 tmp.SetActive(true);
             }
-            
-            if(playerHand == alliedHand)
-            {
-                minion = (MinionData)deck[0];
-                tmp = Instantiate(UIManager.Instance.minionPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Md = minion;
-                tmp.SetActive(true);
-            }
-
-            else if (deck[0] is StarterData) //Card is a starter
-            {
-                starter = (StarterData)deck[0];
-                tmp = Instantiate(UIManager.Instance.starterPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Sd = starter;
-                tmp.SetActive(true);
-            }
-
-            else if (deck[0] is EssentialsData) //Card is a essential
-            {
-                essentials = (EssentialsData)deck[0];
-                tmp = Instantiate(UIManager.Instance.itemPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Ed = essentials;
-                tmp.SetActive(true);
-            }
 
             if (playerHand == alliedHand)
             {
@@ -260,13 +233,9 @@ public class GameManager : MonoBehaviour
         }
 
         else //no cards left in the deck, add the discard pile, reshuffle and continue the draw
-
         {
-
             //Debug.Log("no cards in deck, please shuffle in discard pile and continue draw");
-
             //TODO: add discard pile to deck, shuffle the deck, continue the draw
-
             if (playerHand == alliedHand)
             {
                 for (int i = 0; i < UIManager.Instance.allyDiscards.Count; i++)
@@ -314,7 +283,7 @@ public class GameManager : MonoBehaviour
         {
             if (UIManager.Instance.allyHand.Count > 5)
             {
-                
+
             }
             else if (UIManager.Instance.allyHand.Count < 5)
             {
@@ -331,14 +300,14 @@ public class GameManager : MonoBehaviour
         {
 
         }
-        
+
         SwitchTurn();
     }
 
     public void EndPhaseCardSwitch()
     {
         //TODO
-    }    
+    }
 
     public GameObject SpawnCard(Transform to, MinionData minion = null, EssentialsData essential = null, StarterData starter = null, bool inShop = false)
     {

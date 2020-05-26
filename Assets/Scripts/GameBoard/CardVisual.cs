@@ -40,7 +40,12 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     public Image allyClass;
     public Image silenceIcon;
     public Image effect1;
-    public Image effect2;    public bool inShop;    private PlayCard pc;
+    public Image effect2;
+
+    public bool inShop;
+
+    private PlayCard pc;
+
     void OnEnable()
     {
         if (md != null)
@@ -108,11 +113,12 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         if (!inShop)
         {
             //Display mana image if the card is present in the shop
-           // costImage.sprite = UIManager.Instance.allSprites.Where(x => x.name == "mana").SingleOrDefault();
+            // costImage.sprite = UIManager.Instance.allSprites.Where(x => x.name == "mana").SingleOrDefault();
         }
 
         //set the cost
-        cost.text = CardData.GoldAndManaCost.ToString();
+        cost.text = CardData.GoldAndManaCost.ToString();
+
         //set the health
         if (health != null)
         {
@@ -136,12 +142,14 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         }
 
         //set the card's color
-        cardBackground.color = CardData.Color;
+        cardBackground.color = CardData.Color;
+
         //set the condition icon
         if (condition != null)
             foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionConditions)
                 if (CardData.ConditionID == entry.Key)
-                    condition.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+                    condition.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+
         //set the effect1 icons
         if (CardData.EffectId1 != 0 && CardData.EffectId1 != 999)
         {

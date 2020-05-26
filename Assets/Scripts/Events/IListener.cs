@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EVENT_TYPE { 
+public enum EVENT_TYPE
+{
     SACRIFICE_MINION,
     SACRIFICE_SELECTED,
     DESTROY_MINION,
@@ -10,10 +11,7 @@ public enum EVENT_TYPE {
     START_COMBAT,
     ATTACK,
     ASSIGN_CONDITIONS,
-    ASSIGN_BLEED,
-    BLEED,
-    ASSIGN_DRAW_CARD,
-    ASSIGN_PEEK_SHOP
+    BLEED
 }
 
 public interface IListener

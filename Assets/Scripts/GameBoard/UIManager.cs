@@ -242,13 +242,13 @@ public class UIManager : MonoBehaviour
         {
             GameManager.Instance.menu.gameObject.SetActive(true);
         }
-        
+
     }
 
     public void optionMenu()
     {
-            GameManager.Instance.pMenu.gameObject.SetActive(false);
-            GameManager.Instance.option.gameObject.SetActive(true);
+        GameManager.Instance.pMenu.gameObject.SetActive(false);
+        GameManager.Instance.option.gameObject.SetActive(true);
     }
 
     public void optionMenuBack()
@@ -468,7 +468,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void HighlightHeroPortraitAndName() {
+    public void HighlightHeroPortraitAndName()
+    {
         if (GameManager.Instance.GetCurrentPlayer() == 0)
         {
             GameManager.Instance.bottomHero.HeroImageBorder.color = Color.green;
@@ -476,7 +477,8 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.topHero.HeroImageBorder.color = Color.white;
             GameManager.Instance.topHero.PlayerNameBox.color = Color.white;
         }
-        else {
+        else
+        {
             GameManager.Instance.bottomHero.HeroImageBorder.color = Color.white;
             GameManager.Instance.bottomHero.PlayerNameBox.color = Color.white;
             GameManager.Instance.topHero.HeroImageBorder.color = Color.green;
@@ -542,7 +544,7 @@ public class UIManager : MonoBehaviour
         {
             if (warriorMinions.Count != 0)
             {
-                foreach(MinionData md in data)
+                foreach (MinionData md in data)
                 {
                     warriorMinions.Remove(md);
                 }
@@ -590,24 +592,24 @@ public class UIManager : MonoBehaviour
     //displays discard pile for bottom player
     public void DisplayAllyDiscards()
     {
-        if(allyDiscardClosed) //checks to see if discard UI is open or closed
+        if (allyDiscardClosed) //checks to see if discard UI is open or closed
         {
-            List<GameObject> tmp = new List<GameObject>(); 
+            List<GameObject> tmp = new List<GameObject>();
             tmp = GameManager.Instance.alliedDiscardPileList; //copies the cards gameobjects
 
-            GameManager.Instance.alliedDiscardUI.gameObject.SetActive(true); 
+            GameManager.Instance.alliedDiscardUI.gameObject.SetActive(true);
 
             for (int i = 0; i < allyDiscards.Count; i++)
             {
                 //display cards in the UI equal to the amount of cards in the discard pile
-                Instantiate(tmp[i], GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards")); 
+                Instantiate(tmp[i], GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards"));
             }
 
             allyDiscardClosed = false; //sets shop to "open" state
         }
         else
         {
-            for (int i = 0; i < GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards").childCount; i++) 
+            for (int i = 0; i < GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards").childCount; i++)
             {
                 Destroy(GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards").GetChild(i).gameObject); //destroys all cards in the UI
             }

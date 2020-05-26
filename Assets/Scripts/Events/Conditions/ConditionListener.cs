@@ -2,45 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 public class ConditionListener : MonoBehaviour, IListener
 {
     private MinionData md;
-    private GameObject card;    
+    private GameObject card;
 
     public MinionData Md { get => md; set => md = value; }
     public GameObject Card { get => card; set => card = value; }
+    public EVENT_TYPE ConditionEvent { get; set; }
 
-    public Dictionary<int, EVENT_TYPE> Conditions;
-    public Dictionary<int, EVENT_TYPE> Effects;
+    public Dictionary<int, object> EffectCardData;
 
-    public void Start()
+    private void Awake()
     {
-        Conditions = new Dictionary<int, EVENT_TYPE>()
-        {
-            { 1, EVENT_TYPE.ASSIGN_BLEED }
-        };
-
-        Effects = new Dictionary<int, EVENT_TYPE>()
-        {
-            { 1, EVENT_TYPE.ASSIGN_DRAW_CARD },
-            { 2, EVENT_TYPE.ASSIGN_PEEK_SHOP }
-        };
-
-        EventManager.Instance.AddListener(EVENT_TYPE.ASSIGN_CONDITIONS, this);
+        enabled = false;
     }
 
-    public void OnEvent(EVENT_TYPE Event_Type)
+    public void OnEnable()
     {
-        //Conditions
-        //1,"bleed"
-        //2,"buy-first-card"
-        //3,"minion-defeated"
-        //4,"tap"
-        //5,"change-shop"
-        //6,"action-draw"
-        //7,"passive"
+        EventManager.Instance.AddListener(ConditionEvent, this);
 
         //Effects
         //1,"draw-card"
@@ -64,21 +47,29 @@ public class ConditionListener : MonoBehaviour, IListener
         //19,"experience"
         //20,"health"
         //21,"mana"
-
-        if (md != null)
-        {
-            if (md.ConditionID != 0 && md.EffectId1 != 0)
-            {
-                EventManager.Instance.PostNotification(Conditions[md.ConditionID]);
-                EventManager.Instance.PostNotification(Effects[md.EffectId1]);
-            }
-        }
+        EffectCardData = new Dictionary<int, object> {
+            { 1, card.GetComponent<DrawCardListener>() },
+            { 2, card.GetComponent<PeekShopEventStarter>() }
+        };
     }
 
-    public void AttackHero()
+    public void OnEvent(EVENT_TYPE ConditionEvent)
     {
-        GameManager.Instance.topHero.AdjustHealth(1, false);
+        if (md != null)
+        {
+            if (md.EffectId1 != 0)
+            {
+                foreach (KeyValuePair<int, object> entry in EffectCardData)
+                {
+                    if (entry.Key == md.EffectId1)
+                    {
+                        Type effectType = EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value.GetType();
 
-        EventManager.Instance.PostNotification(EVENT_TYPE.BLEED);
+                        MethodInfo startEvent = effectType.GetMethod("StartEvent");
+                        startEvent.Invoke(EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, new object[] { });
+                    }
+                }
+            }
+        }
     }
 }
