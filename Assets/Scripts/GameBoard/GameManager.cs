@@ -64,6 +64,9 @@ public class GameManager : MonoBehaviour
     private GameObject minionToPromote;
     private GameObject minionToSacrifice;
     private List<GameObject> minionsAttacking = new List<GameObject>();
+    private bool buyFirstCard;
+    private bool firstChangeShop;
+    private bool isEffect;
     private float turnTimer;
 
     public bool IsPromoting { get => isPromoting; set => isPromoting = value; }
@@ -71,6 +74,9 @@ public class GameManager : MonoBehaviour
     public float TurnTimer { get => turnTimer; set => turnTimer = value; }
     public GameObject MinionToSacrifice { get => minionToSacrifice; set => minionToSacrifice = value; }
     public List<GameObject> MinionsAttacking { get => minionsAttacking; set => minionsAttacking = value; }
+    public bool BuyFirstCard { get => buyFirstCard; set => buyFirstCard = value; }
+    public bool FirstChangeShop { get => firstChangeShop; set => firstChangeShop = value; }
+    public bool IsEffect { get => isEffect; set => isEffect = value; }
 
     public static GameManager Instance { get; private set; } = null;
 
@@ -162,6 +168,8 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.GlowCards();
         UIManager.Instance.AttachPlayCard();
         EnableOrDisablePlayerControl(true);
+        buyFirstCard = false;
+        firstChangeShop = false;
     }
 
     public int GetCurrentPlayer()

@@ -22,7 +22,7 @@ public class ConditionListener : MonoBehaviour, IListener
     }
 
     public void OnEnable()
-    {
+    {        
         EventManager.Instance.AddListener(ConditionEvent, this);
 
         //Effects
@@ -49,7 +49,8 @@ public class ConditionListener : MonoBehaviour, IListener
         //21,"mana"
         EffectCardData = new Dictionary<int, object> {
             { 1, card.GetComponent<DrawCardListener>() },
-            { 2, card.GetComponent<PeekShopEventStarter>() }
+            { 2, card.GetComponent<PeekShopEventStarter>() },
+            { 3, card.GetComponent<ChangeShopListener>() }
         };
     }
 

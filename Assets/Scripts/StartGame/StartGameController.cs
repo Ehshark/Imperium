@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using TMPro.Examples;
 
 public class StartGameController : MonoBehaviour
 {
@@ -87,6 +86,7 @@ public class StartGameController : MonoBehaviour
         GameManager.Instance.topHero.MyTurn = true;
         GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
         GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
+        GameManager.Instance.bottomHero.AdjustGold(10, true);
         GameManager.Instance.SwitchTurn();
         UIManager.Instance.ShowHideAttackButton();
         InitialDraw();

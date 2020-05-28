@@ -11,7 +11,9 @@ public enum EVENT_TYPE
     START_COMBAT,
     ATTACK,
     ASSIGN_CONDITIONS,
-    BLEED
+    BLEED,
+    BUY_FIRST_CARD,
+    FIRST_CHANGE_SHOP,
 }
 
 public interface IListener

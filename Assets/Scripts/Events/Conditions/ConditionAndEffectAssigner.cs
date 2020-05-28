@@ -30,7 +30,9 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
         //7,"passive"
         Conditions = new Dictionary<int, EVENT_TYPE>()
         {
-            { 1, EVENT_TYPE.BLEED }
+            { 1, EVENT_TYPE.BLEED },
+            { 2, EVENT_TYPE.BUY_FIRST_CARD },
+            { 5, EVENT_TYPE.FIRST_CHANGE_SHOP }
         };
 
         //Effects - USE THE NAME OF THE SCRIPT YOU WROTE
@@ -41,7 +43,8 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
         Effects = new Dictionary<int, string>()
         {
             { 1, "DrawCardListener" },
-            { 2, "PeekShopEventStarter" }
+            { 2, "PeekShopEventStarter" },
+            { 3, "ChangeShopListener" }
         };
 
         EventManager.Instance.AddListener(EVENT_TYPE.ASSIGN_CONDITIONS, this);
@@ -60,10 +63,7 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
 
                 card.AddComponent<ConditionListener>();
                 card.GetComponent<ConditionListener>().Md = md;
-                card.GetComponent<ConditionListener>().Card = card;
                 card.GetComponent<ConditionListener>().ConditionEvent = condition;
-                card.GetComponent<ConditionListener>().enabled = true;
-
 
                 foreach (KeyValuePair<int, string> entry in Effects)
                     if (md.EffectId1 == entry.Key)
@@ -71,6 +71,9 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
 
                 Type type = System.Type.GetType(effectScriptName + ",Assembly-CSharp");
                 card.AddComponent(type);
+
+                card.GetComponent<ConditionListener>().Card = card;
+                card.GetComponent<ConditionListener>().enabled = true;
             }
 
             //TODO: Repeat logic for md.EffectId2

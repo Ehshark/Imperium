@@ -19,6 +19,10 @@ public class ShopController : MonoBehaviour
     //Selected Card
     private GameObject selectedCard;
 
+    //Current Effect Card
+    private GameObject card;
+    public GameObject Card { get => card; set => card = value; }
+
     public Transform warriorDeck;
     public Transform rogueDeck;
     public Transform mageDeck;
@@ -116,6 +120,43 @@ public class ShopController : MonoBehaviour
                 active.AdjustGold(costForCard, false);
                 //Update the Gold UI
                 herosGold.text = active.Gold.ToString();
+
+                //Buy First Card Condition
+                if (currentPlayer == 0)
+                {
+                    foreach(Transform t in GameManager.Instance.alliedMinionZone)
+                    {
+                        if (!GameManager.Instance.BuyFirstCard)
+                        {
+                            ConditionListener cl = t.gameObject.GetComponent<ConditionListener>();
+
+                            if (cl.ConditionEvent == EVENT_TYPE.BUY_FIRST_CARD)
+                            {
+                                EventManager.Instance.PostNotification(EVENT_TYPE.BUY_FIRST_CARD);
+                                GameManager.Instance.BuyFirstCard = true;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (Transform t in GameManager.Instance.enemyMinionZone)
+                    {
+                        if (!GameManager.Instance.BuyFirstCard)
+                        {
+                            ConditionListener cl = t.gameObject.GetComponent<ConditionListener>();
+
+                            if (cl.ConditionEvent == EVENT_TYPE.BUY_FIRST_CARD)
+                            {
+                                EventManager.Instance.PostNotification(EVENT_TYPE.BUY_FIRST_CARD);
+                                GameManager.Instance.BuyFirstCard = true;
+                            }
+                        }
+                    }
+                }
+
+                //Push the Notification for Buy Condition
+                //EventManager.Instance.PostNotification(EVENT_TYPE.BUY_FIRST_CARD);
             }
             else
             {
@@ -128,6 +169,13 @@ public class ShopController : MonoBehaviour
     {
         if (selectedCard != null)
         {
+            if (GameManager.Instance.IsEffect)
+            {
+                ChangeShopEffect();
+                return;
+            }
+
+            int currentPlayer = GameManager.Instance.GetCurrentPlayer();
             int costToChangeCard = int.Parse(selectedCard.GetComponent<CardVisual>().cost.text) / 2;
             Hero active = GameManager.Instance.ActiveHero();
 
@@ -147,6 +195,40 @@ public class ShopController : MonoBehaviour
 
                     //Destroy the Object
                     RemoveCard(true);
+
+                    //Buy First Card Condition
+                    if (currentPlayer == 0)
+                    {
+                        foreach (Transform t in GameManager.Instance.alliedMinionZone)
+                        {
+                            if (!GameManager.Instance.FirstChangeShop)
+                            {
+                                ConditionListener cl = t.gameObject.GetComponent<ConditionListener>();
+
+                                if (cl.ConditionEvent == EVENT_TYPE.FIRST_CHANGE_SHOP)
+                                {
+                                    EventManager.Instance.PostNotification(EVENT_TYPE.FIRST_CHANGE_SHOP);
+                                    GameManager.Instance.FirstChangeShop = true;
+                                }
+                            }
+                        }
+                    }
+                    else if (currentPlayer == 1)
+                    {
+                        foreach (Transform t in GameManager.Instance.enemyMinionZone)
+                        {
+                            if (!GameManager.Instance.FirstChangeShop)
+                            {
+                                ConditionListener cl = t.gameObject.GetComponent<ConditionListener>();
+
+                                if (cl.ConditionEvent == EVENT_TYPE.FIRST_CHANGE_SHOP)
+                                {
+                                    EventManager.Instance.PostNotification(EVENT_TYPE.FIRST_CHANGE_SHOP);
+                                    GameManager.Instance.FirstChangeShop = true;
+                                }
+                            }
+                        }
+                    }
                 }
                 else
                 {
@@ -158,6 +240,17 @@ public class ShopController : MonoBehaviour
                 Debug.Log("Cannot Change Card");
             }
         }
+    }
+
+    private void ChangeShopEffect()
+    {
+        //Spawn a new card from the correct deck
+        SpawnShopMinion(selectedCard.GetComponent<CardVisual>().Md.CardClass, true, selectedCard.GetComponent<CardVisual>().Md);
+
+        //Destroy the Object
+        RemoveCard(true);
+
+        card.GetComponent<ChangeShopListener>().EnableShop();
     }
 
     private void RemoveCard(bool destroyMinion)
