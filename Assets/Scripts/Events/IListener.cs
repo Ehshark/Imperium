@@ -14,6 +14,7 @@ public enum EVENT_TYPE
     BLEED,
     BUY_FIRST_CARD,
     FIRST_CHANGE_SHOP,
+    DISCARD_CARD
 }
 
 public interface IListener

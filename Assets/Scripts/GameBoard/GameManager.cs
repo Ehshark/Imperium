@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.XR;
 
 public class GameManager : MonoBehaviour
 {
@@ -268,6 +269,15 @@ public class GameManager : MonoBehaviour
                     deck.Add(UIManager.Instance.allyDiscards[0]);
                     UIManager.Instance.allyDiscards.Remove(UIManager.Instance.allyDiscards[0]);
                     ShuffleCurrentDeck(deck);
+                    alliedDiscardPileList.Clear();
+
+                    foreach (GameObject t in alliedDiscardPile) //removes gameobject from discardpile if it isn't the discard pile text
+                    {
+                        if (t.GetComponent<CardVisual>())
+                        {
+                            Destroy(t);
+                        }
+                    }
                 }
             }
             else
@@ -277,6 +287,15 @@ public class GameManager : MonoBehaviour
                     deck.Add(UIManager.Instance.enemyDiscards[0]);
                     UIManager.Instance.allyDiscards.Remove(UIManager.Instance.enemyDiscards[0]);
                     ShuffleCurrentDeck(deck);
+                    enemyDiscardPileList.Clear();
+
+                    foreach (GameObject t in enemyDiscardPile) //removes gameobject from discardpile if it isn't the discard pile text
+                    {
+                        if (t.GetComponent<CardVisual>())
+                        {
+                            Destroy(t);
+                        }
+                    }
                 }
             }
 
@@ -301,18 +320,23 @@ public class GameManager : MonoBehaviour
     //End phase, player draws/selects cards to discard until hand size is 5, then prompt player to spend 1 gold to draw 1 card and discard 1 card 
     public void EndTurn()
     {
-        //TODO
-        int drawNum;
+        int handSize = ActiveHero().HandSize;
+        int drawNum, discardNum;
 
         if (GetCurrentPlayer() == 0)
         {
-            if (UIManager.Instance.allyHand.Count > 5)
+            if (UIManager.Instance.allyHand.Count > handSize)
             {
+                discardNum = UIManager.Instance.allyHand.Count - handSize;
 
+                for (int i = 0; i < discardNum; i++)
+                { 
+                    EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
+                }
             }
-            else if (UIManager.Instance.allyHand.Count < 5)
+            else if (UIManager.Instance.allyHand.Count < handSize)
             {
-                drawNum = 5 - UIManager.Instance.allyHand.Count;
+                drawNum = handSize - UIManager.Instance.allyHand.Count;
 
                 for (int i = 0; i < drawNum; i++)
                 {
@@ -320,18 +344,32 @@ public class GameManager : MonoBehaviour
                 }
             }
             else { }
+
+            EndPhaseCardSwitch();
         }
         else
         {
-
+            //TODO: Logic for enemy side
         }
 
         SwitchTurn();
     }
 
+    // Allows player to pay gold to draw an additional card and then discard a card
     public void EndPhaseCardSwitch()
     {
-        //TODO
+        //TODO: add player confirmation to exchange an extra card, add gold deduction if player chooses to exchange
+        if (GetCurrentPlayer() == 0)
+        {
+            DrawCard(UIManager.Instance.allyDeck, alliedHand);
+
+            EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
+        }
+        else
+        {
+            //TODO: add logic for enemy side
+        }
+
     }
 
     public GameObject SpawnCard(Transform to, MinionData minion = null, EssentialsData essential = null, StarterData starter = null, bool inShop = false)
