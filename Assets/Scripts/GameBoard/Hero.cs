@@ -24,6 +24,7 @@ public class Hero : MonoBehaviour
     private bool myTurn;
     private bool canPlayCards;
     private bool isAttacking;
+    private bool startedCombat;
 
     //Components
     [SerializeField]
@@ -77,6 +78,7 @@ public class Hero : MonoBehaviour
     public bool CanPlayCards { get => canPlayCards; set => canPlayCards = value; }
     public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
     public Transform AttackButton { get => attackButton; set => attackButton = value; }
+    public bool StartedCombat { get => startedCombat; set => startedCombat = value; }
 
     public void SetHero(int health, int mana, int damage, int reqExp, int hand, char clan, Sprite image)
     {

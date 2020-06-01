@@ -17,7 +17,10 @@ public class StartCombatEventDistributor : MonoBehaviour, IListener
     {
         foreach (Transform t in GameManager.Instance.alliedMinionZone)
         {
-            t.gameObject.AddComponent<StartCombatListener>();
+            if (!t.GetComponent<ConditionListener>().Tapped)
+            {
+                t.gameObject.AddComponent<StartCombatListener>();
+            }
         }
 
         heroImage.AddComponent<StartCombatHeroListener>();

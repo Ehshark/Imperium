@@ -4,17 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class ConditionListener : MonoBehaviour, IListener
+public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
 {
     private MinionData md;
     private GameObject card;
+    private bool tapped;
 
     public MinionData Md { get => md; set => md = value; }
     public GameObject Card { get => card; set => card = value; }
     public EVENT_TYPE ConditionEvent { get; set; }
 
     public Dictionary<int, object> EffectCardData;
+
+    public bool Tapped { get => tapped; set => tapped = value; }
 
     private void Awake()
     {
@@ -70,6 +74,19 @@ public class ConditionListener : MonoBehaviour, IListener
                         startEvent.Invoke(EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, new object[] { });
                     }
                 }
+            }
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (ConditionEvent == EVENT_TYPE.TAP_MINION && !GameManager.Instance.ActiveHero().StartedCombat)
+        {
+            if (!tapped)
+            {
+                OnEvent(ConditionEvent);
+                GameManager.Instance.ChangeCardColour(card, Color.cyan);
+                tapped = true;
             }
         }
     }

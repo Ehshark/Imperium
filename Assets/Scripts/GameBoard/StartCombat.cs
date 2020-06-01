@@ -97,6 +97,7 @@ public class StartCombat : MonoBehaviour
             submitButton.SetActive(true);
             GameManager.Instance.StartCombatDamageUI.gameObject.SetActive(true);
             GameManager.Instance.EnableOrDisablePlayerControl(false);
+            GameManager.Instance.ActiveHero().StartedCombat = true;
         }
         else
         {
@@ -105,6 +106,7 @@ public class StartCombat : MonoBehaviour
             submitButton.SetActive(false);
             GameManager.Instance.StartCombatDamageUI.gameObject.SetActive(false);
             GameManager.Instance.EnableOrDisablePlayerControl(true);
+            GameManager.Instance.ActiveHero().StartedCombat = false;
         }
     }
 

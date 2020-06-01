@@ -9,7 +9,6 @@ public class DrawCardListener : MonoBehaviour
         Debug.Log("Draw Card Effect");
 
         int currentPlayer = GameManager.Instance.GetCurrentPlayer();
-        //int currentPlayer = 0;
 
         if (currentPlayer == 0)
         {

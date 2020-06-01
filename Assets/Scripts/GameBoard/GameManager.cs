@@ -152,6 +152,23 @@ public class GameManager : MonoBehaviour
 
     public void SwitchTurn()
     {
+        int currentPlayer = GetCurrentPlayer();
+        //Change Tapped Minions to Untapped
+        if (currentPlayer == 0)
+        {
+            foreach (Transform t in alliedMinionZone)
+            {
+                UnTapMinions(t);
+            }
+        }
+        else
+        {
+            foreach (Transform t in enemyMinionZone)
+            {
+                UnTapMinions(t);
+            }
+        }
+
         if (bottomHero.MyTurn)
         {
             bottomHero.MyTurn = false;
@@ -409,6 +426,16 @@ public class GameManager : MonoBehaviour
             }
         }
         return numChildren;
+    }
+
+    private void UnTapMinions(Transform t)
+    {
+        ConditionListener cl = t.GetComponent<ConditionListener>();
+        if (cl.Tapped)
+        {
+            ChangeCardColour(cl.Card, cl.Md.Color);
+            cl.Tapped = false;
+        }
     }
 
     //TODO: Function to disable play card contol 

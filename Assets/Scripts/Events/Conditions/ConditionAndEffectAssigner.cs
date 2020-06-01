@@ -32,6 +32,7 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
         {
             { 1, EVENT_TYPE.BLEED },
             { 2, EVENT_TYPE.BUY_FIRST_CARD },
+            { 4, EVENT_TYPE.TAP_MINION },
             { 5, EVENT_TYPE.FIRST_CHANGE_SHOP }
         };
 
