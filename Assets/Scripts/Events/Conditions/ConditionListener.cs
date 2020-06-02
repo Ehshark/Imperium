@@ -51,6 +51,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
         EffectCardData = new Dictionary<int, object> {
             { 1, card.GetComponent<DrawCardListener>() },
             { 2, card.GetComponent<PeekShopEventStarter>() },
+            { 4, card.GetComponent<ExpressBuyListener>() },
             { 3, card.GetComponent<ChangeShopListener>() },
             { 14, card.GetComponent<BuffMinionStarter>() },
             { 16, card.GetComponent<DrawDiscardStarter>() }

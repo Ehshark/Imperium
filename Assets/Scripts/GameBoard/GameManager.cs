@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     public Transform enemyDiscardPile;
     public Transform enemyDiscardUI;
     public List<GameObject> enemyDiscardPileList;
+    public Button testButton;
 
     public Transform shop;
     public Transform warriorShopPile;
@@ -83,6 +84,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+
         if (Instance)
         {
             DestroyImmediate(gameObject);
@@ -91,6 +93,13 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        testButton.onClick.AddListener(delegate { DrawCard(UIManager.Instance.allyDeck, alliedHand); });
+
+        //    public void DrawCard(List<Card> deck, Transform playerHand)
     }
 
     public void MoveCard(GameObject go, Transform from, Transform to)
@@ -258,6 +267,7 @@ public class GameManager : MonoBehaviour
         StarterData starter;
         EssentialsData essentials;
 
+
         if (deck.Count > 0) //checks if deck is not empty
         {
             if (deck[0] is MinionData) //Card is a minion
@@ -314,13 +324,13 @@ public class GameManager : MonoBehaviour
                     ShuffleCurrentDeck(deck);
                     alliedDiscardPileList.Clear();
 
-                    foreach (GameObject t in alliedDiscardPile) //removes gameobject from discardpile if it isn't the discard pile text
-                    {
-                        if (t.GetComponent<CardVisual>())
-                        {
-                            Destroy(t);
-                        }
-                    }
+                    //foreach (GameObject t in alliedDiscardPile) //removes gameobject from discardpile if it isn't the discard pile text
+                    //{
+                    //    if (t.GetComponent<CardVisual>())
+                    //    {
+                    //        Destroy(t);
+                    //    }
+                    //}
                 }
             }
             else
@@ -345,7 +355,9 @@ public class GameManager : MonoBehaviour
             //function calls itself to continue the draw since deck is no longer empty
             DrawCard(deck, playerHand);
         }
+        Debug.Log("im in draw card");
 
+        EventManager.Instance.PostNotification(EVENT_TYPE.ACTION_DRAW);
     }
 
     //Shuffle deck

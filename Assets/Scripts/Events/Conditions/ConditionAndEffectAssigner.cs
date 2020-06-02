@@ -33,7 +33,8 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 1, EVENT_TYPE.BLEED },
             { 2, EVENT_TYPE.BUY_FIRST_CARD },
             { 4, EVENT_TYPE.TAP_MINION },
-            { 5, EVENT_TYPE.FIRST_CHANGE_SHOP }
+            { 5, EVENT_TYPE.FIRST_CHANGE_SHOP },
+            { 6, EVENT_TYPE.ACTION_DRAW }
         };
 
         //Effects - USE THE NAME OF THE SCRIPT YOU WROTE
@@ -45,6 +46,7 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
         {
             { 1, "DrawCardListener" },
             { 2, "PeekShopEventStarter" },
+            { 4, "ExpressBuyListener"  },
             { 3, "ChangeShopListener" },
             { 14, "BuffMinionStarter" },
             { 16, "DrawDiscardStarter" }
