@@ -10,15 +10,12 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
 {
     private MinionData md;
     private GameObject card;
-    private bool tapped;
 
     public MinionData Md { get => md; set => md = value; }
     public GameObject Card { get => card; set => card = value; }
     public EVENT_TYPE ConditionEvent { get; set; }
 
     public Dictionary<int, object> EffectCardData;
-
-    public bool Tapped { get => tapped; set => tapped = value; }
 
     private void Awake()
     {
@@ -82,11 +79,13 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
     {
         if (ConditionEvent == EVENT_TYPE.TAP_MINION && !GameManager.Instance.ActiveHero().StartedCombat)
         {
-            if (!tapped)
+            CardVisual cv = card.GetComponent<CardVisual>();
+
+            if (!cv.IsTapped)
             {
                 OnEvent(ConditionEvent);
                 GameManager.Instance.ChangeCardColour(card, Color.cyan);
-                tapped = true;
+                cv.IsTapped = true;
             }
         }
     }

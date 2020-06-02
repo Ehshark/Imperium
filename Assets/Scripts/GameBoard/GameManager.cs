@@ -431,10 +431,11 @@ public class GameManager : MonoBehaviour
     private void UnTapMinions(Transform t)
     {
         ConditionListener cl = t.GetComponent<ConditionListener>();
-        if (cl.Tapped)
+        CardVisual cv = t.GetComponent<CardVisual>();
+        if (cl.Md != null && cv.IsTapped)
         {
             ChangeCardColour(cl.Card, cl.Md.Color);
-            cl.Tapped = false;
+            cv.IsTapped = false;
         }
     }
 

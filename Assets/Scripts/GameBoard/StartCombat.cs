@@ -59,6 +59,12 @@ public class StartCombat : MonoBehaviour
             }
         }
 
+        //Loop through all minions that are currently attacking and set there tap state to false
+        foreach (GameObject go in GameManager.Instance.MinionsAttacking)
+        {
+            go.GetComponent<CardVisual>().IsTapped = false;
+        }
+
         //Reset Hero 
         Hero active = GameManager.Instance.ActiveHero();
         StartCombatHeroListener schl = heroImage.GetComponent<StartCombatHeroListener>();
@@ -138,24 +144,7 @@ public class StartCombat : MonoBehaviour
         foreach (GameObject card in GameManager.Instance.MinionsAttacking)
         {
             CardVisual cv = card.GetComponent<CardVisual>();
-
-            cv.health.text = (Int32.Parse(cv.health.text) - 1).ToString();
-
-            if (cv.Md != null)
-            {
-                cv.CurrentHealth = cv.CurrentHealth - 1;
-            }
-            else if (cv.Sd != null)
-            {
-                cv.CurrentHealth = cv.CurrentHealth - 1;
-            }
-
-            if (cv.CurrentHealth <= 0)
-            {
-                cv.health.text = cv.TotalHealth.ToString();
-                cv.CurrentHealth = cv.TotalHealth;
-                GameManager.Instance.MoveCard(card, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList, true);
-            }
+            cv.AdjustHealth(1, false);
         }
     }
 }

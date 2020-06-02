@@ -17,7 +17,9 @@ public class StartCombatEventDistributor : MonoBehaviour, IListener
     {
         foreach (Transform t in GameManager.Instance.alliedMinionZone)
         {
-            if (!t.GetComponent<ConditionListener>().Tapped)
+            CardVisual cv = t.GetComponent<CardVisual>();
+
+            if (cv.Sd != null || (cv.Md != null && !cv.IsTapped))
             {
                 t.gameObject.AddComponent<StartCombatListener>();
             }

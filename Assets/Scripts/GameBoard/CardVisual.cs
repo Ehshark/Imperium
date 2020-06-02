@@ -26,9 +26,11 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     private int currentHealth;
     private int totalHealth;
+    private bool isTapped;
 
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int TotalHealth { get => totalHealth; set => totalHealth = value; }
+    public bool IsTapped { get => isTapped; set => isTapped = value; }
 
     public TMP_Text cost;
     public TMP_Text health;
@@ -219,6 +221,44 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
             UIManager.Instance.LastSelectedCard = gameObject;
         }
+    }
+
+    public void AdjustHealth(int amount, bool add)
+    {
+        if (cardData is MinionData || cardData is StarterData)
+        {
+            if (add)
+            {
+                currentHealth = currentHealth + amount;
+            }
+            else
+            {
+                currentHealth = currentHealth - amount;
+
+                if (currentHealth <= 0)
+                {
+                    DestroyMinion();
+                }
+            }
+
+            health.text = currentHealth.ToString();
+        }
+    }
+
+    public void DestroyMinion()
+    {
+        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
+        currentHealth = totalHealth;
+
+        if (currentPlayer == 0)
+        {
+            GameManager.Instance.MoveCard(gameObject, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList, true);
+        }
+        else
+        {
+            GameManager.Instance.MoveCard(gameObject, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList, true);
+        }
+        
     }
 
     //TODO: OnHover Function to highlight the card
