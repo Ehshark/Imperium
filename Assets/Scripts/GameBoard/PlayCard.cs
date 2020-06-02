@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class PlayCard : MonoBehaviour
 {
@@ -124,7 +125,18 @@ public class PlayCard : MonoBehaviour
 
     private void StartOrCancelPromotionEvent(bool promoting)
     {
-        if (GameManager.Instance.alliedMinionZone.childCount == 0)
+        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
+        Transform zone;
+        if (currentPlayer == 0)
+        {
+            zone = GameManager.Instance.alliedMinionZone;
+        }
+        else
+        {
+            zone = GameManager.Instance.enemyMinionZone;
+        }
+
+        if (zone.childCount == 0)
         {
             string cantPromote = "No minions to sacrifice!";
             StartCoroutine(GameManager.Instance.SetInstructionsText(cantPromote));
@@ -189,6 +201,7 @@ public class PlayCard : MonoBehaviour
 
     IEnumerator MoveCardFromHand(bool isMinion)
     {
+        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
         Transform minionZone = GameManager.Instance.alliedHand;
         Image image = minionZone.GetComponent<Image>();
         Color color = image.color;
@@ -202,6 +215,8 @@ public class PlayCard : MonoBehaviour
         image.color = color;
 
         card = gameObject;
+        Transform to;
+        List<GameObject> discardList;
 
         if (isMinion)
         {
@@ -212,8 +227,19 @@ public class PlayCard : MonoBehaviour
                 summonPanel.SetActive(false);
             }
 
-            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedMinionZone);
-            mc.AddToQueue();
+            //MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedMinionZone);
+            //mc.AddToQueue();
+
+            if (currentPlayer == 0)
+            {
+                to = GameManager.Instance.alliedMinionZone;
+            }
+            else
+            {
+                to = GameManager.Instance.enemyMinionZone;
+            }
+
+            GameManager.Instance.MoveCard(card, to, null, true);
 
             //Add Condition Scripts 
             if (thisCard is MinionData)
@@ -226,8 +252,20 @@ public class PlayCard : MonoBehaviour
 
         else
         {
-            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedDiscardPile);
-            mc.AddToQueue();
+            if (currentPlayer == 0)
+            {
+                to = GameManager.Instance.alliedDiscardPile;
+                discardList = GameManager.Instance.alliedDiscardPileList;
+            }
+            else
+            {
+                to = GameManager.Instance.enemyDiscardPile;
+                discardList = GameManager.Instance.enemyDiscardPileList;
+            }
+
+            //MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedDiscardPile);
+            //mc.AddToQueue();
+            GameManager.Instance.MoveCard(card, to, discardList, true);
         }
 
         AdjustHeroResources();
@@ -247,9 +285,24 @@ public class PlayCard : MonoBehaviour
         color.a = .4f;
         image.color = color;
 
-        MoveCardCommand mc = new MoveCardCommand(GameManager.Instance.MinionToSacrifice,
-            GameManager.Instance.alliedMinionZone, GameManager.Instance.alliedDiscardPile);
-        mc.AddToQueue();
+        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
+        Transform zone;
+        List<GameObject> discardPile;
+        if (currentPlayer == 0)
+        {
+            zone = GameManager.Instance.alliedDiscardPile;
+            discardPile = GameManager.Instance.alliedDiscardPileList;
+        }
+        else
+        {
+            zone = GameManager.Instance.enemyDiscardPile;
+            discardPile = GameManager.Instance.enemyDiscardPileList;
+        }
+
+        //MoveCardCommand mc = new MoveCardCommand(GameManager.Instance.MinionToSacrifice,
+        //    GameManager.Instance.alliedMinionZone, GameManager.Instance.alliedDiscardPile);
+        //mc.AddToQueue();
+        GameManager.Instance.MoveCard(GameManager.Instance.MinionToSacrifice, zone, discardPile, true);
         StartCoroutine(MoveCardFromHand(true));
     }
 

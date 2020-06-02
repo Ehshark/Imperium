@@ -229,6 +229,8 @@ public class ShopController : MonoBehaviour
                             }
                         }
                     }
+
+                    GameManager.Instance.shop.gameObject.SetActive(false);
                 }
                 else
                 {

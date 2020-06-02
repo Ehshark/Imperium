@@ -24,12 +24,14 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     private int currentHealth;
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     private int totalHealth;
-    public int TotalHealth { get => totalHealth; set => totalHealth = value; }
+    private int currentDamage;
+    private int totalDamage;
     private bool isTapped;
     public bool IsTapped { get => isTapped; set => isTapped = value; }
-    public bool inShop;
-    private Damage dmgAbsorbed;
     public Damage DmgAbsorbed { get => dmgAbsorbed; set => dmgAbsorbed = value; }
+    private Damage dmgAbsorbed;
+    public int CurrentDamage { get => currentDamage; set => currentDamage = value; }
+    public int TotalDamage { get => totalDamage; set => totalDamage = value; }
 
     public TMP_Text cost;
     public TMP_Text health;
@@ -145,7 +147,11 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         if (damage != null)
         {
             if (CardData.AttackDamage != 0)
+            {
                 damage.text = CardData.AttackDamage.ToString();
+                totalDamage = CardData.AttackDamage;
+                currentDamage = CardData.AttackDamage;
+            }
             else
                 damage.transform.parent.gameObject.SetActive(false);
         }
@@ -333,5 +339,30 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         }
         return damageForType;
     }
+    public void AdjustDamage(int amount, bool add)
+    {
+        if (add)
+        {
+            currentDamage = currentDamage + amount;
+        }
+        else
+        {
+            currentDamage = currentDamage - amount;
+
+            if (currentDamage < 0)
+            {
+                currentDamage = 0;
+            }
+        }
+
+        damage.text = currentDamage.ToString();
+    }
+
+    public void ResetDamage()
+    {
+        currentDamage = totalDamage;
+        damage.text = currentDamage.ToString();
+    }
+
     //TODO: OnHover Function to highlight the card
 }

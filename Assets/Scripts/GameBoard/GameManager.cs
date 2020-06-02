@@ -201,14 +201,16 @@ public class GameManager : MonoBehaviour
         {
             foreach (Transform t in alliedMinionZone)
             {
-                //UnTapMinions(t);
+                UnTapMinions(t);
+                ResetDamage(t);
             }
         }
         else
         {
             foreach (Transform t in enemyMinionZone)
             {
-                //UnTapMinions(t);
+                UnTapMinions(t);
+                ResetDamage(t);
             }
         }
 
@@ -512,13 +514,23 @@ public class GameManager : MonoBehaviour
     {
         ConditionListener cl = t.GetComponent<ConditionListener>();
         CardVisual cv = t.GetComponent<CardVisual>();
-        if (cl.Md != null && cv.IsTapped)
+        if (cv.CardData is MinionData)
         {
-            ChangeCardColour(cl.Card, cl.Md.Color);
-            cv.IsTapped = false;
+            if (cl.Md != null && cv.IsTapped)
+            {
+                ChangeCardColour(cl.Card, cl.Md.Color);
+                cv.IsTapped = false;
+            }
         }
     }
 
+    private void ResetDamage(Transform t)
+    {
+        CardVisual cv = t.GetComponent<CardVisual>();
+        cv.ResetDamage();
+    }
+
+    //TODO: Function to disable play card contol 
     public Transform GetActiveHand(bool activeWanted)
     {
         if (activeWanted)
