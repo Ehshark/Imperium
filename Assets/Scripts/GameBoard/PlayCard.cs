@@ -136,16 +136,16 @@ public class PlayCard : MonoBehaviour
             zone = GameManager.Instance.enemyMinionZone;
         }
 
-        if (zone.childCount == 0)
-        {
-            string cantPromote = "No minions to sacrifice!";
-            StartCoroutine(GameManager.Instance.SetInstructionsText(cantPromote));
-            return;
-        }
-
         //We want to start the promoting process
         if (promoting)
         {
+            if (zone.childCount == 0)
+            {
+                string cantPromote = "No minions to sacrifice!";
+                StartCoroutine(GameManager.Instance.SetInstructionsText(cantPromote));
+                return;
+            }
+
             //Change the color of the button to red
             ColorBlock cb = promoteButton.colors;
             cb.normalColor = Color.red;
@@ -225,6 +225,7 @@ public class PlayCard : MonoBehaviour
                 card = GameManager.Instance.MinionToPromote;
                 StartOrCancelPromotionEvent(false);
                 summonPanel.SetActive(false);
+                card.GetComponent<CardVisual>().AdjustHealth(2, true);
             }
 
             //MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedMinionZone);
@@ -239,7 +240,7 @@ public class PlayCard : MonoBehaviour
                 to = GameManager.Instance.enemyMinionZone;
             }
 
-            GameManager.Instance.MoveCard(card, to, null, true);
+            GameManager.Instance.MoveCard(card, to, null, true, true);
 
             //Add Condition Scripts 
             if (thisCard is MinionData)

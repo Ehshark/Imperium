@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
             Destroy(go.GetComponent<PlayCard>());
     }
 
-    public void MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool destroy = false)
+    public void MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool destroy = false, bool copy = false)
     {
         GameObject tmp;
 
@@ -128,6 +128,18 @@ public class GameManager : MonoBehaviour
         if (list != null)
         {
             list.Add(tmp);
+        }
+
+        if (copy)
+        {
+            CardVisual tmpCv = tmp.GetComponent<CardVisual>();
+            CardVisual cv = card.GetComponent<CardVisual>();
+
+            tmpCv.CurrentHealth = cv.CurrentHealth;
+            tmpCv.CurrentDamage = cv.CurrentDamage;
+
+            tmpCv.health.text = tmpCv.CurrentHealth.ToString();
+            tmpCv.damage.text = tmpCv.CurrentDamage.ToString();
         }
 
         if (destroy)
