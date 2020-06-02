@@ -43,7 +43,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
 
                 //Decrease damage counter
                 GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) - cv.Sd.AttackDamage).ToString();
-                GameManager.Instance.MinionsAttacking.Add(card);
+                GameManager.Instance.MinionsAttacking.Remove(card);
             }
             else
             {
@@ -52,7 +52,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
 
                 //Increase damage counter
                 GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) + cv.Sd.AttackDamage).ToString();
-                GameManager.Instance.MinionsAttacking.Remove(card);
+                GameManager.Instance.MinionsAttacking.Add(card);
             }
         }
     }
