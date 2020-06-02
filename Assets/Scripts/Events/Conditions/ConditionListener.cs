@@ -85,6 +85,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             {
                 OnEvent(ConditionEvent);
                 GameManager.Instance.ChangeCardColour(card, Color.cyan);
+                cv.AdjustHealth(1, false);
                 cv.IsTapped = true;
             }
         }
