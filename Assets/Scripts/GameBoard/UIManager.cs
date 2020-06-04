@@ -1,13 +1,11 @@
 ﻿//This script uses magic numbers - the number of ScriptableObjects inside Assets/Resources/Minions/, etc.
 
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
-//using Photon.Pun;
 
 public class UIManager : MonoBehaviour
 {
@@ -180,16 +178,11 @@ public class UIManager : MonoBehaviour
 
     public void GlowCards()
     {
-        Transform minions;
         //Change the hero color 
         //loop and enable all the cards that are available
-        int heroManaCost = GameManager.Instance.ActiveHero().CurrentMana;
-        if (GameManager.Instance.GetCurrentPlayer() == 0)
-            minions = GameManager.Instance.alliedHand;
-        else
-            minions = GameManager.Instance.enemyHand;
+        int heroManaCost = GameManager.Instance.ActiveHero(true).CurrentMana;
 
-        foreach (Transform m in minions)
+        foreach (Transform m in GameManager.Instance.GetActiveHand(true))
         {
             if (m != null)
             {
@@ -198,7 +191,6 @@ public class UIManager : MonoBehaviour
                 Transform costAmount = minionCost.Find("CostAmount");
                 string cost = costAmount.GetComponent<TMP_Text>().text;
                 int mvCost = int.Parse(cost);
-                //Debug.Log(mvCost);
                 if (mvCost <= heroManaCost)
                 {
                     m.Find("GlowPanel").gameObject.SetActive(true);
@@ -209,17 +201,18 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
+        foreach (Transform m in GameManager.Instance.GetActiveHand(false))
+        {
+            if (m != null)
+            {
+                m.Find("GlowPanel").gameObject.SetActive(false);
+            }
+        }
     }
 
     public void AttachPlayCard()
     {
-        Transform minions;
-        if (GameManager.Instance.GetCurrentPlayer() == 0)
-            minions = GameManager.Instance.alliedHand;
-        else
-            minions = GameManager.Instance.enemyHand;
-
-        foreach (Transform m in minions)
+        foreach (Transform m in GameManager.Instance.GetActiveHand(true))
         {
             m.gameObject.AddComponent<PlayCard>();
         }
@@ -491,16 +484,12 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.GetCurrentPlayer() == 0)
         {
             GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(true);
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.bottomHero.AttackButton.gameObject, true, true);
             GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(false);
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.topHero.AttackButton.gameObject, false, true);
         }
         else
         {
             GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(true);
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.topHero.AttackButton.gameObject, true, true);
             GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(false);
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.bottomHero.AttackButton.gameObject, false, true);
         }
     }
 

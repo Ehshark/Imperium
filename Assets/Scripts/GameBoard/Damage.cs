@@ -4,9 +4,22 @@ using UnityEngine;
 
 public class Damage
 {
-    private string damageType = "";
-    private int damageAmt = 0;
+    private Dictionary<string, int> damageAbsorbed = new Dictionary<string, int>
+    {
+        { "stealth", 0 },
+        { "lifesteal", 0 },
+        { "poisonTouch", 0 },
+        { "damage", 0 }
+    };
 
-    public string DamageType { get => damageType; set => damageType = value; }
-    public int DamageAmt { get => damageAmt; set => damageAmt = value; }
+    public Dictionary<string, int> DamageAbsorbed { get => damageAbsorbed; set => damageAbsorbed = value; }
+
+    public int TotalDamageAbsorbed()
+    {
+        int tot = 0;
+        foreach (KeyValuePair<string, int> entry in damageAbsorbed) {
+            tot += entry.Value;
+        }
+        return tot;
+    }
 }

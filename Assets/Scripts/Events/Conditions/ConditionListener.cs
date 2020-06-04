@@ -77,7 +77,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (ConditionEvent == EVENT_TYPE.TAP_MINION && !GameManager.Instance.ActiveHero().StartedCombat)
+        if (ConditionEvent == EVENT_TYPE.TAP_MINION && !GameManager.Instance.ActiveHero(true).StartedCombat)
         {
             CardVisual cv = card.GetComponent<CardVisual>();
 

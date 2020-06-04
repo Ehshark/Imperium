@@ -30,7 +30,7 @@ public class ShopController : MonoBehaviour
     public void OnEnable()
     {
         //Update Hero's Current Gold in Shop
-        Hero active = GameManager.Instance.ActiveHero();
+        Hero active = GameManager.Instance.ActiveHero(true);
         herosGold.text = active.Gold.ToString();
     }
 
@@ -87,7 +87,7 @@ public class ShopController : MonoBehaviour
         {
             int costForCard = int.Parse(selectedCard.GetComponent<CardVisual>().cost.text);
             int currentPlayer = GameManager.Instance.GetCurrentPlayer();
-            Hero active = GameManager.Instance.ActiveHero();
+            Hero active = GameManager.Instance.ActiveHero(true);
 
             if (active.Gold >= costForCard)
             {
@@ -177,7 +177,7 @@ public class ShopController : MonoBehaviour
 
             int currentPlayer = GameManager.Instance.GetCurrentPlayer();
             int costToChangeCard = int.Parse(selectedCard.GetComponent<CardVisual>().cost.text) / 2;
-            Hero active = GameManager.Instance.ActiveHero();
+            Hero active = GameManager.Instance.ActiveHero(true);
 
             if (active.Gold >= costToChangeCard)
             {

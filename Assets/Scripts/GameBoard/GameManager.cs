@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.XR;
 
 public class GameManager : MonoBehaviour
 {
@@ -62,6 +61,7 @@ public class GameManager : MonoBehaviour
     public Button moveButton;
 
     private bool isPromoting = false;
+    private bool isDefending = false;
     private GameObject minionToPromote;
     private GameObject minionToSacrifice;
     private List<GameObject> minionsAttacking = new List<GameObject>();
@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
     private bool isEffect;
     private float turnTimer;
 
+    public static GameManager Instance { get; private set; } = null;
     public bool IsPromoting { get => isPromoting; set => isPromoting = value; }
     public GameObject MinionToPromote { get => minionToPromote; set => minionToPromote = value; }
     public float TurnTimer { get => turnTimer; set => turnTimer = value; }
@@ -78,8 +79,7 @@ public class GameManager : MonoBehaviour
     public bool BuyFirstCard { get => buyFirstCard; set => buyFirstCard = value; }
     public bool FirstChangeShop { get => firstChangeShop; set => firstChangeShop = value; }
     public bool IsEffect { get => isEffect; set => isEffect = value; }
-
-    public static GameManager Instance { get; private set; } = null;
+    public bool IsDefending { get => isDefending; set => isDefending = value; }
 
     private void Awake()
     {
@@ -136,19 +136,61 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public Hero ActiveHero()
+    public Hero ActiveHero(bool activeWanted)
     {
-        if (bottomHero.MyTurn)
-            return bottomHero;
+        if (activeWanted)
+        {
+            if (bottomHero.MyTurn)
+                return bottomHero;
+            else
+                return topHero;
+        }
         else
-            return topHero;
+        {
+            if (bottomHero.MyTurn)
+                return topHero;
+            else
+                return bottomHero;
+        }
     }
 
     public void EnableOrDisablePlayerControl(bool enable)
     {
         //buyButton.interactable = enable;
         //changeButton.interactable = enable;
-        ActiveHero().CanPlayCards = enable;
+        ActiveHero(true).CanPlayCards = enable;
+        if (enable)
+        {
+            foreach (Transform m in GetActiveHand(true))
+            {
+                if (m != null)
+                {
+                    Transform ribbon = m.Find("Ribbon");
+                    Transform minionCost = ribbon.Find("Cost");
+                    Transform costAmount = minionCost.Find("CostAmount");
+                    string cost = costAmount.GetComponent<TMP_Text>().text;
+                    int mvCost = int.Parse(cost);
+                    if (mvCost <= ActiveHero(true).CurrentMana)
+                    {
+                        m.Find("GlowPanel").gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        m.Find("GlowPanel").gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach (Transform m in GetActiveHand(true))
+            {
+                if (m != null)
+                {
+                    m.Find("GlowPanel").gameObject.SetActive(false);
+                }
+            }
+        }
     }
 
     public void SwitchTurn()
@@ -159,14 +201,14 @@ public class GameManager : MonoBehaviour
         {
             foreach (Transform t in alliedMinionZone)
             {
-                UnTapMinions(t);
+                //UnTapMinions(t);
             }
         }
         else
         {
             foreach (Transform t in enemyMinionZone)
             {
-                UnTapMinions(t);
+                //UnTapMinions(t);
             }
         }
 
@@ -320,7 +362,7 @@ public class GameManager : MonoBehaviour
     //End phase, player draws/selects cards to discard until hand size is 5, then prompt player to spend 1 gold to draw 1 card and discard 1 card 
     public void EndTurn()
     {
-        int handSize = ActiveHero().HandSize;
+        int handSize = ActiveHero(true).HandSize;
         int drawNum, discardNum;
 
         if (GetCurrentPlayer() == 0)
@@ -330,7 +372,7 @@ public class GameManager : MonoBehaviour
                 discardNum = UIManager.Instance.allyHand.Count - handSize;
 
                 for (int i = 0; i < discardNum; i++)
-                { 
+                {
                     EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
                 }
             }
@@ -477,5 +519,84 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //TODO: Function to disable play card contol 
+    public Transform GetActiveHand(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return alliedHand;
+            }
+            return enemyHand;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyHand;
+            }
+            return alliedHand;
+        }
+    }
+
+    public Transform GetActiveDiscardPile(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return alliedDiscardPile;
+            }
+            return enemyDiscardPile;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyDiscardPile;
+            }
+            return alliedDiscardPile;
+        }
+
+    }
+
+    public Transform GetActiveMinionZone(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return alliedMinionZone;
+            }
+            return enemyMinionZone;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyMinionZone;
+            }
+            return alliedMinionZone;
+        }
+    }
+
+    public Transform GetActiveDeck(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return alliedDeck;
+            }
+            return enemyDeck;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyDeck;
+            }
+            return alliedDeck;
+        }
+    }
 }

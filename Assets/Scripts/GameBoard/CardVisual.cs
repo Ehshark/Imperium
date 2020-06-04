@@ -11,13 +11,10 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private MinionData md;
     public MinionData Md { get => md; set => md = value; }
-
     private StarterData sd;
     public StarterData Sd { get => sd; set => sd = value; }
-
     private EssentialsData ed;
     public EssentialsData Ed { get => ed; set => ed = value; }
-
     private Card cardData;
     public Card CardData { get => cardData; set => cardData = value; }
 
@@ -25,16 +22,22 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     public List<Transform> descriptions;
 
     private int currentHealth;
-    private int totalHealth;
-    private bool isTapped;
-
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
+    private int totalHealth;
     public int TotalHealth { get => totalHealth; set => totalHealth = value; }
+    private bool isTapped;
     public bool IsTapped { get => isTapped; set => isTapped = value; }
+    public bool inShop;
+    private Damage dmgAbsorbed;
+    public Damage DmgAbsorbed { get => dmgAbsorbed; set => dmgAbsorbed = value; }
 
     public TMP_Text cost;
     public TMP_Text health;
     public TMP_Text damage;
+    public TMP_Text regDmgAbs;
+    public TMP_Text poisonDmgAbs;
+    public TMP_Text stealthDmgAbs;
+    public TMP_Text lifestealDmgAbs;
 
     public Image costImage;
     public Image cardBackground;
@@ -44,12 +47,15 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     public Image effect1;
     public Image effect2;
 
-    public bool inShop;
+    public Button increaseDmgAbsorbed;
+    public Button decreaseDmgAbsorbed;
 
     private PlayCard pc;
 
+    public GameObject damageObjects;
     void OnEnable()
     {
+        dmgAbsorbed = new Damage();
         if (md != null)
             cardData = md;
         else if (ed != null)
@@ -62,7 +68,8 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             PopulateCard();
             UpdateCardDescriptions();
         }
-
+        increaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(true); });
+        decreaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(false); });
     }
 
     public void UpdateCardDescriptions()
@@ -212,7 +219,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         }
 
         else if (eventData.button == PointerEventData.InputButton.Left &&
-            GameManager.Instance.ActiveHero().CanPlayCards &&
+            GameManager.Instance.ActiveHero(true).CanPlayCards &&
             (transform.parent.name.Equals("Hand") || transform.parent.name.Equals("EnemyHand")))
         {
             pc = gameObject.GetComponent<PlayCard>();
@@ -258,8 +265,73 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         {
             GameManager.Instance.MoveCard(gameObject, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList, true);
         }
-        
     }
 
+    public void AssignDamageAbsorbed(bool isIncrease)
+    {
+        StartCombat sc = GameManager.Instance.ActiveHero(true).AttackButton.parent.GetComponent<StartCombat>();
+        TMP_Text dmgText;
+        //TODO: Handle the zero damage absorbed cases to enable/disable gameobjects
+        DefendListener dl = GameManager.Instance.gameObject.GetComponent<DefendListener>();
+        if (!dl.DamageSelected.Equals(""))
+        {
+            if (dl.DamageSelected.Equals("damage"))
+            {
+                dmgText = regDmgAbs;
+            }
+            else if (dl.DamageSelected.Equals("poisonTouch"))
+            {
+                dmgText = poisonDmgAbs;
+            }
+            else if (dl.DamageSelected.Equals("stealth"))
+            {
+                dmgText = stealthDmgAbs;
+            }
+            else
+            {
+                dmgText = lifestealDmgAbs;
+            }
+
+            if (isIncrease)
+            {
+                if (dmgAbsorbed.TotalDamageAbsorbed() < currentHealth && dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] < sc.totalDamage[dl.DamageSelected] &&
+                    CheckAlliesAssignment(dl.DamageSelected) < sc.totalDamage[dl.DamageSelected])
+                {
+                    if (dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] == 0)
+                    {
+                        dmgText.transform.parent.gameObject.SetActive(true);
+                    }
+                    dmgAbsorbed.DamageAbsorbed[dl.DamageSelected]++;
+                }
+                dmgText.text = dmgAbsorbed.DamageAbsorbed[dl.DamageSelected].ToString();
+            }
+            else
+            {
+                if (dmgAbsorbed.TotalDamageAbsorbed() > 0 && dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] > 0)
+                {
+                    dmgAbsorbed.DamageAbsorbed[dl.DamageSelected]--;
+                }
+                dmgText.text = dmgAbsorbed.DamageAbsorbed[dl.DamageSelected].ToString();
+                if (dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] == 0)
+                {
+                    dmgText.transform.parent.gameObject.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            GameManager.Instance.SetInstructionsText("Select a damage type first");
+        }
+    }
+
+    private int CheckAlliesAssignment(string damageType)
+    {
+        int damageForType = 0;
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
+        {
+            damageForType += t.GetComponent<CardVisual>().dmgAbsorbed.DamageAbsorbed[damageType];
+        }
+        return damageForType;
+    }
     //TODO: OnHover Function to highlight the card
 }

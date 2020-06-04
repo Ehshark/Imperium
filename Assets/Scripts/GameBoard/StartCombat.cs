@@ -8,14 +8,10 @@ using System.Linq;
 
 public class StartCombat : MonoBehaviour
 {
-    public GameObject attackButton;
-    public GameObject cancelButton;
-    public GameObject submitButton;
-
     [SerializeField]
     private GameObject heroImage;
 
-    public static Dictionary<String, int> totalDamage = new Dictionary<string, int>
+    public Dictionary<string, int> totalDamage = new Dictionary<string, int>
     {
         { "stealth", 0 },
         { "lifesteal", 0 },
@@ -33,11 +29,14 @@ public class StartCombat : MonoBehaviour
 
         //Update the instructions text
         StartCoroutine(GameManager.Instance.SetInstructionsText("Please Select Minions to Attack"));
+
+        GameManager.Instance.buyButton.interactable = false;
+        GameManager.Instance.changeButton.interactable = false;
     }
 
     public void CancelCombat()
     {
-        SwitchButtons();        
+        SwitchButtons();
 
         //Remove all Combat Listener scripts from each card
         foreach (Transform t in GameManager.Instance.alliedMinionZone)
@@ -66,7 +65,7 @@ public class StartCombat : MonoBehaviour
         }
 
         //Reset Hero 
-        Hero active = GameManager.Instance.ActiveHero();
+        Hero active = GameManager.Instance.ActiveHero(true);
         StartCombatHeroListener schl = heroImage.GetComponent<StartCombatHeroListener>();
 
         if (active.IsAttacking)
@@ -80,57 +79,72 @@ public class StartCombat : MonoBehaviour
             Destroy(schl);
         }
 
-        //Reset the counter 
-        GameManager.Instance.alliedDamageCounter.text = "0";
-        GameManager.Instance.alliedStealthDamageCounter.text = "0";
+        //Reset the counter if combat was cancelled
+        if (!GameManager.Instance.IsDefending)
+        {
+            GameManager.Instance.alliedDamageCounter.text = "0";
+            GameManager.Instance.alliedStealthDamageCounter.text = "0";
+            GameManager.Instance.alliedLifestealDamageCounter.text = "0";
+            GameManager.Instance.alliedPoisonTouchDamageCounter.text = "0";
+        }
 
-        //Reset the Damage
-        totalDamage["stealth"] = 0;
-        totalDamage["lifesteal"] = 0;
-        totalDamage["poisonTouch"] = 0;
-        totalDamage["damage"] = 0;
+        //Reset the Damage if combat was cancelled
+        if (!GameManager.Instance.IsDefending)
+        {
+            totalDamage["stealth"] = 0;
+            totalDamage["lifesteal"] = 0;
+            totalDamage["poisonTouch"] = 0;
+            totalDamage["damage"] = 0;
+        }
 
-        //Reset the List of Attack Minions
-        GameManager.Instance.MinionsAttacking = new List<GameObject>();
+        //Reset the List of Attack Minions if combat was cancelled
+        if (!GameManager.Instance.IsDefending) {
+            GameManager.Instance.MinionsAttacking = new List<GameObject>();
+        }
     }
 
     private void SwitchButtons()
     {
-        if (attackButton.activeSelf)
+        if (GameManager.Instance.ActiveHero(true).AttackButton.gameObject.activeSelf)
         {
-            cancelButton.SetActive(true);
-            attackButton.SetActive(false);
-            submitButton.SetActive(true);
+            GameManager.Instance.ActiveHero(true).CancelButton.gameObject.SetActive(true);
+            GameManager.Instance.ActiveHero(true).AttackButton.gameObject.SetActive(false);
+            GameManager.Instance.ActiveHero(true).SubmitButton.gameObject.SetActive(true);
             GameManager.Instance.StartCombatDamageUI.gameObject.SetActive(true);
             GameManager.Instance.EnableOrDisablePlayerControl(false);
-            GameManager.Instance.ActiveHero().StartedCombat = true;
+            GameManager.Instance.ActiveHero(true).StartedCombat = true;
         }
         else
         {
-            cancelButton.SetActive(false);
-            attackButton.SetActive(true);
-            submitButton.SetActive(false);
-            GameManager.Instance.StartCombatDamageUI.gameObject.SetActive(false);
-            GameManager.Instance.EnableOrDisablePlayerControl(true);
-            GameManager.Instance.ActiveHero().StartedCombat = false;
+            GameManager.Instance.ActiveHero(true).CancelButton.gameObject.SetActive(false);
+            if (!GameManager.Instance.IsDefending)
+            {
+                GameManager.Instance.ActiveHero(true).AttackButton.gameObject.SetActive(true);
+                GameManager.Instance.EnableOrDisablePlayerControl(true);
+                GameManager.Instance.StartCombatDamageUI.gameObject.SetActive(false);
+            }
+            GameManager.Instance.ActiveHero(true).SubmitButton.gameObject.SetActive(false);
+            GameManager.Instance.ActiveHero(true).StartedCombat = false;
         }
     }
 
     public void SubmitAttack()
     {
-        if (GameManager.Instance.MinionsAttacking.Count != 0 || GameManager.Instance.ActiveHero().IsAttacking)
+        GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
+        if (GameManager.Instance.MinionsAttacking.Count != 0 || GameManager.Instance.ActiveHero(true).IsAttacking)
         {
             AssignDamageToMinions();
 
             //Set current Hero is false
-            GameManager.Instance.ActiveHero().IsAttacking = false;
+            GameManager.Instance.ActiveHero(true).IsAttacking = false;
 
             //Add Damage
-            StartCombat.totalDamage["stealth"] = Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text);
-            StartCombat.totalDamage["lifesteal"] = Int32.Parse(GameManager.Instance.alliedLifestealDamageCounter.text);
-            StartCombat.totalDamage["poisonTouch"] = Int32.Parse(GameManager.Instance.alliedPoisonTouchDamageCounter.text);
-            StartCombat.totalDamage["damage"] = Int32.Parse(GameManager.Instance.alliedDamageCounter.text);
+            totalDamage["stealth"] = Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text);
+            totalDamage["lifesteal"] = Int32.Parse(GameManager.Instance.alliedLifestealDamageCounter.text);
+            totalDamage["poisonTouch"] = Int32.Parse(GameManager.Instance.alliedPoisonTouchDamageCounter.text);
+            totalDamage["damage"] = Int32.Parse(GameManager.Instance.alliedDamageCounter.text);
 
+            EventManager.Instance.PostNotification(EVENT_TYPE.DEFEND_AGAINST);
             CancelCombat();
         }
         else

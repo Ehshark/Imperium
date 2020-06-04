@@ -268,34 +268,34 @@ public class PlayCard : MonoBehaviour
             if (thisCard is StarterData)
             {
                 if (thisCard.EffectId1 == 20)
-                    GameManager.Instance.ActiveHero().AdjustHealth(1, true);
+                    GameManager.Instance.ActiveHero(true).AdjustHealth(1, true);
                 else if (thisCard.EffectId1 == 21)
-                    GameManager.Instance.ActiveHero().AdjustMana(1, true);
+                    GameManager.Instance.ActiveHero(true).AdjustMana(1, true);
             }
             else if (thisCard is EssentialsData)
             {
                 if (thisCard.EffectId1 == 20)
-                    GameManager.Instance.ActiveHero().AdjustHealth(2, true);
+                    GameManager.Instance.ActiveHero(true).AdjustHealth(2, true);
                 else if (thisCard.EffectId1 == 21)
-                    GameManager.Instance.ActiveHero().AdjustMana(2, true);
+                    GameManager.Instance.ActiveHero(true).AdjustMana(2, true);
             }
         }
         else if (thisCard.GoldAndManaCost > 0)
         {
-            GameManager.Instance.ActiveHero().AdjustMana(thisCard.GoldAndManaCost, false);
+            GameManager.Instance.ActiveHero(true).AdjustMana(thisCard.GoldAndManaCost, false);
             if (thisCard.EffectId1 == 18 && thisCard is StarterData)
             {
-                GameManager.Instance.ActiveHero().AdjustGold(2, true);
-                GameManager.Instance.ActiveHero().GainExp(1);
+                GameManager.Instance.ActiveHero(true).AdjustGold(2, true);
+                GameManager.Instance.ActiveHero(true).GainExp(1);
             }
             else if (thisCard.EffectId1 == 18 && thisCard is EssentialsData)
             {
-                GameManager.Instance.ActiveHero().AdjustGold(4, true);
-                GameManager.Instance.ActiveHero().GainExp(2);
+                GameManager.Instance.ActiveHero(true).AdjustGold(4, true);
+                GameManager.Instance.ActiveHero(true).GainExp(2);
             }
             else if (thisCard.EffectId1 == 14 && thisCard is EssentialsData)
             {
-                GameManager.Instance.ActiveHero().AdjustDamage(1);
+                GameManager.Instance.ActiveHero(true).AdjustDamage(1);
                 //TODO: Take away 1 damage at the end of the turn.
             }
         }
@@ -305,21 +305,21 @@ public class PlayCard : MonoBehaviour
     {
         string message;
         bool canPlay = true;
-        if (GameManager.Instance.ActiveHero().CurrentHealth == GameManager.Instance.ActiveHero().TotalHealth && thisCard.EffectId1 == 20)
+        if (GameManager.Instance.ActiveHero(true).CurrentHealth == GameManager.Instance.ActiveHero(true).TotalHealth && thisCard.EffectId1 == 20)
         {
             message = "Health is already full!";
             StartCoroutine(GameManager.Instance.SetInstructionsText(message));
             canPlay = false;
         }
 
-        else if (GameManager.Instance.ActiveHero().CurrentMana == GameManager.Instance.ActiveHero().TotalMana && thisCard.EffectId1 == 21)
+        else if (GameManager.Instance.ActiveHero(true).CurrentMana == GameManager.Instance.ActiveHero(true).TotalMana && thisCard.EffectId1 == 21)
         {
             message = "Mana is already full!";
             StartCoroutine(GameManager.Instance.SetInstructionsText(message));
             canPlay = false;
         }
 
-        else if (GameManager.Instance.ActiveHero().CurrentMana < thisCard.GoldAndManaCost)
+        else if (GameManager.Instance.ActiveHero(true).CurrentMana < thisCard.GoldAndManaCost)
         {
             message = "Not enough Mana!";
             StartCoroutine(GameManager.Instance.SetInstructionsText(message));

@@ -30,6 +30,12 @@ public class Hero : MonoBehaviour
     [SerializeField]
     private Transform attackButton;
     [SerializeField]
+    private Transform cancelButton;
+    [SerializeField]
+    private Transform submitButton;
+    [SerializeField]
+    private Transform defendButton;
+    [SerializeField]
     private TMP_Text healthText;
     [SerializeField]
     private Slider healthBar;
@@ -79,6 +85,9 @@ public class Hero : MonoBehaviour
     public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
     public Transform AttackButton { get => attackButton; set => attackButton = value; }
     public bool StartedCombat { get => startedCombat; set => startedCombat = value; }
+    public Transform CancelButton { get => cancelButton; set => cancelButton = value; }
+    public Transform SubmitButton { get => submitButton; set => submitButton = value; }
+    public Transform DefendButton { get => defendButton; set => defendButton = value; }
 
     public void SetHero(int health, int mana, int damage, int reqExp, int hand, char clan, Sprite image)
     {
