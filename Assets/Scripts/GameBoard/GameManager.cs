@@ -207,23 +207,10 @@ public class GameManager : MonoBehaviour
 
     public void SwitchTurn()
     {
-        int currentPlayer = GetCurrentPlayer();
-        //Change Tapped Minions to Untapped
-        if (currentPlayer == 0)
+        foreach (Transform t in GetActiveMinionZone(true))
         {
-            foreach (Transform t in alliedMinionZone)
-            {
-                UnTapMinions(t);
-                ResetDamage(t);
-            }
-        }
-        else
-        {
-            foreach (Transform t in enemyMinionZone)
-            {
-                UnTapMinions(t);
-                ResetDamage(t);
-            }
+            UnTapMinions(t);
+            ResetDamage(t);
         }
 
         if (bottomHero.MyTurn)
@@ -540,6 +527,88 @@ public class GameManager : MonoBehaviour
     {
         CardVisual cv = t.GetComponent<CardVisual>();
         cv.ResetDamage();
+    }
+
+    public Transform GetActiveHand(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return alliedHand;
+            }
+            return enemyHand;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyHand;
+            }
+            return alliedHand;
+        }
+    }
+
+    public Transform GetActiveDiscardPile(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return alliedDiscardPile;
+            }
+            return enemyDiscardPile;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyDiscardPile;
+            }
+            return alliedDiscardPile;
+        }
+
+    }
+
+    public List<GameObject> GetActiveDiscardPileList(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return alliedDiscardPileList;
+            }
+            return enemyDiscardPileList;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return alliedDiscardPileList;
+            }
+            return enemyDiscardPileList;
+        }
+
+    }
+
+    public Transform GetActiveMinionZone(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return alliedMinionZone;
+            }
+            return enemyMinionZone;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyMinionZone;
+            }
+            return alliedMinionZone;
+        }
     }
 
     //TODO: Function to disable play card contol 

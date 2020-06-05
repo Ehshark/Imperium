@@ -10,29 +10,21 @@ public class BuffMinionListener : MonoBehaviour, IPointerDownHandler
         GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
         CardVisual cv = card.GetComponent<CardVisual>();
 
+        StartCoroutine(GameManager.Instance.SetInstructionsText("Minion's Damage Increased by 1"));
+
         //Adjust Damage 
         cv.AdjustDamage(1, true);
         //Remove Listener 
-        RemoveListener();
+        StartCoroutine(RemoveListener());
     }
 
-    private void RemoveListener()
+    IEnumerator RemoveListener()
     {
-        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
+        yield return new WaitForSeconds(2);
+
         GameManager.Instance.EnableOrDisablePlayerControl(true);
-        Transform zone;
 
-        if (currentPlayer == 0)
-        {
-            zone = GameManager.Instance.alliedMinionZone;
-        }
-        else
-        {
-            zone = GameManager.Instance.enemyMinionZone;
-        }
-
-
-        foreach (Transform t in zone)
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
         {
             BuffMinionListener bml = t.gameObject.GetComponent<BuffMinionListener>();
 

@@ -12,21 +12,8 @@ public class BuffMinionStarter : MonoBehaviour
         //Disable Player Interaction 
         GameManager.Instance.EnableOrDisablePlayerControl(false);
 
-        //Get Current Player and current zone to apply too
-        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
-        Transform zone;
-
-        if (currentPlayer == 0)
-        {
-            zone = GameManager.Instance.alliedMinionZone;
-        }
-        else
-        {
-            zone = GameManager.Instance.enemyMinionZone;
-        }
-
         //Assign each Minion a Listener Script 
-        foreach (Transform t in zone)
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
         {
             t.gameObject.AddComponent<BuffMinionListener>();
         }
