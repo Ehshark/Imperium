@@ -611,6 +611,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void DiscardCard(GameObject card)
+    {
+        Card cardData = card.GetComponent<CardVisual>().CardData;
+
+        if (UIManager.Instance.GetActiveHandList(true).Contains(cardData))
+        {
+            UIManager.Instance.GetActiveHandList(true).Remove(cardData);
+        }
+
+        GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
+    }
+
     //TODO: Function to disable play card contol 
     public Transform GetActiveHand(bool activeWanted)
     {

@@ -214,6 +214,12 @@ public class PlayCard : MonoBehaviour
                 card.GetComponent<CardVisual>().AdjustHealth(2, true);
             }
 
+            Card cardData = card.GetComponent<CardVisual>().CardData;
+            if (UIManager.Instance.GetActiveHandList(true).Contains(cardData))
+            {
+                UIManager.Instance.GetActiveHandList(true).Remove(cardData);
+            }
+
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveHand(true), GameManager.Instance.GetActiveMinionZone(true));
             mc.AddToQueue();
 

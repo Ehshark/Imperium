@@ -635,4 +635,44 @@ public class UIManager : MonoBehaviour
             enemyDiscardClosed = true; //sets shop to "closed" state
         }
     }
+
+    public List<Card> GetActiveDeckList(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GameManager.Instance.GetCurrentPlayer() == 0)
+            {
+                return allyDeck;
+            }
+            return enemyDeck;
+        }
+        else
+        {
+            if (GameManager.Instance.GetCurrentPlayer() == 0)
+            {
+                return enemyDeck;
+            }
+            return allyDeck;
+        }
+    }
+
+    public List<Card> GetActiveHandList(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GameManager.Instance.GetCurrentPlayer() == 0)
+            {
+                return allyHand;
+            }
+            return enemyHand;
+        }
+        else
+        {
+            if (GameManager.Instance.GetCurrentPlayer() == 0)
+            {
+                return enemyHand;
+            }
+            return allyHand;
+        }
+    }
 }

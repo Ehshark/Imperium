@@ -46,7 +46,8 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 1, "DrawCardListener" },
             { 2, "PeekShopEventStarter" },
             { 3, "ChangeShopListener" },
-            { 14, "BuffMinionStarter" }
+            { 14, "BuffMinionStarter" },
+            { 16, "DrawDiscardStarter" }
         };
 
         EventManager.Instance.AddListener(EVENT_TYPE.ASSIGN_CONDITIONS, this);

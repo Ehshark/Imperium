@@ -8,15 +8,6 @@ public class DrawCardListener : MonoBehaviour
     {
         Debug.Log("Draw Card Effect");
 
-        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
-
-        if (currentPlayer == 0)
-        {
-            GameManager.Instance.DrawCard(UIManager.Instance.allyDeck, GameManager.Instance.alliedHand);
-        }
-        else
-        {
-            GameManager.Instance.DrawCard(UIManager.Instance.enemyDeck, GameManager.Instance.enemyHand);
-        }
+        GameManager.Instance.DrawCard(UIManager.Instance.GetActiveDeckList(true), GameManager.Instance.GetActiveHand(true));
     }
 }
