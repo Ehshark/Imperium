@@ -374,6 +374,7 @@ public class GameManager : MonoBehaviour
 
                 for (int i = 0; i < discardNum; i++)
                 {
+                    StartCoroutine(SetInstructionsText("Please Select A Card To Discard"));
                     EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
                 }
             }
@@ -386,9 +387,16 @@ public class GameManager : MonoBehaviour
                     DrawCard(UIManager.Instance.allyDeck, alliedHand);
                 }
             }
-            else { }
+            else 
+            {
+                StartCoroutine(SetInstructionsText("Please Select A Card To Discard"));
 
-            EndPhaseCardSwitch();
+                EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
+                Debug.Log("Handsize 5 working: " + EVENT_TYPE.DISCARD_CARD);
+            }
+
+            //StartCoroutine(SetInstructionsText(""));
+            //EndPhaseCardSwitch();
         }
         else
         {

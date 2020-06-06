@@ -10,7 +10,7 @@ public class DiscardCardEventDistributor : MonoBehaviour, IListener
         EventManager.Instance.AddListener(EVENT_TYPE.DISCARD_CARD, this);
     }
 
-    // Update is called once per frame
+    //adds listener to all cards in hand
     public void OnEvent(EVENT_TYPE Event_Type)
     {
         foreach (Transform t in GameManager.Instance.alliedHand)
