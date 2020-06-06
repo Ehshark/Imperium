@@ -399,7 +399,7 @@ public class GameManager : MonoBehaviour
                     DrawCard(UIManager.Instance.allyDeck, alliedHand);
                 }
             }
-            else 
+            else
             {
                 StartCoroutine(SetInstructionsText("Please Select A Card To Discard"));
 
@@ -640,71 +640,10 @@ public class GameManager : MonoBehaviour
             UIManager.Instance.GetActiveHandList(true).Remove(cardData);
         }
 
-        GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
+        MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
     }
 
     //TODO: Function to disable play card contol 
-    public Transform GetActiveHand(bool activeWanted)
-    {
-        if (activeWanted)
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return alliedHand;
-            }
-            return enemyHand;
-        }
-        else
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return enemyHand;
-            }
-            return alliedHand;
-        }
-    }
-
-    public Transform GetActiveDiscardPile(bool activeWanted)
-    {
-        if (activeWanted)
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return alliedDiscardPile;
-            }
-            return enemyDiscardPile;
-        }
-        else
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return enemyDiscardPile;
-            }
-            return alliedDiscardPile;
-        }
-
-    }
-
-    public Transform GetActiveMinionZone(bool activeWanted)
-    {
-        if (activeWanted)
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return alliedMinionZone;
-            }
-            return enemyMinionZone;
-        }
-        else
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return enemyMinionZone;
-            }
-            return alliedMinionZone;
-        }
-    }
-
     public Transform GetActiveDeck(bool activeWanted)
     {
         if (activeWanted)

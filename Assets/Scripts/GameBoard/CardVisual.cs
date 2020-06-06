@@ -52,6 +52,8 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     public Button increaseDmgAbsorbed;
     public Button decreaseDmgAbsorbed;
 
+    public bool inShop;
+
     private PlayCard pc;
 
     public GameObject damageObjects;
