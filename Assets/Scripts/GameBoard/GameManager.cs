@@ -65,9 +65,11 @@ public class GameManager : MonoBehaviour
     public Button shopButton;
     public Button exitShopButton;
     public Button moveButton;
+    public Image expressBuyImage;
 
     private bool isPromoting = false;
     private bool isDefending = false;
+    private bool hasExpressBuy = false;
     private GameObject minionToPromote;
     private GameObject minionToSacrifice;
     private List<GameObject> minionsAttacking = new List<GameObject>();
@@ -87,6 +89,7 @@ public class GameManager : MonoBehaviour
     public bool FirstChangeShop { get => firstChangeShop; set => firstChangeShop = value; }
     public bool IsEffect { get => isEffect; set => isEffect = value; }
     public bool IsDefending { get => isDefending; set => isDefending = value; }
+    public bool HasExpressBuy { get => hasExpressBuy; set => hasExpressBuy = value; }
 
     private void Awake()
     {
@@ -239,6 +242,7 @@ public class GameManager : MonoBehaviour
             cv.IsCombatEffectActivated = false;
             UnTapMinions(t);
             ResetDamage(t);
+            DisableExpressBuy();
         }
 
         UIManager.Instance.HighlightHeroPortraitAndName();
@@ -601,6 +605,12 @@ public class GameManager : MonoBehaviour
     {
         CardVisual cv = t.GetComponent<CardVisual>();
         cv.ResetDamage();
+    }
+
+    private void DisableExpressBuy()
+    {
+        hasExpressBuy = false;
+        expressBuyImage.gameObject.SetActive(false);
     }
 
     public Transform GetActiveHand(bool activeWanted)

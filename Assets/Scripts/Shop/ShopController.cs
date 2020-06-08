@@ -101,16 +101,30 @@ public class ShopController : MonoBehaviour
                     //Spawn a new card from the correct deck
                     SpawnShopMinion(minion.Md.CardClass, false);
 
-                    //Move Card to the Correct Discard Pile
-                    MoveShopCardToDiscard(selectedCard);
+                    if (GameManager.Instance.HasExpressBuy)
+                    {
+                        MoveShopCardToHand(selectedCard);
+                    }
+                    else
+                    {
+                        //Move Card to the Correct Discard Pile
+                        MoveShopCardToDiscard(selectedCard);
+                    }
 
                     //Destroy the Object
                     RemoveCard(true);
                 }
                 else if (selectedCard.GetComponent<CardVisual>().Ed != null)
                 {
-                    //Move Card to the Correct Discard Pile
-                    MoveShopCardToDiscard(selectedCard);
+                    if (GameManager.Instance.HasExpressBuy)
+                    {
+                        MoveShopCardToHand(selectedCard);
+                    }
+                    else
+                    {
+                        //Move Card to the Correct Discard Pile
+                        MoveShopCardToDiscard(selectedCard);
+                    }
 
                     //Destroy the Object
                     RemoveCard(false);
@@ -312,5 +326,12 @@ public class ShopController : MonoBehaviour
                 UIManager.Instance.enemyDiscards.Add(card.GetComponent<CardVisual>().Ed);
             }
         }
+    }
+
+    private void MoveShopCardToHand(GameObject card)
+    {
+        GameObject shopCard = GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.GetActiveHand(true), null, true, false, true);
+        shopCard.AddComponent<PlayCard>();
+        UIManager.Instance.GetActiveHandList(true).Add(shopCard.GetComponent<CardVisual>().CardData);
     }
 }
