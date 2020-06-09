@@ -41,7 +41,7 @@ public class DiscardCardListener : MonoBehaviour, IPointerDownHandler
             Debug.Log("essential data discarded");
         }
 
-        GameManager.Instance.MoveCard(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedDiscardPile);
+        GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.alliedDiscardPileList);
         GameManager.Instance.alliedDiscardPileList.Add(card);
         Debug.Log("card object discarded");
 

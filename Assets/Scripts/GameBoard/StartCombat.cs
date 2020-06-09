@@ -133,8 +133,6 @@ public class StartCombat : MonoBehaviour
         GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
         if (GameManager.Instance.MinionsAttacking.Count != 0 || GameManager.Instance.ActiveHero(true).IsAttacking)
         {
-            AssignDamageToMinions();
-
             //Set current Hero is false
             GameManager.Instance.ActiveHero(true).IsAttacking = false;
 
@@ -153,7 +151,7 @@ public class StartCombat : MonoBehaviour
             StartCoroutine(GameManager.Instance.SetInstructionsText("No Minions or Hero Selected to Attack"));
         }
     }
-    private void AssignDamageToMinions()
+    public void AssignDamageToAttackers()
     {
         foreach (GameObject card in GameManager.Instance.MinionsAttacking)
         {

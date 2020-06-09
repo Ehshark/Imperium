@@ -48,10 +48,6 @@ public class DefendListener : MonoBehaviour, IListener
             GameManager.Instance.ActiveHero(false).DefendButton.GetComponentInChildren<Button>().onClick.AddListener(SubmitDefenseButtonFunc);
             GameManager.Instance.IsDefending = true;
             ChangeUiForDefense(GameManager.Instance.IsDefending);
-            foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
-            {
-                t.GetComponent<CardVisual>().damageObjects.SetActive(true);
-            }
         }
     }
 
@@ -63,6 +59,13 @@ public class DefendListener : MonoBehaviour, IListener
         GameManager.Instance.ActiveHero(false).SubmitButton.gameObject.SetActive(!isDefending);
         GameManager.Instance.ActiveHero(false).AttackButton.parent.gameObject.SetActive(isDefending);
         GameManager.Instance.ActiveHero(false).DefendButton.gameObject.SetActive(isDefending);
+
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
+        {
+            t.GetComponent<CardVisual>().damageObjects.SetActive(isDefending);
+        }
+        GameManager.Instance.ActiveHero(false).DamageObjects.gameObject.SetActive(isDefending);
+        GameManager.Instance.StartCombatDamageUI.gameObject.SetActive(isDefending);
     }
 
     public void SelectDamageType(string damageType)
@@ -83,6 +86,13 @@ public class DefendListener : MonoBehaviour, IListener
 
     private bool CompareDamage()
     {
+        totalAbsorbed = new Dictionary<string, int>
+        {
+            { "stealth", 0 },
+            { "lifesteal", 0 },
+            { "poisonTouch", 0 },
+            { "damage", 0 }
+        };
         StartCombat sc = GameManager.Instance.ActiveHero(true).AttackButton.parent.GetComponent<StartCombat>();
         CalculateDamageAssigned();
         foreach (KeyValuePair<string, int> entry in totalAbsorbed)
@@ -111,6 +121,13 @@ public class DefendListener : MonoBehaviour, IListener
                 }
             }
         }
+        foreach (KeyValuePair<string, int> entry in GameManager.Instance.ActiveHero(false).GetComponent<Hero>().DmgAbsorbed.DamageAbsorbed)
+        {
+            if (entry.Value != 0)
+            {
+                totalAbsorbed[entry.Key] += entry.Value;
+            }
+        }
     }
 
     public void SubmitDefenseButtonFunc()
@@ -118,14 +135,58 @@ public class DefendListener : MonoBehaviour, IListener
         bool goodSubmission = CompareDamage();
         if (goodSubmission)
         {
+            StartCombat sc = GameManager.Instance.ActiveHero(true).AttackButton.parent.GetComponent<StartCombat>();
+            sc.AssignDamageToAttackers();
+            sc.totalDamage = new Dictionary<string, int>
+            {
+                { "stealth", 0 },
+                { "lifesteal", 0 },
+                { "poisonTouch", 0 },
+                { "damage", 0 }
+            };
+            AssignDamageToDefenders();
             GameManager.Instance.IsDefending = false;
             ChangeUiForDefense(GameManager.Instance.IsDefending);
             GameManager.Instance.EnableOrDisablePlayerControl(true);
-            Debug.Log("Good Submission!");
+            StartCoroutine(GameManager.Instance.SetInstructionsText("Good Submission!"));
         }
         else
         {
-            Debug.Log("Damage assignment does not match!");
+            StartCoroutine(GameManager.Instance.SetInstructionsText("Damage assignment does not match!"));
         }
+    }
+
+    private void AssignDamageToDefenders()
+    {
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
+        {
+            foreach (KeyValuePair<string, int> entry in t.GetComponent<CardVisual>().DmgAbsorbed.DamageAbsorbed)
+            {
+                if (entry.Value != 0)
+                {
+                    t.GetComponent<CardVisual>().AdjustHealth(entry.Value, false);
+                }
+            }
+
+            if (t.GetComponent<CardVisual>().CurrentHealth == 0)
+            {
+                GameManager.Instance.MoveCard(t.gameObject, GameManager.Instance.GetActiveDiscardPile(false), GameManager.Instance.enemyDiscardPileList);
+            }
+            else
+            {
+                t.GetComponent<CardVisual>().DmgAbsorbed.ResetDamageAbsorbed();
+            }
+        }
+
+        foreach (KeyValuePair<string, int> entry in GameManager.Instance.ActiveHero(false).GetComponent<Hero>().DmgAbsorbed.DamageAbsorbed)
+        {
+            if (entry.Value != 0)
+            {
+                GameManager.Instance.ActiveHero(false).AdjustHealth(entry.Value, false);
+            }
+        }
+
+        GameManager.Instance.ActiveHero(false).DmgAbsorbed.ResetDamageAbsorbed();
+        // TODO: End the game if the hero's health is 0.
     }
 }

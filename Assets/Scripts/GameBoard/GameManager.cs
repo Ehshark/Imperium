@@ -102,15 +102,7 @@ public class GameManager : MonoBehaviour
         //    public void DrawCard(List<Card> deck, Transform playerHand)
     }
 
-    public void MoveCard(GameObject go, Transform from, Transform to)
-    {
-        go.transform.SetParent(to, false);
-        go.transform.position = to.position;
-        if (from.name.Equals("Hand") || from.name.Equals("EnemyHand"))
-            Destroy(go.GetComponent<PlayCard>());
-    }
-
-    public void MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool destroy = false, bool copy = false)
+    public GameObject MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool returnCard = false)
     {
         GameObject tmp;
 
@@ -139,21 +131,24 @@ public class GameManager : MonoBehaviour
             list.Add(tmp);
         }
 
-        if (copy)
+        CardVisual tmpCv = tmp.GetComponent<CardVisual>();
+        CardVisual cv = card.GetComponent<CardVisual>();
+
+        tmpCv.CurrentHealth = cv.CurrentHealth;
+        tmpCv.CurrentDamage = cv.CurrentDamage;
+
+        tmpCv.health.text = tmpCv.CurrentHealth.ToString();
+        tmpCv.damage.text = tmpCv.CurrentDamage.ToString();
+
+        Destroy(card);
+
+        if (returnCard)
         {
-            CardVisual tmpCv = tmp.GetComponent<CardVisual>();
-            CardVisual cv = card.GetComponent<CardVisual>();
-
-            tmpCv.CurrentHealth = cv.CurrentHealth;
-            tmpCv.CurrentDamage = cv.CurrentDamage;
-
-            tmpCv.health.text = tmpCv.CurrentHealth.ToString();
-            tmpCv.damage.text = tmpCv.CurrentDamage.ToString();
+            return tmp;
         }
-
-        if (destroy)
+        else
         {
-            Destroy(card);
+            return null;
         }
     }
 
@@ -355,7 +350,7 @@ public class GameManager : MonoBehaviour
             //function calls itself to continue the draw since deck is no longer empty
             DrawCard(deck, playerHand);
         }
-        Debug.Log("im in draw card");
+        //Debug.Log("im in draw card");
 
         EventManager.Instance.PostNotification(EVENT_TYPE.ACTION_DRAW);
     }

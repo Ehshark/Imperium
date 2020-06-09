@@ -36,6 +36,9 @@ public class Hero : MonoBehaviour
     [SerializeField]
     private Transform defendButton;
     [SerializeField]
+    private Transform damageObjects;
+
+    [SerializeField]
     private TMP_Text healthText;
     [SerializeField]
     private Slider healthBar;
@@ -59,6 +62,21 @@ public class Hero : MonoBehaviour
     private Image heroClan;
     [SerializeField]
     private TMP_Text damageText;
+
+    [SerializeField]
+    private TMP_Text regDmgAbs;
+    [SerializeField]
+    private TMP_Text poisonDmgAbs;
+    [SerializeField]
+    private TMP_Text stealthDmgAbs;
+    [SerializeField]
+    private TMP_Text lifestealDmgAbs;
+
+    [SerializeField]
+    private Button increaseDmgAbsorbed;
+    [SerializeField]
+    private Button decreaseDmgAbsorbed;
+
     [SerializeField]
     private Image heroImageBorder;
     public Image HeroImageBorder { get => heroImageBorder; set => heroImageBorder = value; }
@@ -66,6 +84,9 @@ public class Hero : MonoBehaviour
     [SerializeField]
     private Image playerNameBox;
     public Image PlayerNameBox { get => playerNameBox; set => playerNameBox = value; }
+
+    private Damage dmgAbsorbed;
+    public Damage DmgAbsorbed { get => dmgAbsorbed; set => dmgAbsorbed = value; }
 
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int TotalHealth { get => totalHealth; set => totalHealth = value; }
@@ -88,6 +109,14 @@ public class Hero : MonoBehaviour
     public Transform CancelButton { get => cancelButton; set => cancelButton = value; }
     public Transform SubmitButton { get => submitButton; set => submitButton = value; }
     public Transform DefendButton { get => defendButton; set => defendButton = value; }
+    public Transform DamageObjects { get => damageObjects; set => damageObjects = value; }
+
+    private void Start()
+    {
+        dmgAbsorbed = new Damage();
+        increaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(true); });
+        decreaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(false); });
+    }
 
     public void SetHero(int health, int mana, int damage, int reqExp, int hand, char clan, Sprite image)
     {
@@ -287,5 +316,72 @@ public class Hero : MonoBehaviour
     {
         damage += amount;
         SetDamage();
+    }
+
+    public void AssignDamageAbsorbed(bool isIncrease)
+    {
+        StartCombat sc = GameManager.Instance.ActiveHero(true).AttackButton.parent.GetComponent<StartCombat>();
+        TMP_Text dmgText;
+        DefendListener dl = GameManager.Instance.gameObject.GetComponent<DefendListener>();
+        if (!dl.DamageSelected.Equals(""))
+        {
+            if (dl.DamageSelected.Equals("damage"))
+            {
+                dmgText = regDmgAbs;
+            }
+            else if (dl.DamageSelected.Equals("poisonTouch"))
+            {
+                dmgText = poisonDmgAbs;
+            }
+            else if (dl.DamageSelected.Equals("stealth"))
+            {
+                dmgText = stealthDmgAbs;
+            }
+            else
+            {
+                dmgText = lifestealDmgAbs;
+            }
+
+            if (isIncrease)
+            {
+                if (dmgAbsorbed.TotalDamageAbsorbed() < currentHealth && dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] < sc.totalDamage[dl.DamageSelected] &&
+                    CheckAlliesAssignment(dl.DamageSelected) < sc.totalDamage[dl.DamageSelected])
+                {
+                    if (dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] == 0)
+                    {
+                        dmgText.transform.parent.gameObject.SetActive(true);
+                    }
+                    dmgAbsorbed.DamageAbsorbed[dl.DamageSelected]++;
+                }
+                dmgText.text = dmgAbsorbed.DamageAbsorbed[dl.DamageSelected].ToString();
+            }
+            else
+            {
+                if (dmgAbsorbed.TotalDamageAbsorbed() > 0 && dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] > 0)
+                {
+                    dmgAbsorbed.DamageAbsorbed[dl.DamageSelected]--;
+                }
+                dmgText.text = dmgAbsorbed.DamageAbsorbed[dl.DamageSelected].ToString();
+                if (dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] == 0)
+                {
+                    dmgText.transform.parent.gameObject.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            StartCoroutine(GameManager.Instance.SetInstructionsText("Select a damage type first"));
+        }
+    }
+
+    private int CheckAlliesAssignment(string damageType)
+    {
+        int damageForType = 0;
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
+        {
+            damageForType += t.GetComponent<CardVisual>().DmgAbsorbed.DamageAbsorbed[damageType];
+        }
+        damageForType += dmgAbsorbed.DamageAbsorbed[damageType];
+        return damageForType;
     }
 }

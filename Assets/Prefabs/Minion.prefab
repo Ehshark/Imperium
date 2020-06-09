@@ -863,6 +863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b668f9f7e4379e49b3081a5f0e811bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  md: {fileID: 0}
   descriptions:
   - {fileID: 5361649608067796741}
   - {fileID: 5361649608379456300}
@@ -878,7 +879,6 @@ MonoBehaviour:
   - {fileID: 5361649607342456148}
   - {fileID: 5361649608898509267}
   - {fileID: 5361649607515448368}
-  inShop: 0
   cost: {fileID: 5361649607378099703}
   health: {fileID: 5361649608773061276}
   damage: {fileID: 5361649608923231243}
@@ -895,6 +895,7 @@ MonoBehaviour:
   effect2: {fileID: 5361649607857650548}
   increaseDmgAbsorbed: {fileID: 6834990688394146436}
   decreaseDmgAbsorbed: {fileID: 1678023116184825889}
+  inShop: 0
   damageObjects: {fileID: 4275893230608264239}
 --- !u!1 &5361649607057006654
 GameObject:
@@ -4697,7 +4698,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5164,7 +5165,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5320,7 +5321,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5513,7 +5514,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

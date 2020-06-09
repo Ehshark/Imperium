@@ -28,8 +28,9 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     private int totalDamage;
     private bool isTapped;
     public bool IsTapped { get => isTapped; set => isTapped = value; }
-    public Damage DmgAbsorbed { get => dmgAbsorbed; set => dmgAbsorbed = value; }
+
     private Damage dmgAbsorbed;
+    public Damage DmgAbsorbed { get => dmgAbsorbed; set => dmgAbsorbed = value; }
     public int CurrentDamage { get => currentDamage; set => currentDamage = value; }
     public int TotalDamage { get => totalDamage; set => totalDamage = value; }
 
@@ -279,7 +280,6 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     {
         StartCombat sc = GameManager.Instance.ActiveHero(true).AttackButton.parent.GetComponent<StartCombat>();
         TMP_Text dmgText;
-        //TODO: Handle the zero damage absorbed cases to enable/disable gameobjects
         DefendListener dl = GameManager.Instance.gameObject.GetComponent<DefendListener>();
         if (!dl.DamageSelected.Equals(""))
         {
@@ -328,7 +328,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            GameManager.Instance.SetInstructionsText("Select a damage type first");
+            StartCoroutine(GameManager.Instance.SetInstructionsText("Select a damage type first"));
         }
     }
 
@@ -337,8 +337,9 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         int damageForType = 0;
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
-            damageForType += t.GetComponent<CardVisual>().dmgAbsorbed.DamageAbsorbed[damageType];
+            damageForType += t.GetComponent<CardVisual>().DmgAbsorbed.DamageAbsorbed[damageType];
         }
+        damageForType += GameManager.Instance.ActiveHero(false).DmgAbsorbed.DamageAbsorbed[damageType];
         return damageForType;
     }
     public void AdjustDamage(int amount, bool add)
