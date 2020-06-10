@@ -42,6 +42,11 @@ public class GameManager : MonoBehaviour
     public List<GameObject> enemyDiscardPileList;
     public Button testButton;
 
+    public List<GameObject> selectedDiscards;
+    public Transform submitDiscardsButton;
+    public Transform cardSwitchButtonYes;
+    public Transform cardSwitchButtonNo;
+
     public Transform shop;
     public Transform warriorShopPile;
     public Transform rogueShopPile;
@@ -70,6 +75,7 @@ public class GameManager : MonoBehaviour
     private bool firstChangeShop;
     private bool isEffect;
     private float turnTimer;
+    private bool hasSwitchedCard = false;
 
     public static GameManager Instance { get; private set; } = null;
     public bool IsPromoting { get => isPromoting; set => isPromoting = value; }
@@ -381,6 +387,8 @@ public class GameManager : MonoBehaviour
     {
         int handSize = ActiveHero(true).HandSize;
         int drawNum, discardNum;
+        selectedDiscards = new List<GameObject>();
+        hasSwitchedCard = false;
 
         if (GetCurrentPlayer() == 0)
         {
@@ -388,11 +396,9 @@ public class GameManager : MonoBehaviour
             {
                 discardNum = UIManager.Instance.allyHand.Count - handSize;
 
-                for (int i = 0; i < discardNum; i++)
-                {
-                    StartCoroutine(SetInstructionsText("Please Select A Card To Discard"));
-                    EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
-                }
+                StartCoroutine(SetInstructionsText("Please Select A Card To Discard"));
+                EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
+                submitDiscardsButton.gameObject.SetActive(true);
             }
             else if (UIManager.Instance.allyHand.Count < handSize)
             {
@@ -405,38 +411,82 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                //DELETE THIS BLOCK OUTSIDE OF TESTING PURPOSES
                 StartCoroutine(SetInstructionsText("Please Select A Card To Discard"));
 
                 EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
                 Debug.Log("Handsize 5 working: " + EVENT_TYPE.DISCARD_CARD);
+                submitDiscardsButton.gameObject.SetActive(true);
             }
-
-            //StartCoroutine(SetInstructionsText(""));
-            //EndPhaseCardSwitch();
         }
         else
         {
             //TODO: Logic for enemy side
         }
-
-        SwitchTurn();
     }
 
     // Allows player to pay gold to draw an additional card and then discard a card
     public void EndPhaseCardSwitch()
     {
-        //TODO: add player confirmation to exchange an extra card, add gold deduction if player chooses to exchange
+        submitDiscardsButton.gameObject.SetActive(true);
+        
         if (GetCurrentPlayer() == 0)
         {
+            ActiveHero(true).AdjustGold(1, false);
+
             DrawCard(UIManager.Instance.allyDeck, alliedHand);
 
             EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
+            StartCoroutine(SetInstructionsText("Please Select A Card To Discard"));
+
         }
         else
         {
             //TODO: add logic for enemy side
         }
 
+        cardSwitchButtonYes.gameObject.SetActive(false);
+        cardSwitchButtonNo.gameObject.SetActive(false);
+
+        //SwitchTurn();
+
+    }
+
+    public void SubmitDiscard()
+    {
+        int discardNum = UIManager.Instance.allyHand.Count - ActiveHero(true).HandSize;
+
+        if (selectedDiscards.Count == 1) //CHANGE TO DISCARDNUM OUTSIDE OF TESTING PURPOSES
+        {
+            foreach (GameObject t in selectedDiscards)
+            {
+                DiscardCard(t);
+                GetActiveDiscardPileList(true).Add(t);
+                UIManager.Instance.allyDiscards.Add(t.GetComponent<CardVisual>().CardData);
+                Debug.Log("card successfully discarded");
+            }
+
+            foreach (Transform t in GetActiveHand(true))
+            {
+                Destroy(t.gameObject.GetComponent<DiscardCardListener>());
+                Debug.Log("removed all discard listeners");
+            }
+            selectedDiscards.Clear();
+
+            StartCoroutine(SetInstructionsText("Do you want to trade 1 gold to switch an additional card?"));
+            submitDiscardsButton.gameObject.SetActive(false);
+
+            if(!hasSwitchedCard)
+            {
+                cardSwitchButtonYes.gameObject.SetActive(true);
+                cardSwitchButtonNo.gameObject.SetActive(true);
+                hasSwitchedCard = true;
+            }
+        }
+        else
+        {
+            StartCoroutine(SetInstructionsText("You Haven't Selected Enough, Please Select A Card To Discard"));
+        }
     }
 
     public GameObject SpawnCard(Transform to, MinionData minion = null, EssentialsData essential = null, StarterData starter = null, bool inShop = false)

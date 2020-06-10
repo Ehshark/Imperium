@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class DiscardCardListener : MonoBehaviour, IPointerDownHandler
 {
-    // Start is called before the first frame update
     public void OnPointerDown(PointerEventData eventData)
     {
         GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
@@ -16,10 +15,26 @@ public class DiscardCardListener : MonoBehaviour, IPointerDownHandler
 
     //Discard function, removes card object and card data from hand and adds them to the discard pile
     //TODO: add logic for enemy side
-    //NOTE: can possibly be moved to GameManager.cs 
     public void Discard(CardVisual cv, GameObject card)
     {
-        if(cv.Md)
+        int discardNum = UIManager.Instance.allyHand.Count - GameManager.Instance.ActiveHero(true).HandSize;
+        //&& GameManager.Instance.selectedDiscards.Count < discardNum
+        if (!GameManager.Instance.selectedDiscards.Contains(card))
+        {
+            GameManager.Instance.selectedDiscards.Add(card);
+            GameManager.Instance.ChangeCardColour(card, Color.cyan);
+            Debug.Log("card added to selected discard and color changed");
+        }
+        else
+        {
+            GameManager.Instance.selectedDiscards.Remove(card);
+            GameManager.Instance.ChangeCardColour(card, cv.CardData.Color);
+            Debug.Log("card removed and color reset OR not added because selected discards are full");
+        }
+
+
+        //GameManager.Instance.DiscardCard(card);
+        /*if(cv.Md)
         {
             //GameManager.Instance.ChangeCardColour(card, cv.Md.Color);
             UIManager.Instance.allyHand.Remove(cv.Md);
@@ -48,6 +63,6 @@ public class DiscardCardListener : MonoBehaviour, IPointerDownHandler
         foreach (Transform t in GameManager.Instance.alliedHand)
         {
             //Destroy(t.gameObject.GetComponent<DiscardCardListener>());
-        }
+        }*/
     }
 }
