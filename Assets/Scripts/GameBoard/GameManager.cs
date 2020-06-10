@@ -243,6 +243,7 @@ public class GameManager : MonoBehaviour
             UnTapMinions(t);
             ResetDamage(t);
             DisableExpressBuy();
+            ResetHealth(t);
         }
 
         UIManager.Instance.HighlightHeroPortraitAndName();
@@ -605,6 +606,17 @@ public class GameManager : MonoBehaviour
     {
         CardVisual cv = t.GetComponent<CardVisual>();
         cv.ResetDamage();
+    }
+
+    private void ResetHealth(Transform t)
+    {
+        CardVisual cv = t.GetComponent<CardVisual>();
+
+        if (cv.HealEffect)
+        {
+            cv.ResetHealth();
+            cv.HealEffect = false;
+        }
     }
 
     private void DisableExpressBuy()

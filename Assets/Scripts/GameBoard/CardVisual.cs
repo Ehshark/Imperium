@@ -27,6 +27,8 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     private int currentDamage;
     private int totalDamage;
     private bool isTapped;
+    private bool healEffect; 
+
     public bool IsTapped { get => isTapped; set => isTapped = value; }
 
     private bool isCombatEffectActivated = false;
@@ -36,6 +38,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     public Damage DmgAbsorbed { get => dmgAbsorbed; set => dmgAbsorbed = value; }
     public int CurrentDamage { get => currentDamage; set => currentDamage = value; }
     public int TotalDamage { get => totalDamage; set => totalDamage = value; }
+    public bool HealEffect { get => healEffect; set => healEffect = value; }
 
     public TMP_Text cost;
     public TMP_Text health;
@@ -445,6 +448,12 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     {
         currentDamage = totalDamage;
         damage.text = currentDamage.ToString();
+    }
+
+    public void ResetHealth()
+    {
+        currentHealth = totalHealth;
+        health.text = currentHealth.ToString();
     }
 
     //TODO: OnHover Function to highlight the card

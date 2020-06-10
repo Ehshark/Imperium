@@ -48,6 +48,7 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 2, "PeekShopEventStarter" },
             { 3, "ChangeShopListener" },
             { 4, "ExpressBuyListener"  },
+            { 6, "HealMinionStarter" },
             { 14, "BuffMinionStarter" },
             { 16, "DrawDiscardStarter" }
         };

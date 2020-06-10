@@ -53,6 +53,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             { 2, card.GetComponent<PeekShopEventStarter>() },
             { 3, card.GetComponent<ChangeShopListener>() },
             { 4, card.GetComponent<ExpressBuyListener>() },
+            { 6, card.GetComponent<HealMinionStarter>() },
             { 14, card.GetComponent<BuffMinionStarter>() },
             { 16, card.GetComponent<DrawDiscardStarter>() }
         };
@@ -88,8 +89,9 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         BuffMinionListener bml = card.GetComponent<BuffMinionListener>();
+        HealMinionListener hml = card.GetComponent<HealMinionListener>();
 
-        if (ConditionEvent == EVENT_TYPE.TAP_MINION && !GameManager.Instance.ActiveHero(true).StartedCombat && !bml)
+        if (ConditionEvent == EVENT_TYPE.TAP_MINION && !GameManager.Instance.ActiveHero(true).StartedCombat && !bml && !hml)
         {
             CardVisual cv = card.GetComponent<CardVisual>();
 
