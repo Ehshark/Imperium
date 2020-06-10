@@ -29,6 +29,9 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     private bool isTapped;
     public bool IsTapped { get => isTapped; set => isTapped = value; }
 
+    private bool isCombatEffectActivated = false;
+    public bool IsCombatEffectActivated { get => isCombatEffectActivated; set => isCombatEffectActivated = value; }
+
     private Damage dmgAbsorbed;
     public Damage DmgAbsorbed { get => dmgAbsorbed; set => dmgAbsorbed = value; }
     public int CurrentDamage { get => currentDamage; set => currentDamage = value; }
@@ -75,6 +78,11 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         }
         increaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(true); });
         decreaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(false); });
+
+        if (md != null && md.ConditionID == 7)
+        {
+            IsCombatEffectActivated = true;
+        }
     }
 
     public void UpdateCardDescriptions()
@@ -303,13 +311,26 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             if (isIncrease)
             {
                 if (dmgAbsorbed.TotalDamageAbsorbed() < currentHealth && dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] < sc.totalDamage[dl.DamageSelected] &&
-                    CheckAlliesAssignment(dl.DamageSelected) < sc.totalDamage[dl.DamageSelected])
+                    CheckAlliesAssignment(dl.DamageSelected) < sc.totalDamage[dl.DamageSelected] && CheckCombatEffects(dl.DamageSelected))
                 {
                     if (dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] == 0)
                     {
                         dmgText.transform.parent.gameObject.SetActive(true);
                     }
                     dmgAbsorbed.DamageAbsorbed[dl.DamageSelected]++;
+                }
+                else if (dmgAbsorbed.TotalDamageAbsorbed() == currentHealth)
+                {
+                    StartCoroutine(GameManager.Instance.SetInstructionsText("That minion cannot absorb more damage."));
+                }
+                else if (dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] == sc.totalDamage[dl.DamageSelected] ||
+                    CheckAlliesAssignment(dl.DamageSelected) == sc.totalDamage[dl.DamageSelected])
+                {
+                    StartCoroutine(GameManager.Instance.SetInstructionsText("You don't need to assign more damage of that type."));
+                }
+                else if (!CheckCombatEffects(dl.DamageSelected))
+                {
+                    StartCoroutine(GameManager.Instance.SetInstructionsText("To absorb Stealth damage, minion needs vigilance."));
                 }
                 dmgText.text = dmgAbsorbed.DamageAbsorbed[dl.DamageSelected].ToString();
             }
@@ -342,6 +363,24 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         damageForType += GameManager.Instance.ActiveHero(false).DmgAbsorbed.DamageAbsorbed[damageType];
         return damageForType;
     }
+
+    private bool CheckCombatEffects(string damageType)
+    {
+        bool canAssignDamage = false;
+        if (damageType.Equals("stealth"))
+        {
+            if (md.EffectId1 == 9)
+            {
+                canAssignDamage = true;
+            }
+        }
+        else
+        {
+            canAssignDamage = true;
+        }
+        return canAssignDamage;
+    }
+
     public void AdjustDamage(int amount, bool add)
     {
         if (add)

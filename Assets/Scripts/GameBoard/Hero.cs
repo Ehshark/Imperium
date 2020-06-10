@@ -353,6 +353,15 @@ public class Hero : MonoBehaviour
                     }
                     dmgAbsorbed.DamageAbsorbed[dl.DamageSelected]++;
                 }
+                else if (dmgAbsorbed.TotalDamageAbsorbed() == currentHealth)
+                {
+                    StartCoroutine(GameManager.Instance.SetInstructionsText("Hero cannot absorb more damage."));
+                }
+                else if (dmgAbsorbed.DamageAbsorbed[dl.DamageSelected] == sc.totalDamage[dl.DamageSelected] ||
+                    CheckAlliesAssignment(dl.DamageSelected) < sc.totalDamage[dl.DamageSelected])
+                {
+                    StartCoroutine(GameManager.Instance.SetInstructionsText("You don't need to assign more damage of that type."));
+                }
                 dmgText.text = dmgAbsorbed.DamageAbsorbed[dl.DamageSelected].ToString();
             }
             else

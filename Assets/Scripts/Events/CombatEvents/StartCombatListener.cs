@@ -59,7 +59,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
 
     private void HasAbilites(CardVisual cv)
     {
-        if (cv.Md.EffectId1 == 8)
+        if (cv.Md.EffectId1 == 8 && cv.IsCombatEffectActivated)
         {
             if (cv.IsTapped)
             {
@@ -70,7 +70,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
                 GameManager.Instance.alliedStealthDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text) - cv.Md.AttackDamage).ToString();
             }
         }
-        else if (cv.Md.EffectId1 == 10)
+        else if (cv.Md.EffectId1 == 10 && cv.IsCombatEffectActivated)
         {
             if (cv.IsTapped)
             {
@@ -81,7 +81,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
                 GameManager.Instance.alliedLifestealDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedLifestealDamageCounter.text) - cv.Md.AttackDamage).ToString();
             }
         }
-        else if (cv.Md.EffectId1 == 7)
+        else if (cv.Md.EffectId1 == 7 && cv.IsCombatEffectActivated)
         {
             if (cv.IsTapped)
             {

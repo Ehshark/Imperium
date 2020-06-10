@@ -160,11 +160,19 @@ public class DefendListener : MonoBehaviour, IListener
     {
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
-            foreach (KeyValuePair<string, int> entry in t.GetComponent<CardVisual>().DmgAbsorbed.DamageAbsorbed)
+            CardVisual cv = t.GetComponent<CardVisual>();
+            foreach (KeyValuePair<string, int> entry in cv.DmgAbsorbed.DamageAbsorbed)
             {
                 if (entry.Value != 0)
                 {
-                    t.GetComponent<CardVisual>().AdjustHealth(entry.Value, false);
+                    if (entry.Key.Equals("poisonTouch") && cv.Md.EffectId1 != 9)
+                    {
+                        cv.CurrentHealth = 0;
+                    }
+                    else
+                    {
+                        cv.AdjustHealth(entry.Value, false);
+                    }
                 }
             }
 
@@ -183,6 +191,10 @@ public class DefendListener : MonoBehaviour, IListener
             if (entry.Value != 0)
             {
                 GameManager.Instance.ActiveHero(false).AdjustHealth(entry.Value, false);
+                if (entry.Key.Equals("lifesteal"))
+                {
+                    GameManager.Instance.ActiveHero(true).AdjustHealth(entry.Value, true);
+                }
             }
         }
 

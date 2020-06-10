@@ -23,7 +23,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
     }
 
     public void OnEnable()
-    {        
+    {
         EventManager.Instance.AddListener(ConditionEvent, this);
 
         //Effects
@@ -60,6 +60,8 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
 
     public void OnEvent(EVENT_TYPE ConditionEvent)
     {
+        CardVisual cv = card.GetComponent<CardVisual>();
+
         if (md != null)
         {
             if (md.EffectId1 != 0)
@@ -74,6 +76,11 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                         startEvent.Invoke(EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, new object[] { });
                     }
                 }
+            }
+
+            if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 8)
+            {
+                cv.IsCombatEffectActivated = true;
             }
         }
     }

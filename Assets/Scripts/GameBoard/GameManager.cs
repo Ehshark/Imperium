@@ -211,12 +211,6 @@ public class GameManager : MonoBehaviour
 
     public void SwitchTurn()
     {
-        foreach (Transform t in GetActiveMinionZone(true))
-        {
-            UnTapMinions(t);
-            ResetDamage(t);
-        }
-
         if (bottomHero.MyTurn)
         {
             bottomHero.MyTurn = false;
@@ -228,6 +222,19 @@ public class GameManager : MonoBehaviour
             bottomHero.MyTurn = true;
         }
 
+        StartTurn();
+    }
+
+    void StartTurn()
+    {
+        foreach (Transform t in GetActiveMinionZone(true))
+        {
+            CardVisual cv = t.GetComponent<CardVisual>();
+            cv.IsCombatEffectActivated = false;
+            UnTapMinions(t);
+            ResetDamage(t);
+        }
+
         UIManager.Instance.HighlightHeroPortraitAndName();
         UIManager.Instance.ShowHideAttackButton();
         UIManager.Instance.GlowCards();
@@ -235,11 +242,13 @@ public class GameManager : MonoBehaviour
         EnableOrDisablePlayerControl(true);
         buyFirstCard = false;
         firstChangeShop = false;
+
+        //TODO: Handle opponent discard logic here
     }
 
     public int GetCurrentPlayer()
     {
-        int player = 0;
+        int player;
 
         if (bottomHero.MyTurn)
         {
