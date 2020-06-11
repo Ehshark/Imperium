@@ -27,7 +27,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     private int currentDamage;
     private int totalDamage;
     private bool isTapped;
-    private bool healEffect; 
+    private bool healEffect;
 
     public bool IsTapped { get => isTapped; set => isTapped = value; }
 
@@ -79,8 +79,13 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             PopulateCard();
             UpdateCardDescriptions();
         }
-        increaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(true); });
-        decreaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(false); });
+
+        if (md != null)
+        {
+            increaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(true); });
+            decreaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(false); });
+        }
+
 
         if (md != null && md.ConditionID == 7)
         {
