@@ -19,16 +19,16 @@ public class UIManager : MonoBehaviour
     private List<MinionData> rogueMinions;
     private List<MinionData> mageMinions;
 
-    public MinionData currentMinion;
+    private MinionData currentMinion;
     private EssentialsData currentEssential;
     private StarterData currentStarter;
 
-    public List<MinionData> dealtWarriorCards;
-    public List<MinionData> dealtRogueCards;
-    public List<MinionData> dealtMageCards;
+    private List<MinionData> dealtWarriorCards;
+    private List<MinionData> dealtRogueCards;
+    private List<MinionData> dealtMageCards;
 
-    public List<StarterData> allyStarters;
-    public List<StarterData> enemyStarters;
+    private List<StarterData> allyStarters;
+    private List<StarterData> enemyStarters;
 
     private List<StarterData> starters;
     private List<EssentialsData> essentials;
@@ -36,10 +36,8 @@ public class UIManager : MonoBehaviour
 
     public List<Card> allyDeck; //decklist to test adding starters
     public List<Card> enemyDeck;
-
     public List<Card> allyHand; //list of cards in hand
     public List<Card> enemyHand;
-
     public List<Card> allyDiscards;
     public List<Card> enemyDiscards;
 
@@ -58,8 +56,9 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; } = null;
 
     private GameObject lastSelectedCard;
-
     public GameObject LastSelectedCard { get => lastSelectedCard; set => lastSelectedCard = value; }
+
+    public Transform enlargedCard;
 
     //public Text yourName;
     //public Text opponentName;

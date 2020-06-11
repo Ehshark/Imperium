@@ -206,38 +206,79 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     void CollapseMinionCard()
     {
-        transform.localScale = new Vector3(1, 1, 1);
+        if (UIManager.Instance.enlargedCard.childCount > 0)
+        {
+            foreach (Transform t in UIManager.Instance.enlargedCard)
+            {
+                Destroy(t.gameObject);
+            }
+        }
+
         isEnlarged = false;
-        foreach (Transform t in descriptions)
-            t.gameObject.SetActive(false);
     }
 
     void EnlargeMinionCard()
     {
-        transform.localScale = new Vector3(4, 4, 4);
+        if (gameObject.transform.parent.name.Equals("Hand"))
+        {
+            foreach (Transform t in GameManager.Instance.alliedHand)
+            {
+                t.GetComponent<CardVisual>().isEnlarged = false;
+            }
+        }
+        else if (gameObject.transform.parent.name.Equals("EnemyHand"))
+        {
+            foreach (Transform t in GameManager.Instance.enemyHand)
+            {
+                t.GetComponent<CardVisual>().isEnlarged = false;
+            }
+        }
+        if (UIManager.Instance.enlargedCard.childCount > 0)
+        {
+            foreach (Transform t in UIManager.Instance.enlargedCard)
+            {
+                Destroy(t.gameObject);
+            }
+        }
+        GameObject go = Instantiate(gameObject);
+        go.transform.SetParent(UIManager.Instance.enlargedCard, false);
+        go.transform.position = UIManager.Instance.enlargedCard.position;
+        go.GetComponent<RectTransform>().pivot = new Vector3(UIManager.Instance.enlargedCard.GetComponent<RectTransform>().
+            pivot.x, UIManager.Instance.enlargedCard.GetComponent<RectTransform>().pivot.y);
+        go.transform.localScale = new Vector3(3, 3, 3);
+
+        if (go.GetComponent<PlayCard>() != null)
+        {
+            Destroy(go.GetComponent<PlayCard>());
+        }
+
+        go.AddComponent<EnlargedCardBehaviour>();
+        foreach (Transform t in go.transform)
+        {
+            if (t.name.Equals("CardBack") || t.name.Equals("SummonPanel") || t.name.Equals("DamageObjects") ||
+                t.name.Equals("GlowPanel") || t.name.Equals("UsePanel"))
+            {
+                t.gameObject.SetActive(false);
+            }
+        }
         isEnlarged = true;
-        TMP_Text text = descriptions[13].GetComponent<TMP_Text>();
-        if (!text.text.Equals(""))
-            foreach (Transform t in descriptions)
-                t.gameObject.SetActive(true);
-        else
-            for (int i = 0; i < descriptions.Count - 2; i++)
-                descriptions[i].gameObject.SetActive(true);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            if (!isEnlarged)
-                EnlargeMinionCard();
-            else
-                CollapseMinionCard();
+            if (!transform.parent.name.Equals("EnlargedCard"))
+            {
+                if (!isEnlarged)
+                    EnlargeMinionCard();
+                else
+                    CollapseMinionCard();
+            }
         }
 
         else if (eventData.button == PointerEventData.InputButton.Left &&
-            GameManager.Instance.ActiveHero(true).CanPlayCards &&
-            (transform.parent.name.Equals("Hand") || transform.parent.name.Equals("EnemyHand")))
+            GameManager.Instance.ActiveHero(true).CanPlayCards && (gameObject.GetComponent<PlayCard>() != null))
         {
             pc = gameObject.GetComponent<PlayCard>();
             if (pc)
