@@ -193,18 +193,26 @@ public class PlayCard : MonoBehaviour
 
         if (isMinion)
         {
+            GameObject movedCard;
+
+            Card cardData = card.GetComponent<CardVisual>().CardData;
+            if (UIManager.Instance.GetActiveHandList(true).Contains(cardData))
+            {
+                UIManager.Instance.GetActiveHandList(true).Remove(cardData);
+            }
+
             if (GameManager.Instance.IsPromoting)
             {
                 card = GameManager.Instance.MinionToPromote;
                 StartOrCancelPromotionEvent(false);
                 summonPanel.SetActive(false);
                 card.GetComponent<CardVisual>().AdjustHealth(2, true);
-            }
 
-            Card cardData = card.GetComponent<CardVisual>().CardData;
-            if (UIManager.Instance.GetActiveHandList(true).Contains(cardData))
+                movedCard = GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveMinionZone(true), null, true, true);
+            }
+            else
             {
-                UIManager.Instance.GetActiveHandList(true).Remove(cardData);
+                movedCard = GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveMinionZone(true), null, true);
             }
 
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveMinionZone(true));
@@ -214,7 +222,7 @@ public class PlayCard : MonoBehaviour
             if (thisCard is MinionData)
             {
                 GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Md = thisCard as MinionData;
-                GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Card = card;
+                GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Card = movedCard;
                 EventManager.Instance.PostNotification(EVENT_TYPE.ASSIGN_CONDITIONS);
             }
         }

@@ -22,10 +22,11 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     public List<Transform> descriptions;
 
     private int currentHealth;
-    public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     private int totalHealth;
     private int currentDamage;
     private int totalDamage;
+    private int promotedHealth;
+    private bool isPromoted;
     private bool isTapped;
     private bool healEffect;
 
@@ -39,6 +40,10 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     public int CurrentDamage { get => currentDamage; set => currentDamage = value; }
     public int TotalDamage { get => totalDamage; set => totalDamage = value; }
     public bool HealEffect { get => healEffect; set => healEffect = value; }
+    public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
+    public int TotalHealth { get => totalHealth; set => totalHealth = value; }
+    public bool IsPromoted { get => isPromoted; set => isPromoted = value; }
+    public int PromotedHealth { get => promotedHealth; set => promotedHealth = value; }
 
     public TMP_Text cost;
     public TMP_Text health;

@@ -10,15 +10,34 @@ public class HealMinionListener : MonoBehaviour, IPointerDownHandler
         GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
         CardVisual cv = card.GetComponent<CardVisual>();
 
-        StartCoroutine(GameManager.Instance.SetInstructionsText("Minion's Health Increased by 1"));
+        if (cv.IsPromoted && (cv.CurrentHealth < cv.PromotedHealth))
+        {
+            StartCoroutine(GameManager.Instance.SetInstructionsText("Minion's Health Increased by 1"));
 
-        //Adjust Damage 
-        cv.AdjustHealth(1, true);
-        //Set Health Flag to true
-        cv.HealEffect = true;
+            //Adjust Damage 
+            cv.AdjustHealth(1, true);
+            //Set Health Flag to true
+            cv.HealEffect = true;
 
-        //Remove Listener 
-        StartCoroutine(RemoveListener());
+            //Remove Listener 
+            StartCoroutine(RemoveListener());
+        }
+        else if (cv.CurrentHealth < cv.TotalHealth && !cv.IsPromoted)
+        {
+            StartCoroutine(GameManager.Instance.SetInstructionsText("Minion's Health Increased by 1"));
+
+            //Adjust Damage 
+            cv.AdjustHealth(1, true);
+            //Set Health Flag to true
+            cv.HealEffect = true;
+
+            //Remove Listener 
+            StartCoroutine(RemoveListener());
+        }
+        else
+        {
+            StartCoroutine(GameManager.Instance.SetInstructionsText("Minion is already at Max Health"));
+        }
     }
 
     IEnumerator RemoveListener()
