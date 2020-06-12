@@ -12,23 +12,12 @@ public class SacrificeEventDistributor : MonoBehaviour, IListener
 
     public void OnEvent(EVENT_TYPE Event_Type)
     {
-        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
-        Transform zone;
-        if (currentPlayer == 0)
-        {
-            zone = GameManager.Instance.alliedMinionZone;
-        }
-        else
-        {
-            zone = GameManager.Instance.enemyMinionZone;
-        }
-
         if (GameManager.Instance.IsPromoting)
-            foreach (Transform t in zone)
+            foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
                 t.gameObject.AddComponent<SacrificeMinionListener>();
         else
         {
-            foreach (Transform t in zone)
+            foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
             {
                 SacrificeMinionListener sml = t.GetComponent<SacrificeMinionListener>();
                 if (sml)
