@@ -18,7 +18,7 @@ public class MoveCardCommand : Command
 
     public override void StartCommandExecution()
     {
-        GameManager.Instance.MoveCard(card, to);
+        GameManager.Instance.MoveCard(card, to, null, false, true);
         CommandExecutionComplete();
     }
 }

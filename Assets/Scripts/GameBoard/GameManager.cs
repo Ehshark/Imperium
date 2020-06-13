@@ -116,52 +116,65 @@ public class GameManager : MonoBehaviour
         //    public void DrawCard(List<Card> deck, Transform playerHand)
     }
 
-    public GameObject MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool returnCard = false)
+    public GameObject MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool returnCard = false, bool simple = false)
     {
-        GameObject tmp;
-
-        if (card.GetComponent<CardVisual>().Md != null)
+        if (!simple)
         {
-            tmp = SpawnCard(null, card.GetComponent<CardVisual>().Md);
+            GameObject tmp;
+
+            if (card.GetComponent<CardVisual>().Md != null)
+            {
+                tmp = SpawnCard(null, card.GetComponent<CardVisual>().Md);
+            }
+            else if (card.GetComponent<CardVisual>().Ed != null)
+            {
+                tmp = SpawnCard(null, null, card.GetComponent<CardVisual>().Ed);
+            }
+            else if (card.GetComponent<CardVisual>().Sd != null)
+            {
+                tmp = SpawnCard(null, null, null, card.GetComponent<CardVisual>().Sd, false);
+            }
+            else
+            {
+                tmp = null;
+            }
+
+            tmp.transform.SetParent(to, false);
+            tmp.transform.localScale = new Vector3(1, 1, 1);
+
+            if (list != null)
+            {
+                list.Add(tmp);
+            }
+
+            CardVisual tmpCv = tmp.GetComponent<CardVisual>();
+            CardVisual cv = card.GetComponent<CardVisual>();
+
+            tmpCv.CurrentHealth = cv.CurrentHealth;
+            tmpCv.CurrentDamage = cv.CurrentDamage;
+
+            tmpCv.health.text = tmpCv.CurrentHealth.ToString();
+            tmpCv.damage.text = tmpCv.CurrentDamage.ToString();
+
+            Destroy(card);
+
+            if (returnCard)
+            {
+                return tmp;
+            }
+            else
+            {
+                return null;
+            }
         }
-        else if (card.GetComponent<CardVisual>().Ed != null)
-        {
-            tmp = SpawnCard(null, null, card.GetComponent<CardVisual>().Ed);
-        }
-        else if (card.GetComponent<CardVisual>().Sd != null)
-        {
-            tmp = SpawnCard(null, null, null, card.GetComponent<CardVisual>().Sd, false);
-        }
-        else
-        {
-            tmp = null;
-        }
-
-        tmp.transform.SetParent(to, false);
-        tmp.transform.localScale = new Vector3(1, 1, 1);
-
-        if (list != null)
-        {
-            list.Add(tmp);
-        }
-
-        CardVisual tmpCv = tmp.GetComponent<CardVisual>();
-        CardVisual cv = card.GetComponent<CardVisual>();
-
-        tmpCv.CurrentHealth = cv.CurrentHealth;
-        tmpCv.CurrentDamage = cv.CurrentDamage;
-
-        tmpCv.health.text = tmpCv.CurrentHealth.ToString();
-        tmpCv.damage.text = tmpCv.CurrentDamage.ToString();
-
-        Destroy(card);
-
-        if (returnCard)
-        {
-            return tmp;
-        }
-        else
-        {
+        else {
+            card.transform.SetParent(to.transform, false);
+            card.transform.position = to.transform.position;
+            if (to.name.Equals("MinionArea") || to.name.Equals("EnemyMinionArea")) {
+                if (card.GetComponent<PlayCard>()) {
+                    Destroy(card.GetComponent<PlayCard>());
+                }
+            }
             return null;
         }
     }
@@ -441,7 +454,7 @@ public class GameManager : MonoBehaviour
     public void EndPhaseCardSwitch()
     {
         submitDiscardsButton.gameObject.SetActive(true);
-        
+
         if (GetCurrentPlayer() == 0)
         {
             ActiveHero(true).AdjustGold(1, false);
@@ -488,7 +501,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(SetInstructionsText("Do you want to trade 1 gold to switch an additional card?"));
             submitDiscardsButton.gameObject.SetActive(false);
 
-            if(!hasSwitchedCard)
+            if (!hasSwitchedCard)
             {
                 cardSwitchButtonYes.gameObject.SetActive(true);
                 cardSwitchButtonNo.gameObject.SetActive(true);
