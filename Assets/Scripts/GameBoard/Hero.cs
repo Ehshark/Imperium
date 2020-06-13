@@ -16,6 +16,8 @@ public class Hero : MonoBehaviour
     private int level;
     private int gold;
     private int handSize;
+    private int powerCount;
+    private List<int> powers;
 
     private char clan;
     //private List<Ability> abilities;
@@ -78,6 +80,13 @@ public class Hero : MonoBehaviour
     private Button decreaseDmgAbsorbed;
 
     [SerializeField]
+    private Image ability1;
+    [SerializeField]
+    private Image ability2;
+    [SerializeField]
+    private Image ability3;
+
+    [SerializeField]
     private Image heroImageBorder;
     public Image HeroImageBorder { get => heroImageBorder; set => heroImageBorder = value; }
 
@@ -110,6 +119,11 @@ public class Hero : MonoBehaviour
     public Transform SubmitButton { get => submitButton; set => submitButton = value; }
     public Transform DefendButton { get => defendButton; set => defendButton = value; }
     public Transform DamageObjects { get => damageObjects; set => damageObjects = value; }
+    public int PowerCount { get => powerCount; set => powerCount = value; }
+    public List<int> Powers { get => powers; set => powers = value; }
+    public Image Ability1 { get => ability1; set => ability1 = value; }
+    public Image Ability2 { get => ability2; set => ability2 = value; }
+    public Image Ability3 { get => ability3; set => ability3 = value; }
 
     private void Start()
     {
@@ -128,6 +142,7 @@ public class Hero : MonoBehaviour
         Damage = damage;
         RequredExp = reqExp;
         HandSize = hand;
+        level = 1;
 
         //UI
         SetHealth();
@@ -137,6 +152,9 @@ public class Hero : MonoBehaviour
         SetSprite(image);
         SetDamage();
         SetClan(clan);
+
+        //Power
+        powers = new List<int>();
     }
 
     public void SetHealth()
@@ -187,17 +205,29 @@ public class Hero : MonoBehaviour
         expBar.value = experience;
     }
 
+    public void IncreaseExp(int amount)
+    {
+        requredExp = amount;
+        experience = 0;
+        SetExp();
+    }
+
     public void GainExp(int amount)
     {
         int total = amount + experience;
 
-        if (total <= RequredExp)
+        if (total < RequredExp)
         {
             experience += amount;
         }
         else
         {
-            experience = RequredExp;
+            if (level != HeroManager.Instance.MaxLevel)
+            {
+                experience += amount;
+            }
+
+            EventManager.Instance.PostNotification(EVENT_TYPE.LEVEL_UP);
         }
 
         SetExp();
@@ -282,6 +312,13 @@ public class Hero : MonoBehaviour
     public void SetLevel()
     {
         levelText.text = level.ToString();
+    }
+
+    public void IncreaseLevel(int amount)
+    {
+        level = level + 1;
+
+        SetLevel();
     }
 
     public void SetSprite(Sprite sprite)
@@ -392,5 +429,16 @@ public class Hero : MonoBehaviour
         }
         damageForType += dmgAbsorbed.DamageAbsorbed[damageType];
         return damageForType;
+    }
+
+    public void ChangeResources(int h, int m, int d)
+    {
+        totalHealth = h;
+        totalMana = m;
+        damage = d;
+
+        SetHealth();
+        SetMana();
+        SetDamage();
     }
 }

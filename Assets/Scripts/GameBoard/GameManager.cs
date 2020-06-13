@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
 
     public Transform instructionsObj;
     public Transform canvas;
+    public Transform skillTree;
+    public GameObject skillTreePrefab;
+    public Transform StartGameManager;
 
     public Transform StartCombatDamageUI;
     public TMP_Text alliedDamageCounter;
@@ -78,6 +81,7 @@ public class GameManager : MonoBehaviour
     private bool isEffect;
     private float turnTimer;
     private bool hasSwitchedCard = false;
+    private bool warriorSetup;
 
     public static GameManager Instance { get; private set; } = null;
     public bool IsPromoting { get => isPromoting; set => isPromoting = value; }
@@ -90,6 +94,7 @@ public class GameManager : MonoBehaviour
     public bool IsEffect { get => isEffect; set => isEffect = value; }
     public bool IsDefending { get => isDefending; set => isDefending = value; }
     public bool HasExpressBuy { get => hasExpressBuy; set => hasExpressBuy = value; }
+    public bool WarriorSetup { get => warriorSetup; set => warriorSetup = value; }
 
     private void Awake()
     {

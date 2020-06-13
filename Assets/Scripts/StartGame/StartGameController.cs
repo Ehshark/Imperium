@@ -85,12 +85,19 @@ public class StartGameController : MonoBehaviour
         GameManager.Instance.bottomHero.MyTurn = false;
         GameManager.Instance.topHero.MyTurn = true;
         GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
+        //GameManager.Instance.bottomHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
+        //GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
         GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
         GameManager.Instance.bottomHero.AdjustGold(10, true);
         GameManager.Instance.SwitchTurn();
         UIManager.Instance.ShowHideAttackButton();
         InitialDraw();
         UIManager.Instance.AttachPlayCard();
+
+        if (GameManager.Instance.ActiveHero(true).Clan == 'W')
+        {
+            InstantiateSkillTree();
+        }
     }
 
     public void SetupGameBoard()
@@ -262,8 +269,32 @@ public class StartGameController : MonoBehaviour
             mage.SetActive(false);
         }
 
-        GameManager.Instance.SwitchTurn();
         cnt++;
+
+        if (GameManager.Instance.bottomHero.MyTurn)
+        {
+            if (GameManager.Instance.bottomHero.Clan == 'W')
+            {
+                GameManager.Instance.WarriorSetup = true;
+                InstantiateSkillTree();
+            }
+            else
+            {
+                SwitchHeroChoosing();
+            }
+        }
+        else if (GameManager.Instance.topHero.MyTurn)
+        {
+            if (GameManager.Instance.topHero.Clan == 'W')
+            {
+                GameManager.Instance.WarriorSetup = true;
+                InstantiateSkillTree();
+            }
+            else
+            {
+                SwitchHeroChoosing();
+            }
+        }
 
         if (cnt == 2)
         {
@@ -285,7 +316,18 @@ public class StartGameController : MonoBehaviour
             //Determine which player has the mulligan button to show first
             SetActiveMulligan();
         }
-        else
+    }
+
+    public void SwitchHeroChoosing()
+    {
+        GameManager.Instance.SwitchTurn();
+
+        if (GameManager.Instance.WarriorSetup)
+        {
+            GameManager.Instance.WarriorSetup = false;
+        }
+
+        if (cnt != 2)
         {
             ShowHeroUI();
         }
@@ -422,5 +464,11 @@ public class StartGameController : MonoBehaviour
             UIManager.Instance.AttachPlayCard();
 
         }
+    }
+
+    public void InstantiateSkillTree()
+    {
+        GameObject tree = Instantiate(GameManager.Instance.skillTreePrefab);
+        tree.transform.SetParent(GameManager.Instance.canvas, false);
     }
 }

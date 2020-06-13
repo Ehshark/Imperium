@@ -360,5 +360,7 @@ public class ShopController : MonoBehaviour
         GameObject shopCard = GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.GetActiveHand(true), null, true);
         shopCard.AddComponent<PlayCard>();
         UIManager.Instance.GetActiveHandList(true).Add(shopCard.GetComponent<CardVisual>().CardData);
+        GameManager.Instance.DisableExpressBuy();
+        EventManager.Instance.PostNotification(EVENT_TYPE.POWER_EXPRESS_BUY);
     }
 }
