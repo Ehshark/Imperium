@@ -375,9 +375,11 @@ public class GameManager : MonoBehaviour
             //function calls itself to continue the draw since deck is no longer empty
             DrawCard(deck, playerHand);
         }
-        //Debug.Log("im in draw card");
 
         EventManager.Instance.PostNotification(EVENT_TYPE.ACTION_DRAW);
+
+
+
     }
 
     //Shuffle deck
@@ -624,7 +626,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void DisableExpressBuy()
+    public void DisableExpressBuy()
     {
         hasExpressBuy = false;
         expressBuyImage.gameObject.SetActive(false);
