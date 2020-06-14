@@ -4176,6 +4176,125 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33a68258f87868448b56e6050e82abf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  longBoardSetup: 0
+  instructionsObj: {fileID: 1868391786}
+  canvas: {fileID: 1826332214}
+  StartCombatDamageUI: {fileID: 499023790}
+  alliedDamageCounter: {fileID: 955850133}
+  alliedStealthDamageCounter: {fileID: 1689487773}
+  alliedLifestealDamageCounter: {fileID: 1500769211}
+  alliedPoisonTouchDamageCounter: {fileID: 532124834}
+  allyDeckCounter: {fileID: 681376984}
+  enemyDeckCounter: {fileID: 43544771}
+  allyMulliganButton: {fileID: 1235774035}
+  enemyMulliganButton: {fileID: 479640065}
+  alliedMinionZone: {fileID: 1176135651}
+  alliedHand: {fileID: 1722948513}
+  alliedDeck: {fileID: 2047779241}
+  alliedDiscardPile: {fileID: 1648791732}
+  alliedDiscardUI: {fileID: 1214468080}
+  alliedDiscardPileList: []
+  enemyMinionZone: {fileID: 964206218}
+  enemyHand: {fileID: 1339266554}
+  enemyDeck: {fileID: 262941049}
+  enemyDiscardPile: {fileID: 53789185}
+  enemyDiscardUI: {fileID: 813417422}
+  enemyDiscardPileList: []
+  testButton: {fileID: 975443561}
+  selectedDiscards: []
+  submitDiscardsButton: {fileID: 1142066537}
+  cardSwitchButtonYes: {fileID: 2058760935}
+  cardSwitchButtonNo: {fileID: 1852388196}
+  shop: {fileID: 536721380}
+  warriorShopPile: {fileID: 2048055305}
+  rogueShopPile: {fileID: 2048055304}
+  mageShopPile: {fileID: 2048055303}
+  essentialsPile: {fileID: 2048055306}
+  option: {fileID: 789155713}
+  menu: {fileID: 1850422967}
+  pMenu: {fileID: 2027033344}
+  bottomHero: {fileID: 126266690}
+  topHero: {fileID: 4782119944451117261}
+  buyButton: {fileID: 856497343}
+  changeButton: {fileID: 456985363}
+  endButton: {fileID: 538851834}
+  shopButton: {fileID: 2047321967}
+  exitShopButton: {fileID: 997198842}
+  moveButton: {fileID: 1138923036}
+  expressBuyImage: {fileID: 0}
+--- !u!114 &645210548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645210545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d84340f84840ce40a30b7c98dd7c6dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &645210549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645210545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 036eed0492409ea428f27353bf69fbdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &645210550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645210545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45b6203ee5f8d76458d53f738d20429c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroImage: {fileID: 1646775897}
+--- !u!114 &645210551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645210545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb9c08fdc5c1674dbf1b867deb4dfc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &645210552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645210545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c894410cdca24e7428a45408bcbbafb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &645210553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645210545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21e8c3b72fab6d44d8d0e42b1ce1733c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &647468645
 GameObject:
   m_ObjectHideFlags: 0
@@ -10933,17 +11052,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 645210547}
-        m_MethodName: SwitchTurn
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1852388195}
         m_MethodName: SetActive
         m_Mode: 6
@@ -10958,6 +11066,28 @@ MonoBehaviour:
       - m_Target: {fileID: 2058760934}
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1586695288}
+        m_MethodName: AttachPlayCard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 645210547}
+        m_MethodName: SwitchTurn
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

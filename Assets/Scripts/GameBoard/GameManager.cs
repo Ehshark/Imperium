@@ -413,6 +413,11 @@ public class GameManager : MonoBehaviour
 
         if (GetCurrentPlayer() == 0)
         {
+            foreach (Transform t in GetActiveHand(true))
+            {
+                Destroy(t.gameObject.GetComponent<PlayCard>());
+            }
+
             if (UIManager.Instance.allyHand.Count > handSize)
             {
                 discardNum = UIManager.Instance.allyHand.Count - handSize;
@@ -482,7 +487,7 @@ public class GameManager : MonoBehaviour
             foreach (GameObject t in selectedDiscards)
             {
                 DiscardCard(t);
-                GetActiveDiscardPileList(true).Add(t);
+                //GetActiveDiscardPileList(true).Add(t);
                 UIManager.Instance.allyDiscards.Add(t.GetComponent<CardVisual>().CardData);
                 Debug.Log("card successfully discarded");
             }
@@ -494,14 +499,20 @@ public class GameManager : MonoBehaviour
             }
             selectedDiscards.Clear();
 
-            StartCoroutine(SetInstructionsText("Do you want to trade 1 gold to switch an additional card?"));
             submitDiscardsButton.gameObject.SetActive(false);
 
             if (!hasSwitchedCard)
             {
+                StartCoroutine(SetInstructionsText("Do you want to trade 1 gold to switch an additional card?"));
                 cardSwitchButtonYes.gameObject.SetActive(true);
                 cardSwitchButtonNo.gameObject.SetActive(true);
                 hasSwitchedCard = true;
+            }
+            else
+            {
+                UIManager.Instance.AttachPlayCard();
+
+                SwitchTurn();
             }
         }
         else
@@ -638,7 +649,7 @@ public class GameManager : MonoBehaviour
     public void DisableExpressBuy()
     {
         hasExpressBuy = false;
-        expressBuyImage.gameObject.SetActive(false);
+        //expressBuyImage.gameObject.SetActive(false);
     }
 
     public Transform GetActiveHand(bool activeWanted)
