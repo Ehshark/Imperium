@@ -11,7 +11,7 @@ public class RecycleListener : MonoBehaviour
     public void StartEvent()
     {
 
-        //when the graveyard is open
+        //when the discardpile is open
         UIManager.Instance.DisplayAllyDiscards();
 
         //attach a button called recycle
@@ -20,10 +20,10 @@ public class RecycleListener : MonoBehaviour
         //activate recycle button
         //change text to Recycle on title
 
-        foreach (GameObject adp in GameManager.Instance.alliedDiscardPileList)
+        foreach (GameObject g in GameManager.Instance.GetActiveDiscardPileList(true))
         {
             Debug.Log("im in adp");
-            Debug.Log(adp);
+            Debug.Log(g);
         }
 
         Debug.Log("im in draw card");
@@ -37,6 +37,8 @@ public class RecycleListener : MonoBehaviour
         
         //unattach recycle button
         //revert text to Discardpile
+
+        //when green button pressed it destroys 
     }
 
     //    Add a UI button to the scene that satisfies the condition of this minion.

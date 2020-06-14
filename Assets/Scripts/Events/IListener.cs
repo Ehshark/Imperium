@@ -27,7 +27,8 @@ public enum EVENT_TYPE
     POWER_HEAL_MINION,
     POWER_BUFF_MINION,
     POWER_TRASH,
-    POWER_STEALTH
+    POWER_STEALTH,
+    RECYCLE_LISTENER_ASSIGNER,
 }
 
 public interface IListener
