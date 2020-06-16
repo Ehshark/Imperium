@@ -1,0 +1,170 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8337193157745625206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8337193157745625205}
+  - component: {fileID: 8337193157745625204}
+  - component: {fileID: 8337193157745625202}
+  - component: {fileID: 8337193157745625203}
+  - component: {fileID: 8337193157745625201}
+  - component: {fileID: 8337193157745625200}
+  - component: {fileID: 8337193157745625215}
+  - component: {fileID: 4879346543807646629}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8337193157745625205
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8337193157745625206}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8337193157745625204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8337193157745625206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33a68258f87868448b56e6050e82abf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  longBoardSetup: 0
+  instructionsObj: {fileID: 0}
+  canvas: {fileID: 0}
+  StartCombatDamageUI: {fileID: 0}
+  alliedDamageCounter: {fileID: 0}
+  alliedStealthDamageCounter: {fileID: 0}
+  alliedLifestealDamageCounter: {fileID: 0}
+  alliedPoisonTouchDamageCounter: {fileID: 0}
+  allyDeckCounter: {fileID: 0}
+  enemyDeckCounter: {fileID: 0}
+  allyMulliganButton: {fileID: 0}
+  enemyMulliganButton: {fileID: 0}
+  alliedMinionZone: {fileID: 0}
+  alliedHand: {fileID: 0}
+  alliedDeck: {fileID: 0}
+  alliedDiscardPile: {fileID: 0}
+  alliedDiscardUI: {fileID: 0}
+  alliedDiscardPileList: []
+  enemyMinionZone: {fileID: 0}
+  enemyHand: {fileID: 0}
+  enemyDeck: {fileID: 0}
+  enemyDiscardPile: {fileID: 0}
+  enemyDiscardUI: {fileID: 0}
+  enemyDiscardPileList: []
+  testButton: {fileID: 0}
+  selectedDiscards: []
+  submitDiscardsButton: {fileID: 0}
+  cardSwitchButtonYes: {fileID: 0}
+  cardSwitchButtonNo: {fileID: 0}
+  shop: {fileID: 0}
+  warriorShopPile: {fileID: 0}
+  rogueShopPile: {fileID: 0}
+  mageShopPile: {fileID: 0}
+  essentialsPile: {fileID: 0}
+  option: {fileID: 0}
+  menu: {fileID: 0}
+  pMenu: {fileID: 0}
+  bottomHero: {fileID: 0}
+  topHero: {fileID: 0}
+  buyButton: {fileID: 0}
+  changeButton: {fileID: 0}
+  endButton: {fileID: 0}
+  shopButton: {fileID: 0}
+  exitShopButton: {fileID: 0}
+  moveButton: {fileID: 0}
+  expressBuyImage: {fileID: 0}
+--- !u!114 &8337193157745625202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8337193157745625206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 036eed0492409ea428f27353bf69fbdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8337193157745625203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8337193157745625206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d84340f84840ce40a30b7c98dd7c6dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8337193157745625201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8337193157745625206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45b6203ee5f8d76458d53f738d20429c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroImage: {fileID: 0}
+--- !u!114 &8337193157745625200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8337193157745625206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb9c08fdc5c1674dbf1b867deb4dfc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8337193157745625215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8337193157745625206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c894410cdca24e7428a45408bcbbafb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4879346543807646629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8337193157745625206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf61b4966c7493c4197908e8d88e522e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

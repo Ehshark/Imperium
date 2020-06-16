@@ -93,22 +93,21 @@ public class PlayCard : MonoBehaviour
     //Connected to the play button in summon panel
     public void PlayMinion()
     {
-        if (!CanPlayItem())
+        if (!CanPlayCard())
             return;
         summonPanel.SetActive(false);
-        StartCoroutine(MoveCardFromHand(true));
+        MoveCardFromHand(true);
         //turns off glowpanel when moving minion
         if (glowPanel != null)
         {
             glowPanel.SetActive(false);
         }
-        StartCoroutine(MoveCardFromHand(true));
     }
 
     //Connected to the promote button in summon panel
     public void StartPromoteButtonFunction()
     {
-        if (!CanPlayItem())
+        if (!CanPlayCard())
             return;
         if (!GameManager.Instance.IsPromoting)
         {
@@ -185,25 +184,10 @@ public class PlayCard : MonoBehaviour
             summonPanel.SetActive(true);
     }
 
-    //This function is called when PostNotification is called on the SACRIFICE_SELECTED event and isPromoting is true
-    public void StartPromotionCoroutine()
+    private void MoveCardFromHand(bool isMinion)
     {
-        StartCoroutine(PromoteMinionWithPlayback());
-    }
-
-    IEnumerator MoveCardFromHand(bool isMinion)
-    {
-        Transform minionZone = GameManager.Instance.alliedHand;
-        Image image = minionZone.GetComponent<Image>();
-        Color color = image.color;
-        while (image.color.a < 1) //use "< 1" when fading in
-        {
-            color.a += Time.deltaTime / 1; //fades out over 1 second. change to += to fade in
-            image.color = color;
-            yield return null;
-        }
-        color.a = .4f;
-        image.color = color;
+        DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true));
+        dc.AddToQueue();
 
         card = gameObject;
 
@@ -223,7 +207,7 @@ public class PlayCard : MonoBehaviour
                 UIManager.Instance.GetActiveHandList(true).Remove(cardData);
             }
 
-            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveHand(true), GameManager.Instance.GetActiveMinionZone(true));
+            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveMinionZone(true));
             mc.AddToQueue();
 
             //Add Condition Scripts 
@@ -237,41 +221,33 @@ public class PlayCard : MonoBehaviour
 
         else
         {
-            //MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedHand, GameManager.Instance.alliedDiscardPile);
-            //mc.AddToQueue();
-            GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
+            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true));
+            mc.AddToQueue();
+            //GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
         }
 
         AdjustHeroResources();
     }
 
-    IEnumerator PromoteMinionWithPlayback()
+    //This function is called when PostNotification is called on the SACRIFICE_SELECTED event and isPromoting is true
+    public void PromoteMinionWithPlayback()
     {
-        Transform minionZone = GameManager.Instance.alliedMinionZone;
-        Image image = minionZone.GetComponent<Image>();
-        Color color = image.color;
-        while (image.color.a < 1) //use "< 1" when fading in
-        {
-            color.a += Time.deltaTime / 1; //fades out over 1 second. change to += to fade in
-            image.color = color;
-            yield return null;
-        }
-        color.a = .4f;
-        image.color = color;
+        DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true));
+        dc.AddToQueue();
 
-        //MoveCardCommand mc = new MoveCardCommand(GameManager.Instance.MinionToSacrifice,
-        //    GameManager.Instance.alliedMinionZone, GameManager.Instance.alliedDiscardPile);
-        //mc.AddToQueue();
-        GameManager.Instance.MoveCard(GameManager.Instance.MinionToSacrifice, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
-        StartCoroutine(MoveCardFromHand(true));
+        MoveCardCommand mc = new MoveCardCommand(GameManager.Instance.MinionToSacrifice,
+            GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true));
+        mc.AddToQueue();
+        //GameManager.Instance.MoveCard(GameManager.Instance.MinionToSacrifice, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
+        MoveCardFromHand(true);
     }
 
     public void PlayItem()
     {
-        if (!CanPlayItem())
+        if (!CanPlayCard())
             return;
         summonPanel.SetActive(false);
-        StartCoroutine(MoveCardFromHand(false));
+        MoveCardFromHand(false);
     }
 
     private void AdjustHeroResources()
@@ -314,7 +290,7 @@ public class PlayCard : MonoBehaviour
         }
     }
 
-    private bool CanPlayItem()
+    private bool CanPlayCard()
     {
         string message;
         bool canPlay = true;

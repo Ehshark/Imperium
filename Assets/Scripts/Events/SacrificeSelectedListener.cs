@@ -13,6 +13,6 @@ public class SacrificeSelectedListener : MonoBehaviour, IListener
     public void OnEvent(EVENT_TYPE SACRIFICE_SELECTED)
     {
         PlayCard pc = GameManager.Instance.MinionToPromote.GetComponent<PlayCard>();
-        pc.StartPromotionCoroutine();
+        pc.PromoteMinionWithPlayback();
     }
 }

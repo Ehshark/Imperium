@@ -26,6 +26,7 @@ public class ShopController : MonoBehaviour
     public Transform warriorDeck;
     public Transform rogueDeck;
     public Transform mageDeck;
+    public Transform goldPileIcon;
 
     public void OnEnable()
     {
@@ -47,7 +48,7 @@ public class ShopController : MonoBehaviour
         {
             //Delete selectedCard if there's an instance of it 
             if (selectedCard != null)
-            {                 
+            {
                 selectedCard = null;
             }
 
@@ -86,15 +87,16 @@ public class ShopController : MonoBehaviour
         if (selectedCard != null)
         {
             int costForCard = int.Parse(selectedCard.GetComponent<CardVisual>().cost.text);
-            int currentPlayer = GameManager.Instance.GetCurrentPlayer();
             Hero active = GameManager.Instance.ActiveHero(true);
 
             if (active.Gold >= costForCard)
             {
-
                 Debug.Log("Can Buy");
+                GameManager.Instance.buyButton.interactable = false;
+                DelayCommand dc = new DelayCommand(goldPileIcon);
+                dc.AddToQueue();
                 //Get the Purchased Minion
-                CardVisual minion = selectedCard.GetComponent<CardVisual>() as CardVisual;
+                CardVisual minion = selectedCard.GetComponent<CardVisual>();
 
                 if (selectedCard.GetComponent<CardVisual>().Md != null)
                 {
@@ -111,8 +113,8 @@ public class ShopController : MonoBehaviour
                         MoveShopCardToDiscard(selectedCard);
                     }
 
-                    //Destroy the Object
-                    RemoveCard(true);
+                    //Destroy minion card the big card objects
+                    //RemoveCard(true);
                 }
                 else if (selectedCard.GetComponent<CardVisual>().Ed != null)
                 {
@@ -126,8 +128,8 @@ public class ShopController : MonoBehaviour
                         MoveShopCardToDiscard(selectedCard);
                     }
 
-                    //Destroy the Object
-                    RemoveCard(false);
+                    //Destroy only the big card object
+                    //RemoveCard(false);
                 }
 
                 //Subtract the Hero's current Gold
@@ -137,32 +139,17 @@ public class ShopController : MonoBehaviour
 
                 //Buy First Card Condition
                 foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
-
                 {
-
                     if (!GameManager.Instance.BuyFirstCard)
-
                     {
-
                         ConditionListener cl = t.gameObject.GetComponent<ConditionListener>();
-
-
-
                         if (cl != null && cl.ConditionEvent == EVENT_TYPE.BUY_FIRST_CARD)
-
                         {
-
                             EventManager.Instance.PostNotification(EVENT_TYPE.BUY_FIRST_CARD);
-
                             GameManager.Instance.BuyFirstCard = true;
-
                         }
-
                     }
-
                 }
-
-                GameManager.Instance.shop.gameObject.SetActive(false);
             }
             else
             {
@@ -181,7 +168,6 @@ public class ShopController : MonoBehaviour
                 return;
             }
 
-            int currentPlayer = GameManager.Instance.GetCurrentPlayer();
             int costToChangeCard = int.Parse(selectedCard.GetComponent<CardVisual>().cost.text) / 2;
             Hero active = GameManager.Instance.ActiveHero(true);
 
@@ -202,36 +188,19 @@ public class ShopController : MonoBehaviour
                     //Destroy the Object
                     RemoveCard(true);
 
-
-
                     //First Change Shop Card Condition
-
                     foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
-
                     {
-
                         if (!GameManager.Instance.FirstChangeShop)
-
                         {
-
                             ConditionListener cl = t.gameObject.GetComponent<ConditionListener>();
-
-
-
                             if (cl != null && cl.ConditionEvent == EVENT_TYPE.FIRST_CHANGE_SHOP)
-
                             {
-
                                 EventManager.Instance.PostNotification(EVENT_TYPE.FIRST_CHANGE_SHOP);
-
                                 GameManager.Instance.FirstChangeShop = true;
-
                             }
-
                         }
-
                     }
-
                     GameManager.Instance.shop.gameObject.SetActive(false);
                 }
                 else
@@ -257,7 +226,7 @@ public class ShopController : MonoBehaviour
         card.GetComponent<ChangeShopListener>().EnableShop();
     }
 
-    private void RemoveCard(bool destroyMinion)
+    public void RemoveCard(bool destroyMinion)
     {
         if (destroyMinion)
         {
@@ -305,7 +274,7 @@ public class ShopController : MonoBehaviour
         }
     }
 
-    private int GetCostForCard(GameObject card)
+    private int GetCostForCard(GameObject card) //being used by buttons in shop
     {
         if (card.GetComponent<CardVisual>().Md != null)
         {
@@ -327,7 +296,9 @@ public class ShopController : MonoBehaviour
 
         if (currentPlayer == 0)
         {
-            GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
+            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
+            mc.AddToQueue();
+            //GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
 
             //adds card data to the respective players discard pile data
             if (card.GetComponent<CardVisual>().Md != null)
@@ -341,7 +312,9 @@ public class ShopController : MonoBehaviour
         }
         else
         {
-            GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
+            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
+            mc.AddToQueue();
+            //GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
 
             //adds card data to the respective players discard pile data
             if (card.GetComponent<CardVisual>().Md != null)
@@ -357,9 +330,12 @@ public class ShopController : MonoBehaviour
 
     private void MoveShopCardToHand(GameObject card)
     {
-        GameObject shopCard = GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.GetActiveHand(true), null, true);
-        shopCard.AddComponent<PlayCard>();
-        UIManager.Instance.GetActiveHandList(true).Add(shopCard.GetComponent<CardVisual>().CardData);
+        MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveHand(true), null);
+        mc.AddToQueue();
+        //GameObject shopCard = GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.GetActiveHand(true), null, true);
+        //shopCard.AddComponent<PlayCard>();
+        card.GetComponent<CardVisual>().inShop = false;
+        UIManager.Instance.GetActiveHandList(true).Add(card.GetComponent<CardVisual>().CardData);
         GameManager.Instance.DisableExpressBuy();
         EventManager.Instance.PostNotification(EVENT_TYPE.POWER_EXPRESS_BUY);
     }
