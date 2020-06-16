@@ -112,8 +112,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         testButton.onClick.AddListener(delegate { DrawCard(UIManager.Instance.allyDeck, alliedHand); });
-
-        //    public void DrawCard(List<Card> deck, Transform playerHand)
     }
 
     public GameObject MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool returnCard = false, bool simple = false)
@@ -300,7 +298,6 @@ public class GameManager : MonoBehaviour
         StarterData starter;
         EssentialsData essentials;
 
-
         if (deck.Count > 0) //checks if deck is not empty
         {
             if (deck[0] is MinionData) //Card is a minion
@@ -388,7 +385,6 @@ public class GameManager : MonoBehaviour
             //function calls itself to continue the draw since deck is no longer empty
             DrawCard(deck, playerHand);
         }
-
         EventManager.Instance.PostNotification(EVENT_TYPE.ACTION_DRAW);
 
 
@@ -759,4 +755,6 @@ public class GameManager : MonoBehaviour
             return alliedDeck;
         }
     }
+
+
 }

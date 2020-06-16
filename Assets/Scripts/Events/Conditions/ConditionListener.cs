@@ -53,6 +53,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             { 2, card.GetComponent<PeekShopEventStarter>() },
             { 3, card.GetComponent<ChangeShopListener>() },
             { 4, card.GetComponent<ExpressBuyListener>() },
+            { 5, card.GetComponent<RecycleListener>() },
             { 6, card.GetComponent<HealMinionStarter>() },
             { 14, card.GetComponent<BuffMinionStarter>() },
             { 16, card.GetComponent<DrawDiscardStarter>() }

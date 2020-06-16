@@ -171,8 +171,11 @@ public class PlayCard : MonoBehaviour
             foreach (Transform t in UIManager.Instance.LastSelectedCard.transform)
             {
                 if ((t.name.Equals("SummonPanel") || t.name.Equals("UsePanel")) && t.gameObject.activeSelf)
+                {
                     t.gameObject.SetActive(false);
+                }
             }
+                   
         }
 
         if (summonPanel.activeSelf)
