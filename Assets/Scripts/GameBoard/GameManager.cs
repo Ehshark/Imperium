@@ -114,8 +114,9 @@ public class GameManager : MonoBehaviour
         testButton.onClick.AddListener(delegate { DrawCard(UIManager.Instance.allyDeck, alliedHand); });
     }
 
-    public GameObject MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool returnCard = false, bool simple = false, bool promoted = false)
+    public GameObject MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool returnCard = false, bool simple = false)
     {
+        CardVisual cv = card.GetComponent<CardVisual>();
         if (!simple)
         {
             GameObject tmp;
@@ -145,14 +146,9 @@ public class GameManager : MonoBehaviour
                 list.Add(tmp);
             }
 
-        if (promoted)
-        {
-            tmpCv.CurrentHealth = cv.CurrentHealth;
-            tmpCv.IsPromoted = true;
-            tmpCv.PromotedHealth = tmpCv.CurrentHealth;
-        }
+            CardVisual tmpCv = tmp.GetComponent<CardVisual>();
             tmpCv.CurrentDamage = cv.CurrentDamage;
-
+            tmpCv.CurrentHealth = cv.CurrentHealth;
             tmpCv.health.text = tmpCv.CurrentHealth.ToString();
             tmpCv.damage.text = tmpCv.CurrentDamage.ToString();
 

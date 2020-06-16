@@ -188,13 +188,11 @@ public class PlayCard : MonoBehaviour
     {
         DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true));
         dc.AddToQueue();
-
         card = gameObject;
+        CardVisual cv = card.GetComponent<CardVisual>();
 
         if (isMinion)
         {
-            GameObject movedCard;
-
             Card cardData = card.GetComponent<CardVisual>().CardData;
             if (UIManager.Instance.GetActiveHandList(true).Contains(cardData))
             {
@@ -206,13 +204,9 @@ public class PlayCard : MonoBehaviour
                 card = GameManager.Instance.MinionToPromote;
                 StartOrCancelPromotionEvent(false);
                 summonPanel.SetActive(false);
-                card.GetComponent<CardVisual>().AdjustHealth(2, true);
-
-                movedCard = GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveMinionZone(true), null, true, true);
-            }
-            else
-            {
-                movedCard = GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveMinionZone(true), null, true);
+                cv.AdjustHealth(2, true);
+                cv.IsPromoted = true;
+                cv.PromotedHealth = cv.CurrentHealth;
             }
 
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveMinionZone(true));
@@ -222,7 +216,7 @@ public class PlayCard : MonoBehaviour
             if (thisCard is MinionData)
             {
                 GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Md = thisCard as MinionData;
-                GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Card = movedCard;
+                GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Card = card;
                 EventManager.Instance.PostNotification(EVENT_TYPE.ASSIGN_CONDITIONS);
             }
         }

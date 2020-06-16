@@ -52,6 +52,10 @@ MonoBehaviour:
   longBoardSetup: 0
   instructionsObj: {fileID: 0}
   canvas: {fileID: 0}
+  skillTree: {fileID: 0}
+  skillTreePrefab: {fileID: 6922683072261596847, guid: c5a72f49c9b5e7247892c33b07f19310,
+    type: 3}
+  StartGameManager: {fileID: 0}
   StartCombatDamageUI: {fileID: 0}
   alliedDamageCounter: {fileID: 0}
   alliedStealthDamageCounter: {fileID: 0}
