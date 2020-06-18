@@ -22,6 +22,18 @@ public class HeroPowerListener : MonoBehaviour, IListener
     {
         StartCoroutine(GameManager.Instance.SetInstructionsText("Power Activated!"));
 
-        GameManager.Instance.ActiveHero(false).AdjustHealth(1, false);
+        //No Minions
+        if (GameManager.Instance.GetActiveMinionZone(false).childCount == 0)
+        {
+            //Shock oppenent's Hero
+            GameManager.Instance.ActiveHero(false).AdjustHealth(1, false);
+        }        
+        else
+        {
+            foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
+            {
+                t.gameObject.AddComponent<ShockListener>();
+            }
+        }
     }
 }

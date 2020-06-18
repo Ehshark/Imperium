@@ -95,8 +95,9 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
     {
         BuffMinionListener bml = card.GetComponent<BuffMinionListener>();
         HealMinionListener hml = card.GetComponent<HealMinionListener>();
+        ShockListener sl = card.GetComponent<ShockListener>();
 
-        if (ConditionEvent == EVENT_TYPE.TAP_MINION && !GameManager.Instance.ActiveHero(true).StartedCombat && !bml && !hml)
+        if (ConditionEvent == EVENT_TYPE.TAP_MINION && !GameManager.Instance.ActiveHero(true).StartedCombat && !bml && !hml && !sl)
         {
             CardVisual cv = card.GetComponent<CardVisual>();
 

@@ -324,14 +324,15 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     }
 
     public void DestroyMinion()
-    {
-        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
+    {        
         currentHealth = totalHealth;
         DelayCommand dc = new DelayCommand(transform, 1f);
         dc.AddToQueue();
         MoveCardCommand mc;
 
-        if (currentPlayer == 0)
+        //Check for shock
+        ShockListener sl = gameObject.GetComponent<ShockListener>();
+        if (sl)
         {
             mc = new MoveCardCommand(gameObject, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
         }
