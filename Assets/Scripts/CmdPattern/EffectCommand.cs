@@ -1,19 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class EffectCommand : Command
+public class EffectCommand : MonoBehaviour
 {
-    int effectId;
-    public int EffectId { get => effectId; }
+    public static Queue<EVENT_TYPE> EffectQueue = new Queue<EVENT_TYPE>();
+    public static bool inEffect = false;
 
-    public EffectCommand(int ei)
+    public static void StartCommandExecution()
     {
-        effectId = ei;
+        if (!inEffect)
+        {
+            EVENT_TYPE effect = EffectQueue.Dequeue();
+            Debug.Log(effect);
+            inEffect = true;
+            EventManager.Instance.PostNotification(effect);
+        }
     }
 
-    public override void StartCommandExecution()
+    public static void ContinueExecution()
     {
+        inEffect = false;
 
+        if (EffectQueue.Count != 0)
+        {
+            DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveMinionZone(true));
+            dc.AddToQueue();
+
+            StartCommandExecution();
+        }
     }
 }

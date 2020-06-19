@@ -27,6 +27,7 @@ public class HeroPowerListener : MonoBehaviour, IListener
         {
             //Shock oppenent's Hero
             GameManager.Instance.ActiveHero(false).AdjustHealth(1, false);
+            EffectCommand.ContinueExecution();
         }        
         else
         {
