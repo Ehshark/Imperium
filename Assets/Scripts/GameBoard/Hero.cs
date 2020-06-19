@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -124,6 +124,7 @@ public class Hero : MonoBehaviour
     public Image Ability1 { get => ability1; set => ability1 = value; }
     public Image Ability2 { get => ability2; set => ability2 = value; }
     public Image Ability3 { get => ability3; set => ability3 = value; }
+    public Image HeroImage { get => heroImage; set => heroImage = value; }
 
     private void Start()
     {

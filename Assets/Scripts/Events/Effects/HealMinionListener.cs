@@ -55,5 +55,8 @@ public class HealMinionListener : MonoBehaviour, IPointerDownHandler
                 Destroy(hml);
             }
         }
+
+        //Call Heal Minion Power Effect
+        EventManager.Instance.PostNotification(EVENT_TYPE.POWER_HEAL_MINION);
     }
 }

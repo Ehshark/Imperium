@@ -120,5 +120,8 @@ public class PeekShopEventStarter : MonoBehaviour
 
         //Delete all objects in moveCards
         moveCards.Clear();
+
+        //Call Peek Shop Power Effect 
+        EventManager.Instance.PostNotification(EVENT_TYPE.POWER_PEEK_SHOP);
     }
 }

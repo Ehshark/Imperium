@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class StartCombatEventDistributor : MonoBehaviour, IListener
 {
-    [SerializeField]
-    private GameObject heroImage;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +12,7 @@ public class StartCombatEventDistributor : MonoBehaviour, IListener
 
     public void OnEvent(EVENT_TYPE Event_Type)
     {
-        foreach (Transform t in GameManager.Instance.alliedMinionZone)
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
         {
             CardVisual cv = t.GetComponent<CardVisual>();
 
@@ -25,7 +22,7 @@ public class StartCombatEventDistributor : MonoBehaviour, IListener
             }
         }
 
-        heroImage.AddComponent<StartCombatHeroListener>();
+        GameManager.Instance.ActiveHero(true).HeroImage.gameObject.AddComponent<StartCombatHeroListener>();
     }
 
     

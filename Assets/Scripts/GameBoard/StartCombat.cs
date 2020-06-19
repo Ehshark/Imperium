@@ -8,9 +8,6 @@ using System.Linq;
 
 public class StartCombat : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject heroImage;
-
     public Dictionary<string, int> totalDamage = new Dictionary<string, int>
     {
         { "stealth", 0 },
@@ -39,7 +36,7 @@ public class StartCombat : MonoBehaviour
         SwitchButtons();
 
         //Remove all Combat Listener scripts from each card
-        foreach (Transform t in GameManager.Instance.alliedMinionZone)
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
         {
             StartCombatListener scl = t.gameObject.GetComponent<StartCombatListener>();
             if (scl)
@@ -66,7 +63,7 @@ public class StartCombat : MonoBehaviour
 
         //Reset Hero 
         Hero active = GameManager.Instance.ActiveHero(true);
-        StartCombatHeroListener schl = heroImage.GetComponent<StartCombatHeroListener>();
+        StartCombatHeroListener schl = active.HeroImage.GetComponent<StartCombatHeroListener>();
 
         if (active.IsAttacking)
         {
