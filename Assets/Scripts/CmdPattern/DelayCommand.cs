@@ -13,8 +13,6 @@ public class DelayCommand : Command
 
     public override void StartCommandExecution()
     {
-        Debug.Log("DelayCommand Started");
-
         GameManager.Instance.GetComponent<DelayCreator>().CreateDelay(objToAnimate, this);
     }
 }

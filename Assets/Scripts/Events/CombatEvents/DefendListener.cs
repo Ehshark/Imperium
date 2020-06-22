@@ -113,11 +113,14 @@ public class DefendListener : MonoBehaviour, IListener
     {
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
-            foreach (KeyValuePair<string, int> entry in t.GetComponent<CardVisual>().DmgAbsorbed.DamageAbsorbed)
+            if (t.gameObject.activeSelf)
             {
-                if (entry.Value != 0)
+                foreach (KeyValuePair<string, int> entry in t.GetComponent<CardVisual>().DmgAbsorbed.DamageAbsorbed)
                 {
-                    totalAbsorbed[entry.Key] += entry.Value;
+                    if (entry.Value != 0)
+                    {
+                        totalAbsorbed[entry.Key] += entry.Value;
+                    }
                 }
             }
         }
@@ -160,29 +163,32 @@ public class DefendListener : MonoBehaviour, IListener
     {
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
-            CardVisual cv = t.GetComponent<CardVisual>();
-            foreach (KeyValuePair<string, int> entry in cv.DmgAbsorbed.DamageAbsorbed)
+            if (t.gameObject.activeSelf)
             {
-                if (entry.Value != 0)
+                CardVisual cv = t.GetComponent<CardVisual>();
+                foreach (KeyValuePair<string, int> entry in cv.DmgAbsorbed.DamageAbsorbed)
                 {
-                    if (entry.Key.Equals("poisonTouch") && cv.Md.EffectId1 != 9)
+                    if (entry.Value != 0)
                     {
-                        cv.CurrentHealth = 0;
-                    }
-                    else
-                    {
-                        cv.AdjustHealth(entry.Value, false);
+                        if (entry.Key.Equals("poisonTouch") && cv.Md.EffectId1 != 9)
+                        {
+                            cv.CurrentHealth = 0;
+                        }
+                        else
+                        {
+                            cv.AdjustHealth(entry.Value, false);
+                        }
                     }
                 }
-            }
 
-            if (t.GetComponent<CardVisual>().CurrentHealth == 0)
-            {
-                GameManager.Instance.MoveCard(t.gameObject, GameManager.Instance.GetActiveDiscardPile(false), GameManager.Instance.enemyDiscardPileList);
-            }
-            else
-            {
-                t.GetComponent<CardVisual>().DmgAbsorbed.ResetDamageAbsorbed();
+                if (t.GetComponent<CardVisual>().CurrentHealth == 0)
+                {
+                    GameManager.Instance.MoveCard(t.gameObject, GameManager.Instance.GetActiveDiscardPile(false), GameManager.Instance.enemyDiscardPileList);
+                }
+                else
+                {
+                    t.GetComponent<CardVisual>().DmgAbsorbed.ResetDamageAbsorbed();
+                }
             }
         }
 

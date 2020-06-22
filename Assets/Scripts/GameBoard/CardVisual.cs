@@ -103,13 +103,13 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         if (md != null)
         {
             TMP_Text text = descriptions[1].GetComponent<TMP_Text>();
-            text.text = "This minion's gold and mana cost is " + cardData.GoldAndManaCost;
+            text.text = "This minion's gold and mana cost";
             text = descriptions[3].GetComponent<TMP_Text>();
-            text.text = "This minion's health is " + cardData.Health;
+            text.text = "This minion's current health";
             text = descriptions[5].GetComponent<TMP_Text>();
-            text.text = "This minion's damage is " + cardData.AttackDamage;
+            text.text = "This minion's damage in combat";
             text = descriptions[7].GetComponent<TMP_Text>();
-            text.text = "When this minion attacks, if you control a " + cardData.AllyClass + " minion, this minion's damage increases by 1";
+            text.text = "When this minion attacks, if you control a " + cardData.AllyClass + " minion, its damage increases by 1";
             text = descriptions[9].GetComponent<TMP_Text>();
             text.text = cardData.ConditionText;
             text = descriptions[11].GetComponent<TMP_Text>();
@@ -121,11 +121,11 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         else if (sd != null)
         {
             TMP_Text text = descriptions[1].GetComponent<TMP_Text>();
-            text.text = "This card's mana cost is " + cardData.GoldAndManaCost;
+            text.text = "This card's mana cost";
             text = descriptions[3].GetComponent<TMP_Text>();
-            text.text = "This minion's health is " + cardData.Health;
+            text.text = "This minion's health";
             text = descriptions[5].GetComponent<TMP_Text>();
-            text.text = "This minion's damage is " + cardData.AttackDamage;
+            text.text = "This minion's damage in combat";
             text = descriptions[7].GetComponent<TMP_Text>();
             text.text = cardData.EffectText1;
             text = descriptions[9].GetComponent<TMP_Text>();
@@ -135,7 +135,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         else if (ed != null)
         {
             TMP_Text text = descriptions[1].GetComponent<TMP_Text>();
-            text.text = "This card's mana cost is " + cardData.GoldAndManaCost;
+            text.text = "This card's mana cost";
             text = descriptions[3].GetComponent<TMP_Text>();
             text.text = cardData.EffectText1;
             text = descriptions[5].GetComponent<TMP_Text>();
@@ -279,7 +279,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button == PointerEventData.InputButton.Right && !inShop)
         {
             if (!transform.parent.name.Equals("EnlargedCard"))
             {
@@ -412,7 +412,10 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         int damageForType = 0;
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
-            damageForType += t.GetComponent<CardVisual>().DmgAbsorbed.DamageAbsorbed[damageType];
+            if (t.gameObject.activeSelf)
+            {
+                damageForType += t.GetComponent<CardVisual>().DmgAbsorbed.DamageAbsorbed[damageType];
+            }
         }
         damageForType += GameManager.Instance.ActiveHero(false).DmgAbsorbed.DamageAbsorbed[damageType];
         return damageForType;

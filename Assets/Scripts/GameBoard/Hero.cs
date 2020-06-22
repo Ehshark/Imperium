@@ -425,7 +425,11 @@ public class Hero : MonoBehaviour
         int damageForType = 0;
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
-            damageForType += t.GetComponent<CardVisual>().DmgAbsorbed.DamageAbsorbed[damageType];
+            if (t.gameObject.activeSelf)
+            {
+                damageForType += t.GetComponent<CardVisual>().DmgAbsorbed.DamageAbsorbed[damageType];
+            }
+
         }
         damageForType += dmgAbsorbed.DamageAbsorbed[damageType];
         return damageForType;

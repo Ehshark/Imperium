@@ -18,8 +18,6 @@ public class MoveCardCommand : Command
 
     public override void StartCommandExecution()
     {
-        Debug.Log("MoveCardCommand Started");
-
         if (to.name.Equals("MinionArea") || to.name.Equals("EnemyMinionArea"))
         {
             GameManager.Instance.MoveCard(card, to, null, false, true);
