@@ -97,12 +97,12 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
             if (cv.IsTapped)
             {
                 //Increase damage counter
-                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) + cv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) + cv.CurrentDamage).ToString();
             }
             else
             {
                 //Decrease damage counter
-                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) - cv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) - cv.CurrentDamage).ToString();
             }
         }       
     }

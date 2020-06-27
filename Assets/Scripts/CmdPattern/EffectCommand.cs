@@ -5,29 +5,46 @@ using System;
 
 public class EffectCommand : MonoBehaviour
 {
-    public static Queue<EVENT_TYPE> EffectQueue = new Queue<EVENT_TYPE>();
-    public static bool inEffect = false;
+    public static EffectCommand Instance { get; private set; } = null;
 
-    public static void StartCommandExecution()
+    public Queue<EVENT_TYPE> EffectQueue = new Queue<EVENT_TYPE>();
+    public bool inEffect = false;
+
+    private void Awake()
+    {
+        if (Instance)
+        {
+            DestroyImmediate(Instance);
+            return;
+        }
+
+        Instance = this;
+    }
+
+    public void Start()
+    {
+        InvokeRepeating("ContinueExecution", 2.0f, 2.5f);
+    }
+
+    public void StartCommandExecution()
     {
         if (!inEffect)
         {
+            inEffect = true;
+            DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true));
+            dc.AddToQueue();
+
             EVENT_TYPE effect = EffectQueue.Dequeue();
             Debug.Log(effect);
-            inEffect = true;
+
             EventManager.Instance.PostNotification(effect);
         }
     }
 
-    public static void ContinueExecution()
+    public void ContinueExecution()
     {
-        inEffect = false;
-
-        if (EffectQueue.Count != 0)
+        if (EffectQueue.Count != 0 && !inEffect)
         {
-            DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveMinionZone(true));
-            dc.AddToQueue();
-
             StartCommandExecution();
         }
     }

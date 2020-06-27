@@ -122,6 +122,7 @@ public class PeekShopEventStarter : MonoBehaviour
         moveCards.Clear();
 
         //Call Peek Shop Power Effect 
-        EventManager.Instance.PostNotification(EVENT_TYPE.POWER_PEEK_SHOP);
+        //EventManager.Instance.PostNotification(EVENT_TYPE.POWER_PEEK_SHOP);
+        EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_PEEK_SHOP);
     }
 }

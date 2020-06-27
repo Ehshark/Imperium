@@ -334,6 +334,7 @@ public class ShopController : MonoBehaviour
         card.GetComponent<CardVisual>().inShop = false;
         UIManager.Instance.GetActiveHandList(true).Add(card.GetComponent<CardVisual>().CardData);
         GameManager.Instance.DisableExpressBuy();
-        EventManager.Instance.PostNotification(EVENT_TYPE.POWER_EXPRESS_BUY);
+        //EventManager.Instance.PostNotification(EVENT_TYPE.POWER_EXPRESS_BUY);
+        EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_EXPRESS_BUY);
     }
 }

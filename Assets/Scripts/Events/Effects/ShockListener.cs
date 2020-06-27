@@ -26,7 +26,8 @@ public class ShockListener : MonoBehaviour, IPointerDownHandler
             }
         }
 
-        EffectCommand.ContinueExecution();
+        //EffectCommand.Instance.ContinueExecution(); 
+        EffectCommand.Instance.inEffect = false;
     }
 
     public void OnDestroy()

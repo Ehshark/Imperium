@@ -34,16 +34,6 @@ public class BuffMinionListener : MonoBehaviour, IPointerDownHandler
             }
         }
 
-        foreach (Command c in Command.CommandQueue)
-        {
-            if (c is EffectCommand data)
-            {
-                EffectCommand ec = data;
-                if (ec.EffectId == 14)
-                {
-                    ec.CommandExecutionComplete();
-                }
-            }
-        }
+        EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_BUFF_MINION);
     }
 }
