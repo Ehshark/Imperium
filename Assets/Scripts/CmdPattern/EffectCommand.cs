@@ -23,7 +23,7 @@ public class EffectCommand : MonoBehaviour
 
     public void Start()
     {
-        InvokeRepeating("ContinueExecution", 2.0f, 2.5f);
+        InvokeRepeating("ContinueExecution", 2f, 2f);
     }
 
     public void StartCommandExecution()
@@ -43,9 +43,24 @@ public class EffectCommand : MonoBehaviour
 
     public void ContinueExecution()
     {
-        if (EffectQueue.Count != 0 && !inEffect)
+        if (EffectQueue.Count != 0 && !inEffect && CanEffectBeCalled())
         {
             StartCommandExecution();
         }
+    }
+
+    public bool CanEffectBeCalled()
+    {
+        bool result = false;
+        bool isAttacking = GameManager.Instance.ActiveHero(true).StartedCombat;
+        bool shopOpen = GameManager.Instance.shop.gameObject.activeSelf;
+        bool isDefending = GameManager.Instance.IsDefending;
+
+        if (!isAttacking && !shopOpen && !isDefending)
+        {
+            result = true;
+        }
+
+        return result;
     }
 }
