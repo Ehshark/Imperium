@@ -40,18 +40,6 @@ public class MoveCardCommand : Command
             GameManager.Instance.buyButton.interactable = true;
         }
 
-        if (card.GetComponent<CardVisual>().inShop)
-        {
-            if (card.GetComponent<CardVisual>().Md != null)
-            {
-                GameManager.Instance.shop.GetComponent<ShopController>().RemoveCard(true);
-            }
-            else
-            {
-                GameManager.Instance.shop.GetComponent<ShopController>().RemoveCard(false);
-            }
-        }
-
         CommandExecutionComplete();
     }
 }

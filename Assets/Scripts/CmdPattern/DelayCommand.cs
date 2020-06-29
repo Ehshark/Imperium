@@ -6,14 +6,16 @@ using UnityEngine;
 public class DelayCommand : Command
 {
     Transform objToAnimate;
-    public DelayCommand(Transform t)
+    float time;
+    public DelayCommand(Transform t, float thyme)
     {
         objToAnimate = t;
+        time = thyme;
     }
 
     public override void StartCommandExecution()
     {
-        GameManager.Instance.GetComponent<DelayCreator>().CreateDelay(objToAnimate, this);
+        GameManager.Instance.GetComponent<DelayCreator>().CreateDelay(objToAnimate, this, time);
     }
 }
 

@@ -180,12 +180,7 @@ public class DefendListener : MonoBehaviour, IListener
                         }
                     }
                 }
-
-                if (t.GetComponent<CardVisual>().CurrentHealth == 0)
-                {
-                    GameManager.Instance.MoveCard(t.gameObject, GameManager.Instance.GetActiveDiscardPile(false), GameManager.Instance.enemyDiscardPileList);
-                }
-                else
+                if (t.GetComponent<CardVisual>().CurrentHealth > 0)
                 {
                     t.GetComponent<CardVisual>().DmgAbsorbed.ResetDamageAbsorbed();
                 }

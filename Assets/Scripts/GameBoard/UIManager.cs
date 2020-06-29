@@ -180,16 +180,17 @@ public class UIManager : MonoBehaviour
         //Change the hero color 
         //loop and enable all the cards that are available
         int heroManaCost = GameManager.Instance.ActiveHero(true).CurrentMana;
+        Transform costAmount;
+        string cost;
+        int mvCost;
 
         foreach (Transform m in GameManager.Instance.GetActiveHand(true))
         {
             if (m != null)
             {
-                Transform ribbon = m.Find("Ribbon");
-                Transform minionCost = ribbon.Find("Cost");
-                Transform costAmount = minionCost.Find("CostAmount");
-                string cost = costAmount.GetComponent<TMP_Text>().text;
-                int mvCost = int.Parse(cost);
+                costAmount = m.Find("Ribbon/Cost/CostAmount");
+                cost = costAmount.GetComponent<TMP_Text>().text;
+                mvCost = int.Parse(cost);
                 if (mvCost <= heroManaCost)
                 {
                     m.Find("GlowPanel").gameObject.SetActive(true);
@@ -672,6 +673,26 @@ public class UIManager : MonoBehaviour
                 return enemyHand;
             }
             return allyHand;
+        }
+    }
+
+    public List<Card> GetActiveDiscardList(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GameManager.Instance.GetCurrentPlayer() == 0)
+            {
+                return allyDiscards;
+            }
+            return enemyDiscards;
+        }
+        else
+        {
+            if (GameManager.Instance.GetCurrentPlayer() == 0)
+            {
+                return enemyDiscards;
+            }
+            return allyDiscards;
         }
     }
 }

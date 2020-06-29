@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -55,12 +55,12 @@ public class ShopController : MonoBehaviour
             //Store the selected minion's object
             selectedCard = selectedObject;
             //Get the CardVisual from the GameObject
-            CardVisual selectedMinion = selectedObject.GetComponent<CardVisual>();
+            CardVisual selectedVisual = selectedObject.GetComponent<CardVisual>();
 
-            if (selectedObject.GetComponent<CardVisual>().Md != null)
+            if (selectedVisual.Md != null)
             {
                 //Spawn Card
-                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedMinion.Md, null, null, true);
+                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedVisual.Md, null, null, true);
 
                 //Set the BigShopCard object with the spawned card
                 bigShopCard = tmp;
@@ -68,10 +68,10 @@ public class ShopController : MonoBehaviour
                 //Set ChangeShop to active 
                 changeShop.interactable = true;
             }
-            else if (selectedObject.GetComponent<CardVisual>().Ed != null)
+            else if (selectedVisual.Ed != null)
             {
                 //Spawn Card
-                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, null, selectedMinion.Ed, null, true);
+                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, null, selectedVisual.Ed, null, true);
 
                 //Set the BigShopCard object with the spawned card
                 bigShopCard = tmp;
@@ -93,7 +93,7 @@ public class ShopController : MonoBehaviour
             {
                 Debug.Log("Can Buy");
                 GameManager.Instance.buyButton.interactable = false;
-                DelayCommand dc = new DelayCommand(goldPileIcon);
+                DelayCommand dc = new DelayCommand(goldPileIcon, 1f);
                 dc.AddToQueue();
                 //Get the Purchased Minion
                 CardVisual minion = selectedCard.GetComponent<CardVisual>();
@@ -114,7 +114,7 @@ public class ShopController : MonoBehaviour
                     }
 
                     //Destroy minion card the big card objects
-                    //RemoveCard(true);
+                    RemoveCard(true);
                 }
                 else if (selectedCard.GetComponent<CardVisual>().Ed != null)
                 {
@@ -129,7 +129,7 @@ public class ShopController : MonoBehaviour
                     }
 
                     //Destroy only the big card object
-                    //RemoveCard(false);
+                    RemoveCard(false);
                 }
 
                 //Subtract the Hero's current Gold
@@ -230,9 +230,7 @@ public class ShopController : MonoBehaviour
     {
         if (destroyMinion)
         {
-            //Destroy the Selected Card Object
-            Destroy(selectedCard.gameObject);
-            selectedCard = null;
+            selectedCard.SetActive(false);
         }
         else
         {

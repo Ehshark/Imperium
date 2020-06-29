@@ -307,11 +307,11 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         {
             if (add)
             {
-                currentHealth = currentHealth + amount;
+                currentHealth += amount;
             }
             else
             {
-                currentHealth = currentHealth - amount;
+                currentHealth -= amount;
 
                 if (currentHealth <= 0)
                 {
@@ -327,15 +327,20 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     {
         int currentPlayer = GameManager.Instance.GetCurrentPlayer();
         currentHealth = totalHealth;
+        DelayCommand dc = new DelayCommand(transform, 1f);
+        dc.AddToQueue();
+        MoveCardCommand mc;
 
         if (currentPlayer == 0)
         {
-            GameManager.Instance.MoveCard(gameObject, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList, true);
+            mc = new MoveCardCommand(gameObject, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
         }
         else
         {
-            GameManager.Instance.MoveCard(gameObject, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList, true);
+            mc = new MoveCardCommand(gameObject, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
         }
+
+        mc.AddToQueue();
     }
 
     public void AssignDamageAbsorbed(bool isIncrease)

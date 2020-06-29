@@ -163,11 +163,14 @@ public class GameManager : MonoBehaviour
                 return null;
             }
         }
-        else {
+        else
+        {
             card.transform.SetParent(to.transform, false);
             card.transform.position = to.transform.position;
-            if (to.name.Equals("MinionArea") || to.name.Equals("EnemyMinionArea")) {
-                if (card.GetComponent<PlayCard>()) {
+            if (to.name.Equals("MinionArea") || to.name.Equals("EnemyMinionArea"))
+            {
+                if (card.GetComponent<PlayCard>())
+                {
                     Destroy(card.GetComponent<PlayCard>());
                 }
             }
@@ -250,9 +253,10 @@ public class GameManager : MonoBehaviour
 
     void StartTurn()
     {
+        CardVisual cv;
         foreach (Transform t in GetActiveMinionZone(true))
         {
-            CardVisual cv = t.GetComponent<CardVisual>();
+            cv = t.GetComponent<CardVisual>();
             cv.IsCombatEffectActivated = false;
             UnTapMinions(t);
             ResetDamage(t);
@@ -290,39 +294,12 @@ public class GameManager : MonoBehaviour
     //TODO: add deck counter and decrement
     public void DrawCard(List<Card> deck, Transform playerHand)
     {
-        GameObject tmp;
-        MinionData minion;
-        StarterData starter;
-        EssentialsData essentials;
-
         if (deck.Count > 0) //checks if deck is not empty
         {
-            if (deck[0] is MinionData) //Card is a minion
-            {
-                minion = (MinionData)deck[0];
-                tmp = Instantiate(UIManager.Instance.minionPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Md = minion;
-                tmp.SetActive(true);
-            }
-
-            else if (deck[0] is StarterData) //Card is a starter
-            {
-                starter = (StarterData)deck[0];
-                tmp = Instantiate(UIManager.Instance.starterPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Sd = starter;
-                tmp.SetActive(true);
-            }
-
-            else if (deck[0] is EssentialsData) //Card is a essential
-            {
-                essentials = (EssentialsData)deck[0];
-                tmp = Instantiate(UIManager.Instance.itemPrefab, playerHand) as GameObject;
-                tmp.SetActive(false);
-                tmp.GetComponent<CardVisual>().Ed = essentials;
-                tmp.SetActive(true);
-            }
+            DelayCommand dc = new DelayCommand(GetActiveHand(true), 0.25f);
+            dc.AddToQueue();
+            InstantiateCommand ic = new InstantiateCommand(deck[0], playerHand);
+            ic.AddToQueue();
 
             if (playerHand == alliedHand)
             {
@@ -383,8 +360,6 @@ public class GameManager : MonoBehaviour
             DrawCard(deck, playerHand);
         }
         EventManager.Instance.PostNotification(EVENT_TYPE.ACTION_DRAW);
-
-
 
     }
 
@@ -524,7 +499,7 @@ public class GameManager : MonoBehaviour
 
         if (minion != null)
         {
-            tmp = Instantiate(UIManager.Instance.minionPrefab) as GameObject;
+            tmp = Instantiate(UIManager.Instance.minionPrefab);
             tmp.SetActive(false);
             tmp.GetComponent<CardVisual>().Md = minion;
 
@@ -539,7 +514,7 @@ public class GameManager : MonoBehaviour
         }
         else if (essential != null)
         {
-            tmp = Instantiate(UIManager.Instance.itemPrefab) as GameObject;
+            tmp = Instantiate(UIManager.Instance.itemPrefab);
             tmp.SetActive(false);
             tmp.GetComponent<CardVisual>().Ed = essential;
 
@@ -554,7 +529,7 @@ public class GameManager : MonoBehaviour
         }
         else if (starter != null)
         {
-            tmp = Instantiate(UIManager.Instance.starterPrefab) as GameObject;
+            tmp = Instantiate(UIManager.Instance.starterPrefab);
             tmp.SetActive(false);
             tmp.GetComponent<CardVisual>().Sd = starter;
             tmp.SetActive(true);
@@ -679,7 +654,6 @@ public class GameManager : MonoBehaviour
             }
             return alliedDiscardPile;
         }
-
     }
 
     public List<GameObject> GetActiveDiscardPileList(bool activeWanted)
@@ -756,5 +730,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void InstantiateCardToHand(Card c, Transform t)
+    {
+        GameObject cardType;
 
+        if (c is MinionData)
+            cardType = UIManager.Instance.minionPrefab;
+        else if (c is StarterData)
+            cardType = UIManager.Instance.starterPrefab;
+        else
+            cardType = UIManager.Instance.itemPrefab;
+
+        GameObject tmp = Instantiate(cardType, t);
+        tmp.SetActive(false);
+
+        if (c is MinionData md)
+            tmp.GetComponent<CardVisual>().Md = md;
+        else if (c is StarterData sd)
+            tmp.GetComponent<CardVisual>().Sd = sd;
+        else if (c is EssentialsData ed)
+            tmp.GetComponent<CardVisual>().Ed = ed;
+
+        tmp.SetActive(true);
+    }
 }

@@ -89,9 +89,10 @@ public class StartGameController : MonoBehaviour
         //GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
         GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
         GameManager.Instance.bottomHero.AdjustGold(10, true);
+        InitialDraw();
+        yield return new WaitForSeconds(3f);
         GameManager.Instance.SwitchTurn();
         UIManager.Instance.ShowHideAttackButton();
-        InitialDraw();
         UIManager.Instance.AttachPlayCard();
 
         if (GameManager.Instance.ActiveHero(true).Clan == 'W')
@@ -334,112 +335,39 @@ public class StartGameController : MonoBehaviour
     }
 
     public void InitialDraw()
-
     {
-
-        //intial draw for bottom player
-
-        for (int i = 0; i < 5; i++)
-
+        //intial draw for active player
+        for (int i = 0; i < GameManager.Instance.ActiveHero(true).HandSize; i++)
         {
-
-            GameManager.Instance.DrawCard(UIManager.Instance.allyDeck, GameManager.Instance.alliedHand);
-
+            GameManager.Instance.DrawCard(UIManager.Instance.GetActiveDeckList(true), GameManager.Instance.GetActiveHand(true));
         }
 
-
-
-        //intial draw for top player
-
-        for (int i = 0; i < 5; i++)
-
+        //intial draw for other player
+        for (int i = 0; i < GameManager.Instance.ActiveHero(false).HandSize; i++)
         {
-            GameManager.Instance.DrawCard(UIManager.Instance.enemyDeck, GameManager.Instance.enemyHand);
-
+            GameManager.Instance.DrawCard(UIManager.Instance.GetActiveDeckList(false), GameManager.Instance.GetActiveHand(false));
         }
-
     }
 
     public void Mulligan()
-
-    { 
-
-        if (GameManager.Instance.GetCurrentPlayer() == 0)
-
+    {
+        for (int i = 0; i < GameManager.Instance.ActiveHero(true).HandSize; i++)
         {
-
-            for (int i = 0; i < 5; i++)
-
-            {
-
-                UIManager.Instance.allyDeck.Add(UIManager.Instance.allyHand[i]);
-
-                Destroy(GameManager.Instance.alliedHand.GetChild(i).gameObject);
-
-            }
-
-
-
-            UIManager.Instance.allyHand.Clear();
-
-            GameManager.Instance.ShuffleCurrentDeck(UIManager.Instance.allyDeck);
-
-
-
-            for (int i = 0; i < 5; i++)
-
-            {
-
-                GameManager.Instance.DrawCard(UIManager.Instance.allyDeck, GameManager.Instance.alliedHand);
-
-            }
-
-            GameManager.Instance.SwitchTurn();
-
-            mulliganCount++;
-
-            SetActiveMulligan();
-
+            UIManager.Instance.GetActiveDeckList(true).Add(UIManager.Instance.GetActiveHandList(true)[i]);
+            Destroy(GameManager.Instance.GetActiveHand(true).GetChild(i).gameObject);
         }
 
-        else
+        UIManager.Instance.GetActiveHandList(true).Clear();
+        GameManager.Instance.ShuffleCurrentDeck(UIManager.Instance.GetActiveDeckList(true));
 
+        for (int i = 0; i < GameManager.Instance.ActiveHero(true).HandSize; i++)
         {
-
-            for (int i = 0; i < 5; i++)
-
-            {
-
-                UIManager.Instance.enemyDeck.Add(UIManager.Instance.enemyHand[i]);
-
-                Destroy(GameManager.Instance.enemyHand.GetChild(i).gameObject);
-
-            }
-
-
-
-            UIManager.Instance.enemyHand.Clear();
-
-            GameManager.Instance.ShuffleCurrentDeck(UIManager.Instance.enemyDeck);
-
-
-
-            for (int i = 0; i < 5; i++)
-
-            {
-
-                GameManager.Instance.DrawCard(UIManager.Instance.enemyDeck, GameManager.Instance.enemyHand);
-
-            }
-
-            GameManager.Instance.SwitchTurn();
-
-            mulliganCount++;
-
-            SetActiveMulligan();
-
+            GameManager.Instance.DrawCard(UIManager.Instance.GetActiveDeckList(true), GameManager.Instance.GetActiveHand(true));
         }
 
+        GameManager.Instance.SwitchTurn();
+        mulliganCount++;
+        SetActiveMulligan();
     }
 
     public void SetActiveMulligan()
@@ -462,7 +390,6 @@ public class StartGameController : MonoBehaviour
             GameManager.Instance.allyMulliganButton.gameObject.SetActive(false);
             GameManager.Instance.enemyMulliganButton.gameObject.SetActive(false);
             UIManager.Instance.AttachPlayCard();
-
         }
     }
 

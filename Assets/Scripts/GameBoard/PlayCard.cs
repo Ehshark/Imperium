@@ -186,7 +186,7 @@ public class PlayCard : MonoBehaviour
 
     private void MoveCardFromHand(bool isMinion)
     {
-        DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true));
+        DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true), 1f);
         dc.AddToQueue();
         card = gameObject;
         CardVisual cv = card.GetComponent<CardVisual>();
@@ -234,7 +234,7 @@ public class PlayCard : MonoBehaviour
     //This function is called when PostNotification is called on the SACRIFICE_SELECTED event and isPromoting is true
     public void PromoteMinionWithPlayback()
     {
-        DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true));
+        DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true), 1f);
         dc.AddToQueue();
 
         MoveCardCommand mc = new MoveCardCommand(GameManager.Instance.MinionToSacrifice,
