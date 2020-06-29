@@ -316,7 +316,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5361649606923715718}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -465,9 +465,9 @@ RectTransform:
   m_Children:
   - {fileID: 5361649607802625129}
   - {fileID: 5361649607602109166}
+  - {fileID: 5361649607211962121}
   - {fileID: 5361649608484436033}
   - {fileID: 9174111617202879247}
-  - {fileID: 5361649607211962121}
   - {fileID: 837858363656721167}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -489,6 +489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b668f9f7e4379e49b3081a5f0e811bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  md: {fileID: 0}
   descriptions:
   - {fileID: 5361649608067796741}
   - {fileID: 5361649608379456300}
@@ -499,6 +500,10 @@ MonoBehaviour:
   cost: {fileID: 5361649607378099703}
   health: {fileID: 0}
   damage: {fileID: 0}
+  regDmgAbs: {fileID: 0}
+  poisonDmgAbs: {fileID: 0}
+  stealthDmgAbs: {fileID: 0}
+  lifestealDmgAbs: {fileID: 0}
   costImage: {fileID: 5361649607611210297}
   cardBackground: {fileID: 5361649607802625128}
   condition: {fileID: 0}
@@ -506,7 +511,10 @@ MonoBehaviour:
   silenceIcon: {fileID: 5361649607211962120}
   effect1: {fileID: 5361649608726143381}
   effect2: {fileID: 5361649607857650548}
+  increaseDmgAbsorbed: {fileID: 0}
+  decreaseDmgAbsorbed: {fileID: 0}
   inShop: 0
+  damageObjects: {fileID: 0}
 --- !u!1 &5361649607211962126
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,7 +547,7 @@ RectTransform:
   - {fileID: 5361649608537821012}
   - {fileID: 5361649608067448159}
   m_Father: {fileID: 5361649606923715718}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -1759,7 +1767,7 @@ RectTransform:
   m_Children:
   - {fileID: 5361649607877832304}
   m_Father: {fileID: 5361649606923715718}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}

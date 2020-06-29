@@ -29,22 +29,42 @@ public class EnlargedCardBehaviour : MonoBehaviour, IPointerEnterHandler, IPoint
     public void OnPointerEnter(PointerEventData eventData)
     {
         cardComponent = eventData.pointerCurrentRaycast.gameObject.transform.parent;
-        Debug.Log(cardComponent.name);
         if (cardComponent.name.Equals("Cost") || cardComponent.name.Equals("Health") || cardComponent.name.Equals("Damage") ||
-            cardComponent.name.Equals("Ally") || cardComponent.name.Equals("Condition") || cardComponent.name.Equals("Effect1Panel") ||
-            cardComponent.name.Equals("Effect2Panel"))
+            cardComponent.name.Equals("Ally") || cardComponent.name.Equals("ConditionPanel") || cardComponent.name.Equals("Effect1Panel")
+            || cardComponent.name.Equals("Effect2Panel"))
         {
             foreach (Transform t in cardComponent)
             {
-                if (t.name.Equals("TextBack") || t.name.Equals("Description"))
+                if (t.name.Equals("TextBack") || t.name.Contains("Description"))
                 {
                     t.gameObject.SetActive(true);
                 }
-                else if (t.name.Equals("Effect1") || t.name.Equals("Effect2"))
+                else if (t.name.Equals("Effect1"))
                 {
                     foreach (Transform child in t)
                     {
-                        if (child.name.Equals("TextBack") || child.name.Equals("Description"))
+                        if (child.name.Equals("TextBack") || child.name.Contains("Description"))
+                        {
+                            child.gameObject.SetActive(true);
+                        }
+                    }
+                }
+                else if (t.name.Equals("Effect2"))
+                {
+                    foreach (Transform child in t)
+                    {
+                        if (child.name.Equals("TextBack") || child.name.Contains("Description"))
+                        {
+                            child.gameObject.SetActive(true);
+                        }
+                    }
+                }
+                else if (t.name.Equals("Condition"))
+                {
+                    Debug.Log("inside condition");
+                    foreach (Transform child in t)
+                    {
+                        if (child.name.Equals("TextBack") || child.name.Contains("Description"))
                         {
                             child.gameObject.SetActive(true);
                         }
@@ -58,15 +78,35 @@ public class EnlargedCardBehaviour : MonoBehaviour, IPointerEnterHandler, IPoint
     {
         foreach (Transform t in cardComponent)
         {
-            if (t.name.Equals("TextBack") || t.name.Equals("Description"))
+            if (t.name.Equals("TextBack") || t.name.Contains("Description"))
             {
                 t.gameObject.SetActive(false);
             }
-            else if (t.name.Equals("Effect1") || t.name.Equals("Effect2"))
+            else if (t.name.Equals("Effect1"))
             {
                 foreach (Transform child in t)
                 {
-                    if (child.name.Equals("TextBack") || child.name.Equals("Description"))
+                    if (child.name.Equals("TextBack") || child.name.Contains("Description"))
+                    {
+                        child.gameObject.SetActive(false);
+                    }
+                }
+            }
+            else if (t.name.Equals("Effect2"))
+            {
+                foreach (Transform child in t)
+                {
+                    if (child.name.Equals("TextBack") || child.name.Contains("Description"))
+                    {
+                        child.gameObject.SetActive(false);
+                    }
+                }
+            }
+            else if (t.name.Equals("Condition"))
+            {
+                foreach (Transform child in t)
+                {
+                    if (child.name.Equals("TextBack") || child.name.Contains("Description"))
                     {
                         child.gameObject.SetActive(false);
                     }

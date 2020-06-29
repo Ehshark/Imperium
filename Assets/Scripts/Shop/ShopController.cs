@@ -61,7 +61,7 @@ public class ShopController : MonoBehaviour
             {
                 //Spawn Card
                 GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedVisual.Md, null, null, true);
-
+                tmp.AddComponent<EnlargedCardBehaviour>();
                 //Set the BigShopCard object with the spawned card
                 bigShopCard = tmp;
 

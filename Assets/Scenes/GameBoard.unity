@@ -6959,7 +6959,7 @@ GameObject:
   - component: {fileID: 1176135652}
   m_Layer: 5
   m_Name: MinionArea
-  m_TagString: MinionArea
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
