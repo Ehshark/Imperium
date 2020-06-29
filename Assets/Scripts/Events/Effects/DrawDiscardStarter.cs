@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class DrawDiscardStarter : MonoBehaviour
@@ -21,6 +22,6 @@ public class DrawDiscardStarter : MonoBehaviour
             t.gameObject.AddComponent<DrawDiscardListener>();
         }
 
-        StartCoroutine(GameManager.Instance.SetInstructionsText("Select One Card to Discard"));
+        GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Select One Card to Discard";
     }
 }

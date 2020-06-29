@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class HealMinionStarter : MonoBehaviour
@@ -32,7 +33,7 @@ public class HealMinionStarter : MonoBehaviour
         if (needToHeal)
         {
             //Display Start message
-            StartCoroutine(GameManager.Instance.SetInstructionsText("Select one Minion to Heal"));
+            GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Select one Minion to Heal";
 
             //Disable Player Interaction 
             GameManager.Instance.EnableOrDisablePlayerControl(false);

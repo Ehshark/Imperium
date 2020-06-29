@@ -93,7 +93,6 @@ public class StartGameController : MonoBehaviour
         yield return new WaitForSeconds(3f);
         GameManager.Instance.SwitchTurn();
         UIManager.Instance.ShowHideAttackButton();
-        UIManager.Instance.AttachPlayCard();
 
         if (GameManager.Instance.ActiveHero(true).Clan == 'W')
         {

@@ -11,7 +11,10 @@ public class Command
     {
         CommandQueue.Enqueue(this);
         if (!playingQueue)
+        {
+            GameManager.Instance.EnableOrDisablePlayerControl(false);
             PlayFirstCommandFromQueue();
+        }
     }
 
     public virtual void StartCommandExecution()
@@ -24,16 +27,14 @@ public class Command
 
     public virtual void CommandExecutionComplete()
     {
+        Debug.Log("Inside command execution complete");
         if (CommandQueue.Count > 0)
             PlayFirstCommandFromQueue();
         else
         {
             playingQueue = false;
-            //GameManager.Instance.canPlayCards = true;
+            GameManager.Instance.EnableOrDisablePlayerControl(true);
         }
-
-        //if (GameManager.Instance.whoseTurn != null)
-        //    GameManager.Instance.whoseTurn.HighlightPlayableCards();
     }
 
     public static void PlayFirstCommandFromQueue()
@@ -41,14 +42,4 @@ public class Command
         playingQueue = true;
         CommandQueue.Dequeue().StartCommandExecution();
     }
-
-    //public static bool CardDrawPending()
-    //{
-    //    foreach (Command c in CommandQueue)
-    //    {
-    //        if (c is DrawACardCommand)
-    //            return true;
-    //    }
-    //    return false;
-    //}
 }

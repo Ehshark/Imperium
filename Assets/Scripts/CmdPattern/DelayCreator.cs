@@ -8,6 +8,8 @@ public class DelayCreator : MonoBehaviour
     IEnumerator CreateDelayCoroutine(Transform t, DelayCommand dc, float time)
     {
         Image image = t.GetComponent<Image>();
+        if (!image)
+            image = t.GetComponentInChildren<Image>();
         //Store the color of the image
         Color color = image.color;
 

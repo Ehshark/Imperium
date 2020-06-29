@@ -91,7 +91,6 @@ public class ShopController : MonoBehaviour
 
             if (active.Gold >= costForCard)
             {
-                Debug.Log("Can Buy");
                 GameManager.Instance.buyButton.interactable = false;
                 DelayCommand dc = new DelayCommand(goldPileIcon, 1f);
                 dc.AddToQueue();

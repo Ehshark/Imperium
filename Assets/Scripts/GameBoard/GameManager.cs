@@ -200,6 +200,17 @@ public class GameManager : MonoBehaviour
     {
         //buyButton.interactable = enable;
         //changeButton.interactable = enable;
+        if (shop.gameObject.activeSelf)
+        {
+            shop.gameObject.SetActive(false);
+        }
+        if (enable)
+            instructionsObj.GetComponent<TMP_Text>().text = "";
+        shopButton.interactable = enable;
+        Transform costAmount;
+        string cost;
+        int mvCost;
+
         ActiveHero(true).CanPlayCards = enable;
         if (enable)
         {
@@ -207,11 +218,9 @@ public class GameManager : MonoBehaviour
             {
                 if (m != null)
                 {
-                    Transform ribbon = m.Find("Ribbon");
-                    Transform minionCost = ribbon.Find("Cost");
-                    Transform costAmount = minionCost.Find("CostAmount");
-                    string cost = costAmount.GetComponent<TMP_Text>().text;
-                    int mvCost = int.Parse(cost);
+                    costAmount = m.Find("Ribbon/Cost/CostAmount");
+                    cost = costAmount.GetComponent<TMP_Text>().text;
+                    mvCost = int.Parse(cost);
                     if (mvCost <= ActiveHero(true).CurrentMana)
                     {
                         m.Find("GlowPanel").gameObject.SetActive(true);
@@ -394,7 +403,7 @@ public class GameManager : MonoBehaviour
             {
                 discardNum = UIManager.Instance.allyHand.Count - handSize;
 
-                StartCoroutine(SetInstructionsText("Please Select A Card To Discard"));
+                instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
                 EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
                 submitDiscardsButton.gameObject.SetActive(true);
             }
@@ -410,7 +419,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 //DELETE THIS BLOCK OUTSIDE OF TESTING PURPOSES
-                StartCoroutine(SetInstructionsText("Please Select A Card To Discard"));
+                instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
 
                 EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
                 Debug.Log("Handsize 5 working: " + EVENT_TYPE.DISCARD_CARD);
@@ -435,7 +444,7 @@ public class GameManager : MonoBehaviour
             DrawCard(UIManager.Instance.allyDeck, alliedHand);
 
             EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
-            StartCoroutine(SetInstructionsText("Please Select A Card To Discard"));
+            instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
 
         }
         else
@@ -475,7 +484,7 @@ public class GameManager : MonoBehaviour
 
             if (!hasSwitchedCard)
             {
-                StartCoroutine(SetInstructionsText("Do you want to trade 1 gold to switch an additional card?"));
+                instructionsObj.GetComponent<TMP_Text>().text = "Do you want to trade 1 gold to switch an additional card?";
                 cardSwitchButtonYes.gameObject.SetActive(true);
                 cardSwitchButtonNo.gameObject.SetActive(true);
                 hasSwitchedCard = true;
@@ -489,7 +498,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(SetInstructionsText("You Haven't Selected Enough, Please Select A Card To Discard"));
+            instructionsObj.GetComponent<TMP_Text>().text = "You Haven't Selected Enough, Please Select A Card To Discard";
         }
     }
 
@@ -545,7 +554,7 @@ public class GameManager : MonoBehaviour
         TMP_Text text = instructionsObj.GetComponent<TMP_Text>();
         text.text = message;
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3f);
 
         text.text = "";
     }

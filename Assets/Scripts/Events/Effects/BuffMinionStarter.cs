@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BuffMinionStarter : MonoBehaviour
@@ -7,7 +8,7 @@ public class BuffMinionStarter : MonoBehaviour
     public void StartEvent()
     {
         //Display Start message
-        StartCoroutine(GameManager.Instance.SetInstructionsText("Select one Minion to Buff"));
+        GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Select one Minion to Buff";
 
         //Disable Player Interaction 
         GameManager.Instance.EnableOrDisablePlayerControl(false);

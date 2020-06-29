@@ -33,5 +33,17 @@ public class BuffMinionListener : MonoBehaviour, IPointerDownHandler
                 Destroy(bml);
             }
         }
+
+        foreach (Command c in Command.CommandQueue)
+        {
+            if (c is EffectCommand data)
+            {
+                EffectCommand ec = data;
+                if (ec.EffectId == 14)
+                {
+                    ec.CommandExecutionComplete();
+                }
+            }
+        }
     }
 }

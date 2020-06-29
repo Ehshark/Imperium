@@ -61,7 +61,6 @@ public class EnlargedCardBehaviour : MonoBehaviour, IPointerEnterHandler, IPoint
                 }
                 else if (t.name.Equals("Condition"))
                 {
-                    Debug.Log("inside condition");
                     foreach (Transform child in t)
                     {
                         if (child.name.Equals("TextBack") || child.name.Contains("Description"))

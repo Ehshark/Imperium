@@ -72,6 +72,10 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                 {
                     if (entry.Key == md.EffectId1)
                     {
+                        DelayCommand dc = new DelayCommand(card.transform, 1f);
+                        dc.AddToQueue();
+                        EffectCommand ec = new EffectCommand(md.EffectId1);
+                        ec.AddToQueue();
                         Type effectType = EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value.GetType();
 
                         MethodInfo startEvent = effectType.GetMethod("StartEvent");

@@ -97,11 +97,6 @@ public class PlayCard : MonoBehaviour
             return;
         summonPanel.SetActive(false);
         MoveCardFromHand(true);
-        //turns off glowpanel when moving minion
-        if (glowPanel != null)
-        {
-            glowPanel.SetActive(false);
-        }
     }
 
     //Connected to the promote button in summon panel

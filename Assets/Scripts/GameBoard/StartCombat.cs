@@ -28,7 +28,7 @@ public class StartCombat : MonoBehaviour
         EventManager.Instance.PostNotification(EVENT_TYPE.START_COMBAT);
 
         //Update the instructions text
-        StartCoroutine(GameManager.Instance.SetInstructionsText("Please Select Minions to Attack"));
+        GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Please Select Minions to Attack";
 
         GameManager.Instance.buyButton.interactable = false;
         GameManager.Instance.changeButton.interactable = false;
