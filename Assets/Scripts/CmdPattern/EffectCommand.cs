@@ -31,7 +31,7 @@ public class EffectCommand : MonoBehaviour
         if (!inEffect)
         {
             inEffect = true;
-            DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true));
+            DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true), 1f);
             dc.AddToQueue();
 
             EVENT_TYPE effect = EffectQueue.Dequeue();
