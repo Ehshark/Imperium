@@ -51,8 +51,10 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 5, "RecycleListener" },
             { 6, "HealMinionStarter" },
             { 13, "ShockListenerStarter" },
+            { 11, "UntapMinionStarter"}, //new
             { 14, "BuffMinionStarter" },
-            { 16, "DrawDiscardStarter" },
+            { 15, "OpponentDiscardStarter"}, //new
+            { 16, "DrawDiscardStarter" }
             { 17, "TrashStarter" }
         };
 

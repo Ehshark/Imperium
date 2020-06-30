@@ -493,7 +493,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 UIManager.Instance.AttachPlayCard();
-
+                hasSwitchedCard = false; //resets if player switch card check
                 SwitchTurn();
             }
         }
