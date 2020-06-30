@@ -54,7 +54,7 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 11, "UntapMinionStarter"}, //new
             { 14, "BuffMinionStarter" },
             { 15, "OpponentDiscardStarter"}, //new
-            { 16, "DrawDiscardStarter" }
+            { 16, "DrawDiscardStarter" },
             { 17, "TrashStarter" }
         };
 
