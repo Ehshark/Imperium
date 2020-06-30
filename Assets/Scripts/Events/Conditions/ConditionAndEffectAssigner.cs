@@ -50,8 +50,10 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 4, "ExpressBuyListener"  },
             { 5, "RecycleListener" },
             { 6, "HealMinionStarter" },
+            { 13, "ShockListenerStarter" },
             { 14, "BuffMinionStarter" },
-            { 16, "DrawDiscardStarter" }
+            { 16, "DrawDiscardStarter" },
+            { 17, "TrashStarter" }
         };
 
         EventManager.Instance.AddListener(EVENT_TYPE.ASSIGN_CONDITIONS, this);
@@ -92,5 +94,13 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
         GameManager.Instance.topHero.AdjustHealth(1, false);
 
         EventManager.Instance.PostNotification(EVENT_TYPE.BLEED);
+    }
+
+    public void tmp()
+    {
+        EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_EXPRESS_BUY);
+        EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_EXPRESS_BUY);
+
+        //EffectCommand.In.StartCommandExecution();
     }
 }

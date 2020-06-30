@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     public Transform option;
     public Transform menu;
     public Transform pMenu;
+    public Transform trashUI;
 
     public Hero bottomHero;
     public Hero topHero;
