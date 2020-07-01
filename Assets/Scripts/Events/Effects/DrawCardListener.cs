@@ -11,8 +11,9 @@ public class DrawCardListener : MonoBehaviour
 
         GameManager.Instance.DrawCard(UIManager.Instance.GetActiveDeckList(true), GameManager.Instance.GetActiveHand(true));
 
-        //EffectCommand.Instance.inEffect = false;
+        //Call the Next Power in the Queue
         InvokeEventCommand.InvokeNextEvent();
+        //Compare if end of Queue has been reached
         InvokeEventCommand.InEffect();
     }
 }

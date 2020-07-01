@@ -57,7 +57,11 @@ public class HealMinionListener : MonoBehaviour, IPointerDownHandler
         }
 
         //Call Heal Minion Power Effect
-        //EventManager.Instance.PostNotification(EVENT_TYPE.POWER_HEAL_MINION);
         EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_HEAL_MINION);
+
+        //Call the Next Power in the Queue
+        InvokeEventCommand.InvokeNextEvent();
+        //Compare if end of Queue has been reached
+        InvokeEventCommand.InEffect();
     }
 }

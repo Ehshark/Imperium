@@ -334,11 +334,13 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         ShockListener sl = gameObject.GetComponent<ShockListener>();
         if (sl)
         {
-            mc = new MoveCardCommand(gameObject, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
+            //mc = new MoveCardCommand(gameObject, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
+            mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(false), GameManager.Instance.GetActiveDiscardPileList(false));
         }
         else
         {
-            mc = new MoveCardCommand(gameObject, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
+            //mc = new MoveCardCommand(gameObject, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
+            mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true));
         }
 
         mc.AddToQueue();

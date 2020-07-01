@@ -66,4 +66,19 @@ public class EffectCommand : MonoBehaviour
 
         return result;
     }
+
+    public void InvokeMethod(InvokeEventCommand iec)
+    {
+        StartCoroutine(InvokeDelay(iec));
+    }
+
+    public IEnumerator InvokeDelay(InvokeEventCommand iec)
+    {
+        DelayCommand dc = new DelayCommand(iec.card.transform, 2f);
+        dc.AddToQueue();
+
+        yield return new WaitForSeconds(2f);
+
+        iec.method.Invoke(iec.cardType, new object[] { });
+    }
 }

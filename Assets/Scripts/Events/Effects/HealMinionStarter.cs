@@ -44,5 +44,14 @@ public class HealMinionStarter : MonoBehaviour
                 t.gameObject.AddComponent<HealMinionListener>();
             }
         }
+        else
+        {
+            StartCoroutine(GameManager.Instance.SetInstructionsText("All Minions are Currently at Full Health"));
+
+            //Call the Next Power in the Queue
+            InvokeEventCommand.InvokeNextEvent();
+            //Compare if end of Queue has been reached
+            InvokeEventCommand.InEffect();
+        }
     }
 }

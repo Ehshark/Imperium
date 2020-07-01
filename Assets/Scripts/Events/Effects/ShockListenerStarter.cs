@@ -13,7 +13,11 @@ public class ShockListenerStarter : MonoBehaviour
 
             //Shock oppenent's Hero
             GameManager.Instance.ActiveHero(false).AdjustHealth(1, false);
-            EffectCommand.Instance.inEffect = false;
+
+            //Call the Next Power in the Queue
+            InvokeEventCommand.InvokeNextEvent();
+            //Compare if end of Queue has been reached
+            InvokeEventCommand.InEffect();
         }
         else
         {

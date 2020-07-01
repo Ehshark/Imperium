@@ -6,12 +6,11 @@ using UnityEngine.UI;
 
 public class InvokeEventCommand : Command
 {
-    //public static Queue<InvokeEventCommand> InvokeEventQueue = new Queue<InvokeEventCommand>();
-    public static int effectsInQueue = 0;
+    public static Queue<InvokeEventCommand> InvokeEventQueue = new Queue<InvokeEventCommand>();
 
-    object cardType;
-    MethodInfo method;
-    GameObject card;
+    public object cardType;
+    public MethodInfo method;
+    public GameObject card;
 
     public InvokeEventCommand(MethodInfo methodInfo, object type, GameObject c)
     {
@@ -22,29 +21,25 @@ public class InvokeEventCommand : Command
 
     public override void AddToQueue()
     {
-        CommandQueue.Enqueue(this);
-        effectsInQueue++;
+        InvokeEventQueue.Enqueue(this);
     }
 
     public override void StartCommandExecution()
     {
-        method.Invoke(cardType, new object[] { });
-        effectsInQueue--;
+        EffectCommand.Instance.InvokeMethod(this);
     }
 
     public static void InvokeNextEvent()
-    {
-        Debug.Log(effectsInQueue);
-
-        if (CommandQueue.Count > 0)
+    {         
+        if (InvokeEventQueue.Count > 0)
         {
-            Command.PlayFirstCommandFromQueue();
+            InvokeEventQueue.Dequeue().StartCommandExecution();
         }
     }
 
     public static void InEffect()
     {
-        if (effectsInQueue == 0)
+        if (InvokeEventQueue.Count == 0)
         {
             EffectCommand.Instance.inEffect = false;
         }

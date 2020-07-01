@@ -127,7 +127,9 @@ public class PeekShopEventStarter : MonoBehaviour
         //EventManager.Instance.PostNotification(EVENT_TYPE.POWER_PEEK_SHOP);
         EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_PEEK_SHOP);
 
+        //Call the Next Power in the Queue
         InvokeEventCommand.InvokeNextEvent();
+        //Compare if end of Queue has been reached
         InvokeEventCommand.InEffect();
     }
 }

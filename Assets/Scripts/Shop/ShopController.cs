@@ -144,8 +144,10 @@ public class ShopController : MonoBehaviour
                         ConditionListener cl = t.gameObject.GetComponent<ConditionListener>();
                         if (cl != null && cl.ConditionEvent == EVENT_TYPE.BUY_FIRST_CARD)
                         {
-                            EventManager.Instance.PostNotification(EVENT_TYPE.BUY_FIRST_CARD);
+                            //EventManager.Instance.PostNotification(EVENT_TYPE.BUY_FIRST_CARD);
+                            EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.BUY_FIRST_CARD);
                             GameManager.Instance.BuyFirstCard = true;
+                            break;
                         }
                     }
                 }
@@ -195,8 +197,10 @@ public class ShopController : MonoBehaviour
                             ConditionListener cl = t.gameObject.GetComponent<ConditionListener>();
                             if (cl != null && cl.ConditionEvent == EVENT_TYPE.FIRST_CHANGE_SHOP)
                             {
-                                EventManager.Instance.PostNotification(EVENT_TYPE.FIRST_CHANGE_SHOP);
+                                //EventManager.Instance.PostNotification(EVENT_TYPE.FIRST_CHANGE_SHOP);
+                                EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.FIRST_CHANGE_SHOP);
                                 GameManager.Instance.FirstChangeShop = true;
+                                break;
                             }
                         }
                     }

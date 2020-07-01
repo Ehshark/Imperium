@@ -34,6 +34,12 @@ public class BuffMinionListener : MonoBehaviour, IPointerDownHandler
             }
         }
 
+        //Add the power to the queue
         EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_BUFF_MINION);
+
+        //Call the Next Power in the Queue
+        InvokeEventCommand.InvokeNextEvent();
+        //Compare if end of Queue has been reached
+        InvokeEventCommand.InEffect();
     }
 }
