@@ -31,21 +31,24 @@ public class EffectCommand : MonoBehaviour
         if (!inEffect)
         {
             inEffect = true;
-            DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true), 1f);
-            dc.AddToQueue();
 
             EVENT_TYPE effect = EffectQueue.Dequeue();
             Debug.Log(effect);
 
             EventManager.Instance.PostNotification(effect);
+
+            InvokeEventCommand.InvokeNextEvent();
         }
     }
 
     public void ContinueExecution()
     {
-        if (EffectQueue.Count != 0 && !inEffect && CanEffectBeCalled())
+        if (EffectQueue.Count != 0 && !inEffect)
         {
-            StartCommandExecution();
+            if (CanEffectBeCalled())
+            {
+                StartCommandExecution();
+            }
         }
     }
 

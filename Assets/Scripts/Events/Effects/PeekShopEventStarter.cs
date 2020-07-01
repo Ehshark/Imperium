@@ -11,6 +11,8 @@ public class PeekShopEventStarter : MonoBehaviour
 
     public void StartEvent()
     {
+        StartCoroutine(GameManager.Instance.SetInstructionsText("Peek Shop Effect"));
+
         card = gameObject;
 
         //Disable features in Shop
@@ -124,5 +126,8 @@ public class PeekShopEventStarter : MonoBehaviour
         //Call Peek Shop Power Effect 
         //EventManager.Instance.PostNotification(EVENT_TYPE.POWER_PEEK_SHOP);
         EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_PEEK_SHOP);
+
+        InvokeEventCommand.InvokeNextEvent();
+        InvokeEventCommand.InEffect();
     }
 }

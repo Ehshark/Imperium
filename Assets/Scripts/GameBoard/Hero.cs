@@ -189,6 +189,12 @@ public class Hero : MonoBehaviour
             if (total >= 0)
             {
                 currentHealth -= amount;
+
+                if (GameManager.Instance.IsDefending)
+                {
+                    //Add Bleed to the queue
+                    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.BLEED);
+                }
             }
             else
             {

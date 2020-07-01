@@ -56,13 +56,7 @@ public class TrashController : MonoBehaviour
     {
         List<GameObject> discardCards = GameManager.Instance.GetActiveDiscardPileList(true);
 
-        //for (int i = 0; i < discardCards.Count; i++)
-        //{
-        //    GameObject card = Instantiate(discardCards[i]);
-        //    card.transform.SetParent(discardPile, false);
-        //    card.AddComponent<TrashListener>();
-        //}
-        int i = 0;
+        int i = 1;
         foreach (Card c in UIManager.Instance.GetActiveDiscardList(true))
         {
             GameObject card;
@@ -127,7 +121,7 @@ public class TrashController : MonoBehaviour
         //Remove actual Card from discard
         if (card.GetComponent<TrashListener>().location == "discard")
         {
-            Transform tmp = GameManager.Instance.GetActiveHand(true).GetChild(card.GetComponent<TrashListener>().index);
+            Transform tmp = GameManager.Instance.GetActiveDiscardPile(true).GetChild(card.GetComponent<TrashListener>().index);
             Destroy(tmp.gameObject);
         }
 

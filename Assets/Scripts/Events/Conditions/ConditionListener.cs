@@ -79,7 +79,9 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                         Type effectType = EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value.GetType();
 
                         MethodInfo startEvent = effectType.GetMethod("StartEvent");
-                        startEvent.Invoke(EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, new object[] { });
+                        //startEvent.Invoke(EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, new object[] { });
+                        InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, card);
+                        invokeEvent.AddToQueue();
                     }
                 }
             }
