@@ -231,12 +231,21 @@ public class Hero : MonoBehaviour
         }
         else
         {
+            //Get the total amount of experience to increase after level up
+            int expToIncreaseAfter = total - RequredExp;
+
             if (level != HeroManager.Instance.MaxLevel)
             {
                 experience += amount;
             }
 
             EventManager.Instance.PostNotification(EVENT_TYPE.LEVEL_UP);
+
+            //Increase experience if there is experience to increase afterwards
+            if (expToIncreaseAfter > 0 && level != HeroManager.Instance.MaxLevel)
+            {
+                experience += expToIncreaseAfter;
+            }
         }
 
         SetExp();

@@ -56,7 +56,9 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 14, "BuffMinionStarter" },
             { 15, "OpponentDiscardStarter"}, //new
             { 16, "DrawDiscardStarter" },
-            { 17, "TrashStarter" }
+            { 17, "TrashStarter" },
+            { 18, "EssentialListener" },
+            { 19, "EssentialListener" }
         };
 
         EventManager.Instance.AddListener(EVENT_TYPE.ASSIGN_CONDITIONS, this);
@@ -84,11 +86,29 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
                 Type type = Type.GetType(effectScriptName + ",Assembly-CSharp");
                 card.AddComponent(type);
 
+                //TODO: Repeat logic for md.EffectId2
+                if (md.EffectId2 != 999)
+                {
+                    foreach (KeyValuePair<int, string> entry in Effects)
+                        if (md.EffectId2 == entry.Key)
+                            effectScriptName = entry.Value;
+
+                    Type effectType = System.Type.GetType(effectScriptName + ",Assembly-CSharp");
+                    card.AddComponent(effectType);
+
+                    if (md.EffectId2 == 18)
+                    {
+                        card.GetComponent<EssentialListener>().Type = "Gold";
+                    }
+                    else if (md.EffectId2 == 19)
+                    {
+                        card.GetComponent<EssentialListener>().Type = "Exp";
+                    }
+                }
+
                 card.GetComponent<ConditionListener>().Card = card;
                 card.GetComponent<ConditionListener>().enabled = true;
             }
-
-            //TODO: Repeat logic for md.EffectId2
         }
     }
 
@@ -101,9 +121,6 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
 
     public void tmp()
     {
-        EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_EXPRESS_BUY);
-        EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_EXPRESS_BUY);
-
-        //EffectCommand.In.StartCommandExecution();
+        GameManager.Instance.ActiveHero(true).GainExp(1);
     }
 }

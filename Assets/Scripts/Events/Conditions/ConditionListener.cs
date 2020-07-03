@@ -55,12 +55,14 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             { 4, card.GetComponent<ExpressBuyListener>() },
             { 5, card.GetComponent<RecycleListenerAssigner>() },
             { 6, card.GetComponent<HealMinionStarter>() },
+            { 11, card.GetComponent<UntapMinionStarter>() },
             { 13, card.GetComponent<ShockListenerStarter>() },
-            { 11, card.GetComponent<UntapMinionStarter>() }, //new
             { 14, card.GetComponent<BuffMinionStarter>() },
+            { 15, card.GetComponent<OpponentDiscardStarter>() },
             { 16, card.GetComponent<DrawDiscardStarter>() },
             { 17, card.GetComponent<TrashStarter>() },
-            { 15, card.GetComponent<OpponentDiscardStarter>() } //new
+            { 18, card.GetComponent<EssentialListener>() },
+            { 19, card.GetComponent<EssentialListener>() }
         };
     }
 
@@ -79,8 +81,15 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                         Type effectType = EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value.GetType();
 
                         MethodInfo startEvent = effectType.GetMethod("StartEvent");
-                        //startEvent.Invoke(EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, new object[] { });
                         InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, card);
+                        invokeEvent.AddToQueue();
+                    }
+                    else if (entry.Key == md.EffectId2)
+                    {
+                        Type effectType = EffectCardData.Where(t => t.Key == md.EffectId2).SingleOrDefault().Value.GetType();
+
+                        MethodInfo startEvent = effectType.GetMethod("StartEvent");
+                        InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId2).SingleOrDefault().Value, card);
                         invokeEvent.AddToQueue();
                     }
                 }

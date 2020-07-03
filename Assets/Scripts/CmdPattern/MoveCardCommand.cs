@@ -25,11 +25,6 @@ public class MoveCardCommand : Command
         else if (to.name.Equals("DiscardPile") || to.name.Equals("EnemyDiscardPile"))
         {
             GameManager.Instance.MoveCard(card, to, dpList, false, false);
-            CardVisual cv = card.GetComponent<CardVisual>();
-            if (cv.Md != null || cv.Sd != null || cv.Ed != null)
-            {
-                UIManager.Instance.GetActiveDiscardList(true).Add(cv.CardData);
-            }
         }
         else
         {
