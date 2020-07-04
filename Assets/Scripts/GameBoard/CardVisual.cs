@@ -330,17 +330,28 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         dc.AddToQueue();
         MoveCardCommand mc;
 
+        //Get the Card's Data
+        Card card = gameObject.GetComponent<CardVisual>().CardData;
+
         //Check for shock
         ShockListener sl = gameObject.GetComponent<ShockListener>();
         if (sl)
         {
-            //mc = new MoveCardCommand(gameObject, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
             mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(false), GameManager.Instance.GetActiveDiscardPileList(false));
+            UIManager.Instance.GetActiveDiscardList(false).Add(card);
         }
         else
         {
-            //mc = new MoveCardCommand(gameObject, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
-            mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true));
+            if (GameManager.Instance.IsDefending)
+            {
+                mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(false), GameManager.Instance.GetActiveDiscardPileList(false));
+                UIManager.Instance.GetActiveDiscardList(false).Add(card);
+            }
+            else
+            {
+                mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true));
+                UIManager.Instance.GetActiveDiscardList(true).Add(card);
+            }
         }
 
         mc.AddToQueue();

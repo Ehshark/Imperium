@@ -140,7 +140,6 @@ public class DefendListener : MonoBehaviour, IListener
         if (goodSubmission)
         {
             StartCombat sc = GameManager.Instance.ActiveHero(true).AttackButton.parent.GetComponent<StartCombat>();
-            sc.AssignDamageToAttackers();
             sc.totalDamage = new Dictionary<string, int>
             {
                 { "stealth", 0 },
@@ -150,6 +149,7 @@ public class DefendListener : MonoBehaviour, IListener
             };
             AssignDamageToDefenders();
             GameManager.Instance.IsDefending = false;
+            sc.AssignDamageToAttackers();
             ChangeUiForDefense(GameManager.Instance.IsDefending);
             GameManager.Instance.EnableOrDisablePlayerControl(true);
             StartCoroutine(GameManager.Instance.SetInstructionsText("Good Submission!"));

@@ -119,8 +119,8 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
         EventManager.Instance.PostNotification(EVENT_TYPE.BLEED);
     }
 
-    public void tmp()
+    public void tmp(GameObject card)
     {
-        GameManager.Instance.ActiveHero(true).GainExp(1);
+        card.GetComponent<CardVisual>().AdjustHealth(1, false);
     }
 }
