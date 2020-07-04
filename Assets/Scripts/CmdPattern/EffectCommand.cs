@@ -57,7 +57,7 @@ public class EffectCommand : MonoBehaviour
         bool result = false;
         bool isAttacking = GameManager.Instance.ActiveHero(true).StartedCombat;
         bool shopOpen = GameManager.Instance.shop.gameObject.activeSelf;
-        bool isDefending = GameManager.Instance.IsDefending;
+        bool isDefending = GameManager.Instance.IsDefending;        
 
         if (!isAttacking && !shopOpen && !isDefending)
         {

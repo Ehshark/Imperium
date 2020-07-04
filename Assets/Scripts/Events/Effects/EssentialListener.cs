@@ -19,6 +19,9 @@ public class EssentialListener : MonoBehaviour
             {
                 GameManager.Instance.ActiveHero(true).GainExp(2);
             }
+
+            //Call the Next Power in the Queue
+            InvokeEventCommand.InvokeNextEvent();
         }
     }
 }

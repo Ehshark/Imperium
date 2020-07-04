@@ -30,16 +30,12 @@ public class InvokeEventCommand : Command
     }
 
     public static void InvokeNextEvent()
-    {         
+    {
         if (InvokeEventQueue.Count > 0)
         {
             InvokeEventQueue.Dequeue().StartCommandExecution();
         }
-    }
-
-    public static void InEffect()
-    {
-        if (InvokeEventQueue.Count == 0)
+        else
         {
             EffectCommand.Instance.inEffect = false;
         }

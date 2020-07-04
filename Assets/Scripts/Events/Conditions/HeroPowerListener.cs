@@ -5,7 +5,6 @@ using UnityEngine;
 public class HeroPowerListener : MonoBehaviour, IListener
 {
     private EVENT_TYPE powerEffect;
-
     public EVENT_TYPE PowerEffect { get => powerEffect; set => powerEffect = value; }
 
     public void Awake()
@@ -31,6 +30,8 @@ public class HeroPowerListener : MonoBehaviour, IListener
         }        
         else
         {
+            GameManager.Instance.InHeroPower = true;
+
             foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
             {
                 t.gameObject.AddComponent<ShockListener>();

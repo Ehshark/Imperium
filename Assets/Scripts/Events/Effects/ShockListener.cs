@@ -17,7 +17,7 @@ public class ShockListener : MonoBehaviour, IPointerDownHandler
 
         cv.AdjustHealth(1, false);
 
-        foreach(Transform t in GameManager.Instance.GetActiveMinionZone(false))
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
             ShockListener sl = t.GetComponent<ShockListener>();
             if (sl)
@@ -26,8 +26,16 @@ public class ShockListener : MonoBehaviour, IPointerDownHandler
             }
         }
 
-        //EffectCommand.Instance.ContinueExecution(); 
-        EffectCommand.Instance.inEffect = false;
+        if (GameManager.Instance.InHeroPower)
+        {
+            GameManager.Instance.InHeroPower = false;
+            EffectCommand.Instance.inEffect = false;
+        }
+        else
+        {
+            //Call the Next Power in the Queue
+            InvokeEventCommand.InvokeNextEvent();
+        }
     }
 
     public void OnDestroy()

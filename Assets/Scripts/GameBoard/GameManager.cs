@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
     private bool hasSwitchedCard = false;
     private bool isForcedDiscard = false;
     private bool warriorSetup;
+    private bool inHeroPower;
     private Color lastSelectedColor;
 
     public static GameManager Instance { get; private set; } = null;
@@ -102,6 +103,7 @@ public class GameManager : MonoBehaviour
     public bool IsDefending { get => isDefending; set => isDefending = value; }
     public bool HasExpressBuy { get => hasExpressBuy; set => hasExpressBuy = value; }
     public bool WarriorSetup { get => warriorSetup; set => warriorSetup = value; }
+    public bool InHeroPower { get => inHeroPower; set => inHeroPower = value; }
     public Color LastSelectedColor { get => lastSelectedColor; set => lastSelectedColor = value; }
 
     private void Awake()

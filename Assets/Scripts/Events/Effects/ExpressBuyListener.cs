@@ -15,8 +15,6 @@ public class ExpressBuyListener : MonoBehaviour
 
             //Call the Next Power in the Queue
             InvokeEventCommand.InvokeNextEvent();
-            //Compare if end of Queue has been reached
-            InvokeEventCommand.InEffect();
         }
     }
 }
