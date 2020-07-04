@@ -85,7 +85,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             UpdateCardDescriptions();
         }
 
-        if (md != null)
+        if (md != null || (sd != null && currentDamage != 0))
         {
             increaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(true); });
             decreaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(false); });
@@ -324,7 +324,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     }
 
     public void DestroyMinion()
-    {        
+    {
         currentHealth = totalHealth;
         DelayCommand dc = new DelayCommand(transform, 1f);
         dc.AddToQueue();
@@ -450,11 +450,11 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     {
         if (add)
         {
-            currentDamage = currentDamage + amount;
+            currentDamage += amount;
         }
         else
         {
-            currentDamage = currentDamage - amount;
+            currentDamage -= amount;
 
             if (currentDamage < 0)
             {
@@ -475,6 +475,16 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     {
         currentHealth = totalHealth;
         health.text = currentHealth.ToString();
+    }
+
+    public Card GetCardData()
+    {
+        if (md)
+            return md;
+        else if (sd)
+            return sd;
+        else
+            return ed;
     }
 
     //TODO: OnHover Function to highlight the card

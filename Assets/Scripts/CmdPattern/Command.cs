@@ -27,7 +27,6 @@ public class Command
 
     public virtual void CommandExecutionComplete()
     {
-        Debug.Log("Inside command execution complete");
         if (CommandQueue.Count > 0)
             PlayFirstCommandFromQueue();
         else

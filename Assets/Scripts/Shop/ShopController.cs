@@ -299,33 +299,11 @@ public class ShopController : MonoBehaviour
         {
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
             mc.AddToQueue();
-            //GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
-
-            //adds card data to the respective players discard pile data
-            if (card.GetComponent<CardVisual>().Md != null)
-            {
-                UIManager.Instance.allyDiscards.Add(card.GetComponent<CardVisual>().Md);
-            }
-            else
-            {
-                UIManager.Instance.allyDiscards.Add(card.GetComponent<CardVisual>().Ed);
-            }
         }
         else
         {
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
             mc.AddToQueue();
-            //GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
-
-            //adds card data to the respective players discard pile data
-            if (card.GetComponent<CardVisual>().Md != null)
-            {
-                UIManager.Instance.enemyDiscards.Add(card.GetComponent<CardVisual>().Md);
-            }
-            else
-            {
-                UIManager.Instance.enemyDiscards.Add(card.GetComponent<CardVisual>().Ed);
-            }
         }
     }
 

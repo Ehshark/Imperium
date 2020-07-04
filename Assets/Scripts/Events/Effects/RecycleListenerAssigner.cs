@@ -1,72 +1,92 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 
-public class RecycleListenerAssigner : MonoBehaviour, IPointerClickHandler
+public class RecycleListenerAssigner : MonoBehaviour
 {
- 
-    bool cardSelected = true;
-    Color lastSelectedColor;
+    public GameObject AllyDiscardList;
+    private Transform DiscardPile;
+    public Button recycleButton;
+    private List<Card> deckList = new List<Card>();
+    TMP_Text titleText;
 
-    public void OnPointerClick(PointerEventData eventData)
+    private void Awake()
     {
-        GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
-        CardVisual cv = gameObject.GetComponent<CardVisual>();
-        CardVisual cvsss = gameObject.GetComponent<CardVisual>();
+        titleText = GameManager.Instance.alliedDiscardUI.Find("DiscardListTitle/Text").GetComponent<TMP_Text>();
+    }
 
-        if (gameObject != UIManager.Instance.LastSelectedCard && UIManager.Instance.LastSelectedCard != null)
+    public void StartEvent()
+    {
+        GameManager.Instance.allyDiscardPileButton.interactable = false;
+        GameManager.Instance.enemyDiscardPileButton.interactable = false;
+        SetupRecycleUI(true);
+        //show the discardpile for player
+        UIManager.Instance.DisplayAllyDiscards();
+        recycleButton = GameManager.Instance.recycleButton.GetComponent<Button>();
+        recycleButton.onClick.AddListener(RecycleConfirmButton);
+        DiscardPile = GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards");
+
+        foreach (Transform t in DiscardPile)
         {
-            foreach (Transform t in UIManager.Instance.LastSelectedCard.transform)
+            t.gameObject.AddComponent<RecycleListener>();
+        }
+        //recycle button add the clicked card as reference. and put it top of the deck? 
+    }
+
+    //Adjusts the ui for discard pile and becomes a recycle ui pass true for recycle then false for turning it back to regular 
+    public void SetupRecycleUI(bool on)
+    {
+        if (on)
+        {
+            //turn off exit exit attach recycle button and change title
+            titleText.text = "Recycle";
+            GameManager.Instance.exitDiscardsButton.gameObject.SetActive(false);
+            GameManager.Instance.recycleButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            //turn on exit button 
+            titleText.text = "Discard";
+            GameManager.Instance.exitDiscardsButton.gameObject.SetActive(true);
+            GameManager.Instance.recycleButton.gameObject.SetActive(false);
+        }
+    }
+
+    public void RecycleConfirmButton()
+    {
+        if (UIManager.Instance.LastSelectedCard)
+        {
+            CardVisual cv = UIManager.Instance.LastSelectedCard.GetComponent<CardVisual>();
+            //move the selected card to top of the deck. 
+            deckList = UIManager.Instance.GetActiveDeckList(true);
+            deckList.Insert(0, cv.GetCardData());
+
+            TMP_Text deckCounter = GameManager.Instance.GetActiveDeck(true).transform.Find("DeckCounter").GetComponent<TMP_Text>();
+            deckCounter.text = deckList.Count.ToString();
+
+            //destroy the selected card from the discard pile
+            Card cardData;
+            CardVisual cv2;
+            foreach (Transform t in GameManager.Instance.GetActiveDiscardPile(true))
             {
-                if (cv.cardBackground.color != Color.green)
+                cv2 = t.gameObject.GetComponent<CardVisual>();
+                cardData = cv2.GetCardData();
+
+                if (cardData == cv.GetCardData())
                 {
-                    if (cv.Md)
-                    {
-                        lastSelectedColor = cv.cardBackground.color;
-                        GameManager.Instance.ChangeCardColour(card, Color.green);
-                    }
-                    if (cv.Ed)
-                    {
-                        lastSelectedColor = cv.cardBackground.color;
-                        GameManager.Instance.ChangeCardColour(card, Color.green);
-                    }
-                    if (cv.Sd)
-                    {
-                        lastSelectedColor = cv.cardBackground.color;
-                        GameManager.Instance.ChangeCardColour(card, Color.green);
-                    }
+                    Destroy(t.gameObject);
                 }
             }
         }
-        //if its green and clicked again
-            if (cv.cardBackground.color == Color.green)
-            {
-                if (cv.Md)
-                {
-                    cv.cardBackground.color = lastSelectedColor;
-                }
-                if (cv.Ed)
-                {
-                    cv.cardBackground.color = lastSelectedColor;
 
-                }
-                if (cv.Sd)
-                {
-                    cv.cardBackground.color = lastSelectedColor;
-                }
-            }
-            else
-            {
-                GameManager.Instance.ChangeCardColour(card, Color.green);
-            }
-            UIManager.Instance.LastSelectedCard = gameObject;
-
-            Debug.Log(UIManager.Instance.LastSelectedCard + " after func");
-        }
-
-
-   
+        GameManager.Instance.alliedDiscardUI.gameObject.SetActive(false);
+        SetupRecycleUI(false);
+        GameManager.Instance.allyDiscardPileButton.interactable = true;
+        GameManager.Instance.enemyDiscardPileButton.interactable = true;
+    }
 }
+

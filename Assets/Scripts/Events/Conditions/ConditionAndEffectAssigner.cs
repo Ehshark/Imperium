@@ -48,7 +48,7 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 2, "PeekShopEventStarter" },
             { 3, "ChangeShopListener" },
             { 4, "ExpressBuyListener"  },
-            { 5, "RecycleListener" },
+            { 5, "RecycleListenerAssigner" },
             { 6, "HealMinionStarter" },
             { 13, "ShockListenerStarter" },
             { 11, "UntapMinionStarter"}, //new
@@ -80,7 +80,7 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
                     if (md.EffectId1 == entry.Key)
                         effectScriptName = entry.Value;
 
-                Type type = System.Type.GetType(effectScriptName + ",Assembly-CSharp");
+                Type type = Type.GetType(effectScriptName + ",Assembly-CSharp");
                 card.AddComponent(type);
 
                 card.GetComponent<ConditionListener>().Card = card;

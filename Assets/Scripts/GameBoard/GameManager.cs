@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> selectedDiscards;
     public Transform submitDiscardsButton;
+    public Transform exitDiscardsButton;
+    public Transform recycleButton;
     public Transform cardSwitchButtonYes;
     public Transform cardSwitchButtonNo;
 
@@ -69,6 +71,8 @@ public class GameManager : MonoBehaviour
     public Button shopButton;
     public Button exitShopButton;
     public Button moveButton;
+    public Button allyDiscardPileButton;
+    public Button enemyDiscardPileButton;
     public Image expressBuyImage;
 
     private bool isPromoting = false;
@@ -84,6 +88,7 @@ public class GameManager : MonoBehaviour
     private bool hasSwitchedCard = false;
     private bool isForcedDiscard = false;
     private bool warriorSetup;
+    private Color lastSelectedColor;
 
     public static GameManager Instance { get; private set; } = null;
     public bool IsPromoting { get => isPromoting; set => isPromoting = value; }
@@ -97,6 +102,7 @@ public class GameManager : MonoBehaviour
     public bool IsDefending { get => isDefending; set => isDefending = value; }
     public bool HasExpressBuy { get => hasExpressBuy; set => hasExpressBuy = value; }
     public bool WarriorSetup { get => warriorSetup; set => warriorSetup = value; }
+    public Color LastSelectedColor { get => lastSelectedColor; set => lastSelectedColor = value; }
 
     private void Awake()
     {
@@ -202,10 +208,8 @@ public class GameManager : MonoBehaviour
     {
         //buyButton.interactable = enable;
         //changeButton.interactable = enable;
-        if (shop.gameObject.activeSelf)
-        {
-            shop.gameObject.SetActive(false);
-        }
+        allyDiscardPileButton.interactable = enable;
+        enemyDiscardPileButton.interactable = enable;
         if (enable)
             instructionsObj.GetComponent<TMP_Text>().text = "";
         shopButton.interactable = enable;
@@ -573,15 +577,8 @@ public class GameManager : MonoBehaviour
     public void ChangeCardColour(GameObject card, Color color)
     {
         CardVisual cv = card.GetComponent<CardVisual>();
-
-        if (cv.Md)
-        {
+        if (cv)
             cv.cardBackground.color = color;
-        }
-        else if (cv.Sd)
-        {
-            cv.cardBackground.color = color;
-        }
     }
 
     public int EnableOrDisableChildren(GameObject obj, bool enable, bool enableParent = false)

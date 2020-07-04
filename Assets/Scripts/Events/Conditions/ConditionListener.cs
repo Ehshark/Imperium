@@ -53,7 +53,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             { 2, card.GetComponent<PeekShopEventStarter>() },
             { 3, card.GetComponent<ChangeShopListener>() },
             { 4, card.GetComponent<ExpressBuyListener>() },
-            { 5, card.GetComponent<RecycleListener>() },
+            { 5, card.GetComponent<RecycleListenerAssigner>() },
             { 6, card.GetComponent<HealMinionStarter>() },
             { 13, card.GetComponent<ShockListenerStarter>() },
             { 11, card.GetComponent<UntapMinionStarter>() }, //new
@@ -86,7 +86,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                 }
             }
 
-            if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 8)
+            if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 9 || cv.Md.EffectId1 == 10)
             {
                 cv.IsCombatEffectActivated = true;
             }
