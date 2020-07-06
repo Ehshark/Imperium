@@ -213,30 +213,11 @@ public class GameManager : MonoBehaviour
         if (enable)
             instructionsObj.GetComponent<TMP_Text>().text = "";
         shopButton.interactable = enable;
-        Transform costAmount;
-        string cost;
-        int mvCost;
 
         ActiveHero(true).CanPlayCards = enable;
         if (enable)
         {
-            foreach (Transform m in GetActiveHand(true))
-            {
-                if (m != null)
-                {
-                    costAmount = m.Find("Ribbon/Cost/CostAmount");
-                    cost = costAmount.GetComponent<TMP_Text>().text;
-                    mvCost = int.Parse(cost);
-                    if (mvCost <= ActiveHero(true).CurrentMana)
-                    {
-                        m.Find("GlowPanel").gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        m.Find("GlowPanel").gameObject.SetActive(false);
-                    }
-                }
-            }
+            UIManager.Instance.GlowCards();
         }
         else
         {
@@ -273,6 +254,7 @@ public class GameManager : MonoBehaviour
         {
             cv = t.GetComponent<CardVisual>();
             cv.IsCombatEffectActivated = false;
+            cv.CombatEffectActivated(false);
             UnTapMinions(t);
             ResetDamage(t);
             DisableExpressBuy();
@@ -296,6 +278,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Opponent discarding");
             submitDiscardsButton.gameObject.SetActive(true);
         }
+        ActiveHero(true).AdjustDiscard(false);
     }
 
     public int GetCurrentPlayer()
@@ -614,6 +597,7 @@ public class GameManager : MonoBehaviour
             {
                 ChangeCardColour(cl.Card, cl.Md.Color);
                 cv.IsTapped = false;
+                cv.ChangeTappedAppearance();
             }
         }
     }

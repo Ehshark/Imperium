@@ -89,6 +89,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 9 || cv.Md.EffectId1 == 10)
             {
                 cv.IsCombatEffectActivated = true;
+                cv.CombatEffectActivated(true);
             }
         }
     }

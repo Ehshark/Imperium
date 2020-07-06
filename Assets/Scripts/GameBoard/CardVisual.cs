@@ -487,5 +487,29 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             return ed;
     }
 
+    public void ChangeTappedAppearance()
+    {
+        Color originalColor = cardBackground.color;
+        if (isTapped)
+            originalColor.a = 0.5f;
+        else
+            originalColor.a = 1f;
+
+        cardBackground.color = originalColor;
+    }
+
+    public void CombatEffectActivated(bool activate)
+    {
+        Transform glowObj = transform.Find("GlowPanel");
+        Image glow = glowObj.GetComponent<Image>();
+        if (glow.color != new Color(1f, 0f, 0f, 1f))
+            glow.color = new Color(1f, 0f, 0f, 1f);
+
+        if (activate)
+            glowObj.gameObject.SetActive(true);
+        else
+            glowObj.gameObject.SetActive(false);
+    }
+
     //TODO: OnHover Function to highlight the card
 }

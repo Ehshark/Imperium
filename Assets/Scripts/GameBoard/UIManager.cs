@@ -177,27 +177,48 @@ public class UIManager : MonoBehaviour
 
     public void GlowCards()
     {
-        //Change the hero color 
-        //loop and enable all the cards that are available
-        int heroManaCost = GameManager.Instance.ActiveHero(true).CurrentMana;
-        Transform costAmount;
-        string cost;
+        Hero activeHero = GameManager.Instance.ActiveHero(true);
+        Transform activeHand = GameManager.Instance.GetActiveHand(true);
+        int heroManaCost = activeHero.CurrentMana;
         int mvCost;
+        CardVisual cv;
+        Card data;
 
-        foreach (Transform m in GameManager.Instance.GetActiveHand(true))
+        foreach (Transform m in activeHand)
         {
             if (m != null)
             {
-                costAmount = m.Find("Ribbon/Cost/CostAmount");
-                cost = costAmount.GetComponent<TMP_Text>().text;
-                mvCost = int.Parse(cost);
-                if (mvCost <= heroManaCost)
+                cv = m.GetComponent<CardVisual>();
+                data = cv.GetCardData();
+                mvCost = data.GoldAndManaCost;
+
+                //if the card is a health potion, check whether health is already full
+                if (data.EffectId1 == 20)
                 {
-                    m.Find("GlowPanel").gameObject.SetActive(true);
+                    if (activeHero.CurrentHealth == activeHero.TotalHealth)
+                        m.Find("GlowPanel").gameObject.SetActive(false);
+                    else
+                        m.Find("GlowPanel").gameObject.SetActive(true);
                 }
+                //if the card is a mana potion, check whether mana is already full
+                else if (data.EffectId1 == 21)
+                {
+                    if (heroManaCost == activeHero.TotalMana)
+                        m.Find("GlowPanel").gameObject.SetActive(false);
+                    else
+                        m.Find("GlowPanel").gameObject.SetActive(true);
+                }
+                //else the card is not a potion, so check if its cost is less than current mana
                 else
                 {
-                    m.Find("GlowPanel").gameObject.SetActive(false);
+                    if (mvCost <= heroManaCost)
+                    {
+                        m.Find("GlowPanel").gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        m.Find("GlowPanel").gameObject.SetActive(false);
+                    }
                 }
             }
         }

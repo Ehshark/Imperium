@@ -56,9 +56,12 @@ public class StartCombat : MonoBehaviour
         }
 
         //Loop through all minions that are currently attacking and set there tap state to false
-        foreach (GameObject go in GameManager.Instance.MinionsAttacking)
+        if (!GameManager.Instance.IsDefending)
         {
-            go.GetComponent<CardVisual>().IsTapped = false;
+            foreach (GameObject go in GameManager.Instance.MinionsAttacking)
+            {
+                go.GetComponent<CardVisual>().IsTapped = false;
+            }
         }
 
         //Reset Hero 
@@ -95,7 +98,8 @@ public class StartCombat : MonoBehaviour
         }
 
         //Reset the List of Attack Minions if combat was cancelled
-        if (!GameManager.Instance.IsDefending) {
+        if (!GameManager.Instance.IsDefending)
+        {
             GameManager.Instance.MinionsAttacking = new List<GameObject>();
         }
     }
@@ -127,6 +131,7 @@ public class StartCombat : MonoBehaviour
 
     public void SubmitAttack()
     {
+        CardVisual cv;
         GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
         if (GameManager.Instance.MinionsAttacking.Count != 0 || GameManager.Instance.ActiveHero(true).IsAttacking)
         {
@@ -141,6 +146,11 @@ public class StartCombat : MonoBehaviour
 
             EventManager.Instance.PostNotification(EVENT_TYPE.DEFEND_AGAINST);
             CancelCombat();
+            foreach (GameObject g in GameManager.Instance.MinionsAttacking)
+            {
+                cv = g.GetComponent<CardVisual>();
+                cv.ChangeTappedAppearance();
+            }
         }
         else
         {

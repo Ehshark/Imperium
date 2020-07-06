@@ -64,6 +64,8 @@ public class Hero : MonoBehaviour
     private Image heroClan;
     [SerializeField]
     private TMP_Text damageText;
+    [SerializeField]
+    private TMP_Text discardText;
 
     [SerializeField]
     private TMP_Text regDmgAbs;
@@ -360,6 +362,16 @@ public class Hero : MonoBehaviour
     {
         damage += amount;
         SetDamage();
+    }
+
+    public void AdjustDiscard(bool increase)
+    {
+        if (increase)
+            hasToDiscard++;
+        else
+            hasToDiscard = 0;
+
+        discardText.text = HasToDiscard.ToString();
     }
 
     public void AssignDamageAbsorbed(bool isIncrease)
