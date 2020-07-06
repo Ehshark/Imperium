@@ -62,7 +62,8 @@ public class DefendListener : MonoBehaviour, IListener
 
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
-            t.GetComponent<CardVisual>().damageObjects.SetActive(isDefending);
+            if (t.gameObject.activeSelf && !t.GetComponent<CardVisual>().IsTapped)
+                t.GetComponent<CardVisual>().damageObjects.SetActive(isDefending);
         }
         GameManager.Instance.ActiveHero(false).DamageObjects.gameObject.SetActive(isDefending);
         GameManager.Instance.StartCombatDamageUI.gameObject.SetActive(isDefending);
@@ -172,10 +173,14 @@ public class DefendListener : MonoBehaviour, IListener
                     {
                         if (entry.Key.Equals("poisonTouch") && cv.Md.EffectId1 != 9)
                         {
-                            cv.CurrentHealth = 0;
+                            cv.AdjustHealth(cv.CurrentHealth, false);
+                            EventManager.Instance.PostNotification(EVENT_TYPE.MINION_DEFEATED);
                         }
                         else
                         {
+                            if ((cv.CurrentHealth - entry.Value) == 0)
+                                EventManager.Instance.PostNotification(EVENT_TYPE.MINION_DEFEATED);
+
                             cv.AdjustHealth(entry.Value, false);
                         }
                     }

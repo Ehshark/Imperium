@@ -34,7 +34,8 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 2, EVENT_TYPE.BUY_FIRST_CARD },
             { 4, EVENT_TYPE.TAP_MINION },
             { 5, EVENT_TYPE.FIRST_CHANGE_SHOP },
-            { 6, EVENT_TYPE.ACTION_DRAW }
+            { 6, EVENT_TYPE.ACTION_DRAW },
+            { 3, EVENT_TYPE.MINION_DEFEATED }
         };
 
         //Effects - USE THE NAME OF THE SCRIPT YOU WROTE
