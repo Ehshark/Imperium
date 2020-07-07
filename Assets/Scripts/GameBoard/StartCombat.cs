@@ -27,8 +27,7 @@ public class StartCombat : MonoBehaviour
         //Update the instructions text
         GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Please Select Minions to Attack";
 
-        GameManager.Instance.buyButton.interactable = false;
-        GameManager.Instance.changeButton.interactable = false;
+        GameManager.Instance.shopButton.interactable = false;
     }
 
     public void CancelCombat()
@@ -102,6 +101,8 @@ public class StartCombat : MonoBehaviour
         {
             GameManager.Instance.MinionsAttacking = new List<GameObject>();
         }
+
+        GameManager.Instance.shopButton.interactable = true;
     }
 
     private void SwitchButtons()
