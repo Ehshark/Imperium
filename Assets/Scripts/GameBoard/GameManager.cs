@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour
     private bool isEffect;
     private float turnTimer;
     private bool hasSwitchedCard = false;
+    private bool isForcedDiscard = false;
     private bool warriorSetup;
 
     public static GameManager Instance { get; private set; } = null;
@@ -282,6 +283,15 @@ public class GameManager : MonoBehaviour
         firstChangeShop = false;
 
         //TODO: Handle opponent discard logic here
+        if(ActiveHero(true).HasToDiscard > 0)
+        {
+            isForcedDiscard = true;
+            instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
+
+            EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
+            Debug.Log("Opponent discarding");
+            submitDiscardsButton.gameObject.SetActive(true);
+        }
     }
 
     public int GetCurrentPlayer()
@@ -483,7 +493,7 @@ public class GameManager : MonoBehaviour
 
             submitDiscardsButton.gameObject.SetActive(false);
 
-            if (!hasSwitchedCard)
+            if (!hasSwitchedCard && !isForcedDiscard)
             {
                 instructionsObj.GetComponent<TMP_Text>().text = "Do you want to trade 1 gold to switch an additional card?";
                 cardSwitchButtonYes.gameObject.SetActive(true);

@@ -30,5 +30,7 @@ public class UntapMinionListener : MonoBehaviour, IPointerDownHandler
         {
             StartCoroutine(GameManager.Instance.SetInstructionsText("This Minion is not currently tapped, please select a Minion to untap"));
         }
+
+        //InvokeEventCommand.InvokeNextEvent();
     }
 }

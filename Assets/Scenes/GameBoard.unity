@@ -747,18 +747,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21e8c3b72fab6d44d8d0e42b1ce1733c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &63783568 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8337193157745625200, guid: 0a603b7ac0f073a4faff149c6dbf644c,
-    type: 3}
-  m_PrefabInstance: {fileID: 8337193157108951495}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 63783563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eeb9c08fdc5c1674dbf1b867deb4dfc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &69098778
 GameObject:
   m_ObjectHideFlags: 0
@@ -1277,7 +1265,7 @@ PrefabInstance:
         type: 3}
       propertyPath: md
       value: 
-      objectReference: {fileID: 11400000, guid: 7b72174fc49deaa4d963c3b5ccb1df9d,
+      objectReference: {fileID: 11400000, guid: a7c304db95c44da4b97ebf0673be3e4d,
         type: 2}
     - target: {fileID: 3569495913472679337, guid: eefefb9f2c5af18409cebc6556cf53cc,
         type: 3}
@@ -1852,7 +1840,7 @@ PrefabInstance:
         type: 3}
       propertyPath: md
       value: 
-      objectReference: {fileID: 11400000, guid: 5d11914f9416fa843b80d55b35e40a1a,
+      objectReference: {fileID: 11400000, guid: 99d36582e8486334cae7a08f10a29dee,
         type: 2}
     - target: {fileID: 3569495913472679337, guid: eefefb9f2c5af18409cebc6556cf53cc,
         type: 3}
@@ -2169,12 +2157,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 63783568}
-        m_MethodName: tmp
+      - m_Target: {fileID: 63783563}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2773,7 +2761,7 @@ PrefabInstance:
         type: 3}
       propertyPath: md
       value: 
-      objectReference: {fileID: 11400000, guid: d76d50351762e43468e33c4cff712566,
+      objectReference: {fileID: 11400000, guid: 4e4d965f460b63049b31f704e247980c,
         type: 2}
     - target: {fileID: 3569495913472679337, guid: eefefb9f2c5af18409cebc6556cf53cc,
         type: 3}
@@ -4567,7 +4555,7 @@ PrefabInstance:
         type: 3}
       propertyPath: md
       value: 
-      objectReference: {fileID: 11400000, guid: 919ced145f2f1c3458bbd1b176d400b9,
+      objectReference: {fileID: 11400000, guid: 9a76043f197a2c1409dfc11dd4947d7f,
         type: 2}
     - target: {fileID: 3569495913472679337, guid: eefefb9f2c5af18409cebc6556cf53cc,
         type: 3}
