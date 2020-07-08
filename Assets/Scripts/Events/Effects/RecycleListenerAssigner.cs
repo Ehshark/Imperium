@@ -12,11 +12,11 @@ public class RecycleListenerAssigner : MonoBehaviour
     private Transform DiscardPile;
     public Button recycleButton;
     private List<Card> deckList = new List<Card>();
-    TMP_Text titleText;
+    TMP_Text titleText;    
 
     private void Awake()
     {
-        titleText = GameManager.Instance.alliedDiscardUI.Find("DiscardListTitle/Text").GetComponent<TMP_Text>();
+        titleText = GameManager.Instance.GetActiveDiscardUI(true).Find("DiscardListTitle/Text").GetComponent<TMP_Text>();
     }
 
     public void StartEvent()
@@ -25,14 +25,24 @@ public class RecycleListenerAssigner : MonoBehaviour
         GameManager.Instance.enemyDiscardPileButton.interactable = false;
         SetupRecycleUI(true);
         //show the discardpile for player
-        UIManager.Instance.DisplayAllyDiscards();
+        if (GameManager.Instance.GetCurrentPlayer() == 0)
+        {
+            UIManager.Instance.DisplayAllyDiscards();
+        }
+        else
+        {
+            UIManager.Instance.DisplayEnemyDiscards();
+        }
         recycleButton = GameManager.Instance.recycleButton.GetComponent<Button>();
         recycleButton.onClick.AddListener(RecycleConfirmButton);
-        DiscardPile = GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards");
+        DiscardPile = GameManager.Instance.GetActiveDiscardUI(true).transform.Find("CardPile/Cards");
 
+        int i = 0;
         foreach (Transform t in DiscardPile)
         {
             t.gameObject.AddComponent<RecycleListener>();
+            t.gameObject.GetComponent<RecycleListener>().index = i;
+            i++;
         }
         //recycle button add the clicked card as reference. and put it top of the deck? 
     }
@@ -68,25 +78,21 @@ public class RecycleListenerAssigner : MonoBehaviour
             TMP_Text deckCounter = GameManager.Instance.GetActiveDeck(true).transform.Find("DeckCounter").GetComponent<TMP_Text>();
             deckCounter.text = deckList.Count.ToString();
 
-            //destroy the selected card from the discard pile
-            Card cardData;
-            CardVisual cv2;
-            foreach (Transform t in GameManager.Instance.GetActiveDiscardPile(true))
-            {
-                cv2 = t.gameObject.GetComponent<CardVisual>();
-                cardData = cv2.GetCardData();
+            Destroy(GameManager.Instance.GetActiveDiscardPile(true).GetChild(GameManager.Instance.RemoveCardAtIndex).gameObject);
+            UIManager.Instance.GetActiveDiscardList(true).RemoveAt(GameManager.Instance.RemoveCardAtIndex);
+            GameManager.Instance.RemoveCardAtIndex = -1;
 
-                if (cardData == cv.GetCardData())
-                {
-                    Destroy(t.gameObject);
-                }
-            }
+            //Add the power to the Queue
+            EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_RECYCLE);
         }
 
-        GameManager.Instance.alliedDiscardUI.gameObject.SetActive(false);
+        GameManager.Instance.GetActiveDiscardUI(true).gameObject.SetActive(false);
         SetupRecycleUI(false);
         GameManager.Instance.allyDiscardPileButton.interactable = true;
         GameManager.Instance.enemyDiscardPileButton.interactable = true;
+
+        //Call the Next Effect in the Queue
+        InvokeEventCommand.InvokeNextEvent();
     }
 }
 

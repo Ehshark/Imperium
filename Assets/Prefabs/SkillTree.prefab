@@ -130,7 +130,7 @@ MonoBehaviour:
   abilityName: {fileID: 677976765092813298}
   silenceIcon: {fileID: 261519723928574995}
   recycleIcon: {fileID: 3337195549037203673}
-  untapIcon: {fileID: 8665520649402095372}
+  lifeStealIcon: {fileID: 8665520649402095372}
   poisonIcon: {fileID: 7692081318681838552}
   peekshopIcon: {fileID: 2548921137435431272}
   healIcon: {fileID: 1938188734347460918}
@@ -1996,7 +1996,22 @@ PrefabInstance:
     - target: {fileID: 1090425499445157076, guid: e8fa12506130e1e4385bcf0873cb522f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 11
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1090425499445157076, guid: e8fa12506130e1e4385bcf0873cb522f,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1090425499445157076, guid: e8fa12506130e1e4385bcf0873cb522f,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1090425499445157076, guid: e8fa12506130e1e4385bcf0873cb522f,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.b
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2151636627811420160, guid: e8fa12506130e1e4385bcf0873cb522f,
         type: 3}
@@ -2283,6 +2298,12 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 8439848150235526998, guid: e8fa12506130e1e4385bcf0873cb522f,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 28828c385a7be60498e3807baf3af24c,
+        type: 3}
     - target: {fileID: 8851194701853785011, guid: e8fa12506130e1e4385bcf0873cb522f,
         type: 3}
       propertyPath: m_AnchoredPosition.x

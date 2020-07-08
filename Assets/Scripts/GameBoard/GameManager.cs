@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
     private bool warriorSetup;
     private bool inHeroPower;
     private Color lastSelectedColor;
+    private int removeCardAtIndex;
 
     public static GameManager Instance { get; private set; } = null;
     public bool IsPromoting { get => isPromoting; set => isPromoting = value; }
@@ -104,6 +105,7 @@ public class GameManager : MonoBehaviour
     public bool InHeroPower { get => inHeroPower; set => inHeroPower = value; }
     public Color LastSelectedColor { get => lastSelectedColor; set => lastSelectedColor = value; }
     public bool IsActionPhase { get => isActionPhase; set => isActionPhase = value; }
+    public int RemoveCardAtIndex { get => removeCardAtIndex; set => removeCardAtIndex = value; }
 
     private void Awake()
     {
@@ -635,6 +637,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public Transform GetActiveDiscardUI(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return alliedDiscardUI;
+            }
+
+            return enemyDiscardUI;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyDiscardUI;
+            }
+            return alliedDiscardUI;
+        }
+    }
+    
     public Transform GetActiveMinionZone(bool activeWanted)
     {
         if (activeWanted)

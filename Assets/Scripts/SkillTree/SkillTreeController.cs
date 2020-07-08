@@ -14,7 +14,7 @@ public class SkillTreeController : MonoBehaviour
 
     public Button silenceIcon;
     public Button recycleIcon;
-    public Button untapIcon;
+    public Button lifeStealIcon;
     public Button poisonIcon;
     public Button peekshopIcon;
     public Button healIcon;
@@ -45,7 +45,7 @@ public class SkillTreeController : MonoBehaviour
             {6,"Heal Allied minion"},
             {7,"Poison Touch"},
             {8,"Stealth"},
-            {11,"Untap Minion"},
+            {10,"Lifesteal"},
             {12,"Silence"},
             {14,"Buff Allied Minion"},
             {17,"Trash"}
@@ -59,7 +59,7 @@ public class SkillTreeController : MonoBehaviour
             {6,"Increase target allied minion's health by 1"},
             {7,"This minion gains poison touch until the end of your turn."},
             {8,"This minion gains stealth until the end of your turn."},
-            {11,"Untap target allied minion."},
+            {10,"This minion gains lifesteal until the end of your turn."},
             {12,"Target enemy minion loses its effect(s) until the end of your opponent's next turn."},
             {14,"Target allied minion's damage increases by 1 until the end of your turn"},
             {17,"Select 1 card from your hand or discard pile. Remove that card from the game."}
@@ -73,7 +73,7 @@ public class SkillTreeController : MonoBehaviour
             {6,EVENT_TYPE.POWER_HEAL_MINION},
             {7,EVENT_TYPE.POWER_POISON_TOUCH},
             {8,EVENT_TYPE.POWER_STEALTH},
-            {11,EVENT_TYPE.POWER_UNTAP},
+            {10,EVENT_TYPE.POWER_LIFESTEAL},
             {12,EVENT_TYPE.POWER_SILENCE},
             {14,EVENT_TYPE.POWER_BUFF_MINION},
             {17,EVENT_TYPE.POWER_TRASH}
@@ -87,7 +87,7 @@ public class SkillTreeController : MonoBehaviour
             {6,healIcon},
             {7,poisonIcon},
             {8,stealthIcon},
-            {11,untapIcon},
+            {10,lifeStealIcon},
             {12,silenceIcon},
             {14,buffIcon},
             {17,trashIcon}

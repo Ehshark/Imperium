@@ -54,7 +54,7 @@ public class TrashController : MonoBehaviour
     
     public void LoadDiscardList()
     {
-        int i = 1;
+        int i = 0;
         foreach (Card c in UIManager.Instance.GetActiveDiscardList(true))
         {
             GameObject card;
@@ -110,7 +110,10 @@ public class TrashController : MonoBehaviour
 
         gameObject.SetActive(false);
 
-        //Call the Next Power in the Queue
+        //Call the next power or condition
+        EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_TRASH);
+
+        //Call the Next Effect in the Queue
         InvokeEventCommand.InvokeNextEvent();
     }
 }

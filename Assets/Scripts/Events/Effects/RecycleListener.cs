@@ -9,6 +9,7 @@ public class RecycleListener : MonoBehaviour, IPointerClickHandler
 {
     GameObject card;
     CardVisual cv;
+    public int index;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -26,11 +27,13 @@ public class RecycleListener : MonoBehaviour, IPointerClickHandler
                     GameManager.Instance.LastSelectedColor = cv.cardBackground.color;
                     GameManager.Instance.ChangeCardColour(card, Color.cyan);
                     UIManager.Instance.LastSelectedCard = gameObject;
+                    GameManager.Instance.RemoveCardAtIndex = index;
                 }
                 else
                 {
                     cv.cardBackground.color = GameManager.Instance.LastSelectedColor;
                     UIManager.Instance.LastSelectedCard = null;
+                    GameManager.Instance.RemoveCardAtIndex = -1;
                 }
             }
         }

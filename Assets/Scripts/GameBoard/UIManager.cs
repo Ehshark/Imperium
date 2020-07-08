@@ -632,7 +632,7 @@ public class UIManager : MonoBehaviour
         {
             GameManager.Instance.enemyDiscardUI.gameObject.SetActive(true);
 
-            for (int i = 0; i < enemyDiscards.Count; i++)
+            foreach (Card c in allyDiscards)
             {
                 //display cards in the UI equal to the amount of cards in the discard pile
                 GameManager.Instance.SpawnCard(GameManager.Instance.enemyDiscardUI.transform.Find("CardPile/Cards"), enemyDiscards[i]);

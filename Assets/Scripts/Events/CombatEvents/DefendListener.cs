@@ -174,12 +174,13 @@ public class DefendListener : MonoBehaviour, IListener
                         if (entry.Key.Equals("poisonTouch") && cv.Md.EffectId1 != 9)
                         {
                             cv.AdjustHealth(cv.CurrentHealth, false);
-                            EventManager.Instance.PostNotification(EVENT_TYPE.MINION_DEFEATED);
+                            //EventManager.Instance.PostNotification(EVENT_TYPE.MINION_DEFEATED);
+                            EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.MINION_DEFEATED);
                         }
                         else
                         {
                             if ((cv.CurrentHealth - entry.Value) == 0)
-                                EventManager.Instance.PostNotification(EVENT_TYPE.MINION_DEFEATED);
+                                EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.MINION_DEFEATED);
 
                             cv.AdjustHealth(entry.Value, false);
                         }
@@ -200,6 +201,15 @@ public class DefendListener : MonoBehaviour, IListener
                 if (entry.Key.Equals("lifesteal"))
                 {
                     GameManager.Instance.ActiveHero(true).AdjustHealth(entry.Value, true);
+                    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_LIFESTEAL);
+                }
+                else if (entry.Key.Equals("poisonTouch"))
+                {
+                    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_POISON_TOUCH);
+                }
+                else if (entry.Key.Equals("stealth"))
+                {
+                    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_STEALTH);
                 }
             }
         }
