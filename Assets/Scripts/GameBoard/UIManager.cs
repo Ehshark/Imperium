@@ -604,13 +604,11 @@ public class UIManager : MonoBehaviour
     {
         if (allyDiscardClosed) //checks to see if discard UI is open or closed
         {
-            List<GameObject> tmp = GameManager.Instance.alliedDiscardPileList; //copies the cards gameobjects
-
             GameManager.Instance.alliedDiscardUI.gameObject.SetActive(true);
             for (int i = 0; i < allyDiscards.Count; i++)
             {
                 //display cards in the UI equal to the amount of cards in the discard pile
-                Instantiate(tmp[i], GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards"));
+                GameManager.Instance.SpawnCard(GameManager.Instance.alliedDiscardUI.transform.Find("CardPile/Cards"), allyDiscards[i]);
             }
 
             allyDiscardClosed = false; //sets shop to "open" state
@@ -632,15 +630,12 @@ public class UIManager : MonoBehaviour
     {
         if (enemyDiscardClosed) //checks to see if discard UI is open or closed
         {
-            List<GameObject> tmp = new List<GameObject>();
-            tmp = GameManager.Instance.enemyDiscardPileList; //copies the cards gameobjects
-
             GameManager.Instance.enemyDiscardUI.gameObject.SetActive(true);
 
             for (int i = 0; i < enemyDiscards.Count; i++)
             {
                 //display cards in the UI equal to the amount of cards in the discard pile
-                Instantiate(tmp[i], GameManager.Instance.enemyDiscardUI.transform.Find("CardPile/Cards"));
+                GameManager.Instance.SpawnCard(GameManager.Instance.enemyDiscardUI.transform.Find("CardPile/Cards"), enemyDiscards[i]);
             }
 
             enemyDiscardClosed = false; //sets shop to "open" state

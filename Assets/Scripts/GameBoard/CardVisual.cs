@@ -337,20 +337,17 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         ShockListener sl = gameObject.GetComponent<ShockListener>();
         if (sl)
         {
-            mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(false), GameManager.Instance.GetActiveDiscardPileList(false));
-            UIManager.Instance.GetActiveDiscardList(false).Add(card);
+            mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(false), UIManager.Instance.GetActiveDiscardList(false));
         }
         else
         {
             if (GameManager.Instance.IsDefending)
             {
-                mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(false), GameManager.Instance.GetActiveDiscardPileList(false));
-                UIManager.Instance.GetActiveDiscardList(false).Add(card);
+                mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(false), UIManager.Instance.GetActiveDiscardList(false));
             }
             else
             {
-                mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true));
-                UIManager.Instance.GetActiveDiscardList(true).Add(card);
+                mc = new MoveCardCommand(gameObject, GameManager.Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true));
             }
         }
 

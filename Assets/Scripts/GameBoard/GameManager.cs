@@ -35,15 +35,12 @@ public class GameManager : MonoBehaviour
     public Transform alliedDeck;
     public Transform alliedDiscardPile;
     public Transform alliedDiscardUI;
-    public List<GameObject> alliedDiscardPileList;
 
     public Transform enemyMinionZone;
     public Transform enemyHand;
     public Transform enemyDeck;
     public Transform enemyDiscardPile;
     public Transform enemyDiscardUI;
-    public List<GameObject> enemyDiscardPileList;
-    public Button testButton;
 
     public List<GameObject> selectedDiscards;
     public Transform submitDiscardsButton;
@@ -87,6 +84,7 @@ public class GameManager : MonoBehaviour
     private float turnTimer;
     private bool hasSwitchedCard = false;
     private bool isForcedDiscard = false;
+    private bool isActionPhase = false;
     private bool warriorSetup;
     private bool inHeroPower;
     private Color lastSelectedColor;
@@ -105,6 +103,7 @@ public class GameManager : MonoBehaviour
     public bool WarriorSetup { get => warriorSetup; set => warriorSetup = value; }
     public bool InHeroPower { get => inHeroPower; set => inHeroPower = value; }
     public Color LastSelectedColor { get => lastSelectedColor; set => lastSelectedColor = value; }
+    public bool IsActionPhase { get => isActionPhase; set => isActionPhase = value; }
 
     private void Awake()
     {
@@ -119,12 +118,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
-    {
-        testButton.onClick.AddListener(delegate { DrawCard(UIManager.Instance.allyDeck, alliedHand); });
-    }
-
-    public GameObject MoveCard(GameObject card, Transform to, List<GameObject> list = null, bool returnCard = false, bool simple = false)
+    public GameObject MoveCard(GameObject card, Transform to, List<Card> list = null, bool returnCard = false, bool simple = false)
     {
         CardVisual cv = card.GetComponent<CardVisual>();
         if (!simple)
@@ -141,7 +135,7 @@ public class GameManager : MonoBehaviour
             }
             else if (card.GetComponent<CardVisual>().Sd != null)
             {
-                tmp = SpawnCard(null, null, null, card.GetComponent<CardVisual>().Sd, false);
+                tmp = SpawnCard(null, card.GetComponent<CardVisual>().Sd, false);
             }
             else
             {
@@ -153,7 +147,7 @@ public class GameManager : MonoBehaviour
 
             if (list != null)
             {
-                list.Add(tmp);
+                list.Add(card.GetComponent<CardVisual>().GetCardData());
             }
 
             CardVisual tmpCv = tmp.GetComponent<CardVisual>();
@@ -249,6 +243,7 @@ public class GameManager : MonoBehaviour
 
     void StartTurn()
     {
+        isActionPhase = false;
         CardVisual cv;
         foreach (Transform t in GetActiveMinionZone(true))
         {
@@ -269,7 +264,7 @@ public class GameManager : MonoBehaviour
         firstChangeShop = false;
 
         //TODO: Handle opponent discard logic here
-        if(ActiveHero(true).HasToDiscard > 0)
+        if (ActiveHero(true).HasToDiscard > 0)
         {
             isForcedDiscard = true;
             instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
@@ -278,6 +273,9 @@ public class GameManager : MonoBehaviour
             Debug.Log("Opponent discarding");
             submitDiscardsButton.gameObject.SetActive(true);
         }
+        else
+            isActionPhase = true;
+
         ActiveHero(true).AdjustDiscard(false);
     }
 
@@ -296,12 +294,11 @@ public class GameManager : MonoBehaviour
 
         return player;
     }
+
     //draws a single card, takes in a list of Card parameter and determines what kind of card it is and instantiate + populates it
-    //TODO: change the instatiate prefab for cards to the enemy's hand as well
-    //TODO: add deck counter and decrement
     public void DrawCard(List<Card> deck, Transform playerHand)
     {
-        if (deck.Count > 0) //checks if deck is not empty
+        if (deck.Count > 0)
         {
             DelayCommand dc = new DelayCommand(GetActiveHand(true), 0.25f);
             dc.AddToQueue();
@@ -324,25 +321,20 @@ public class GameManager : MonoBehaviour
 
         else //no cards left in the deck, add the discard pile, reshuffle and continue the draw
         {
-            //Debug.Log("no cards in deck, please shuffle in discard pile and continue draw");
-            //TODO: add discard pile to deck, shuffle the deck, continue the draw
             if (playerHand == alliedHand)
             {
                 for (int i = 0; i < UIManager.Instance.allyDiscards.Count; i++)
                 {
                     deck.Add(UIManager.Instance.allyDiscards[0]);
                     UIManager.Instance.allyDiscards.Remove(UIManager.Instance.allyDiscards[0]);
-                    ShuffleCurrentDeck(deck);
-                    alliedDiscardPileList.Clear();
 
-                    //foreach (GameObject t in alliedDiscardPile) //removes gameobject from discardpile if it isn't the discard pile text
-                    //{
-                    //    if (t.GetComponent<CardVisual>())
-                    //    {
-                    //        Destroy(t);
-                    //    }
-                    //}
+                    foreach (GameObject t in alliedDiscardPile) 
+                    {
+                        Destroy(t);
+                    }
                 }
+
+                ShuffleCurrentDeck(deck);
             }
             else
             {
@@ -350,23 +342,22 @@ public class GameManager : MonoBehaviour
                 {
                     deck.Add(UIManager.Instance.enemyDiscards[0]);
                     UIManager.Instance.allyDiscards.Remove(UIManager.Instance.enemyDiscards[0]);
-                    ShuffleCurrentDeck(deck);
-                    enemyDiscardPileList.Clear();
 
-                    foreach (GameObject t in enemyDiscardPile) //removes gameobject from discardpile if it isn't the discard pile text
+                    foreach (GameObject t in enemyDiscardPile) 
                     {
-                        if (t.GetComponent<CardVisual>())
-                        {
-                            Destroy(t);
-                        }
+                        Destroy(t);
                     }
                 }
+
+                ShuffleCurrentDeck(deck);
             }
 
             //function calls itself to continue the draw since deck is no longer empty
             DrawCard(deck, playerHand);
         }
-        EventManager.Instance.PostNotification(EVENT_TYPE.ACTION_DRAW);
+
+        if(isActionPhase)
+            EventManager.Instance.PostNotification(EVENT_TYPE.ACTION_DRAW);
 
     }
 
@@ -385,48 +376,44 @@ public class GameManager : MonoBehaviour
     //End phase, player draws/selects cards to discard until hand size is 5, then prompt player to spend 1 gold to draw 1 card and discard 1 card 
     public void EndTurn()
     {
+        isActionPhase = false;
+        Transform activeHand = GetActiveHand(true);
         int handSize = ActiveHero(true).HandSize;
-        int drawNum, discardNum;
+        int drawNum;
         selectedDiscards = new List<GameObject>();
         hasSwitchedCard = false;
 
-        if (GetCurrentPlayer() == 0)
+        foreach (Transform t in activeHand)
         {
-            foreach (Transform t in GetActiveHand(true))
-            {
-                Destroy(t.gameObject.GetComponent<PlayCard>());
-            }
+            Destroy(t.gameObject.GetComponent<PlayCard>());
+        }
 
-            if (UIManager.Instance.allyHand.Count > handSize)
-            {
-                discardNum = UIManager.Instance.allyHand.Count - handSize;
+        if (UIManager.Instance.GetActiveHandList(true).Count > handSize)
+        {
+            instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
+            EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
+            submitDiscardsButton.gameObject.SetActive(true);
+        }
+        else if (UIManager.Instance.GetActiveHandList(true).Count < handSize)
+        {
+            drawNum = handSize - UIManager.Instance.GetActiveHandList(true).Count;
 
-                instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
-                EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
-                submitDiscardsButton.gameObject.SetActive(true);
-            }
-            else if (UIManager.Instance.allyHand.Count < handSize)
+            for (int i = 0; i < drawNum; i++)
             {
-                drawNum = handSize - UIManager.Instance.allyHand.Count;
-
-                for (int i = 0; i < drawNum; i++)
-                {
-                    DrawCard(UIManager.Instance.allyDeck, alliedHand);
-                }
+                DrawCard(UIManager.Instance.GetActiveDeckList(true), activeHand);
             }
-            else
-            {
-                //DELETE THIS BLOCK OUTSIDE OF TESTING PURPOSES
-                instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
-
-                EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
-                Debug.Log("Handsize 5 working: " + EVENT_TYPE.DISCARD_CARD);
-                submitDiscardsButton.gameObject.SetActive(true);
-            }
+        }
+        if (ActiveHero(true).Gold > 0)
+        {
+            instructionsObj.GetComponent<TMP_Text>().text = "Do you want to trade 1 gold to switch an additional card?";
+            cardSwitchButtonYes.gameObject.SetActive(true);
+            cardSwitchButtonNo.gameObject.SetActive(true);
+            hasSwitchedCard = true;
         }
         else
         {
-            //TODO: Logic for enemy side
+            SwitchTurn();
+            instructionsObj.GetComponent<TMP_Text>().text = "No cards needed to discard. Passing Turn";
         }
     }
 
@@ -434,51 +421,37 @@ public class GameManager : MonoBehaviour
     public void EndPhaseCardSwitch()
     {
         submitDiscardsButton.gameObject.SetActive(true);
-
-        if (GetCurrentPlayer() == 0)
-        {
-            ActiveHero(true).AdjustGold(1, false);
-
-            DrawCard(UIManager.Instance.allyDeck, alliedHand);
-
-            EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
-            instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
-
-        }
-        else
-        {
-            //TODO: add logic for enemy side
-        }
-
+        ActiveHero(true).AdjustGold(1, false);
+        DrawCard(UIManager.Instance.GetActiveDeckList(true), GetActiveHand(true));
+        EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
+        instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
         cardSwitchButtonYes.gameObject.SetActive(false);
         cardSwitchButtonNo.gameObject.SetActive(false);
-
-        //SwitchTurn();
-
     }
 
     public void SubmitDiscard()
     {
-        int discardNum = UIManager.Instance.allyHand.Count - ActiveHero(true).HandSize;
+        Transform activeHand = GetActiveHand(true);
+        int discardNum = UIManager.Instance.GetActiveHandList(true).Count - ActiveHero(true).HandSize;
 
-        if (selectedDiscards.Count == 1) //CHANGE TO DISCARDNUM OUTSIDE OF TESTING PURPOSES
+        if (selectedDiscards.Count == discardNum)
         {
             foreach (GameObject t in selectedDiscards)
             {
                 DiscardCard(t);
-                //GetActiveDiscardPileList(true).Add(t);
-                UIManager.Instance.allyDiscards.Add(t.GetComponent<CardVisual>().CardData);
-                Debug.Log("card successfully discarded");
             }
 
-            foreach (Transform t in GetActiveHand(true))
+            foreach (Transform t in activeHand)
             {
                 Destroy(t.gameObject.GetComponent<DiscardCardListener>());
-                Debug.Log("removed all discard listeners");
             }
+
             selectedDiscards.Clear();
 
             submitDiscardsButton.gameObject.SetActive(false);
+
+            if (!isActionPhase)
+                isActionPhase = true;
 
             if (!hasSwitchedCard && !isForcedDiscard)
             {
@@ -489,26 +462,28 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                UIManager.Instance.AttachPlayCard();
                 hasSwitchedCard = false; //resets if player switch card check
                 SwitchTurn();
             }
         }
-        else
+        else if (selectedDiscards.Count < discardNum)
         {
-            instructionsObj.GetComponent<TMP_Text>().text = "You Haven't Selected Enough, Please Select A Card To Discard";
+            instructionsObj.GetComponent<TMP_Text>().text = "You haven't selected Enough, Please select more cards to discard";
+        }
+        else {
+            instructionsObj.GetComponent<TMP_Text>().text = "You haven't selected Enough, Please select less cards to discard";
         }
     }
 
-    public GameObject SpawnCard(Transform to, MinionData minion = null, EssentialsData essential = null, StarterData starter = null, bool inShop = false)
+    public GameObject SpawnCard(Transform to, Card card, bool inShop = false)
     {
         GameObject tmp;
 
-        if (minion != null)
+        if (card is MinionData md)
         {
             tmp = Instantiate(UIManager.Instance.minionPrefab);
             tmp.SetActive(false);
-            tmp.GetComponent<CardVisual>().Md = minion;
+            tmp.GetComponent<CardVisual>().Md = md;
 
             if (inShop)
             {
@@ -519,11 +494,11 @@ public class GameManager : MonoBehaviour
             tmp.transform.SetParent(to, false);
             return tmp;
         }
-        else if (essential != null)
+        else if (card is EssentialsData ed)
         {
             tmp = Instantiate(UIManager.Instance.itemPrefab);
             tmp.SetActive(false);
-            tmp.GetComponent<CardVisual>().Ed = essential;
+            tmp.GetComponent<CardVisual>().Ed = ed;
 
             if (inShop)
             {
@@ -534,11 +509,11 @@ public class GameManager : MonoBehaviour
             tmp.transform.SetParent(to, false);
             return tmp;
         }
-        else if (starter != null)
+        else if (card is StarterData sd)
         {
             tmp = Instantiate(UIManager.Instance.starterPrefab);
             tmp.SetActive(false);
-            tmp.GetComponent<CardVisual>().Sd = starter;
+            tmp.GetComponent<CardVisual>().Sd = sd;
             tmp.SetActive(true);
             tmp.transform.SetParent(to, false);
             return tmp;
@@ -659,27 +634,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public List<GameObject> GetActiveDiscardPileList(bool activeWanted)
-    {
-        if (activeWanted)
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return alliedDiscardPileList;
-            }
-            return enemyDiscardPileList;
-        }
-        else
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return alliedDiscardPileList;
-            }
-            return enemyDiscardPileList;
-        }
-
-    }
-
     public Transform GetActiveMinionZone(bool activeWanted)
     {
         if (activeWanted)
@@ -709,7 +663,7 @@ public class GameManager : MonoBehaviour
             UIManager.Instance.GetActiveHandList(true).Remove(cardData);
         }
 
-        MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
+        MoveCard(card, Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true), true);
     }
 
     //TODO: Function to disable play card contol 
@@ -730,6 +684,26 @@ public class GameManager : MonoBehaviour
                 return enemyDeck;
             }
             return alliedDeck;
+        }
+    }
+
+    public TMP_Text GetActiveDeckCounter(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return allyDeckCounter;
+            }
+            return enemyDeckCounter;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyDeckCounter;
+            }
+            return allyDeckCounter;
         }
     }
 

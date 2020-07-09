@@ -6,7 +6,7 @@ public class TrashStarter : MonoBehaviour
 {
     public void StartEvent()
     {
-        if (GameManager.Instance.GetActiveDiscardPileList(true).Count != 0 || GameManager.Instance.GetActiveHand(true).childCount != 0)
+        if (UIManager.Instance.GetActiveDiscardList(true).Count != 0 || GameManager.Instance.GetActiveHand(true).childCount != 0)
         {
             GameManager.Instance.trashUI.gameObject.SetActive(true);
         }

@@ -60,7 +60,7 @@ public class ShopController : MonoBehaviour
             if (selectedVisual.Md != null)
             {
                 //Spawn Card
-                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedVisual.Md, null, null, true);
+                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedVisual.Md, true);
                 tmp.AddComponent<EnlargedCardBehaviour>();
                 //Set the BigShopCard object with the spawned card
                 bigShopCard = tmp;
@@ -71,7 +71,7 @@ public class ShopController : MonoBehaviour
             else if (selectedVisual.Ed != null)
             {
                 //Spawn Card
-                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, null, selectedVisual.Ed, null, true);
+                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, selectedVisual.Ed, true);
 
                 //Set the BigShopCard object with the spawned card
                 bigShopCard = tmp;
@@ -293,18 +293,8 @@ public class ShopController : MonoBehaviour
 
     private void MoveShopCardToDiscard(GameObject card)
     {
-        int currentPlayer = GameManager.Instance.GetCurrentPlayer();
-
-        if (currentPlayer == 0)
-        {
-            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedDiscardPile, GameManager.Instance.alliedDiscardPileList);
-            mc.AddToQueue();
-        }
-        else
-        {
-            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.enemyDiscardPile, GameManager.Instance.enemyDiscardPileList);
-            mc.AddToQueue();
-        }
+        MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedDiscardPile, UIManager.Instance.GetActiveDiscardList(true));
+        mc.AddToQueue();
     }
 
     private void MoveShopCardToHand(GameObject card)

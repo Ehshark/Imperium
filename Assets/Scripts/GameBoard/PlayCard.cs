@@ -218,7 +218,7 @@ public class PlayCard : MonoBehaviour
 
         else
         {
-            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true));
+            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true));
             mc.AddToQueue();
             //GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
         }
@@ -233,7 +233,7 @@ public class PlayCard : MonoBehaviour
         dc.AddToQueue();
 
         MoveCardCommand mc = new MoveCardCommand(GameManager.Instance.MinionToSacrifice,
-            GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true));
+            GameManager.Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true));
         mc.AddToQueue();
         //GameManager.Instance.MoveCard(GameManager.Instance.MinionToSacrifice, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
         MoveCardFromHand(true);

@@ -8,9 +8,12 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
 {
     public void OnPointerDown(PointerEventData eventData)
     {
-        GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
-        CardVisual cv = card.GetComponent<CardVisual>();
-        TapMinion(cv, card);
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
+            CardVisual cv = card.GetComponent<CardVisual>();
+            TapMinion(cv, card);
+        }
     }
 
     private void TapMinion(CardVisual cv, GameObject card)

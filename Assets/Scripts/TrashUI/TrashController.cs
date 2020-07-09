@@ -38,7 +38,7 @@ public class TrashController : MonoBehaviour
             }
             else if (cv.Sd != null)
             {
-                card = GameManager.Instance.SpawnCard(handPile, null, null, cv.Sd);
+                card = GameManager.Instance.SpawnCard(handPile, cv.Sd);
             }
             else
             {
@@ -54,29 +54,12 @@ public class TrashController : MonoBehaviour
     
     public void LoadDiscardList()
     {
-        List<GameObject> discardCards = GameManager.Instance.GetActiveDiscardPileList(true);
-
         int i = 1;
         foreach (Card c in UIManager.Instance.GetActiveDiscardList(true))
         {
             GameObject card;
 
-            if (c is MinionData)
-            {
-                card = GameManager.Instance.SpawnCard(discardPile, (MinionData)c);
-            }
-            else if (c is StarterData)
-            {
-                card = GameManager.Instance.SpawnCard(discardPile, null, null, (StarterData)c);
-            }
-            else if (c is EssentialsData)
-            {
-                card = GameManager.Instance.SpawnCard(discardPile, null, (EssentialsData)c);
-            }
-            else
-            {
-                card = null;
-            }
+            card = GameManager.Instance.SpawnCard(discardPile, c);
 
             card.AddComponent<TrashListener>();
             card.GetComponent<TrashListener>().location = "discard";

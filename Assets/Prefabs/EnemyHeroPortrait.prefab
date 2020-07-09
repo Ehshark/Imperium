@@ -4336,7 +4336,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 341b207ef1d08cd4998687adead76cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heroImage: {fileID: 7585996840043040199}
 --- !u!1 &6661112996840299217
 GameObject:
   m_ObjectHideFlags: 0
@@ -5178,6 +5177,7 @@ MonoBehaviour:
   heroImage: {fileID: 7585996840043040197}
   heroClan: {fileID: 7585996840856235212}
   damageText: {fileID: 7968248931080624537}
+  discardText: {fileID: 6463131762138868185}
   regDmgAbs: {fileID: 6601543725102919342}
   poisonDmgAbs: {fileID: 4378505053020784809}
   stealthDmgAbs: {fileID: 3361701450903739524}

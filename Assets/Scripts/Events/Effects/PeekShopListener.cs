@@ -23,7 +23,7 @@ public class PeekShopListener : MonoBehaviour, IPointerDownHandler
             //Spawn Card
             foreach (MinionData md in data)
             {
-                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, md, null, null, true);
+                GameObject tmp = GameManager.Instance.SpawnCard(cardGroup.transform, md, true);
                 tmp.AddComponent<PeekShopListener>();
                 tmp.GetComponent<PeekShopListener>().inDeck = false;
                 tmp.GetComponent<PeekShopListener>().minionClass = minionClass;

@@ -7,9 +7,9 @@ public class MoveCardCommand : Command
 {
     readonly GameObject card;
     readonly Transform to;
-    List<GameObject> dpList;
+    List<Card> dpList;
 
-    public MoveCardCommand(GameObject m, Transform t, List<GameObject> dpl = null)
+    public MoveCardCommand(GameObject m, Transform t, List<Card> dpl = null)
     {
         card = m;
         to = t;
