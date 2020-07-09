@@ -58,7 +58,6 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             { 11, card.GetComponent<UntapMinionStarter>() },
             { 13, card.GetComponent<ShockListenerStarter>() },
             { 14, card.GetComponent<BuffMinionStarter>() },
-            { 15, card.GetComponent<OpponentDiscardStarter>() },
             { 16, card.GetComponent<DrawDiscardStarter>() },
             { 17, card.GetComponent<TrashStarter>() },
             { 18, card.GetComponent<EssentialListener>() },

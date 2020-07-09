@@ -12,6 +12,8 @@ public class SilenceMinionStarter : MonoBehaviour
         {
             StartCoroutine(GameManager.Instance.SetInstructionsText("Opponent's Hero Silenced!"));
 
+            //Call the Next Power in the Queue
+            InvokeEventCommand.InvokeNextEvent();
         }
         else
         {
