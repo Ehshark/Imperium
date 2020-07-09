@@ -632,10 +632,10 @@ public class UIManager : MonoBehaviour
         {
             GameManager.Instance.enemyDiscardUI.gameObject.SetActive(true);
 
-            foreach (Card c in allyDiscards)
+            foreach (Card c in enemyDiscards)
             {
                 //display cards in the UI equal to the amount of cards in the discard pile
-                GameManager.Instance.SpawnCard(GameManager.Instance.enemyDiscardUI.transform.Find("CardPile/Cards"), enemyDiscards[i]);
+                GameManager.Instance.SpawnCard(GameManager.Instance.enemyDiscardUI.transform.Find("CardPile/Cards"), c);
             }
 
             enemyDiscardClosed = false; //sets shop to "open" state

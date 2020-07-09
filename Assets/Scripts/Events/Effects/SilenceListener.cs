@@ -26,9 +26,8 @@ public class SilenceListener : MonoBehaviour, IPointerDownHandler
             }
         }
 
-        EffectCommand.Instance.inEffect = false;
-
-
+        EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_SILENCE);
+        InvokeEventCommand.InvokeNextEvent();
     }
 
     public void OnDestroy()

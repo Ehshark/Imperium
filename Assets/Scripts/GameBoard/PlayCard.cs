@@ -223,8 +223,6 @@ public class PlayCard : MonoBehaviour
                 UIManager.Instance.GetActiveHandList(true).Remove(cardData);
             }
 
-            UIManager.Instance.GetActiveDiscardList(true).Add(cardData);
-
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true));
             mc.AddToQueue();
             //GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);

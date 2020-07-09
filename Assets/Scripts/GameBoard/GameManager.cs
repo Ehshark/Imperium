@@ -387,6 +387,8 @@ public class GameManager : MonoBehaviour
         selectedDiscards = new List<GameObject>();
         hasSwitchedCard = false;
 
+        EnableOrDisablePlayerControl(false);
+
         foreach (Transform t in activeHand)
         {
             Destroy(t.gameObject.GetComponent<PlayCard>());
@@ -475,7 +477,7 @@ public class GameManager : MonoBehaviour
             instructionsObj.GetComponent<TMP_Text>().text = "You haven't selected Enough, Please select more cards to discard";
         }
         else {
-            instructionsObj.GetComponent<TMP_Text>().text = "You haven't selected Enough, Please select less cards to discard";
+            instructionsObj.GetComponent<TMP_Text>().text = "You selected too many, Please select less cards to discard";
         }
     }
 
