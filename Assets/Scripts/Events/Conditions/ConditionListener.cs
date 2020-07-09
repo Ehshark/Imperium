@@ -61,7 +61,10 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             { 15, card.GetComponent<OpponentDiscardStarter>() },
             { 16, card.GetComponent<DrawDiscardStarter>() },
             { 17, card.GetComponent<TrashStarter>() },
-            { 18, card.GetComponent<EssentialListener>() }
+            { 18, card.GetComponent<EssentialListener>() },
+            { 19, card.GetComponent<EssentialListener>() },
+            { 15, card.GetComponent<OpponentDiscardStarter>() }, 
+            { 12, card.GetComponent<SilenceMinionStarter>() }
         };
     }
 
@@ -71,7 +74,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
 
         if (md != null)
         {
-            if (md.EffectId1 != 0)
+            if (md.EffectId1 != 0 && !md.IsSilenced)
             {
                 foreach (KeyValuePair<int, object> entry in EffectCardData)
                 {
@@ -94,7 +97,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                 }
             }
 
-            if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 9 || cv.Md.EffectId1 == 10)
+            if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 9 || cv.Md.EffectId1 == 10 && !md.IsSilenced)
             {
                 cv.IsCombatEffectActivated = true;
                 cv.CombatEffectActivated(true);

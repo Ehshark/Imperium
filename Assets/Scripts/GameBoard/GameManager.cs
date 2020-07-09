@@ -254,6 +254,7 @@ public class GameManager : MonoBehaviour
             cv.CombatEffectActivated(false);
             UnTapMinions(t);
             ResetDamage(t);
+            cv.ActivateSilence(false);
             DisableExpressBuy();
         }
 

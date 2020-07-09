@@ -27,5 +27,8 @@ public class ShockListenerStarter : MonoBehaviour
                 t.gameObject.AddComponent<ShockListener>();
             }
         }
+
+        //Call the Next Effect in the Queue
+        InvokeEventCommand.InvokeNextEvent();
     }
 }

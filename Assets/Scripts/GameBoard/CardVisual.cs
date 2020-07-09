@@ -30,6 +30,9 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     private bool isTapped;
     private bool healEffect;
 
+    private bool isSilenced = false;
+    private bool IsSilenced { get => isTapped; set => isTapped = value; }
+
     public bool IsTapped { get => isTapped; set => isTapped = value; }
 
     private bool isCombatEffectActivated = false;
@@ -69,6 +72,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     private PlayCard pc;
 
     public GameObject damageObjects;
+    public Image silenceImage;
     void OnEnable()
     {
         dmgAbsorbed = new Damage();
@@ -523,4 +527,19 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     }
 
     //TODO: OnHover Function to highlight the card
+
+    public void ActivateSilence(bool activate)
+    {
+        if (activate)
+        {
+            isSilenced = true;
+            silenceImage.enabled = true;
+        }
+        else
+        {
+            isSilenced = false;
+            silenceImage.enabled = false;
+        }
+    }
+
 }

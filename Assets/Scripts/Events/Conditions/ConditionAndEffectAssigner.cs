@@ -51,13 +51,15 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 4, "ExpressBuyListener"  },
             { 5, "RecycleListenerAssigner" },
             { 6, "HealMinionStarter" },
-            { 11, "UntapMinionStarter"}, //new
+            { 11, "UntapMinionStarter"}, 
             { 13, "ShockListenerStarter" },
             { 14, "BuffMinionStarter" },
-            { 15, "OpponentDiscardStarter"}, //new
+            { 15, "OpponentDiscardStarter"}, 
             { 16, "DrawDiscardStarter" },
             { 17, "TrashStarter" },
-            { 18, "EssentialListener" }
+            { 18, "EssentialListener" },
+            { 19, "EssentialListener" },
+            { 12, "SilenceListenerStarter" }
         };
 
         EventManager.Instance.AddListener(EVENT_TYPE.ASSIGN_CONDITIONS, this);
