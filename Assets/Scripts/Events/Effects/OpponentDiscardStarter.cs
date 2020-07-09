@@ -9,6 +9,6 @@ public class OpponentDiscardStarter : MonoBehaviour
         //Display Start message
         StartCoroutine(GameManager.Instance.SetInstructionsText("Increased opponent's mandatory discard"));
 
-        GameManager.Instance.ActiveHero(false).HasToDiscard++;
+        GameManager.Instance.ActiveHero(false).AdjustDiscard(true);
     }
 }

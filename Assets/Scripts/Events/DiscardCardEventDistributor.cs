@@ -13,7 +13,7 @@ public class DiscardCardEventDistributor : MonoBehaviour, IListener
     //adds listener to all cards in hand
     public void OnEvent(EVENT_TYPE Event_Type)
     {
-        foreach (Transform t in GameManager.Instance.alliedHand)
+        foreach (Transform t in GameManager.Instance.GetActiveHand(true))
         {
             t.gameObject.AddComponent<DiscardCardListener>();
         }

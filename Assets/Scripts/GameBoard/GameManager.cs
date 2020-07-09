@@ -277,6 +277,7 @@ public class GameManager : MonoBehaviour
             isActionPhase = true;
 
         ActiveHero(true).AdjustDiscard(false);
+        isForcedDiscard = false;
     }
 
     public int GetCurrentPlayer()

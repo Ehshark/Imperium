@@ -380,7 +380,9 @@ public class Hero : MonoBehaviour
         else
             hasToDiscard = 0;
 
-        discardText.text = HasToDiscard.ToString();
+        discardText.text = HasToDiscard.ToString(); //set discardtext not working, gives null error
+        Debug.Log("DISCARD NUMBER: " + hasToDiscard);
+        Debug.Log("DISCARD TEXT: " + discardText.text);
     }
 
     public void AssignDamageAbsorbed(bool isIncrease)
