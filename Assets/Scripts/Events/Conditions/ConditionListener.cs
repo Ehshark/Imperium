@@ -115,11 +115,11 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             CardVisual cv = card.GetComponent<CardVisual>();
 
             if (!cv.IsTapped)
-            {
-                OnEvent(ConditionEvent);
-                GameManager.Instance.ChangeCardColour(card, Color.cyan);
-                cv.AdjustHealth(1, false);
+            {                 
+                EffectCommand.Instance.EffectQueue.Enqueue(ConditionEvent);
                 cv.IsTapped = true;
+                cv.ChangeTappedAppearance();
+                cv.AdjustHealth(1, false);
             }
         }
     }

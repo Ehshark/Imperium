@@ -293,7 +293,7 @@ public class ShopController : MonoBehaviour
 
     private void MoveShopCardToDiscard(GameObject card)
     {
-        MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.alliedDiscardPile, UIManager.Instance.GetActiveDiscardList(true));
+        MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true));
         mc.AddToQueue();
     }
 
