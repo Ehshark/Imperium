@@ -275,7 +275,6 @@ public class GameManager : MonoBehaviour
             instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
 
             EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
-            Debug.Log("Opponent discarding");
             submitDiscardsButton.gameObject.SetActive(true);
         }
         else
@@ -426,7 +425,7 @@ public class GameManager : MonoBehaviour
         else
         {
             SwitchTurn();
-            instructionsObj.GetComponent<TMP_Text>().text = "No cards needed to discard. Passing Turn";
+            instructionsObj.GetComponent<TMP_Text>().text = "No cards needed to discard and no gold. Passing Turn";
         }
     }
 
@@ -468,7 +467,7 @@ public class GameManager : MonoBehaviour
 
             if (!hasSwitchedCard && !isForcedDiscard)
             {
-                instructionsObj.GetComponent<TMP_Text>().text = "Do you want to trade 1 gold to switch an additional card?";
+                instructionsObj.GetComponent<TMP_Text>().text = "Pay 1 gold to draw and discard a card?";
                 cardSwitchButtonYes.gameObject.SetActive(true);
                 cardSwitchButtonNo.gameObject.SetActive(true);
                 hasSwitchedCard = true;
@@ -481,10 +480,10 @@ public class GameManager : MonoBehaviour
         }
         else if (selectedDiscards.Count < discardNum)
         {
-            instructionsObj.GetComponent<TMP_Text>().text = "You haven't selected Enough, Please select more cards to discard";
+            instructionsObj.GetComponent<TMP_Text>().text = "You haven't selected enough, select more cards to discard";
         }
         else {
-            instructionsObj.GetComponent<TMP_Text>().text = "You selected too many, Please select less cards to discard";
+            instructionsObj.GetComponent<TMP_Text>().text = "You selected too many, select less cards to discard";
         }
     }
 
