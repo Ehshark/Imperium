@@ -61,8 +61,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             { 15, card.GetComponent<OpponentDiscardStarter>() },
             { 16, card.GetComponent<DrawDiscardStarter>() },
             { 17, card.GetComponent<TrashStarter>() },
-            { 18, card.GetComponent<EssentialListener>() },
-            { 19, card.GetComponent<EssentialListener>() }
+            { 18, card.GetComponent<EssentialListener>() }
         };
     }
 

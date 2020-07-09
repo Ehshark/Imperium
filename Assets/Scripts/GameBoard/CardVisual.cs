@@ -462,10 +462,12 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         if (add)
         {
             currentDamage += amount;
+            damage.color = Color.green;
         }
         else
         {
             currentDamage -= amount;
+            damage.color = Color.white;
 
             if (currentDamage < 0)
             {
@@ -480,6 +482,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     {
         currentDamage = totalDamage;
         damage.text = currentDamage.ToString();
+        damage.color = Color.white;
     }
 
     public void ResetHealth()

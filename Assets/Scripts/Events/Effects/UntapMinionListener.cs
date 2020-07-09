@@ -5,32 +5,44 @@ using UnityEngine.EventSystems;
 
 public class UntapMinionListener : MonoBehaviour, IPointerDownHandler
 {
+    public void Start()
+    {
+        GameManager.Instance.ChangeCardColour(gameObject, Color.cyan);
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
         CardVisual cv = card.GetComponent<CardVisual>();
 
-        UntapMinion(card, cv);
+        UntapMinion(cv);
     }
 
-    public void UntapMinion(GameObject card, CardVisual cv)
+    public void UntapMinion(CardVisual cv)
     {
+        Transform alliedMinions = GameManager.Instance.GetActiveMinionZone(true);
         if (cv.IsTapped)
         {
             cv.IsTapped = false;
-            GameManager.Instance.ChangeCardColour(card, cv.Md.Color);
+            cv.ChangeTappedAppearance();
 
             //removes all untap listeners from all minions on the active player's board
-            foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
+            foreach (Transform t in alliedMinions)
             {
                 Destroy(t.gameObject.GetComponent<UntapMinionListener>());
             }
+
+            InvokeEventCommand.InvokeNextEvent();
         }
         else
         {
             StartCoroutine(GameManager.Instance.SetInstructionsText("This Minion is not currently tapped, please select a Minion to untap"));
         }
+    }
 
-        //InvokeEventCommand.InvokeNextEvent();
+    public void OnDestroy()
+    {
+        CardVisual cv = gameObject.GetComponent<CardVisual>();
+        GameManager.Instance.ChangeCardColour(gameObject, cv.GetCardData().Color);
     }
 }

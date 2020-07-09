@@ -57,8 +57,7 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 15, "OpponentDiscardStarter"}, //new
             { 16, "DrawDiscardStarter" },
             { 17, "TrashStarter" },
-            { 18, "EssentialListener" },
-            { 19, "EssentialListener" }
+            { 18, "EssentialListener" }
         };
 
         EventManager.Instance.AddListener(EVENT_TYPE.ASSIGN_CONDITIONS, this);

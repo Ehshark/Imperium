@@ -208,8 +208,6 @@ public class GameManager : MonoBehaviour
 
     public void EnableOrDisablePlayerControl(bool enable)
     {
-        //buyButton.interactable = enable;
-        //changeButton.interactable = enable;
         allyDiscardPileButton.interactable = enable;
         enemyDiscardPileButton.interactable = enable;
         if (enable)
@@ -562,6 +560,8 @@ public class GameManager : MonoBehaviour
     public void ChangeCardColour(GameObject card, Color color)
     {
         CardVisual cv = card.GetComponent<CardVisual>();
+        if (cv.IsTapped)
+            color.a = 0.5f;
         if (cv)
             cv.cardBackground.color = color;
     }

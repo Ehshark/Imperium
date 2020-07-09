@@ -6,8 +6,6 @@ using UnityEngine.EventSystems;
 
 public class StartCombatListener : MonoBehaviour, IPointerDownHandler
 {
-    private bool tapped;
-
     public void OnPointerDown(PointerEventData eventData)
     {
         GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
@@ -16,7 +14,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
     }
 
     private void TapMinion(CardVisual cv, GameObject card)
-    { 
+    {
         if (cv.Md)
         {
             if (cv.IsTapped)
@@ -104,6 +102,6 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
                 //Decrease damage counter
                 GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) - cv.CurrentDamage).ToString();
             }
-        }       
+        }
     }
 }

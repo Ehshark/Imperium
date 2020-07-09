@@ -21,6 +21,7 @@ public class InvokeEventCommand : Command
 
     public override void AddToQueue()
     {
+        GameManager.Instance.EnableOrDisablePlayerControl(false);
         InvokeEventQueue.Enqueue(this);
     }
 
@@ -38,6 +39,8 @@ public class InvokeEventCommand : Command
         else
         {
             EffectCommand.Instance.inEffect = false;
+            if (!playingQueue)
+                GameManager.Instance.EnableOrDisablePlayerControl(true);
         }
     }
 }

@@ -32,7 +32,8 @@ public class Command
         else
         {
             playingQueue = false;
-            GameManager.Instance.EnableOrDisablePlayerControl(true);
+            if (!EffectCommand.Instance.inEffect)
+                GameManager.Instance.EnableOrDisablePlayerControl(true);
         }
     }
 

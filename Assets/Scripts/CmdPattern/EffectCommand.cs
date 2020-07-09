@@ -23,7 +23,7 @@ public class EffectCommand : MonoBehaviour
 
     public void Start()
     {
-        InvokeRepeating("ContinueExecution", 2f, 2f);
+        InvokeRepeating("ContinueExecution", 2f, 0.5f);
     }
 
     public void StartCommandExecution()
@@ -33,7 +33,6 @@ public class EffectCommand : MonoBehaviour
             inEffect = true;
 
             EVENT_TYPE effect = EffectQueue.Dequeue();
-            Debug.Log(effect);
 
             EventManager.Instance.PostNotification(effect);
 

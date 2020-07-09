@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,8 +26,9 @@ public class StartCombat : MonoBehaviour
 
         //Update the instructions text
         GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Please Select Minions to Attack";
-
         GameManager.Instance.shopButton.interactable = false;
+
+        AssignAllyDamageBonus(true);
     }
 
     public void CancelCombat()
@@ -85,24 +86,18 @@ public class StartCombat : MonoBehaviour
             GameManager.Instance.alliedStealthDamageCounter.text = "0";
             GameManager.Instance.alliedLifestealDamageCounter.text = "0";
             GameManager.Instance.alliedPoisonTouchDamageCounter.text = "0";
-        }
 
-        //Reset the Damage if combat was cancelled
-        if (!GameManager.Instance.IsDefending)
-        {
             totalDamage["stealth"] = 0;
             totalDamage["lifesteal"] = 0;
             totalDamage["poisonTouch"] = 0;
             totalDamage["damage"] = 0;
-        }
 
-        //Reset the List of Attack Minions if combat was cancelled
-        if (!GameManager.Instance.IsDefending)
-        {
             GameManager.Instance.MinionsAttacking = new List<GameObject>();
+
+            GameManager.Instance.shopButton.interactable = true;
         }
 
-        GameManager.Instance.shopButton.interactable = true;
+        AssignAllyDamageBonus(false);
     }
 
     private void SwitchButtons()
@@ -139,6 +134,13 @@ public class StartCombat : MonoBehaviour
             //Set current Hero is false
             GameManager.Instance.ActiveHero(true).IsAttacking = false;
 
+            if (CheckForVictory())
+            {
+                CancelCombat();
+                StartCoroutine(GameManager.Instance.SetInstructionsText("Attacking player has won the game."));
+                return;
+            }
+
             //Add Damage
             totalDamage["stealth"] = Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text);
             totalDamage["lifesteal"] = Int32.Parse(GameManager.Instance.alliedLifestealDamageCounter.text);
@@ -166,5 +168,56 @@ public class StartCombat : MonoBehaviour
             CardVisual cv = card.GetComponent<CardVisual>();
             cv.AdjustHealth(1, false);
         }
+    }
+
+    private void AssignAllyDamageBonus(bool increase)
+    {
+        CardVisual cv;
+        Transform alliedMinions = GameManager.Instance.GetActiveMinionZone(true);
+        foreach (Transform t in alliedMinions)
+        {
+            cv = t.GetComponent<CardVisual>();
+            if (cv.GetCardData() is MinionData)
+            {
+                foreach (Transform t2 in alliedMinions)
+                {
+                    string clan = t2.GetComponent<CardVisual>().GetCardData().CardClass;
+                    if (clan != null && clan.Equals(cv.GetCardData().AllyClass))
+                    {
+                        if (increase)
+                            cv.AdjustDamage(1, true);
+                        else
+                            cv.AdjustDamage(1, false);
+                    }
+                }
+            }
+        }
+    }
+
+    private bool CheckForVictory()
+    {
+        int totalAttackingDamage = Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text) +
+            Int32.Parse(GameManager.Instance.alliedLifestealDamageCounter.text) +
+            Int32.Parse(GameManager.Instance.alliedPoisonTouchDamageCounter.text) +
+            Int32.Parse(GameManager.Instance.alliedDamageCounter.text);
+
+        int totalDefendingHealth = 0;
+
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
+        {
+            if (t.gameObject.activeSelf)
+            {
+                totalDefendingHealth += t.GetComponent<CardVisual>().CurrentHealth;
+            }
+        }
+
+        totalDefendingHealth += GameManager.Instance.ActiveHero(false).CurrentHealth;
+
+        if (totalAttackingDamage >= totalDefendingHealth)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
