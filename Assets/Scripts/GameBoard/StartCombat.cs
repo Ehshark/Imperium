@@ -207,7 +207,7 @@ public class StartCombat : MonoBehaviour
 
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
-            if (t.gameObject.activeSelf)
+            if (t.gameObject.activeSelf && !t.GetComponent<CardVisual>().IsTapped)
             {
                 totalDefendingHealth += t.GetComponent<CardVisual>().CurrentHealth;
             }

@@ -266,6 +266,8 @@ public class GameManager : MonoBehaviour
         firstChangeShop = false;
         DisableExpressBuy();
 
+        GameManager.Instance.ActiveHero(true).AttackButton.gameObject.SetActive(true);
+
         //TODO: Handle opponent discard logic here
         if (ActiveHero(true).HasToDiscard > 0)
         {

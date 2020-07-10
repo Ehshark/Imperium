@@ -482,4 +482,20 @@ public class Hero : MonoBehaviour
         SetMana();
         SetDamage();
     }
+
+    public void ResetDamageObjectsUI()
+    {
+        Transform amounts = damageObjects.transform.Find("DamageAmounts");
+        foreach (Transform t in amounts)
+        {
+            t.gameObject.SetActive(false);
+            foreach (Transform t2 in t)
+            {
+                if (t2.name.Contains("Text"))
+                {
+                    t2.GetComponent<TMP_Text>().text = "0";
+                }
+            }
+        }
+    }
 }

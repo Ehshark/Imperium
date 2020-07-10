@@ -193,6 +193,7 @@ public class DefendListener : MonoBehaviour, IListener
                 if (t.GetComponent<CardVisual>().CurrentHealth > 0)
                 {
                     t.GetComponent<CardVisual>().DmgAbsorbed.ResetDamageAbsorbed();
+                    t.GetComponent<CardVisual>().ResetDamageObjectsUI();
                 }
             }
         }
@@ -219,6 +220,7 @@ public class DefendListener : MonoBehaviour, IListener
         }
 
         GameManager.Instance.ActiveHero(false).DmgAbsorbed.ResetDamageAbsorbed();
+        GameManager.Instance.ActiveHero(false).ResetDamageObjectsUI();
         // TODO: End the game if the hero's health is 0.
     }
 
