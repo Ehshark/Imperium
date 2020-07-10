@@ -1727,6 +1727,7 @@ MonoBehaviour:
   decreaseDmgAbsorbed: {fileID: 3471774916176119650}
   inShop: 0
   damageObjects: {fileID: 2091687755534774659}
+  silenceImage: {fileID: 5361649607211962120}
 --- !u!1 &5361649607057006654
 GameObject:
   m_ObjectHideFlags: 0

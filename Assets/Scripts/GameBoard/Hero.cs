@@ -207,6 +207,13 @@ public class Hero : MonoBehaviour
         SetHealth();
     }
 
+    public void ResetMana()
+    {
+        currentMana = totalMana;
+
+        SetMana();
+    }
+
     public void SetExp()
     {
         expText.text = experience + "   /   " + requredExp;

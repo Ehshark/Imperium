@@ -55,8 +55,11 @@ public class DefendListener : MonoBehaviour, IListener
     {
         GameManager.Instance.ActiveHero(true).AttackButton.parent.gameObject.SetActive(!isDefending);
         GameManager.Instance.ActiveHero(false).AttackButton.gameObject.SetActive(!isDefending);
-        GameManager.Instance.ActiveHero(false).CancelButton.gameObject.SetActive(!isDefending);
-        GameManager.Instance.ActiveHero(false).SubmitButton.gameObject.SetActive(!isDefending);
+        if (isDefending)
+        {
+            GameManager.Instance.ActiveHero(false).CancelButton.gameObject.SetActive(!isDefending);
+            GameManager.Instance.ActiveHero(false).SubmitButton.gameObject.SetActive(!isDefending);
+        }
         GameManager.Instance.ActiveHero(false).AttackButton.parent.gameObject.SetActive(isDefending);
         GameManager.Instance.ActiveHero(false).DefendButton.gameObject.SetActive(isDefending);
 
@@ -153,6 +156,7 @@ public class DefendListener : MonoBehaviour, IListener
             ChangeUiForDefense(GameManager.Instance.IsDefending);
             GameManager.Instance.EnableOrDisablePlayerControl(true);
             StartCoroutine(GameManager.Instance.SetInstructionsText("Good Submission!"));
+            ResetDamageUI();
         }
         else
         {
@@ -216,5 +220,13 @@ public class DefendListener : MonoBehaviour, IListener
 
         GameManager.Instance.ActiveHero(false).DmgAbsorbed.ResetDamageAbsorbed();
         // TODO: End the game if the hero's health is 0.
+    }
+
+    private void ResetDamageUI()
+    {
+        GameManager.Instance.alliedDamageCounter.text = "0";
+        GameManager.Instance.alliedLifestealDamageCounter.text = "0";
+        GameManager.Instance.alliedPoisonTouchDamageCounter.text = "0";
+        GameManager.Instance.alliedStealthDamageCounter.text = "0";
     }
 }

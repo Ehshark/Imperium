@@ -168,6 +168,8 @@ public class StartCombat : MonoBehaviour
             CardVisual cv = card.GetComponent<CardVisual>();
             cv.AdjustHealth(1, false);
         }
+
+        GameManager.Instance.MinionsAttacking.Clear();
     }
 
     private void AssignAllyDamageBonus(bool increase)

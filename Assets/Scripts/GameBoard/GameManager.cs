@@ -255,7 +255,6 @@ public class GameManager : MonoBehaviour
             UnTapMinions(t);
             ResetDamage(t);
             cv.ActivateSilence(false);
-            DisableExpressBuy();
         }
 
         UIManager.Instance.HighlightHeroPortraitAndName();
@@ -265,6 +264,7 @@ public class GameManager : MonoBehaviour
         EnableOrDisablePlayerControl(true);
         buyFirstCard = false;
         firstChangeShop = false;
+        DisableExpressBuy();
 
         //TODO: Handle opponent discard logic here
         if (ActiveHero(true).HasToDiscard > 0)
@@ -387,6 +387,7 @@ public class GameManager : MonoBehaviour
         selectedDiscards = new List<GameObject>();
         hasSwitchedCard = false;
 
+        GameManager.Instance.ActiveHero(true).ResetMana();
         EnableOrDisablePlayerControl(false);
 
         foreach (Transform t in activeHand)
@@ -572,13 +573,11 @@ public class GameManager : MonoBehaviour
 
     private void UnTapMinions(Transform t)
     {
-        ConditionListener cl = t.GetComponent<ConditionListener>();
         CardVisual cv = t.GetComponent<CardVisual>();
-        if (cv.CardData is MinionData)
+        if (cv != null)
         {
-            if (cl.Md != null && cv.IsTapped)
+            if ((cv.Md != null || cv.Sd != null) && cv.IsTapped)
             {
-                ChangeCardColour(cl.Card, cl.Md.Color);
                 cv.IsTapped = false;
                 cv.ChangeTappedAppearance();
             }
