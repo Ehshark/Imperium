@@ -329,31 +329,35 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < UIManager.Instance.allyDiscards.Count; i++)
                 {
-                    deck.Add(UIManager.Instance.allyDiscards[0]);
-                    UIManager.Instance.allyDiscards.Remove(UIManager.Instance.allyDiscards[0]);
+                    deck.Add(UIManager.Instance.allyDiscards[i]);
+                }
 
-                    foreach (GameObject t in alliedDiscardPile) 
-                    {
-                        Destroy(t);
-                    }
+                UIManager.Instance.allyDiscards.Clear();
+
+                foreach (Transform t in GameManager.Instance.alliedDiscardPile)
+                {
+                    Destroy(t.gameObject);
                 }
 
                 ShuffleCurrentDeck(deck);
+                allyDeckCounter.text = deck.Count.ToString();
             }
             else
             {
                 for (int i = 0; i < UIManager.Instance.enemyDiscards.Count; i++)
                 {
-                    deck.Add(UIManager.Instance.enemyDiscards[0]);
-                    UIManager.Instance.allyDiscards.Remove(UIManager.Instance.enemyDiscards[0]);
+                    deck.Add(UIManager.Instance.enemyDiscards[i]);
+                }
 
-                    foreach (GameObject t in enemyDiscardPile) 
-                    {
-                        Destroy(t);
-                    }
+                UIManager.Instance.enemyDiscards.Clear();
+
+                foreach (Transform t in GameManager.Instance.enemyDiscardPile)
+                {
+                    Destroy(t.gameObject);
                 }
 
                 ShuffleCurrentDeck(deck);
+                enemyDeckCounter.text = deck.Count.ToString();
             }
 
             //function calls itself to continue the draw since deck is no longer empty

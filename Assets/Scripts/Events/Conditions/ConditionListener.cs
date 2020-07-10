@@ -71,35 +71,40 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
     {
         CardVisual cv = card.GetComponent<CardVisual>();
 
-        if (md != null)
+        Transform parent = card.transform.parent;
+
+        if (parent == GameManager.Instance.GetActiveMinionZone(true))
         {
-            if (md.EffectId1 != 0 && !md.IsSilenced)
+            if (md != null)
             {
-                foreach (KeyValuePair<int, object> entry in EffectCardData)
+                if (md.EffectId1 != 0 && !md.IsSilenced)
                 {
-                    if (entry.Key == md.EffectId1)
+                    foreach (KeyValuePair<int, object> entry in EffectCardData)
                     {
-                        Type effectType = EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value.GetType();
+                        if (entry.Key == md.EffectId1)
+                        {
+                            Type effectType = EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value.GetType();
 
-                        MethodInfo startEvent = effectType.GetMethod("StartEvent");
-                        InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, card);
-                        invokeEvent.AddToQueue();
-                    }
-                    else if (entry.Key == md.EffectId2)
-                    {
-                        Type effectType = EffectCardData.Where(t => t.Key == md.EffectId2).SingleOrDefault().Value.GetType();
+                            MethodInfo startEvent = effectType.GetMethod("StartEvent");
+                            InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, card);
+                            invokeEvent.AddToQueue();
+                        }
+                        else if (entry.Key == md.EffectId2)
+                        {
+                            Type effectType = EffectCardData.Where(t => t.Key == md.EffectId2).SingleOrDefault().Value.GetType();
 
-                        MethodInfo startEvent = effectType.GetMethod("StartEvent");
-                        InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId2).SingleOrDefault().Value, card);
-                        invokeEvent.AddToQueue();
+                            MethodInfo startEvent = effectType.GetMethod("StartEvent");
+                            InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId2).SingleOrDefault().Value, card);
+                            invokeEvent.AddToQueue();
+                        }
                     }
                 }
-            }
 
-            if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 9 || cv.Md.EffectId1 == 10 && !md.IsSilenced)
-            {
-                cv.IsCombatEffectActivated = true;
-                cv.CombatEffectActivated(true);
+                if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 9 || cv.Md.EffectId1 == 10 && !md.IsSilenced)
+                {
+                    cv.IsCombatEffectActivated = true;
+                    cv.CombatEffectActivated(true);
+                }
             }
         }
     }
