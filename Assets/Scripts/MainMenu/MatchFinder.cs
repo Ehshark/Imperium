@@ -3,13 +3,14 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MatchFinder : MonoBehaviourPunCallbacks
 {
-    public Text playButtonText;
+    public TMP_Text playButtonText;
     int seconds = 5;
     const byte START_MATCH_EVENT = 0;
     const string characters = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -27,6 +28,7 @@ public class MatchFinder : MonoBehaviourPunCallbacks
 
     public void CreateOrJoinRoom()
     {
+        playButtonText.transform.parent.GetComponent<Button>().interactable = false;
         if (!PhotonNetwork.IsConnected)
             return;
 
@@ -139,6 +141,7 @@ public class MatchFinder : MonoBehaviourPunCallbacks
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         Debug.Log("Room creation failed: " + message, this);
+        playButtonText.transform.parent.GetComponent<Button>().interactable = true;
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)

@@ -15,6 +15,11 @@ public class ShockListener : MonoBehaviour, IPointerDownHandler
         GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
         CardVisual cv = card.GetComponent<CardVisual>();
 
+        if (cv.CurrentHealth - 1 == 0)
+        {
+            EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.MINION_DEFEATED);
+        }
+
         cv.AdjustHealth(1, false);
 
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))

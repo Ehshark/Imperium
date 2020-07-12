@@ -1,23 +1,28 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PhotonConnector : MonoBehaviourPunCallbacks
 {
     public Button connectButton;
-    public Text connectButtonText;
+    public TMP_Text connectButtonText;
     public Button playButton;
     public InputField userName;
     public string gameVersion = "0.0.1";
-    // Start is called before the first frame update
+
     public void ConnectToPhoton()
     {
-        if ((userName.text).Equals(""))
+        if ((userName.text).Equals("")) {
+            Color color = Color.red;
+            color.a = 0.5f;
+            userName.GetComponent<Image>().color = color;
             return;
+        }
 
+        userName.GetComponent<Image>().color = Color.white;
         PhotonNetwork.NickName = userName.text;
-        GameManager.UserName = userName.text;
         Debug.Log("Connecting to Photon...");
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = gameVersion;
