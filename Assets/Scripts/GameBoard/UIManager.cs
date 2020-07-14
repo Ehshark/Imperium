@@ -242,10 +242,6 @@ public class UIManager : MonoBehaviour
             {
                 m.gameObject.AddComponent<PlayCard>();
             }
-            else
-            {
-                m.gameObject.AddComponent<TutorialPlayCard>();
-            }
         }
     }
 

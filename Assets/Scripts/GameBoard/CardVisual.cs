@@ -303,6 +303,15 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
             UIManager.Instance.LastSelectedCard = gameObject;
         }
+        else if (eventData.button == PointerEventData.InputButton.Left &&
+            GameManager.Instance.ActiveHero(true).CanPlayCards && (gameObject.GetComponent<TutorialPlayCard>() != null))
+        {
+            TutorialPlayCard tpc = gameObject.GetComponent<TutorialPlayCard>();
+            if (tpc)
+                tpc.ShowSummonPanel();
+
+            UIManager.Instance.LastSelectedCard = gameObject;
+        }
     }
 
     public void AdjustHealth(int amount, bool add)

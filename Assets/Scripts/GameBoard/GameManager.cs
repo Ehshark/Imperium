@@ -212,7 +212,9 @@ public class GameManager : MonoBehaviour
         enemyDiscardPileButton.interactable = enable;
         if (enable)
             instructionsObj.GetComponent<TMP_Text>().text = "";
-        shopButton.interactable = enable;
+
+        if (!StartGameController.Instance.tutorial)
+            shopButton.interactable = enable;
 
         ActiveHero(true).CanPlayCards = enable;
         if (enable)

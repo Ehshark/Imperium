@@ -11,6 +11,7 @@ public class StartGameController : MonoBehaviour
     public GameObject HeroUI { get => heroUI; set => heroUI = value; }
     public int BottomHeroChosen { get => bottomHeroChosen; set => bottomHeroChosen = value; }
     public int TopHeroChosen { get => topHeroChosen; set => topHeroChosen = value; }
+    public GameObject TutorialUI { get => tutorialUI; set => tutorialUI = value; }
 
     //Components
     [SerializeField]
@@ -135,7 +136,12 @@ public class StartGameController : MonoBehaviour
         yield return new WaitForSeconds(3f);
         GameManager.Instance.SwitchTurn();
         UIManager.Instance.ShowHideAttackButton();
+
+        //Set Tutorial Stuff
         tutorialUI.SetActive(true);
+        GameManager.Instance.ActiveHero(true).AttackButton.Find("AttackIcon").GetComponent<Button>().interactable = false;
+        GameManager.Instance.shopButton.interactable = false;
+        GameManager.Instance.endButton.interactable = false;
     }
 
     public void SetupGameBoard()

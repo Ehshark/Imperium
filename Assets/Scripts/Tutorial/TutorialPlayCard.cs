@@ -1,8 +1,8 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections.Generic;
 
 public class TutorialPlayCard : MonoBehaviour
 {
@@ -169,7 +169,7 @@ public class TutorialPlayCard : MonoBehaviour
                     t.gameObject.SetActive(false);
                 }
             }
-                   
+
         }
 
         if (summonPanel.activeSelf)
@@ -229,6 +229,19 @@ public class TutorialPlayCard : MonoBehaviour
         }
 
         AdjustHeroResources();
+
+        //Increase Count in TutorialUI
+        int count = StartGameController.Instance.TutorialUI.GetComponent<TutorialTextController>().count;
+        int maxCount = StartGameController.Instance.TutorialUI.GetComponent<TutorialTextController>().maxCount;
+
+        if (count < maxCount)
+        {
+            StartGameController.Instance.TutorialUI.GetComponent<TutorialTextController>().count++;
+        }
+        else
+        {
+            StartGameController.Instance.TutorialUI.SetActive(true);
+        }
     }
 
     //This function is called when PostNotification is called on the SACRIFICE_SELECTED event and isPromoting is true
