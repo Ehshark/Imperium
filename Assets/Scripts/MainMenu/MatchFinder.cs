@@ -12,7 +12,6 @@ public class MatchFinder : MonoBehaviourPunCallbacks
 {
     public TMP_Text playButtonText;
     int seconds = 5;
-    const byte START_MATCH_EVENT = 0;
     const string characters = "abcdefghijklmnopqrstuvwxyz0123456789";
     int charAmount = 10;
     [SerializeField]
@@ -117,7 +116,6 @@ public class MatchFinder : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
             InvokeRepeating("UpdatePlayButton", 0, 1.0f);
-            PhotonNetwork.RaiseEvent(START_MATCH_EVENT, null, RaiseEventOptions.Default, SendOptions.SendReliable);
         }
     }
 
