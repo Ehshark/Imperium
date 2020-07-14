@@ -53,6 +53,11 @@ public class StartGameController : MonoBehaviour
     private enum Coin { IDLE, TAILS, HEADS }
     private Coin coinValue;
 
+    //Tutorial
+    public bool tutorial;
+    [SerializeField]
+    private GameObject tutorialUI;
+
     private void Awake()
     {
         if (Instance)
@@ -84,6 +89,14 @@ public class StartGameController : MonoBehaviour
                 StartCoroutine(ShortGameSetup());
             }
         }
+        else if (tutorial)
+        {
+            StartCoroutine(TutorialSetup());
+        }
+        else
+        {
+            StartCoroutine(ShortGameSetup());
+        }
     }
 
     private IEnumerator ShortGameSetup()
@@ -107,6 +120,22 @@ public class StartGameController : MonoBehaviour
         {
             InstantiateSkillTree();
         }
+    }
+
+    private IEnumerator TutorialSetup()
+    {
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.bottomHero.SetPlayerName("Player 1");
+        GameManager.Instance.topHero.SetPlayerName("Player 2");
+        GameManager.Instance.bottomHero.MyTurn = false;
+        GameManager.Instance.topHero.MyTurn = true;
+        GameManager.Instance.bottomHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
+        GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
+        InitialDraw();
+        yield return new WaitForSeconds(3f);
+        GameManager.Instance.SwitchTurn();
+        UIManager.Instance.ShowHideAttackButton();
+        tutorialUI.SetActive(true);
     }
 
     public void SetupGameBoard()

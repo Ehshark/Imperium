@@ -126,7 +126,10 @@ public class UIManager : MonoBehaviour
         LoadScriptableObjectsToLists();
 
         //Shuffle each list holding the scriptable objects
-        Shuffle();
+        if (!StartGameController.Instance.tutorial)
+        {
+            Shuffle();
+        }
         currentEssential = essentials[0];
         currentMinion = minions[0];
         currentStarter = starters[0];
@@ -235,7 +238,14 @@ public class UIManager : MonoBehaviour
     {
         foreach (Transform m in GameManager.Instance.GetActiveHand(true))
         {
-            m.gameObject.AddComponent<PlayCard>();
+            if (!StartGameController.Instance.tutorial)
+            {
+                m.gameObject.AddComponent<PlayCard>();
+            }
+            else
+            {
+                m.gameObject.AddComponent<TutorialPlayCard>();
+            }
         }
     }
 
@@ -462,7 +472,10 @@ public class UIManager : MonoBehaviour
             allyDeck.Add(starters[i]); //add starter cards to decklist
         }
 
-        ShuffleStarterDeck();
+        if (!StartGameController.Instance.tutorial)
+        {
+            ShuffleStarterDeck();
+        }
 
         for (int i = 0; i < starters.Count; i++)
         {
