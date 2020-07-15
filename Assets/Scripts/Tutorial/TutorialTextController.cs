@@ -5,6 +5,7 @@ using TMPro;
 using System.Linq;
 using System;
 using UnityEngine.UI;
+using UnityEngine.UI.Extensions;
 
 public class TutorialTextController : MonoBehaviour
 {
@@ -48,9 +49,10 @@ public class TutorialTextController : MonoBehaviour
 
         //tutorialText = new List<KeyValuePair<string, Action>>
         //{
-        //    { new KeyValuePair<string, Action>("When Fetch Quest is played, our Hero will gain +1 Experience and +1 Gold.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("Now that we have some gold, let's buy a Card from the shop.", delegate { EnableShop(); }) },
-        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) }
+        //    { new KeyValuePair<string, Action>("In our hand currently, we have four Fetch Quest cards and one Starter Minion.", delegate { DelayOnHero("Hand", 2f); }) },
+        //    { new KeyValuePair<string, Action>("Let's start out by playing two Fetch Quest Cards and our Starting Minion",  delegate { AttachForFetchAndMinion(); }) },
+        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+        //    { new KeyValuePair<string, Action>("Excellent! In every turn, we want to get rid of many cards possible.", delegate { ButtonDelay(); }) },
         //};
     }
 
@@ -162,9 +164,15 @@ public class TutorialTextController : MonoBehaviour
     {
         Transform hand = GameManager.Instance.GetActiveHand(true);
 
-        hand.GetChild(0).gameObject.AddComponent<TutorialPlayCard>();
-        hand.GetChild(1).gameObject.AddComponent<TutorialPlayCard>();
-        hand.GetChild(4).gameObject.AddComponent<TutorialPlayCard>();
+        for (int i = 0; i < hand.childCount; i++)
+        {
+            if (i == 0 || i == 1 || i == 4)
+            {
+                CardVisual cv = hand.GetChild(i).GetComponent<CardVisual>();
+                cv.particleGlow.gameObject.SetActive(true);
+                hand.GetChild(i).gameObject.AddComponent<TutorialPlayCard>();
+            }
+        }
 
         count = 0;
         maxCount = 2;

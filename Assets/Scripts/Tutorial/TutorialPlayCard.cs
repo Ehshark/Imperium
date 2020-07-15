@@ -214,6 +214,8 @@ public class TutorialPlayCard : MonoBehaviour
                 GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Card = card;
                 EventManager.Instance.PostNotification(EVENT_TYPE.ASSIGN_CONDITIONS);
             }
+
+            cv.particleGlow.gameObject.SetActive(false);
         }
         else
         {

@@ -73,6 +73,8 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     public GameObject damageObjects;
     public Image silenceImage;
+
+    public ParticleSystem particleGlow;
     void OnEnable()
     {
         dmgAbsorbed = new Damage();
