@@ -247,6 +247,11 @@ public class GameManager : MonoBehaviour
         }
 
         StartTurn();
+
+        if (StartGameController.Instance.tutorial && GetActiveHand(true) == enemyHand)
+        {
+            StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
+        }
     }
 
     void StartTurn()

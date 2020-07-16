@@ -77,30 +77,26 @@ public class TutorialTextController : MonoBehaviour
             { new KeyValuePair<string, Action>("Excellent! In the defending phase, the defending player has the ability to assign damage to their hero and defending minions.", delegate { DisableGlowOnMinion(); }) },
             { new KeyValuePair<string, Action>("In this case, our opponent can only assign damage to their hero. Let's take a look.", delegate { ButtonDelay(); }) },
             { new KeyValuePair<string, Action>("", delegate { ActivateEnemyAI(); }) },
+            { new KeyValuePair<string, Action>("There we go! The opponent's hero took one damage and the control was placed back to you.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Oh, what happened to our Minion? After the combat phase, each minion that was selected to attack will be tapped until your next turn.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Any minions that are tapped cannot delcare an attack or defend against an attack.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Alright, now that our turn is over, let's give our opponent control.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Press the End Turn Button to end our turn.", delegate { ActivateEndTurn(); }) },
+            { new KeyValuePair<string, Action>("", delegate { ActivateEnemyAI(); }) },
         };
 
-        //tutorialText = new List<KeyValuePair<string, Action>>
-        //{
-        //    { new KeyValuePair<string, Action>("In our hand currently, we have four Fetch Quest cards and one Starter Minion.", delegate { DelayOnHero("Hand", 2f); }) },
-        //    { new KeyValuePair<string, Action>("Let's start out by playing two Fetch Quest Cards and our Starting Minion", delegate { AttachForFetchAndMinion(); }) },
-        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
-        //    { new KeyValuePair<string, Action>("Excellent! In every turn, we want to get rid of many cards possible.", delegate { DestroyPlayCard(); }) },
-        //    { new KeyValuePair<string, Action>("Alright let's attack! Select the Attack button to start your combat phase.", delegate { SetupAttack(); }) },
-        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
-        //    { new KeyValuePair<string, Action>("In the combat phase, you're allowed to select both your hero and as many minions on the field to attack.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("Once your selection has been made, select the Submit Button to attack your opponent.", delegate { DelayOnHero("Submit", 2f); }) },
-        //    { new KeyValuePair<string, Action>("To cancel your combat phase, select the Cancel Button to return to your Action Phase.", delegate { DelayOnHero("Cancel", 2f); }) },
-        //    { new KeyValuePair<string, Action>("Currently, we only have one minion summoned in the minion area. Because he has two health, he will not be destroyed after combat.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("Alright let's attack; select the minion to attack with. After that, select the Submit Button.", delegate { ActivateAttack(); }) },
-        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
-        //    { new KeyValuePair<string, Action>("Excellent! In the defending phase, the defending player has the ability to assign damage to their hero and defending minions.", delegate { DisableGlowOnMinion(); }) },
-        //    { new KeyValuePair<string, Action>("In this case, our opponent can only assign damage to their hero. Let's take a look.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("", delegate { ActivateEnemyAI(); }) },
-        //};
+        tutorialText = new List<KeyValuePair<string, Action>>
+        {
+            { new KeyValuePair<string, Action>("Alright, now that our turn is over, let's give our opponent control.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Press the End Turn Button to end our turn.", delegate { ActivateEndTurn(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("", delegate { ActivateEnemyAI(); }) },
+        };
 
         enemyAI = new List<Action>
         {
-            { new Action(delegate { Defend(); }) }
+            { new Action(delegate { Defend(); }) },
+            { new Action(delegate { EnemyTurn(); }) },
         };
 
     }
@@ -219,6 +215,11 @@ public class TutorialTextController : MonoBehaviour
         else if (type.Equals("Cancel"))
         {
             DelayCommand dc = new DelayCommand(GameManager.Instance.ActiveHero(true).CancelButton, time);
+            dc.AddToQueue();
+        }
+        else if (type.Equals("EndTurn"))
+        {
+            DelayCommand dc = new DelayCommand(GameManager.Instance.endButton.transform, time);
             dc.AddToQueue();
         }
 
@@ -372,7 +373,10 @@ public class TutorialTextController : MonoBehaviour
 
     public void UpdateAI()
     {
-        enemyAI.ElementAtOrDefault(enemyIndex).Invoke();
+        if (enemyAI.ElementAtOrDefault(enemyIndex) != null)
+        {
+            enemyAI.ElementAtOrDefault(enemyIndex).Invoke();
+        }
         enemyIndex++;
     }
 
@@ -383,10 +387,51 @@ public class TutorialTextController : MonoBehaviour
 
     private IEnumerator DefendAI()
     {
-        GameManager.Instance.GetComponent<DefendListener>().SelectDamageType("damage");
+        DefendListener dl = GameManager.Instance.GetComponent<DefendListener>();
+
+        dl.SelectDamageType("damage");
         yield return new WaitForSeconds(1f);
 
-        GameManager.Instance.ActiveHero(true).AssignDamageAbsorbed(true);
+        GameManager.Instance.ActiveHero(false).AssignDamageAbsorbed(true);
         yield return new WaitForSeconds(1f);
+
+        dl.SubmitDefenseButtonFunc();
+        yield return new WaitForSeconds(1f);
+
+        ShowUI();
+    }
+
+    private void ActivateEndTurn()
+    {
+        //Test
+        enemyIndex++;
+
+        GameManager.Instance.endButton.interactable = true;
+        DelayOnHero("EndTurn", 2f);
+    }
+
+    private void EnemyTurn()
+    {
+        StartCoroutine(EnemyTurnAI());
+    }
+
+    private IEnumerator EnemyTurnAI()
+    {
+        GameManager.Instance.ActiveHero(true).AttackButton.Find("AttackIcon").GetComponent<Button>().interactable = false;
+        yield return new WaitForSeconds(1f);
+
+        Transform hand = GameManager.Instance.GetActiveHand(true);
+        foreach (Transform t in hand)
+        {
+            t.gameObject.AddComponent<PlayCard>();
+        }
+        yield return new WaitForSeconds(2.5f);
+
+        hand.GetChild(0).GetComponent<PlayCard>().PlayItem();
+        yield return new WaitForSeconds(2f);
+        hand.GetChild(0).GetComponent<PlayCard>().PlayItem();
+        yield return new WaitForSeconds(2f);
+        hand.GetChild(hand.childCount - 1).GetComponent<PlayCard>().PlayMinion();
+        yield return new WaitForSeconds(2f);
     }
 }
