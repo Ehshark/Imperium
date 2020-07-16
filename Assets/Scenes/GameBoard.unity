@@ -1508,12 +1508,12 @@ PrefabInstance:
     - target: {fileID: 5361649606923715718, guid: eefefb9f2c5af18409cebc6556cf53cc,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 351.0002
       objectReference: {fileID: 0}
     - target: {fileID: 5361649606923715718, guid: eefefb9f2c5af18409cebc6556cf53cc,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000030517578
+      value: -7.138954
       objectReference: {fileID: 0}
     - target: {fileID: 5361649606923715718, guid: eefefb9f2c5af18409cebc6556cf53cc,
         type: 3}
@@ -2955,7 +2955,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -187.9, y: 33.199997}
+  m_AnchoredPosition: {x: -187.9, y: 0}
   m_SizeDelta: {x: 71.8053, y: 49.0214}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &681376984
@@ -4656,8 +4656,8 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 10
-  m_ChildForceExpandWidth: 0
+  m_Spacing: -50
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
@@ -5538,8 +5538,8 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 10
-  m_ChildForceExpandWidth: 0
+  m_Spacing: -50
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
@@ -8862,8 +8862,8 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 10
-  m_ChildForceExpandWidth: 0
+  m_Spacing: -100
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
@@ -10481,8 +10481,8 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 10
-  m_ChildForceExpandWidth: 0
+  m_Spacing: -100
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
@@ -12184,7 +12184,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047779240}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 66.69}
+  m_LocalPosition: {x: 0, y: 0, z: 56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2075935474}
@@ -12196,7 +12196,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 960.8, y: 9}
-  m_SizeDelta: {x: 115.63495, y: 145.62833}
+  m_SizeDelta: {x: 115.6349, y: 145.6283}
   m_Pivot: {x: 1, y: 0}
 --- !u!1001 &2048055302
 PrefabInstance:
@@ -14367,7 +14367,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2075935473}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.000015258789}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
   m_LocalScale: {x: 115, y: 144, z: 50}
   m_Children: []
   m_Father: {fileID: 2047779241}
@@ -15988,6 +15988,26 @@ PrefabInstance:
       propertyPath: enemyDiscardPileButton
       value: 
       objectReference: {fileID: 1297702960}
+    - target: {fileID: 8337193157745625204, guid: 0a603b7ac0f073a4faff149c6dbf644c,
+        type: 3}
+      propertyPath: allyDeckVisual
+      value: 
+      objectReference: {fileID: 2075935473}
+    - target: {fileID: 8337193157745625204, guid: 0a603b7ac0f073a4faff149c6dbf644c,
+        type: 3}
+      propertyPath: allyDeckCover
+      value: 
+      objectReference: {fileID: 1499201181}
+    - target: {fileID: 8337193157745625204, guid: 0a603b7ac0f073a4faff149c6dbf644c,
+        type: 3}
+      propertyPath: enemyDeckVisual
+      value: 
+      objectReference: {fileID: 2065291703}
+    - target: {fileID: 8337193157745625204, guid: 0a603b7ac0f073a4faff149c6dbf644c,
+        type: 3}
+      propertyPath: enemyDeckCover
+      value: 
+      objectReference: {fileID: 735825874}
     - target: {fileID: 8337193157745625205, guid: 0a603b7ac0f073a4faff149c6dbf644c,
         type: 3}
       propertyPath: m_LocalPosition.x

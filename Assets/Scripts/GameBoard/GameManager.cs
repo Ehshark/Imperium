@@ -26,6 +26,10 @@ public class GameManager : MonoBehaviour
 
     public TMP_Text allyDeckCounter;
     public TMP_Text enemyDeckCounter;
+    public GameObject allyDeckVisual;
+    public GameObject enemyDeckVisual;
+    public GameObject allyDeckCover;
+    public GameObject enemyDeckCover;
 
     public Transform allyMulliganButton;
     public Transform enemyMulliganButton;
@@ -282,6 +286,8 @@ public class GameManager : MonoBehaviour
 
         ActiveHero(true).AdjustDiscard(false);
         isForcedDiscard = false;
+
+        AdjustDeckHeight();
     }
 
     public int GetCurrentPlayer()
@@ -322,6 +328,8 @@ public class GameManager : MonoBehaviour
                 deck.Remove(deck[0]);
                 enemyDeckCounter.text = deck.Count.ToString();
             }
+
+            AdjustDeckHeight();
         }
 
         else //no cards left in the deck, add the discard pile, reshuffle and continue the draw
@@ -361,8 +369,11 @@ public class GameManager : MonoBehaviour
                 enemyDeckCounter.text = deck.Count.ToString();
             }
 
+            AdjustDeckHeight();
+
             //function calls itself to continue the draw since deck is no longer empty
             DrawCard(deck, playerHand);
+
         }
 
         if(isActionPhase)
@@ -604,6 +615,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Used to change the deck's visual height
+    public void AdjustDeckHeight()
+    {
+        Vector3 tmp = GetActiveDeck(true).transform.localPosition; //saves current decks x and y pos
+        GetActiveDeck(true).transform.localPosition = new Vector3(tmp.x, tmp.y, 100f); //resets deck to default height
+
+        float height = UIManager.Instance.GetActiveDeckList(true).Count * 2f; //total "thickness" of the cards
+
+        GetActiveDeck(true).transform.localPosition = new Vector3(tmp.x, tmp.y, 100f - height); //setting new height of deck
+
+        if(UIManager.Instance.GetActiveDeckList(true).Count == 0) //deck disappears if there are no cards
+        {
+            GetActiveDeck(true).GetChild(0).transform.gameObject.SetActive(false);
+            GetActiveDeck(true).GetChild(1).transform.gameObject.SetActive(false);
+        }
+    }
+
     public Transform GetActiveHand(bool activeWanted)
     {
         if (activeWanted)
@@ -735,6 +763,46 @@ public class GameManager : MonoBehaviour
                 return enemyDeckCounter;
             }
             return allyDeckCounter;
+        }
+    }
+
+    public GameObject GetActiveDeckVisual(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return allyDeckVisual;
+            }
+            return enemyDeckVisual;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyDeckVisual;
+            }
+            return allyDeckVisual;
+        }
+    }
+
+    public GameObject GetActiveDeckCover(bool activeWanted)
+    {
+        if (activeWanted)
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return allyDeckCover;
+            }
+            return enemyDeckCover;
+        }
+        else
+        {
+            if (GetCurrentPlayer() == 0)
+            {
+                return enemyDeckCover;
+            }
+            return allyDeckCover;
         }
     }
 
