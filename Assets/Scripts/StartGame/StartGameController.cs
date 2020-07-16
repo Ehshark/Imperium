@@ -7,7 +7,10 @@ using UnityEngine.UI;
 public class StartGameController : MonoBehaviour
 {
     public static StartGameController Instance { get; private set; } = null;
+    public bool afterCoinTossAndHeroSelection = false;
     public GameObject HeroUI { get => heroUI; set => heroUI = value; }
+    public int BottomHeroChosen { get => bottomHeroChosen; set => bottomHeroChosen = value; }
+    public int TopHeroChosen { get => topHeroChosen; set => topHeroChosen = value; }
 
     //Components
     [SerializeField]
@@ -38,6 +41,8 @@ public class StartGameController : MonoBehaviour
     private int turn = 0;
     private int cnt = 0;
     private int mulliganCount = 0;
+    private int bottomHeroChosen; //1 = Warrior, 2 = Rogue, 3 = Mage
+    private int topHeroChosen; //1 = Warrior, 2 = Rogue, 3 = Mage
 
     [SerializeField]
     private Button tailsButton;
@@ -56,24 +61,28 @@ public class StartGameController : MonoBehaviour
             return;
         }
 
-        Instance = this;
+        Instance = this; 
+        DontDestroyOnLoad(gameObject);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        if (GameManager.Instance.longBoardSetup)
+        if (afterCoinTossAndHeroSelection)
         {
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.canvas.gameObject, false);
-            GameManager.Instance.alliedDeck.parent.gameObject.SetActive(true);
-            GameManager.Instance.enemyDeck.parent.gameObject.SetActive(true);
-            GameManager.Instance.EnableOrDisableChildren(overallUI, true);
-            heroUI.SetActive(false);
-            SetupGameBoard();
-        }
-        else
-        {
-            StartCoroutine(ShortGameSetup());
+            if (GameManager.Instance.longBoardSetup)
+            {
+                GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.canvas.gameObject, false);
+                GameManager.Instance.alliedDeck.parent.gameObject.SetActive(true);
+                GameManager.Instance.enemyDeck.parent.gameObject.SetActive(true);
+                GameManager.Instance.EnableOrDisableChildren(overallUI, true);
+                heroUI.SetActive(false);
+                SetupGameBoard();
+            }
+            else
+            {
+                StartCoroutine(ShortGameSetup());
+            }
         }
     }
 
