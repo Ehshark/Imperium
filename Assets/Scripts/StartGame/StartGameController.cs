@@ -12,6 +12,7 @@ public class StartGameController : MonoBehaviour
     public int BottomHeroChosen { get => bottomHeroChosen; set => bottomHeroChosen = value; }
     public int TopHeroChosen { get => topHeroChosen; set => topHeroChosen = value; }
     public GameObject TutorialUI { get => tutorialUI; set => tutorialUI = value; }
+    public GameObject TutorialObject { get => tutorialObject; set => tutorialObject = value; }
 
     //Components
     [SerializeField]
@@ -58,6 +59,8 @@ public class StartGameController : MonoBehaviour
     public bool tutorial;
     [SerializeField]
     private GameObject tutorialUI;
+    [SerializeField]
+    private GameObject tutorialObject;
 
     private void Awake()
     {

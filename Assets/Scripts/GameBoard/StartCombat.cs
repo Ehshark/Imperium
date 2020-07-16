@@ -21,11 +21,22 @@ public class StartCombat : MonoBehaviour
         //Switch the buttons shown
         SwitchButtons();
 
-        //Push a notification for the StartCombat Event
-        EventManager.Instance.PostNotification(EVENT_TYPE.START_COMBAT);
+        if (!StartGameController.Instance.tutorial)
+        {
+            //Push a notification for the StartCombat Event
+            EventManager.Instance.PostNotification(EVENT_TYPE.START_COMBAT);
 
-        //Update the instructions text
-        GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Please Select Minions to Attack";
+            //Update the instructions text
+            GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Please Select Minions to Attack";
+        }
+        else
+        {
+            GameManager.Instance.ActiveHero(true).SubmitButton.Find("SubmitIcon").GetComponent<Button>().interactable = false;
+            GameManager.Instance.ActiveHero(true).CancelButton.Find("CancelIcon").GetComponent<Button>().interactable = false;
+
+            StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
+        }
+
         GameManager.Instance.shopButton.interactable = false;
 
         AssignAllyDamageBonus(true);

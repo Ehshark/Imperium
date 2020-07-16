@@ -20,23 +20,27 @@ public class DefendListener : MonoBehaviour, IListener
     {
         damageSelected = "";
         EventManager.Instance.AddListener(EVENT_TYPE.DEFEND_AGAINST, this);
-        foreach (Transform t in GameManager.Instance.StartCombatDamageUI)
+
+        if (!StartGameController.Instance.tutorial)
         {
-            if (t.name.Equals("poisonTouch"))
+            foreach (Transform t in GameManager.Instance.StartCombatDamageUI)
             {
-                t.gameObject.GetComponentInChildren<Button>().onClick.AddListener(delegate { SelectDamageType("poisonTouch"); });
-            }
-            else if (t.name.Equals("stealth"))
-            {
-                t.gameObject.GetComponentInChildren<Button>().onClick.AddListener(delegate { SelectDamageType("stealth"); });
-            }
-            else if (t.name.Equals("damage"))
-            {
-                t.gameObject.GetComponentInChildren<Button>().onClick.AddListener(delegate { SelectDamageType("damage"); });
-            }
-            else if (t.name.Equals("lifesteal"))
-            {
-                t.gameObject.GetComponentInChildren<Button>().onClick.AddListener(delegate { SelectDamageType("lifesteal"); });
+                if (t.name.Equals("poisonTouch"))
+                {
+                    t.gameObject.GetComponentInChildren<Button>().onClick.AddListener(delegate { SelectDamageType("poisonTouch"); });
+                }
+                else if (t.name.Equals("stealth"))
+                {
+                    t.gameObject.GetComponentInChildren<Button>().onClick.AddListener(delegate { SelectDamageType("stealth"); });
+                }
+                else if (t.name.Equals("damage"))
+                {
+                    t.gameObject.GetComponentInChildren<Button>().onClick.AddListener(delegate { SelectDamageType("damage"); });
+                }
+                else if (t.name.Equals("lifesteal"))
+                {
+                    t.gameObject.GetComponentInChildren<Button>().onClick.AddListener(delegate { SelectDamageType("lifesteal"); });
+                }
             }
         }
     }
@@ -48,6 +52,11 @@ public class DefendListener : MonoBehaviour, IListener
             GameManager.Instance.ActiveHero(false).DefendButton.GetComponentInChildren<Button>().onClick.AddListener(SubmitDefenseButtonFunc);
             GameManager.Instance.IsDefending = true;
             ChangeUiForDefense(GameManager.Instance.IsDefending);
+            
+            if (StartGameController.Instance.tutorial)
+            {
+                StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
+            }
         }
     }
 

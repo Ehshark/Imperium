@@ -13,9 +13,13 @@ public class TutorialTextController : MonoBehaviour
     private Text tutorialUIText;
     [SerializeField]
     private Button nextButton;
+    [SerializeField]
+    private Transform background;
 
     private List<KeyValuePair<string, Action>> tutorialText;
+    private List<Action> enemyAI;
     private int indexUI;
+    private int enemyIndex;
 
     public int count;
     public int maxCount;
@@ -39,32 +43,85 @@ public class TutorialTextController : MonoBehaviour
             { new KeyValuePair<string, Action>("In our hand currently, we have four Fetch Quest cards and one Starter Minion.", delegate { DelayOnHero("Hand", 2f); }) },
             { new KeyValuePair<string, Action>("Let's start out by playing two Fetch Quest Cards and our Starting Minion",  delegate { AttachForFetchAndMinion(); }) },
             { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
-            { new KeyValuePair<string, Action>("Excellent! In every turn, we want to get rid of many cards possible.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Excellent! In every turn, we want to get rid of many cards possible.", delegate { DestroyPlayCard(); }) },
             { new KeyValuePair<string, Action>("Because our mana counter is at zero, we cannot play anymore cards this turn.", delegate { DelayOnHero("Mana", 2f); }) },
             { new KeyValuePair<string, Action>("Wait, something is different. Both are Gold counter and our Exp counter got increased.", delegate { DelayOnHero("Gold", 1f); DelayOnHero("Exp", 1f); }) },
             { new KeyValuePair<string, Action>("When Fetch Quest is played, our Hero will gain +1 Experience and +1 Gold.", delegate { ButtonDelay(); }) },
             { new KeyValuePair<string, Action>("Now that we have some gold, let's buy a Card from the shop.", delegate { GameManager.Instance.shopButton.interactable = true; ButtonDelay(); }) },
-            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) }
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("While in the shop, you can buy Minion or Essentinel Cards using the Gold your Hero obtains.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Cards that you buy in the shop are used to build your deck. Different strategies can be used from the cards you buy.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Let's try to buy a card now! See that card glowing? Use your Gold to buy it.", delegate { BuyCardTutorial(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("Excellent! When you buy a card from the shop the card will be sent to the discard pile. The shop will then be replaced with a new card.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("When you run out of cards from your deck, all cards from the discard pile will be removed and reshuffled. Making your new deck.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Other than buying cards, the shop also allows you to change a card as well.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Change Shop allows the player to change a shop card from a pile. This card will then be replaced by a new card.", delegate { DelayOnHero("ChangeButton", 2f); }) },
+            { new KeyValuePair<string, Action>("To do a change shop, your gold needs to be higher than half of the selected minion's gold price.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("We have one gold left, let's try to change a card from the shop. Try it on the card that's glowing.", delegate { ChangeShopTutorial(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("Excellent! We bought a card and also did a change shop. Because our gold counter is at zero, let's exit the shop.", delegate { ExitShop(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("We learned how to play cards and we learned how to use the shop. How about we attack next.", delegate { ButtonDelay(); GameManager.Instance.shopButton.interactable = false; }) },
+            { new KeyValuePair<string, Action>("Once per turn, each player is allowed to enter the combat phase and attack. Player's can use any summoned minion or their hero to attack.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("If a player uses their hero to attack, the hero must pay mana equal to half of their hero's current damage.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("If a player uses their minion(s) to attack, all attacking minions must pay one health at the end of the combat phase.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Alright let's attack! Select the Attack button to start your combat phase.", delegate { SetupAttack(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("In the combat phase, you're allowed to select both your hero and as many minions on the field to attack.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Once your selection has been made, select the Submit Button to attack your opponent.", delegate { DelayOnHero("Submit", 2f); }) },
+            { new KeyValuePair<string, Action>("To cancel your combat phase, select the Cancel Button to return to your Action Phase.", delegate { DelayOnHero("Cancel", 2f); }) },
+            { new KeyValuePair<string, Action>("Currently, we only have one minion summoned in the minion area. Because he has two health, he will not be destroyed after combat.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Alright let's attack; select the minion to attack with. After that, select the Submit Button.", delegate { ActivateAttack(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("Excellent! In the defending phase, the defending player has the ability to assign damage to their hero and defending minions.", delegate { DisableGlowOnMinion(); }) },
+            { new KeyValuePair<string, Action>("In this case, our opponent can only assign damage to their hero. Let's take a look.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("", delegate { ActivateEnemyAI(); }) },
         };
 
         //tutorialText = new List<KeyValuePair<string, Action>>
         //{
         //    { new KeyValuePair<string, Action>("In our hand currently, we have four Fetch Quest cards and one Starter Minion.", delegate { DelayOnHero("Hand", 2f); }) },
-        //    { new KeyValuePair<string, Action>("Let's start out by playing two Fetch Quest Cards and our Starting Minion",  delegate { AttachForFetchAndMinion(); }) },
+        //    { new KeyValuePair<string, Action>("Let's start out by playing two Fetch Quest Cards and our Starting Minion", delegate { AttachForFetchAndMinion(); }) },
         //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
-        //    { new KeyValuePair<string, Action>("Excellent! In every turn, we want to get rid of many cards possible.", delegate { ButtonDelay(); }) },
+        //    { new KeyValuePair<string, Action>("Excellent! In every turn, we want to get rid of many cards possible.", delegate { DestroyPlayCard(); }) },
+        //    { new KeyValuePair<string, Action>("Alright let's attack! Select the Attack button to start your combat phase.", delegate { SetupAttack(); }) },
+        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+        //    { new KeyValuePair<string, Action>("In the combat phase, you're allowed to select both your hero and as many minions on the field to attack.", delegate { ButtonDelay(); }) },
+        //    { new KeyValuePair<string, Action>("Once your selection has been made, select the Submit Button to attack your opponent.", delegate { DelayOnHero("Submit", 2f); }) },
+        //    { new KeyValuePair<string, Action>("To cancel your combat phase, select the Cancel Button to return to your Action Phase.", delegate { DelayOnHero("Cancel", 2f); }) },
+        //    { new KeyValuePair<string, Action>("Currently, we only have one minion summoned in the minion area. Because he has two health, he will not be destroyed after combat.", delegate { ButtonDelay(); }) },
+        //    { new KeyValuePair<string, Action>("Alright let's attack; select the minion to attack with. After that, select the Submit Button.", delegate { ActivateAttack(); }) },
+        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+        //    { new KeyValuePair<string, Action>("Excellent! In the defending phase, the defending player has the ability to assign damage to their hero and defending minions.", delegate { DisableGlowOnMinion(); }) },
+        //    { new KeyValuePair<string, Action>("In this case, our opponent can only assign damage to their hero. Let's take a look.", delegate { ButtonDelay(); }) },
+        //    { new KeyValuePair<string, Action>("", delegate { ActivateEnemyAI(); }) },
         //};
+
+        enemyAI = new List<Action>
+        {
+            { new Action(delegate { Defend(); }) }
+        };
+
     }
 
     public void Start()
     {
         indexUI = 1;
+        enemyIndex = 0;
         count = 0;
         maxCount = 0;
     }
 
     public void OnEnable()
     {
+        background.gameObject.SetActive(true);
+        UpdateUI();
+    }
+
+    public void ShowUI()
+    {
+        background.gameObject.SetActive(true);
         UpdateUI();
     }
 
@@ -85,7 +142,7 @@ public class TutorialTextController : MonoBehaviour
 
     public void CloseUI()
     {
-        gameObject.SetActive(false);
+        background.gameObject.SetActive(false);
     }
 
     private void DelayOnHero(string type, float time)
@@ -144,6 +201,26 @@ public class TutorialTextController : MonoBehaviour
             DelayCommand dc = new DelayCommand(hero.Find("ExpBarBorder"), time);
             dc.AddToQueue();
         }
+        else if (type.Equals("ChangeButton"))
+        {
+            DelayCommand dc = new DelayCommand(GameManager.Instance.changeButton.transform, time);
+            dc.AddToQueue();
+        }
+        else if (type.Equals("Attack"))
+        {
+            DelayCommand dc = new DelayCommand(GameManager.Instance.ActiveHero(true).AttackButton, time);
+            dc.AddToQueue();
+        }
+        else if (type.Equals("Submit"))
+        {
+            DelayCommand dc = new DelayCommand(GameManager.Instance.ActiveHero(true).SubmitButton, time);
+            dc.AddToQueue();
+        }
+        else if (type.Equals("Cancel"))
+        {
+            DelayCommand dc = new DelayCommand(GameManager.Instance.ActiveHero(true).CancelButton, time);
+            dc.AddToQueue();
+        }
 
         StartCoroutine(ButtonDelay(2f));
     }
@@ -177,12 +254,139 @@ public class TutorialTextController : MonoBehaviour
         count = 0;
         maxCount = 2;
 
-        StartCoroutine(ButtonDelay(1f));
+        ButtonDelay();
+    }
+
+    private void DestroyPlayCard()
+    {
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
+        {
+            TutorialPlayCard tpc = t.GetComponent<TutorialPlayCard>();
+            if (tpc)
+            {
+                Destroy(tpc);
+            }
+        }
+
+        ButtonDelay();
     }
 
     private void EnableShop()
     {
         GameManager.Instance.shopButton.interactable = true;
+
+        foreach(Transform t in GameManager.Instance.warriorShopPile)
+        {
+            ShowShopCard ssc = t.GetComponent<ShowShopCard>();
+            if (ssc)
+            {
+                Destroy(ssc);
+            }
+        }
+
+        foreach (Transform t in GameManager.Instance.rogueShopPile)
+        {
+            ShowShopCard ssc = t.GetComponent<ShowShopCard>();
+            if (ssc)
+            {
+                Destroy(ssc);
+            }
+        }
+
+        foreach (Transform t in GameManager.Instance.mageShopPile)
+        {
+            ShowShopCard ssc = t.GetComponent<ShowShopCard>();
+            if (ssc)
+            {
+                Destroy(ssc);
+            }
+        }
+
+        GameManager.Instance.changeButton.interactable = false;
+        GameManager.Instance.ActiveHero(true).AdjustGold(4, true);
+
         ButtonDelay();
+    }
+
+    private void BuyCardTutorial()
+    {
+        GameObject cardToBuy = GameManager.Instance.mageShopPile.GetChild(0).gameObject;
+        cardToBuy.AddComponent<ShowShopCard>();
+        cardToBuy.GetComponent<CardVisual>().particleGlow.gameObject.SetActive(true);
+
+        ButtonDelay();
+    }
+
+    private void ChangeShopTutorial()
+    {
+        GameManager.Instance.changeButton.interactable = true;
+        GameManager.Instance.buyButton.interactable = false;
+
+        GameObject cardToBuy = GameManager.Instance.rogueShopPile.GetChild(1).gameObject;
+        cardToBuy.AddComponent<ShowShopCard>();
+        cardToBuy.GetComponent<CardVisual>().particleGlow.gameObject.SetActive(true);
+
+        ButtonDelay();
+    }
+
+    private void ExitShop()
+    {
+        GameManager.Instance.changeButton.interactable = true;
+        GameManager.Instance.buyButton.interactable = true;
+        GameManager.Instance.exitShopButton.interactable = true;
+
+        ButtonDelay();
+    }
+
+    private void SetupAttack()
+    {
+        GameManager.Instance.ActiveHero(true).AttackButton.Find("AttackIcon").GetComponent<Button>().interactable = true;
+        DelayOnHero("Attack", 2f); 
+    }
+
+    private void ActivateAttack()
+    {
+        GameObject minion = GameManager.Instance.GetActiveMinionZone(true).GetChild(0).gameObject;
+        minion.AddComponent<StartCombatListener>();
+        minion.GetComponent<CardVisual>().particleGlow.gameObject.SetActive(true);
+
+        GameManager.Instance.ActiveHero(true).SubmitButton.Find("SubmitIcon").GetComponent<Button>().interactable = true;
+
+        ButtonDelay();
+    }
+
+    private void DisableGlowOnMinion()
+    {
+        GameObject minion = GameManager.Instance.GetActiveMinionZone(true).GetChild(0).gameObject;
+        minion.GetComponent<CardVisual>().particleGlow.gameObject.SetActive(false);
+
+        ButtonDelay();
+    }
+
+    public void ActivateEnemyAI()
+    {
+        CloseUI();
+
+        UpdateAI();
+    }
+
+    public void UpdateAI()
+    {
+        enemyAI.ElementAtOrDefault(enemyIndex).Invoke();
+        enemyIndex++;
+    }
+
+    private void Defend()
+    {
+        StartCoroutine(DefendAI());
+    }
+
+    private IEnumerator DefendAI()
+    {
+        GameManager.Instance.GetComponent<DefendListener>().SelectDamageType("damage");
+        yield return new WaitForSeconds(1f);
+
+        GameManager.Instance.ActiveHero(true).AssignDamageAbsorbed(true);
+        yield return new WaitForSeconds(1f);
     }
 }

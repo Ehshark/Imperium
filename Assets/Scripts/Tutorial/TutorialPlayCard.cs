@@ -233,16 +233,16 @@ public class TutorialPlayCard : MonoBehaviour
         AdjustHeroResources();
 
         //Increase Count in TutorialUI
-        int count = StartGameController.Instance.TutorialUI.GetComponent<TutorialTextController>().count;
-        int maxCount = StartGameController.Instance.TutorialUI.GetComponent<TutorialTextController>().maxCount;
+        int count = StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().count;
+        int maxCount = StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().maxCount;
 
         if (count < maxCount)
         {
-            StartGameController.Instance.TutorialUI.GetComponent<TutorialTextController>().count++;
+            StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().count++;
         }
         else
         {
-            StartGameController.Instance.TutorialUI.SetActive(true);
+            StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
         }
     }
 

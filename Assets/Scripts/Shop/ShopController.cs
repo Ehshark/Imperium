@@ -35,6 +35,16 @@ public class ShopController : MonoBehaviour
         herosGold.text = active.Gold.ToString();
     }
 
+    public void CloseShop()
+    {
+        gameObject.SetActive(false);
+
+        if (StartGameController.Instance.tutorial)
+        {
+            StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
+        }
+    }
+
     public void UpdateShopCard(GameObject selectedObject)
     {
         //Delete the bigShopCard if there is an instance of it
@@ -65,8 +75,11 @@ public class ShopController : MonoBehaviour
                 //Set the BigShopCard object with the spawned card
                 bigShopCard = tmp;
 
-                //Set ChangeShop to active 
-                changeShop.interactable = true;
+                if (!StartGameController.Instance.tutorial)
+                {
+                    //Set ChangeShop to active 
+                    changeShop.interactable = true;
+                }
             }
             else if (selectedVisual.Ed != null)
             {
@@ -151,6 +164,12 @@ public class ShopController : MonoBehaviour
                         }
                     }
                 }
+
+                //Tutorial 
+                if (StartGameController.Instance.tutorial)
+                {
+                    StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
+                }
             }
             else
             {
@@ -179,6 +198,13 @@ public class ShopController : MonoBehaviour
                 //Compare if there is Card's to change the shop
                 if (UIManager.Instance.CanChangeShopCard(selectedCard.GetComponent<CardVisual>().Md.CardClass))
                 {
+                    //Delay on Gold Coin
+                    DelayCommand dc = new DelayCommand(goldPileIcon, 1f);
+                    dc.AddToQueue();
+
+                    //Delay on Pile
+                    DelayOnPile();
+
                     //Spawn a new card from the correct deck
                     SpawnShopMinion(selectedCard.GetComponent<CardVisual>().Md.CardClass, true, selectedCard.GetComponent<CardVisual>().Md);
 
@@ -204,7 +230,12 @@ public class ShopController : MonoBehaviour
                             }
                         }
                     }
-                    GameManager.Instance.shop.gameObject.SetActive(false);
+
+                    //Tutorial
+                    if (StartGameController.Instance.tutorial)
+                    {
+                        StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
+                    }
                 }
                 else
                 {
@@ -308,5 +339,26 @@ public class ShopController : MonoBehaviour
         GameManager.Instance.DisableExpressBuy();
         //EventManager.Instance.PostNotification(EVENT_TYPE.POWER_EXPRESS_BUY);
         EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_EXPRESS_BUY);
+    }
+
+    private void DelayOnPile()
+    {
+        string type = selectedCard.GetComponent<CardVisual>().Md.CardClass;
+        DelayCommand dc;
+
+        if (type == "Warrior")
+        {
+            dc = new DelayCommand(warriorDeck, 1f);
+        }
+        else if (type == "Rogue")
+        {
+            dc = new DelayCommand(rogueDeck, 1f);
+        }
+        else
+        {
+            dc = new DelayCommand(mageDeck, 1f);
+        }
+
+        dc.AddToQueue();
     }
 }

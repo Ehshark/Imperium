@@ -248,6 +248,12 @@ public class UIManager : MonoBehaviour
     public void DisplayShop()
     {
         GameManager.Instance.shop.gameObject.SetActive(true);
+
+        if (StartGameController.Instance.tutorial)
+        {
+            StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
+            GameManager.Instance.exitShopButton.interactable = false;
+        }
     }
 
 
@@ -415,7 +421,10 @@ public class UIManager : MonoBehaviour
         if (tmp.GetComponent<CardVisual>().Md != null)
         {
             tmp.GetComponent<CardVisual>().inShop = true;
-            tmp.AddComponent<ShowShopCard>();
+            if (!StartGameController.Instance.tutorial)
+            {
+                tmp.AddComponent<ShowShopCard>();
+            }
             tmp.SetActive(true);
         }
 
