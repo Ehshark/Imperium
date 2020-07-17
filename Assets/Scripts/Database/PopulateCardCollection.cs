@@ -42,11 +42,11 @@ public class PopulateCardCollection : MonoBehaviour
         List<MinionData> mList = new List<MinionData>();
         Debug.Log("yo");
         Debug.Log(mList);
-        CardDatabaseManager.Instance.LoadScriptableObjectsToLists();
-        CardDatabaseManager.Instance.LoadSprites();
+        //CardDatabaseManager.Instance.LoadScriptableObjectsToLists();
+        //CardDatabaseManager.Instance.LoadSprites();
 
 
-        CardDatabaseManager.Instance.SetEssentials();
+        //CardDatabaseManager.Instance.SetEssentials();
 
 
 
@@ -61,7 +61,7 @@ public class PopulateCardCollection : MonoBehaviour
 
         ////Sets all 9 cards in the shop, 3 cards per pile
         //CardDatabaseManager.Instance.SetWarriorMinion();
-        CardDatabaseManager.Instance.SortPiles();
+        //CardDatabaseManager.Instance.SortPiles();
         //CardDatabaseManager.Instance.SetMageMinion();
         //CardDatabaseManager.Instance.SetEssentials();
 

@@ -129,7 +129,7 @@ public class UIManager : MonoBehaviour
         LoadScriptableObjectsToLists();
 
         //Shuffle each list holding the scriptable objects
-        if (!StartGameController.Instance.tutorial)
+        if (StartGameController.Instance != null && !StartGameController.Instance.tutorial)
         {
             Shuffle();
         }
@@ -154,7 +154,7 @@ public class UIManager : MonoBehaviour
         SetEssentials();
     }
 
-    private void LoadScriptableObjectsToLists()
+    public void LoadScriptableObjectsToLists()
     {
         //Load all the minion scriptable objects from the resources folder and add them to the minions list
         minions = new List<MinionData>();
@@ -305,7 +305,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void LoadSprites()
+    public void LoadSprites()
     {
         object[] loadedIcons = Resources.LoadAll("VisualAssets/game-icons-net/CardAndHeroAttributes", typeof(Sprite));
         allSprites = new List<Sprite>();
@@ -346,43 +346,55 @@ public class UIManager : MonoBehaviour
 
     public void SetWarriorMinion()
     {
+        CardVisual mv;
         for (int i = 0; i < 3; i++)
         {
             currentMinion = warriorMinions[i];
             dealtWarriorCards.Add(currentMinion);
-            CardVisual mv = GameManager.Instance.warriorShopPile.GetChild(i).GetComponent<CardVisual>();
-            mv.Md = currentMinion;
-            GameManager.Instance.warriorShopPile.GetChild(i).gameObject.SetActive(true);
-            //Pop added
-            warriorMinions.Remove(warriorMinions[i]);
+            if (GameManager.Instance.warriorShopPile != null)
+            {
+                mv = GameManager.Instance.warriorShopPile.GetChild(i).GetComponent<CardVisual>();
+                mv.Md = currentMinion;
+                GameManager.Instance.warriorShopPile.GetChild(i).gameObject.SetActive(true);
+                //Pop added
+                warriorMinions.Remove(warriorMinions[i]);
+            }
         }
     }
 
     public void SetRogueMinion()
     {
+        CardVisual mv;
         for (int i = 0; i < 3; i++)
         {
             currentMinion = rogueMinions[i];
             dealtRogueCards.Add(currentMinion);
-            CardVisual mv = GameManager.Instance.rogueShopPile.GetChild(i).GetComponent<CardVisual>();
-            mv.Md = currentMinion;
-            GameManager.Instance.rogueShopPile.GetChild(i).gameObject.SetActive(true);
-            //Pop added
-            rogueMinions.Remove(rogueMinions[i]);
+            if (GameManager.Instance.rogueShopPile != null)
+            {
+                mv = GameManager.Instance.rogueShopPile.GetChild(i).GetComponent<CardVisual>();
+                mv.Md = currentMinion;
+                GameManager.Instance.rogueShopPile.GetChild(i).gameObject.SetActive(true);
+                //Pop added
+                rogueMinions.Remove(rogueMinions[i]);
+            }
         }
     }
 
     public void SetMageMinion()
     {
+        CardVisual mv;
         for (int i = 0; i < 3; i++)
         {
             currentMinion = mageMinions[i];
             dealtMageCards.Add(currentMinion);
-            CardVisual mv = GameManager.Instance.mageShopPile.GetChild(i).GetComponent<CardVisual>();
-            mv.Md = currentMinion;
-            GameManager.Instance.mageShopPile.GetChild(i).gameObject.SetActive(true);
-            //Pop added
-            mageMinions.Remove(mageMinions[i]);
+            if (GameManager.Instance.mageShopPile != null)
+            {
+                mv = GameManager.Instance.mageShopPile.GetChild(i).GetComponent<CardVisual>();
+                mv.Md = currentMinion;
+                GameManager.Instance.mageShopPile.GetChild(i).gameObject.SetActive(true);
+                //Pop added
+                mageMinions.Remove(mageMinions[i]);
+            }
         }
     }
 
@@ -480,7 +492,7 @@ public class UIManager : MonoBehaviour
             allyDeck.Add(starters[i]); //add starter cards to decklist
         }
 
-        if (!StartGameController.Instance.tutorial)
+        if (StartGameController.Instance != null && !StartGameController.Instance.tutorial)
         {
             ShuffleStarterDeck();
         }
@@ -497,9 +509,12 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             currentEssential = essentials[i];
-            CardVisual cv = GameManager.Instance.essentialsPile.GetChild(i).GetComponent<CardVisual>();
-            cv.Ed = currentEssential;
-            GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
+            if (GameManager.Instance.essentialsPile != null)
+            {
+                CardVisual cv = GameManager.Instance.essentialsPile.GetChild(i).GetComponent<CardVisual>();
+                cv.Ed = currentEssential;
+                GameManager.Instance.essentialsPile.GetChild(i).gameObject.SetActive(true);
+            }
         }
     }
 

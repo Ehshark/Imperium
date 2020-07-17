@@ -93,6 +93,7 @@ public class CoinTossAndHeroSelector : MonoBehaviour
         if (eventCode == UPDATE_DIDWINTOSS_EVENT)
         {
             didWinToss = (bool)photonEvent.CustomData;
+            StartCoroutine(FlipCoinAnimation());
         }
 
         else if (eventCode == SHOW_HERO_UI_EVENT)
@@ -151,8 +152,6 @@ public class CoinTossAndHeroSelector : MonoBehaviour
 
             if (PhotonNetwork.IsMasterClient)
                 GetTossResult();
-
-            StartCoroutine(FlipCoinAnimation());
         }
     }
 
@@ -183,9 +182,15 @@ public class CoinTossAndHeroSelector : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
         animator.SetBool("flip", false);
         if (didWinToss)
+        {
             coin.Find("Heads").gameObject.SetActive(true);
+            coin.Find("Tails").gameObject.SetActive(false);
+        }
         else
+        {
             coin.Find("Tails").gameObject.SetActive(true);
+            coin.Find("Heads").gameObject.SetActive(false);
+        }
 
         yield return new WaitForSeconds(1f);
 

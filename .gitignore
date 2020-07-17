@@ -44,11 +44,7 @@ Thumbs.db
 .vs/
 
 # Art Assets from Unity Asset Store
-Assets/Freeui
-Assets/Pixel Font - Tripfive
-Assets/GUI_Parts
-Assets/TextMesh Pro
-Assets/Fantasy Wooden GUI  Free
+Assets/AssetStoreImports
 
 # Photon
 Assets/Photon
