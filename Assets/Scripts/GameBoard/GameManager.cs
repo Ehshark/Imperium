@@ -208,13 +208,15 @@ public class GameManager : MonoBehaviour
 
     public void EnableOrDisablePlayerControl(bool enable)
     {
-        allyDiscardPileButton.interactable = enable;
-        enemyDiscardPileButton.interactable = enable;
         if (enable)
             instructionsObj.GetComponent<TMP_Text>().text = "";
 
         if (!StartGameController.Instance.tutorial)
+        {
             shopButton.interactable = enable;
+            allyDiscardPileButton.interactable = enable;
+            enemyDiscardPileButton.interactable = enable;
+        }
 
         ActiveHero(true).CanPlayCards = enable;
         if (enable)

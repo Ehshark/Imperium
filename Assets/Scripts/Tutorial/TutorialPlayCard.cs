@@ -93,27 +93,33 @@ public class TutorialPlayCard : MonoBehaviour
     //Connected to the play button in summon panel
     public void PlayMinion()
     {
-        if (!CanPlayCard())
-            return;
-        summonPanel.SetActive(false);
-        MoveCardFromHand(true);
+        if (!StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().disablePlay)
+        {
+            if (!CanPlayCard())
+                return;
+            summonPanel.SetActive(false);
+            MoveCardFromHand(true);
+        }
     }
 
     //Connected to the promote button in summon panel
     public void StartPromoteButtonFunction()
     {
-        if (!CanPlayCard())
-            return;
-        if (!GameManager.Instance.IsPromoting)
+        if (!StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().disablePromote)
         {
-            StartOrCancelPromotionEvent(true);
-            GameManager.Instance.MinionToPromote = gameObject;
-        }
+            if (!CanPlayCard())
+                return;
+            if (!GameManager.Instance.IsPromoting)
+            {
+                StartOrCancelPromotionEvent(true);
+                GameManager.Instance.MinionToPromote = gameObject;
+            }
 
-        else
-        {
-            StartOrCancelPromotionEvent(false);
-            GameManager.Instance.MinionToPromote = null;
+            else
+            {
+                StartOrCancelPromotionEvent(false);
+                GameManager.Instance.MinionToPromote = null;
+            }
         }
     }
 
@@ -210,9 +216,25 @@ public class TutorialPlayCard : MonoBehaviour
             //Add Condition Scripts 
             if (thisCard is MinionData)
             {
-                GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Md = thisCard as MinionData;
-                GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Card = card;
-                EventManager.Instance.PostNotification(EVENT_TYPE.ASSIGN_CONDITIONS);
+                //GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Md = thisCard as MinionData;
+                //GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Card = card;
+                //EventManager.Instance.PostNotification(EVENT_TYPE.ASSIGN_CONDITIONS);
+
+                gameObject.AddComponent<TutorialConditionListener>();
+                gameObject.GetComponent<TutorialConditionListener>().ConditionEvent = EVENT_TYPE.TAP_MINION;
+                if (thisCard.MinionID == 4)
+                {
+                    gameObject.AddComponent<DrawCardListener>();
+                }
+                else if (thisCard.MinionID == 101)
+                {
+                    gameObject.AddComponent<BuffMinionStarter>();
+                    gameObject.AddComponent<EssentialListener>();
+                    gameObject.GetComponent<EssentialListener>().Type = "Gold";
+                }
+                gameObject.GetComponent<TutorialConditionListener>().Card = gameObject;
+                gameObject.GetComponent<TutorialConditionListener>().Md = thisCard as MinionData;
+                gameObject.GetComponent<TutorialConditionListener>().enabled = true;
             }
 
             cv.particleGlow.gameObject.SetActive(false);
@@ -244,6 +266,9 @@ public class TutorialPlayCard : MonoBehaviour
         {
             StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
         }
+
+        TutorialPlayCard tpc = gameObject.GetComponent<TutorialPlayCard>();
+        Destroy(tpc);
     }
 
     //This function is called when PostNotification is called on the SACRIFICE_SELECTED event and isPromoting is true

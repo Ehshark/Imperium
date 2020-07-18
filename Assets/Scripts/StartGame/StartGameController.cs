@@ -145,6 +145,8 @@ public class StartGameController : MonoBehaviour
         GameManager.Instance.ActiveHero(true).AttackButton.Find("AttackIcon").GetComponent<Button>().interactable = false;
         GameManager.Instance.shopButton.interactable = false;
         GameManager.Instance.endButton.interactable = false;
+        GameManager.Instance.allyDiscardPileButton.interactable = false;
+        GameManager.Instance.enemyDiscardPileButton.interactable = false;
     }
 
     public void SetupGameBoard()

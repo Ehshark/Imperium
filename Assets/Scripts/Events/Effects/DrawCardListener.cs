@@ -13,5 +13,10 @@ public class DrawCardListener : MonoBehaviour
 
         //Call the Next Power in the Queue
         InvokeEventCommand.InvokeNextEvent();
+
+        if (StartGameController.Instance.tutorial)
+        {
+            StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
+        }
     }
 }

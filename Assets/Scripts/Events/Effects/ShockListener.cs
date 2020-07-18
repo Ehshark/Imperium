@@ -41,6 +41,11 @@ public class ShockListener : MonoBehaviour, IPointerDownHandler
             //Call the Next Power in the Queue
             InvokeEventCommand.InvokeNextEvent();
         }
+
+        if (StartGameController.Instance.tutorial)
+        {
+            StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
+        }
     }
 
     public void OnDestroy()

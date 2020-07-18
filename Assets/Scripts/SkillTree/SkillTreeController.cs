@@ -93,12 +93,27 @@ public class SkillTreeController : MonoBehaviour
             {17,trashIcon}
         };
 
-        foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
+        if (!StartGameController.Instance.tutorial)
         {
-            if (GameManager.Instance.ActiveHero(true).Powers.Contains(entry.Key))
+            foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
             {
-                PowerIcons.Where(x => x.Key == entry.Key).SingleOrDefault().Value.interactable = false;
+                if (GameManager.Instance.ActiveHero(true).Powers.Contains(entry.Key))
+                {
+                    PowerIcons.Where(x => x.Key == entry.Key).SingleOrDefault().Value.interactable = false;
+                }
             }
+        }
+        else
+        {
+            foreach (KeyValuePair<int, Button> entry in PowerIcons)
+            {
+                entry.Value.interactable = false;
+            }
+
+            int parentCnt = gameObject.transform.parent.childCount;
+            gameObject.transform.SetSiblingIndex(parentCnt-2);
+
+            //StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
         }
     }
 
@@ -142,6 +157,11 @@ public class SkillTreeController : MonoBehaviour
             if (GameManager.Instance.WarriorSetup)
             {
                 GameManager.Instance.StartGameManager.GetComponent<StartGameController>().SwitchHeroChoosing();
+            }
+
+            if (StartGameController.Instance.tutorial)
+            {
+                StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
             }
         }
     }

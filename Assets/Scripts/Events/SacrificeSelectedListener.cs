@@ -12,7 +12,15 @@ public class SacrificeSelectedListener : MonoBehaviour, IListener
 
     public void OnEvent(EVENT_TYPE SACRIFICE_SELECTED)
     {
-        PlayCard pc = GameManager.Instance.MinionToPromote.GetComponent<PlayCard>();
-        pc.PromoteMinionWithPlayback();
+        if (!StartGameController.Instance.tutorial)
+        {
+            PlayCard pc = GameManager.Instance.MinionToPromote.GetComponent<PlayCard>();
+            pc.PromoteMinionWithPlayback();
+        }
+        else
+        {
+            TutorialPlayCard tpc = GameManager.Instance.MinionToPromote.GetComponent<TutorialPlayCard>();
+            tpc.PromoteMinionWithPlayback();
+        }
     }
 }

@@ -72,6 +72,7 @@ public class StartCombat : MonoBehaviour
             foreach (GameObject go in GameManager.Instance.MinionsAttacking)
             {
                 go.GetComponent<CardVisual>().IsTapped = false;
+                go.GetComponent<CardVisual>().ChangeTappedAppearance();
             }
         }
 
