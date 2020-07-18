@@ -16,7 +16,7 @@ public class StartCombatEventDistributor : MonoBehaviour, IListener
         {
             CardVisual cv = t.GetComponent<CardVisual>();
 
-            if (cv.Sd != null || (cv.Md != null && !cv.IsTapped))
+            if ((cv.Sd != null || cv.Md != null) && !cv.IsTapped)
             {
                 t.gameObject.AddComponent<StartCombatListener>();
             }

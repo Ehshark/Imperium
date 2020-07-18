@@ -11,6 +11,7 @@ public class Hero : MonoBehaviour
     private int currentMana;
     private int totalMana;
     private int damage;
+    private int damageBonus;
     private int experience;
     private int requredExp;
     private int level;
@@ -127,6 +128,7 @@ public class Hero : MonoBehaviour
     public Image Ability2 { get => ability2; set => ability2 = value; }
     public Image Ability3 { get => ability3; set => ability3 = value; }
     public Image HeroImage { get => heroImage; set => heroImage = value; }
+    public int DamageBonus { get => damageBonus; set => damageBonus = value; }
 
     private void Start()
     {
@@ -374,10 +376,12 @@ public class Hero : MonoBehaviour
         //}
     }
 
-    public void AdjustDamage(int amount)
+    public void AdjustDamage(int amount, bool isBonus)
     {
         damage += amount;
         SetDamage();
+        if (isBonus)
+            damageBonus += amount;
     }
 
     public void AdjustDiscard(bool increase)

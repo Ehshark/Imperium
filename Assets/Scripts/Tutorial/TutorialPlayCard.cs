@@ -326,8 +326,7 @@ public class TutorialPlayCard : MonoBehaviour
             }
             else if (thisCard.EffectId1 == 14 && thisCard is EssentialsData)
             {
-                GameManager.Instance.ActiveHero(true).AdjustDamage(1);
-                //TODO: Take away 1 damage at the end of the turn.
+                GameManager.Instance.ActiveHero(true).AdjustDamage(1, true);
             }
         }
     }

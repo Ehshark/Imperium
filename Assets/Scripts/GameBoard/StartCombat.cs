@@ -69,6 +69,7 @@ public class StartCombat : MonoBehaviour
         //Loop through all minions that are currently attacking and set there tap state to false
         if (!GameManager.Instance.IsDefending)
         {
+            CardVisual cv;
             foreach (GameObject go in GameManager.Instance.MinionsAttacking)
             {
                 go.GetComponent<CardVisual>().IsTapped = false;

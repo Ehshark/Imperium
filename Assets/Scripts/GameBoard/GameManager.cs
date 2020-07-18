@@ -135,11 +135,11 @@ public class GameManager : MonoBehaviour
             }
             else if (card.GetComponent<CardVisual>().Ed != null)
             {
-                tmp = SpawnCard(null, null, card.GetComponent<CardVisual>().Ed);
+                tmp = SpawnCard(null, card.GetComponent<CardVisual>().Ed);
             }
             else if (card.GetComponent<CardVisual>().Sd != null)
             {
-                tmp = SpawnCard(null, card.GetComponent<CardVisual>().Sd, false);
+                tmp = SpawnCard(null, card.GetComponent<CardVisual>().Sd);
             }
             else
             {
@@ -155,12 +155,15 @@ public class GameManager : MonoBehaviour
             }
 
             CardVisual tmpCv = tmp.GetComponent<CardVisual>();
-            tmpCv.CurrentDamage = cv.CurrentDamage;
-            tmpCv.CurrentHealth = cv.CurrentHealth;
-            tmpCv.health.text = tmpCv.CurrentHealth.ToString();
-            tmpCv.damage.text = tmpCv.CurrentDamage.ToString();
+            if (tmpCv.Md || tmpCv.Sd)
+            {
+                tmpCv.CurrentDamage = cv.CurrentDamage;
+                tmpCv.CurrentHealth = cv.CurrentHealth;
+                tmpCv.health.text = tmpCv.CurrentHealth.ToString();
+                tmpCv.damage.text = tmpCv.CurrentDamage.ToString();
 
-            Destroy(card);
+                Destroy(card);
+            }
 
             if (returnCard)
             {
@@ -266,6 +269,12 @@ public class GameManager : MonoBehaviour
             UnTapMinions(t);
             ResetDamage(t);
             cv.ActivateSilence(false);
+        }
+
+        if (ActiveHero(true).DamageBonus > 0)
+        {
+            ActiveHero(true).Damage -= ActiveHero(true).DamageBonus;
+            ActiveHero(true).DamageBonus = 0;
         }
 
         UIManager.Instance.HighlightHeroPortraitAndName();
@@ -383,7 +392,7 @@ public class GameManager : MonoBehaviour
 
         }
 
-        if(isActionPhase)
+        if (isActionPhase)
             EventManager.Instance.PostNotification(EVENT_TYPE.ACTION_DRAW);
 
     }
@@ -500,7 +509,8 @@ public class GameManager : MonoBehaviour
         {
             instructionsObj.GetComponent<TMP_Text>().text = "You haven't selected enough, select more cards to discard";
         }
-        else {
+        else
+        {
             instructionsObj.GetComponent<TMP_Text>().text = "You selected too many, select less cards to discard";
         }
     }
@@ -632,7 +642,7 @@ public class GameManager : MonoBehaviour
 
         GetActiveDeck(true).transform.localPosition = new Vector3(tmp.x, tmp.y, 100f - height); //setting new height of deck
 
-        if(UIManager.Instance.GetActiveDeckList(true).Count == 0) //deck disappears if there are no cards
+        if (UIManager.Instance.GetActiveDeckList(true).Count == 0) //deck disappears if there are no cards
         {
             GetActiveDeck(true).GetChild(0).transform.gameObject.SetActive(false);
             GetActiveDeck(true).GetChild(1).transform.gameObject.SetActive(false);
@@ -704,7 +714,7 @@ public class GameManager : MonoBehaviour
             return alliedDiscardUI;
         }
     }
-    
+
     public Transform GetActiveMinionZone(bool activeWanted)
     {
         if (activeWanted)
