@@ -1127,7 +1127,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1739394064}
   - component: {fileID: 1739394063}
-  - component: {fileID: 1739394065}
   m_Layer: 0
   m_Name: CoinTossManager
   m_TagString: Untagged
@@ -1177,34 +1176,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1739394065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1739394062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7f61b15ad0e204e8bea7584a71288e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  afterCoinTossAndHeroSelection: 0
-  coin: {fileID: 0}
-  coinToss: {fileID: 0}
-  reactionText: {fileID: 0}
-  overallUI: {fileID: 0}
-  heroUI: {fileID: 0}
-  warrior: {fileID: 0}
-  rogue: {fileID: 0}
-  mage: {fileID: 0}
-  warriorImage: {fileID: 0}
-  rogueImage: {fileID: 0}
-  mageImage: {fileID: 0}
-  bottomHero: {fileID: 0}
-  topHero: {fileID: 0}
-  tailsButton: {fileID: 0}
-  headsButton: {fileID: 0}
 --- !u!1001 &2104823261
 PrefabInstance:
   m_ObjectHideFlags: 0

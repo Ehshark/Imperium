@@ -9,17 +9,18 @@ public class CoinToss : MonoBehaviour
     public GameObject heads;
     public GameObject tails;
 
-    public void HeadsOrTails ()
+    public void HeadsOrTails()
     {
         //Reset 
         heads.SetActive(false);
         tails.SetActive(false);
+        int result = 0;
 
-        int result = StartGameController.GetComponent<StartGameController>().GetCoinValue();
+        //result = StartGameController.GetComponent<StartGameController>().GetCoinValue();
 
         if (result == 0)
         {
-            tails.SetActive(true);  
+            tails.SetActive(true);
         }
         else
         {

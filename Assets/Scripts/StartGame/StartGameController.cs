@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Photon.Pun;
+using ExitGames.Client.Photon;
 
 public class StartGameController : MonoBehaviour
 {
     public static StartGameController Instance { get; private set; } = null;
-    public bool afterCoinTossAndHeroSelection = false;
+    public bool isTesting = false;
     public GameObject HeroUI { get => heroUI; set => heroUI = value; }
-    public int BottomHeroChosen { get => bottomHeroChosen; set => bottomHeroChosen = value; }
-    public int TopHeroChosen { get => topHeroChosen; set => topHeroChosen = value; }
+    public int HostChoice { get => EventManager.Instance.HostChoice; set => EventManager.Instance.HostChoice = value; }
+    public int ClientChoice { get => EventManager.Instance.ClientChoice; set => EventManager.Instance.ClientChoice = value; }
     public GameObject TutorialUI { get => tutorialUI; set => tutorialUI = value; }
     public GameObject TutorialObject { get => tutorialObject; set => tutorialObject = value; }
+    public bool HostFirst { get => EventManager.Instance.HostFirst; set => EventManager.Instance.HostFirst = value; }
 
     //Components
     [SerializeField]
@@ -43,8 +46,6 @@ public class StartGameController : MonoBehaviour
     private int turn = 0;
     private int cnt = 0;
     private int mulliganCount = 0;
-    private int bottomHeroChosen; //1 = Warrior, 2 = Rogue, 3 = Mage
-    private int topHeroChosen; //1 = Warrior, 2 = Rogue, 3 = Mage
 
     [SerializeField]
     private Button tailsButton;
@@ -70,37 +71,94 @@ public class StartGameController : MonoBehaviour
             return;
         }
 
-        Instance = this; 
-        DontDestroyOnLoad(gameObject);
+        Instance = this;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        if (afterCoinTossAndHeroSelection)
-        {
-            if (GameManager.Instance.longBoardSetup)
-            {
-                GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.canvas.gameObject, false);
-                GameManager.Instance.alliedDeck.parent.gameObject.SetActive(true);
-                GameManager.Instance.enemyDeck.parent.gameObject.SetActive(true);
-                GameManager.Instance.EnableOrDisableChildren(overallUI, true);
-                heroUI.SetActive(false);
-                SetupGameBoard();
-            }
-            else
-            {
-                StartCoroutine(ShortGameSetup());
-            }
-        }
-        else if (tutorial)
+        if (tutorial)
         {
             StartCoroutine(TutorialSetup());
         }
-        else
+        else if (isTesting)
         {
             StartCoroutine(ShortGameSetup());
         }
+        else
+            StartCoroutine(MultiplayerSetup());
+    }
+
+    private IEnumerator MultiplayerSetup()
+    {
+        yield return new WaitForSeconds(1f);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameManager.Instance.bottomHero.SetPlayerName(PhotonNetwork.NickName + " - Host");
+            GameManager.Instance.topHero.SetPlayerName(PhotonNetwork.PlayerListOthers[0].NickName);
+            if (EventManager.Instance.HostFirst)
+            {
+                GameManager.Instance.bottomHero.MyTurn = true;
+                GameManager.Instance.topHero.MyTurn = false;
+            }
+            else
+            {
+                GameManager.Instance.bottomHero.MyTurn = false;
+                GameManager.Instance.topHero.MyTurn = true;
+            }
+
+            if (EventManager.Instance.HostChoice == 1)
+                GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
+            else if (EventManager.Instance.HostChoice == 2)
+                GameManager.Instance.bottomHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
+            else if (EventManager.Instance.HostChoice == 3)
+                GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
+
+            if (EventManager.Instance.ClientChoice == 1)
+                GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
+            else if (EventManager.Instance.ClientChoice == 2)
+                GameManager.Instance.topHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
+            else if (EventManager.Instance.ClientChoice == 3)
+                GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
+        }
+
+        else
+        {
+            GameManager.Instance.bottomHero.SetPlayerName(PhotonNetwork.NickName);
+            GameManager.Instance.topHero.SetPlayerName(PhotonNetwork.PlayerListOthers[0].NickName + " - Host");
+            if (EventManager.Instance.HostFirst)
+            {
+                GameManager.Instance.bottomHero.MyTurn = false;
+                GameManager.Instance.topHero.MyTurn = true;
+            }
+            else
+            {
+                GameManager.Instance.bottomHero.MyTurn = true;
+                GameManager.Instance.topHero.MyTurn = false;
+            }
+
+            if (EventManager.Instance.HostChoice == 1)
+                GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
+            else if (EventManager.Instance.HostChoice == 2)
+                GameManager.Instance.topHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
+            else if (EventManager.Instance.HostChoice == 3)
+                GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
+
+            if (EventManager.Instance.ClientChoice == 1)
+                GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
+            else if (EventManager.Instance.ClientChoice == 2)
+                GameManager.Instance.bottomHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
+            else if (EventManager.Instance.ClientChoice == 3)
+                GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
+        }
+
+        InitialDraw();
+        //GameManager.Instance.StartTurn();
+
+        //if (GameManager.Instance.ActiveHero(true).Clan == 'W')
+        //{
+        //    InstantiateSkillTree();
+        //}
     }
 
     private IEnumerator ShortGameSetup()
@@ -175,8 +233,6 @@ public class StartGameController : MonoBehaviour
         GameManager.Instance.topHero = topHero.GetComponent<Hero>();
         GameManager.Instance.bottomHero.SetPlayerName("Player 1");
         GameManager.Instance.topHero.SetPlayerName("Player 2");
-
-        overallUI.gameObject.SetActive(true);
     }
 
     public void FlipCoin(int value)
@@ -269,11 +325,6 @@ public class StartGameController : MonoBehaviour
 
     public void SetHero(int hero)
     {
-        GameManager.Instance.alliedHand.gameObject.SetActive(true);
-        GameManager.Instance.alliedMinionZone.gameObject.SetActive(true);
-        GameManager.Instance.enemyHand.gameObject.SetActive(true);
-        GameManager.Instance.enemyMinionZone.gameObject.SetActive(true);
-
         //Warrior
         if (hero == 0)
         {
@@ -353,15 +404,6 @@ public class StartGameController : MonoBehaviour
             //Begin the initial draw
             InitialDraw();
 
-            GameManager.Instance.EnableOrDisableChildren(bottomHero.gameObject, true, true);
-            GameManager.Instance.EnableOrDisableChildren(topHero.gameObject, true, true);
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.topHero.AttackButton.parent.gameObject, false);
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.bottomHero.AttackButton.parent.gameObject, false);
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.alliedDeck.gameObject, true, true);
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.enemyDeck.gameObject, true, true);
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.shopButton.gameObject, true, true);
-            GameManager.Instance.EnableOrDisableChildren(GameManager.Instance.endButton.gameObject, true, true);
-
             //Determine which player has the mulligan button to show first
             SetActiveMulligan();
         }
@@ -384,16 +426,22 @@ public class StartGameController : MonoBehaviour
 
     public void InitialDraw()
     {
+        Hero activeHero = GameManager.Instance.ActiveHero(true);
+        Hero inactiveHero = GameManager.Instance.ActiveHero(false);
+        List<Card> activeList = UIManager.Instance.GetActiveDeckList(true);
+        List<Card> inactiveList = UIManager.Instance.GetActiveDeckList(false);
+        Transform activeHand = GameManager.Instance.GetActiveHand(true);
+        Transform inactiveHand = GameManager.Instance.GetActiveHand(false);
         //intial draw for active player
-        for (int i = 0; i < GameManager.Instance.ActiveHero(true).HandSize; i++)
+        for (int i = 0; i < activeHero.HandSize; i++)
         {
-            GameManager.Instance.DrawCard(UIManager.Instance.GetActiveDeckList(true), GameManager.Instance.GetActiveHand(true));
+            GameManager.Instance.DrawCard(activeList, activeHand);
         }
 
         //intial draw for other player
-        for (int i = 0; i < GameManager.Instance.ActiveHero(false).HandSize; i++)
+        for (int i = 0; i < inactiveHero.HandSize; i++)
         {
-            GameManager.Instance.DrawCard(UIManager.Instance.GetActiveDeckList(false), GameManager.Instance.GetActiveHand(false));
+            GameManager.Instance.DrawCard(inactiveList, inactiveHand);
         }
     }
 

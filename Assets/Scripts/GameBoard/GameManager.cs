@@ -6,8 +6,6 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public bool longBoardSetup = true;
-
     //Player
     public static string UserName { get; set; }
     public static Player player { get; set; } = null;
@@ -257,7 +255,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void StartTurn()
+    public void StartTurn()
     {
         isActionPhase = false;
         CardVisual cv;
@@ -388,7 +386,7 @@ public class GameManager : MonoBehaviour
             AdjustDeckHeight();
 
             //function calls itself to continue the draw since deck is no longer empty
-            DrawCard(deck, playerHand);
+            //DrawCard(deck, playerHand);
 
         }
 
@@ -800,6 +798,8 @@ public class GameManager : MonoBehaviour
             cardType = UIManager.Instance.itemPrefab;
 
         GameObject tmp = Instantiate(cardType, t);
+        if (t.name.Equals("EnemyHand"))
+            tmp.transform.Find("CardBack").gameObject.SetActive(true);
         tmp.SetActive(false);
 
         if (c is MinionData md)

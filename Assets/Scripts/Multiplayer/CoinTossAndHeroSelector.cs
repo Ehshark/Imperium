@@ -4,7 +4,6 @@ using Photon.Realtime;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CoinTossAndHeroSelector : MonoBehaviour
@@ -30,10 +29,9 @@ public class CoinTossAndHeroSelector : MonoBehaviour
     public Button mage;
 
     private Animator animator;
-
-    const byte UPDATE_DIDWINTOSS_EVENT = 1;
-    const byte SHOW_COIN_TOSS_EVENT = 2;
-    const byte SHOW_HERO_UI_EVENT = 3;
+    const byte SHOW_COIN_TOSS_EVENT = 1;
+    const byte SHOW_HERO_UI_EVENT = 2;
+    const byte GO_TO_GAMEBOARD_EVENT = 3;
 
     bool didWinToss; //true is heads
     bool hostChoice; //true is heads
@@ -43,7 +41,7 @@ public class CoinTossAndHeroSelector : MonoBehaviour
     private void Awake()
     {
         animator = coin.GetComponent<Animator>();
-        raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
     }
 
     // Start is called before the first frame update
@@ -57,14 +55,14 @@ public class CoinTossAndHeroSelector : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
-            pOneNameText.text = PhotonNetwork.NickName + " (Host)";
+            pOneNameText.text = PhotonNetwork.NickName + " - Host";
             pTwoNameText.text = PhotonNetwork.PlayerListOthers[0].NickName;
         }
 
         else
         {
             pOneNameText.text = PhotonNetwork.NickName;
-            pTwoNameText.text = PhotonNetwork.PlayerListOthers[0].NickName + " (Host)";
+            pTwoNameText.text = PhotonNetwork.PlayerListOthers[0].NickName + " - Host";
         }
 
         if (!PhotonNetwork.IsMasterClient)
@@ -87,12 +85,14 @@ public class CoinTossAndHeroSelector : MonoBehaviour
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
 
-    private void OnEvent(EventData photonEvent)
+    private void OnEvent(EventData photonEvent) //This code block will only be executed on the client, i.e. not the host
     {
         byte eventCode = photonEvent.Code;
-        if (eventCode == UPDATE_DIDWINTOSS_EVENT)
+        if (eventCode == SHOW_COIN_TOSS_EVENT)
         {
-            didWinToss = (bool)photonEvent.CustomData;
+            bool[] bools = (bool[])photonEvent.CustomData;
+            hostChoice = bools[0];
+            didWinToss = bools[1];
             StartCoroutine(FlipCoinAnimation());
         }
 
@@ -101,58 +101,58 @@ public class CoinTossAndHeroSelector : MonoBehaviour
             int choice = (int)photonEvent.CustomData;
 
             if (choice == 1)
+            {
                 chooseHeroUI.Find("Warrior").gameObject.SetActive(false);
+                topHeroImage.sprite = warriorImage;
+            }
+
             else if (choice == 2)
+            {
                 chooseHeroUI.Find("Rogue").gameObject.SetActive(false);
-            else
+                topHeroImage.sprite = rogueImage;
+            }
+
+            else if (choice == 3)
+            {
                 chooseHeroUI.Find("Mage").gameObject.SetActive(false);
-
-            if (chooseHeroUI.gameObject.activeSelf)
-            {
-                chooseHeroUI.gameObject.SetActive(false);
-                instructionsText.text = "Your opponent is choosing their hero...";
+                topHeroImage.sprite = mageImage;
             }
-
-            else
-            {
-                if (StartGameController.Instance.BottomHeroChosen == 0 && StartGameController.Instance.TopHeroChosen == 0)
-                {
-                    if (choice == 1)
-                        topHeroImage.sprite = warriorImage;
-                    else if (choice == 2)
-                        topHeroImage.sprite = rogueImage;
-                    else
-                        topHeroImage.sprite = mageImage;
-
-                    StartGameController.Instance.TopHeroChosen = choice;
-                }
-
-                else if (StartGameController.Instance.BottomHeroChosen != 0 && StartGameController.Instance.TopHeroChosen == 0)
-                {
-                    if (choice == 1)
-                        topHeroImage.sprite = warriorImage;
-                    else if (choice == 2)
-                        topHeroImage.sprite = rogueImage;
-                    else
-                        topHeroImage.sprite = mageImage;
-                    StartGameController.Instance.TopHeroChosen = choice;
-                    SceneManager.LoadScene(2);
-                }
-
-                chooseHeroUI.gameObject.SetActive(true);
-                instructionsText.text = "Choose your hero.";
-            }
-
-        }
-
-        else if (eventCode == SHOW_COIN_TOSS_EVENT)
-        {
-            if (!PhotonNetwork.IsMasterClient)
-                hostChoice = (bool)photonEvent.CustomData;
 
             if (PhotonNetwork.IsMasterClient)
-                GetTossResult();
+                EventManager.Instance.ClientChoice = choice;
+            else
+                EventManager.Instance.HostChoice = choice;
+
+            int count = 0;
+
+            foreach (Transform child in chooseHeroUI)
+            {
+                if (child.gameObject.activeSelf)
+                    count++;
+            }
+
+            if (count == 1)
+            {
+                PhotonNetwork.RaiseEvent(GO_TO_GAMEBOARD_EVENT, choice, new RaiseEventOptions { Receivers = ReceiverGroup.All },
+                        SendOptions.SendReliable);
+                return;
+            }
+
+            chooseHeroUI.gameObject.SetActive(true);
         }
+
+        else if (eventCode == GO_TO_GAMEBOARD_EVENT)
+        {
+            PhotonNetwork.LoadLevel(2);
+        }
+    }
+    public void StartCoinTossAnimation(bool choice)
+    {
+        hostChoice = choice;
+        GetTossResult();
+        bool[] bools = new bool[] { hostChoice, didWinToss };
+        PhotonNetwork.RaiseEvent(SHOW_COIN_TOSS_EVENT, bools, raiseEventOptions, SendOptions.SendReliable);
+        StartCoroutine(FlipCoinAnimation());
     }
 
     void GetTossResult()
@@ -164,8 +164,6 @@ public class CoinTossAndHeroSelector : MonoBehaviour
 
         else
             didWinToss = false;
-
-        PhotonNetwork.RaiseEvent(UPDATE_DIDWINTOSS_EVENT, didWinToss, raiseEventOptions, SendOptions.SendReliable);
     }
 
     IEnumerator FlipCoinAnimation()
@@ -174,7 +172,6 @@ public class CoinTossAndHeroSelector : MonoBehaviour
         {
             coinTossUI.parent.gameObject.SetActive(true);
             coinTossUI.gameObject.SetActive(true);
-            instructionsText.text = "";
         }
         heads.interactable = false;
         tails.interactable = false;
@@ -198,6 +195,7 @@ public class CoinTossAndHeroSelector : MonoBehaviour
 
         if (hostChoice == didWinToss)
         {
+            EventManager.Instance.HostFirst = true;
             if (!PhotonNetwork.IsMasterClient)
                 instructionsText.text = "Your opponent has won the coin toss! They are selecting their hero...";
             else
@@ -208,6 +206,7 @@ public class CoinTossAndHeroSelector : MonoBehaviour
         }
         else
         {
+            EventManager.Instance.HostFirst = false;
             if (!PhotonNetwork.IsMasterClient)
             {
                 instructionsText.text = "You have won the coin toss! Choose your hero.";
@@ -219,25 +218,35 @@ public class CoinTossAndHeroSelector : MonoBehaviour
         }
     }
 
-    public void StartCoinTossAnimation(bool choice)
-    {
-        hostChoice = choice;
-        PhotonNetwork.RaiseEvent(SHOW_COIN_TOSS_EVENT, hostChoice, raiseEventOptions, SendOptions.SendReliable);
-    }
 
     private void ShowSecondChooseHeroUI(int choice)
     {
-        if (StartGameController.Instance.BottomHeroChosen == 0)
+        if (!chooseHeroUI.gameObject.activeSelf)
+            chooseHeroUI.gameObject.SetActive(true);
+        if (PhotonNetwork.IsMasterClient)
+            EventManager.Instance.HostChoice = choice;
+        else
+            EventManager.Instance.ClientChoice = choice;
+
+        if (choice == 1)
         {
-            StartGameController.Instance.BottomHeroChosen = choice;
-            if (choice == 1)
-                bottomHeroImage.sprite = warriorImage;
-            else if (choice == 2)
-                bottomHeroImage.sprite = rogueImage;
-            else
-                bottomHeroImage.sprite = mageImage;
+            chooseHeroUI.Find("Warrior").gameObject.SetActive(false);
+            bottomHeroImage.sprite = warriorImage;
+        }
+
+        else if (choice == 2)
+        {
+            chooseHeroUI.Find("Rogue").gameObject.SetActive(false);
+            bottomHeroImage.sprite = rogueImage;
+        }
+
+        else if (choice == 3)
+        {
+            chooseHeroUI.Find("Mage").gameObject.SetActive(false);
+            bottomHeroImage.sprite = mageImage;
         }
 
         PhotonNetwork.RaiseEvent(SHOW_HERO_UI_EVENT, choice, raiseEventOptions, SendOptions.SendReliable);
+        chooseHeroUI.gameObject.SetActive(false);
     }
 }

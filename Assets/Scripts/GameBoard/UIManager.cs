@@ -7,6 +7,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 public class UIManager : MonoBehaviour
 {
@@ -63,8 +66,7 @@ public class UIManager : MonoBehaviour
 
     public Transform enlargedCard;
 
-    //public Text yourName;
-    //public Text opponentName;
+    //const byte START_MULTIPLAYER_MATCH_EVENT = 4;
 
     private void Awake()
     {
@@ -152,6 +154,9 @@ public class UIManager : MonoBehaviour
         SetRogueMinion();
         SetMageMinion();
         SetEssentials();
+
+        //PhotonNetwork.RaiseEvent(START_MULTIPLAYER_MATCH_EVENT, null, new RaiseEventOptions { Receivers = ReceiverGroup.All }, 
+            //SendOptions.SendReliable);
     }
 
     public void LoadScriptableObjectsToLists()

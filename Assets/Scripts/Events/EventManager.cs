@@ -5,6 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class EventManager : MonoBehaviour
 {
+    //Start Game Variables
+    private int hostChoice; //1 = Warrior, 2 = Rogue, 3 = Mage
+    private int clientChoice; //1 = Warrior, 2 = Rogue, 3 = Mage
+    private bool hostFirst;
+    public int HostChoice { get => hostChoice; set => hostChoice = value; }
+    public int ClientChoice { get => clientChoice; set => clientChoice = value; }
+    public bool HostFirst { get => hostFirst; set => hostFirst = value; }
+
+
     //public access to instance
     public static EventManager Instance { get; private set; } = null;
 
@@ -20,7 +29,7 @@ public class EventManager : MonoBehaviour
         }
 
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     //Function to add listener to array of listeners

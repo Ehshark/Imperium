@@ -1082,7 +1082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7f61b15ad0e204e8bea7584a71288e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  afterCoinTossAndHeroSelection: 0
+  isTesting: 0
   coin: {fileID: 813119159}
   coinToss: {fileID: 1641953544}
   reactionText: {fileID: 187796305}
