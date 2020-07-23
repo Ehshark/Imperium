@@ -19,9 +19,9 @@ public class UIManager : MonoBehaviour
     public GameObject starterPrefab;
     public GameObject itemPrefab;
 
-    private List<MinionData> warriorMinions;
-    private List<MinionData> rogueMinions;
-    private List<MinionData> mageMinions;
+    public List<MinionData> warriorMinions;
+    public List<MinionData> rogueMinions;
+    public List<MinionData> mageMinions;
 
     private MinionData currentMinion;
     private EssentialsData currentEssential;
@@ -330,7 +330,7 @@ public class UIManager : MonoBehaviour
             allSprites.Add((Sprite)loadedIcons[i]);
     }
 
-    private void SortPiles()
+    public void SortPiles()
     {
         warriorMinions = new List<MinionData>();
         rogueMinions = new List<MinionData>();

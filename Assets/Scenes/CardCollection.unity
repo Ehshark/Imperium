@@ -762,7 +762,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1892386720}
         m_MethodName: FillCards
         m_Mode: 1
         m_Arguments:
@@ -1527,8 +1527,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2132875437}
   m_HandleRect: {fileID: 2132875436}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.99999994
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2224,9 +2224,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allSprites: []
-  minionPrefab: {fileID: 0}
+  minionPrefab: {fileID: 5361649606923715719, guid: eefefb9f2c5af18409cebc6556cf53cc,
+    type: 3}
   starterPrefab: {fileID: 0}
   itemPrefab: {fileID: 0}
+  warriorMinions: []
+  rogueMinions: []
+  mageMinions: []
   allyDeck: []
   enemyDeck: []
   allyHand: []
@@ -2260,6 +2264,7 @@ GameObject:
   - component: {fileID: 1892386718}
   - component: {fileID: 1892386719}
   - component: {fileID: 1892386721}
+  - component: {fileID: 1892386720}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -2310,6 +2315,21 @@ MonoBehaviour:
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &1892386720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892386717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2de185dc97cf5c04d893ab56dcdafa9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 5361649606923715719, guid: eefefb9f2c5af18409cebc6556cf53cc, type: 3}
+  content: {fileID: 0}
+  NumberToCreate: 0
 --- !u!114 &1892386721
 MonoBehaviour:
   m_ObjectHideFlags: 0
