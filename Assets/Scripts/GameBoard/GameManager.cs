@@ -26,10 +26,6 @@ public class GameManager : MonoBehaviour
 
     public TMP_Text allyDeckCounter;
     public TMP_Text enemyDeckCounter;
-    public GameObject allyDeckVisual;
-    public GameObject enemyDeckVisual;
-    public GameObject allyDeckCover;
-    public GameObject enemyDeckCover;
 
     public Transform allyMulliganButton;
     public Transform enemyMulliganButton;
@@ -62,6 +58,8 @@ public class GameManager : MonoBehaviour
     public Transform menu;
     public Transform pMenu;
     public Transform trashUI;
+
+    public Transform EffectIconQueue;
 
     public Hero bottomHero;
     public Hero topHero;
@@ -639,6 +637,11 @@ public class GameManager : MonoBehaviour
             GetActiveDeck(true).GetChild(0).transform.gameObject.SetActive(false);
             GetActiveDeck(true).GetChild(1).transform.gameObject.SetActive(false);
         }
+        else //if the deck regains cards make it reappear
+        {
+            GetActiveDeck(true).GetChild(0).transform.gameObject.SetActive(false);
+            GetActiveDeck(true).GetChild(1).transform.gameObject.SetActive(false);
+        }
     }
 
     public Transform GetActiveHand(bool activeWanted)
@@ -772,46 +775,6 @@ public class GameManager : MonoBehaviour
                 return enemyDeckCounter;
             }
             return allyDeckCounter;
-        }
-    }
-
-    public GameObject GetActiveDeckVisual(bool activeWanted)
-    {
-        if (activeWanted)
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return allyDeckVisual;
-            }
-            return enemyDeckVisual;
-        }
-        else
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return enemyDeckVisual;
-            }
-            return allyDeckVisual;
-        }
-    }
-
-    public GameObject GetActiveDeckCover(bool activeWanted)
-    {
-        if (activeWanted)
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return allyDeckCover;
-            }
-            return enemyDeckCover;
-        }
-        else
-        {
-            if (GetCurrentPlayer() == 0)
-            {
-                return enemyDeckCover;
-            }
-            return allyDeckCover;
         }
     }
 

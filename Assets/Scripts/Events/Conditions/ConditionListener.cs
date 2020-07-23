@@ -88,6 +88,9 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                             MethodInfo startEvent = effectType.GetMethod("StartEvent");
                             InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, card);
                             invokeEvent.AddToQueue();
+
+                            //setting the icon queue
+                            StartCoroutine(UIManager.Instance.SetEffectIconQueue(entry.Key));
                         }
                         else if (entry.Key == md.EffectId2)
                         {
@@ -96,6 +99,9 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                             MethodInfo startEvent = effectType.GetMethod("StartEvent");
                             InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId2).SingleOrDefault().Value, card);
                             invokeEvent.AddToQueue();
+
+                            //setting the icon queue
+                            StartCoroutine(UIManager.Instance.SetEffectIconQueue(entry.Key));
                         }
                     }
                 }

@@ -23,6 +23,9 @@ public class InvokeEventCommand : Command
     {
         GameManager.Instance.EnableOrDisablePlayerControl(false);
         InvokeEventQueue.Enqueue(this);
+
+        //testing
+        Debug.Log("object: " + this.cardType);
     }
 
     public override void StartCommandExecution()

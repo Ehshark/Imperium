@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -52,6 +53,8 @@ public class UIManager : MonoBehaviour
     public Dictionary<int, string> minionConditions;
     public Dictionary<int, string> minionEffects;
     public Dictionary<int, string> minionClasses;
+
+    public Queue<Image> iconQueue = new Queue<Image>(); //visual effect queue
 
     public static UIManager Instance { get; private set; } = null;
 
@@ -668,6 +671,38 @@ public class UIManager : MonoBehaviour
             enemyDiscardClosed = true; //sets shop to "closed" state
         }
     }
+
+    //used to set visual effect icon queue
+    public IEnumerator SetEffectIconQueue(int key)
+    {
+        GameObject tmpObj = new GameObject();
+        tmpObj.transform.SetParent(GameManager.Instance.EffectIconQueue);
+        tmpObj.transform.position = GameManager.Instance.EffectIconQueue.position;
+        tmpObj.transform.localScale = GameManager.Instance.EffectIconQueue.localScale;
+        Image tmp = tmpObj.AddComponent<Image>();
+
+
+        foreach (KeyValuePair<int, string> entry in minionEffects)
+        {
+            if (key == entry.Key)
+            {
+                //finds the correct icon based on the name
+                tmp.sprite = allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+
+                //append child sprite to the into the queue
+                iconQueue.Enqueue(tmp);
+
+                yield return new WaitForSeconds(3f); //wait for 3 seconds before removing the icon
+
+                if(iconQueue.Count > 0)
+                {
+                    iconQueue.Dequeue();
+                    Destroy(tmpObj);
+                }
+            }
+        }
+    }
+
 
     public List<Card> GetActiveDeckList(bool activeWanted)
     {
