@@ -12,6 +12,8 @@ public class ShopController : MonoBehaviour
     private TextMeshProUGUI herosGold;
     [SerializeField]
     private Button changeShop;
+    [SerializeField]
+    private ParticleSystem exitGlow;
 
     //Big Shop Card
     private GameObject bigShopCard;
@@ -37,6 +39,7 @@ public class ShopController : MonoBehaviour
 
     public void CloseShop()
     {
+        exitGlow.gameObject.SetActive(false);
         gameObject.SetActive(false);
 
         if (StartGameController.Instance.tutorial)
@@ -160,6 +163,7 @@ public class ShopController : MonoBehaviour
                             //EventManager.Instance.PostNotification(EVENT_TYPE.BUY_FIRST_CARD);
                             EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.BUY_FIRST_CARD);
                             GameManager.Instance.BuyFirstCard = true;
+                            exitGlow.gameObject.SetActive(true);
                             break;
                         }
                     }
@@ -226,6 +230,7 @@ public class ShopController : MonoBehaviour
                                 //EventManager.Instance.PostNotification(EVENT_TYPE.FIRST_CHANGE_SHOP);
                                 EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.FIRST_CHANGE_SHOP);
                                 GameManager.Instance.FirstChangeShop = true;
+                                exitGlow.gameObject.SetActive(true);
                                 break;
                             }
                         }

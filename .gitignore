@@ -45,6 +45,16 @@ Thumbs.db
 
 # Art Assets from Unity Asset Store
 Assets/AssetStoreImports
+Assets/AssetStoreImports/Fantasy Wooden GUI Free
+Assets/AssetStoreImports/GUI-Parts
+Assets/AssetStoreImports/TextMesh Pro
+Assets/AssetStoreImports/Freeui
+
+# Old Folder
+Assets/Fantasy Wooden GUI Free
+Assets/GUI_Parts
+Assets/TextMesh Pro
+Assets/Freeui
 
 # Photon
 Assets/Photon

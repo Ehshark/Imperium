@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class BackgroundController : MonoBehaviour
 {
+    public void Start()
+    {
+        Music.Instance.PlayTitleMusic();
+    }
+
     public void Update()
     {
         if (Input.GetMouseButtonDown(0))

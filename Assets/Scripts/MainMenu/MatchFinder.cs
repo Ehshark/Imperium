@@ -124,7 +124,10 @@ public class MatchFinder : MonoBehaviourPunCallbacks
         playButtonText.text = "Found match. Starting in " + seconds + " seconds...";
         seconds--;
         if (seconds == 0 && PhotonNetwork.IsMasterClient)
+        {
             SceneManager.LoadScene(1);
+            //Music.Instance.PlayGameboardMusic();
+        }
     }
 
     private void NetworkingClient_EventRecieved(EventData obj)
