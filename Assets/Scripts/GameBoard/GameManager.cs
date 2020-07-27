@@ -647,8 +647,18 @@ public class GameManager : MonoBehaviour
         }
         else //if the deck regains cards make it reappear
         {
-            GetActiveDeck(true).GetChild(0).transform.gameObject.SetActive(false);
-            GetActiveDeck(true).GetChild(1).transform.gameObject.SetActive(false);
+            GetActiveDeck(true).GetChild(0).transform.gameObject.SetActive(true);
+            GetActiveDeck(true).GetChild(1).transform.gameObject.SetActive(true);
+        }
+    }
+
+    //used for rotating card animation
+    public IEnumerator FlipCard(GameObject card)
+    {
+        for(float i = 0f; i <= 360f; i+=10)
+        {
+            card.transform.rotation = Quaternion.Euler(0f, i, 0f);
+            yield return new WaitForSeconds(0f);
         }
     }
 
@@ -810,5 +820,7 @@ public class GameManager : MonoBehaviour
             tmp.GetComponent<CardVisual>().Ed = ed;
 
         tmp.SetActive(true);
+
+        StartCoroutine(FlipCard(tmp)); //calls card flip animation
     }
 }
