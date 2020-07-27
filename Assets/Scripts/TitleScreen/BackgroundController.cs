@@ -14,7 +14,7 @@ public class BackgroundController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            SceneManager.LoadScene("LoginScene");
+            LevelLoader.Instance.LoadNextScene(3);
         }
     }
 }

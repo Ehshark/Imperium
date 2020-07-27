@@ -41,11 +41,11 @@ public class LoginPlayer : MonoBehaviour
             {
                 tmp.LEADERBOARD_LEVEL = SQLManager.GetLeaderboardLevel(tmp.PLAYER_ID);
                 GameManager.player = tmp;
-                SceneManager.LoadScene("MainMenu");
+                LevelLoader.Instance.LoadNextScene(0);
             }
             else
             {
-                errorText.text = "Error: Password";
+                errorText.text = "The password entered was not correct. Please re-enter your password and try again.";
                 errorPanel.SetActive(true);
             }
         }
