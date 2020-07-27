@@ -132,7 +132,7 @@ public class UIManager : MonoBehaviour
         LoadScriptableObjectsToLists();
 
         //Shuffle each list holding the scriptable objects
-        if (StartGameController.Instance != null && !StartGameController.Instance.tutorial && PhotonNetwork.IsMasterClient)
+        if (StartGameController.Instance != null && !StartGameController.Instance.tutorial)// && PhotonNetwork.IsMasterClient)
         {
             Shuffle();
 
@@ -152,31 +152,31 @@ public class UIManager : MonoBehaviour
             SetMageMinion();
             SetEssentials();
 
-            List<MinionDataPhoton> mdp = new List<MinionDataPhoton>();
-            List<StarterDataPhoton> sdp = new List<StarterDataPhoton>();
-            List<EssentialsDataPhoton> edp = new List<EssentialsDataPhoton>();
+            //List<MinionDataPhoton> mdp = new List<MinionDataPhoton>();
+            //List<StarterDataPhoton> sdp = new List<StarterDataPhoton>();
+            //List<EssentialsDataPhoton> edp = new List<EssentialsDataPhoton>();
 
-            foreach (MinionData m in minions)
-            {
-                mdp.Add(new MinionDataPhoton(m));
-            }
-            foreach (StarterData s in starters)
-            {
-                sdp.Add(new StarterDataPhoton(s));
-            }
-            foreach (EssentialsData e in essentials)
-            {
-                edp.Add(new EssentialsDataPhoton(e));
-            }
+            //foreach (MinionData m in minions)
+            //{
+            //    mdp.Add(new MinionDataPhoton(m));
+            //}
+            //foreach (StarterData s in starters)
+            //{
+            //    sdp.Add(new StarterDataPhoton(s));
+            //}
+            //foreach (EssentialsData e in essentials)
+            //{
+            //    edp.Add(new EssentialsDataPhoton(e));
+            //}
 
-            byte[] mdpByte = DataHandler.Instance.ObjectToByteArray(mdp);
-            byte[] sdpByte = DataHandler.Instance.ObjectToByteArray(sdp);
-            byte[] edpByte = DataHandler.Instance.ObjectToByteArray(edp);
+            //byte[] mdpByte = DataHandler.Instance.ObjectToByteArray(mdp);
+            //byte[] sdpByte = DataHandler.Instance.ObjectToByteArray(sdp);
+            //byte[] edpByte = DataHandler.Instance.ObjectToByteArray(edp);
 
-            object[] data = new object[] { mdpByte, sdpByte, edpByte };
+            //object[] data = new object[] { mdpByte, sdpByte, edpByte };
 
-            PhotonNetwork.RaiseEvent(SEND_SHUFFLED_DECKS_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-            SendOptions.SendReliable);
+            //PhotonNetwork.RaiseEvent(SEND_SHUFFLED_DECKS_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            //SendOptions.SendReliable);
         }
     }
 
