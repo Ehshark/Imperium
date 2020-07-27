@@ -37,13 +37,14 @@ public class PeekShopListener : MonoBehaviour, IPointerDownHandler
         }
         else
         {
-            MinionData minion = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject.GetComponent<CardVisual>().Md;
+            CardVisual cv = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject.GetComponent<CardVisual>();
+            MinionData minion = cv.Md;
 
             if (tapped)
             {
                 card.GetComponent<PeekShopEventStarter>().moveCards.Remove(minion);
-                GameManager.Instance.ChangeCardColour(eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject, minion.Color);
                 eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject.GetComponent<CardVisual>().particleGlow.gameObject.SetActive(false);
+                GameManager.Instance.ChangeCardColour(eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject, cv.cardBackground.color);
                 tapped = false;                
             }
             else

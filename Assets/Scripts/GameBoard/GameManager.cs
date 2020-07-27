@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour
             }
 
             CardVisual tmpCv = tmp.GetComponent<CardVisual>();
-            if (tmpCv.Md || tmpCv.Sd)
+            if (tmpCv.Md != null || tmpCv.Sd != null)
             {
                 tmpCv.CurrentDamage = cv.CurrentDamage;
                 tmpCv.CurrentHealth = cv.CurrentHealth;

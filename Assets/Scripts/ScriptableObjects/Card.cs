@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Card : ScriptableObject
 {
-    public virtual Color Color { get; set; }
     public virtual int GoldAndManaCost { get; set; }
     public virtual int MinionID { get; set; }
     public virtual string ConditionText { get; set; }

@@ -42,7 +42,7 @@ public class TrashController : MonoBehaviour
             }
             else
             {
-                card = GameManager.Instance.SpawnCard(handPile, null, cv.Ed);
+                card = GameManager.Instance.SpawnCard(handPile, cv.Ed);
             }
 
             card.AddComponent<TrashListener>();

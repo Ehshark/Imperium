@@ -26,11 +26,11 @@ public class SacrificeMinionListener : MonoBehaviour, IPointerDownHandler
         
         if (cv.Md != null)
         {
-            cv.cardBackground.color = cv.Md.Color;
+            cv.cardBackground.color = cv.cardBackground.color;
         }
         else
         {
-            cv.cardBackground.color = cv.Sd.Color;
+            cv.cardBackground.color = cv.cardBackground.color;
         }
 
     }

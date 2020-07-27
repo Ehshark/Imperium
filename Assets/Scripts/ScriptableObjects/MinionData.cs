@@ -7,8 +7,6 @@ using UnityEngine.UI;
 public class MinionData : Card
 {
     [SerializeField]
-    private Color color;
-    [SerializeField]
     private int minionID;
     [SerializeField]
     private int goldAndManaCost;
@@ -35,7 +33,6 @@ public class MinionData : Card
     [SerializeField]
     private int allyClassID;
 
-    public override Color Color { get => color; set => color = value; }
     public override int GoldAndManaCost { get => goldAndManaCost; set => goldAndManaCost = value; }
     public override int MinionID { get => minionID; set => minionID = value; }
     public override string ConditionText { get => conditionText; set => conditionText = value; }
@@ -49,4 +46,21 @@ public class MinionData : Card
     public override int EffectId1 { get => effectId1; set => effectId1 = value; }
     public override int EffectId2 { get => effectId2; set => effectId2 = value; }
     public override int AllyClassID { get => allyClassID; set => allyClassID = value; }
+
+    public void Init(MinionDataPhoton mdp)
+    {
+        GoldAndManaCost = mdp.GoldAndManaCost;
+        MinionID = mdp.MinionID;
+        ConditionText = mdp.ConditionText;
+        EffectText1 = mdp.EffectText1;
+        EffectText2 = mdp.EffectText2;
+        AttackDamage = mdp.AttackDamage;
+        Health = mdp.Health;
+        CardClass = mdp.CardClass;
+        AllyClass = mdp.AllyClass;
+        ConditionID = mdp.ConditionID;
+        EffectId1 = mdp.EffectId1;
+        EffectId2 = mdp.EffectId2;
+        AllyClassID = mdp.AllyClassID;
+    }
 }

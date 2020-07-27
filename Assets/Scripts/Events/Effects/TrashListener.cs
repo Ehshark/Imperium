@@ -36,15 +36,15 @@ public class TrashListener : MonoBehaviour, IPointerDownHandler
     {
         if (cv.Md != null)
         {
-            GameManager.Instance.ChangeCardColour(card, cv.Md.Color);
+            GameManager.Instance.ChangeCardColour(card, cv.cardBackground.color);
         }
         else if (cv.Sd != null)
         {
-            GameManager.Instance.ChangeCardColour(card, cv.Sd.Color);
+            GameManager.Instance.ChangeCardColour(card, cv.cardBackground.color);
         }
         else if (cv.Ed != null)
         {
-            GameManager.Instance.ChangeCardColour(card, cv.Ed.Color);
+            GameManager.Instance.ChangeCardColour(card, cv.cardBackground.color);
         }
     }
 }

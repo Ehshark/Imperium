@@ -5686,7 +5686,7 @@ MonoBehaviour:
   effect2: {fileID: 5361649607857650548}
   increaseDmgAbsorbed: {fileID: 6834990688394146436}
   decreaseDmgAbsorbed: {fileID: 1678023116184825889}
-  inShop: 0
+  inShop: 1
   damageObjects: {fileID: 4275893230608264239}
   silenceImage: {fileID: 5361649607211962120}
   particleGlow: {fileID: 3970406645457277004}

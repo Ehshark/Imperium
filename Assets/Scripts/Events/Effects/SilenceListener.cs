@@ -36,11 +36,11 @@ public class SilenceListener : MonoBehaviour, IPointerDownHandler
         CardVisual cv = gameObject.GetComponent<CardVisual>();
         if (cv.Md != null)
         {
-            GameManager.Instance.ChangeCardColour(gameObject, cv.Md.Color);
+            GameManager.Instance.ChangeCardColour(gameObject, cv.cardBackground.color);
         }
         else if (cv.Sd != null)
         {
-            GameManager.Instance.ChangeCardColour(gameObject, cv.Sd.Color);
+            GameManager.Instance.ChangeCardColour(gameObject, cv.cardBackground.color);
         }
     }
 }

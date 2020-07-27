@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class EssentialsDataPhoton : CardPhoton
 {
-    private float[] color;
     private int id;    
     private int goldAndManaCost;
     private int manaCost;
@@ -13,7 +14,6 @@ public class EssentialsDataPhoton : CardPhoton
     private string effectText2;
     private int effectId2;
 
-    public override float[] Color { get => color; set => color = value; }
     public int Id { get => id; set => id = value; }
     public override int GoldAndManaCost { get => goldAndManaCost; set => goldAndManaCost = value; }
     public override string EffectText1 { get => effectText1; set => effectText1 = value; }
@@ -24,7 +24,6 @@ public class EssentialsDataPhoton : CardPhoton
 
     public EssentialsDataPhoton(EssentialsData essentials)
     {
-        Color = new float[] { essentials.Color.a, essentials.Color.r, essentials.Color.g, essentials.Color.b };
         Id = essentials.Id;
         GoldAndManaCost = essentials.GoldAndManaCost;
         EffectText1 = essentials.EffectText1;

@@ -97,7 +97,6 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             decreaseDmgAbsorbed.onClick.AddListener(delegate { AssignDamageAbsorbed(false); });
         }
 
-
         if (md != null && md.ConditionID == 7)
         {
             IsCombatEffectActivated = true;
@@ -186,8 +185,39 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
                 damage.transform.parent.gameObject.SetActive(false);
         }
 
-        //set the card's color
-        cardBackground.color = CardData.Color;
+        //set the card's card art
+        if (md != null)
+        {
+            if (md.CardClass.Equals("Warrior"))
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/warrior");
+            else if (md.CardClass.Equals("Rogue"))
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/rogue");
+            else
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/mage");
+        }
+        else if (sd != null)
+        {
+            if (currentDamage != 0)
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/fantasyWolf");
+            else if (sd.EffectId1 == 20)
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/healthVial");
+            else if (sd.EffectId1 == 21)
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/manaVial");
+            else
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/pouchWithGold");
+        }
+        else
+        {
+            if (ed.EffectId1 == 18) 
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/chest");
+            else if (ed.EffectId1 == 20)
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/healthPotion");
+            else if (ed.EffectId1 == 21)
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/manaPotion");
+            else
+                cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/ragePotion");
+        }
+
 
         //set the condition icon
         if (condition != null)
@@ -505,9 +535,9 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     public Card GetCardData()
     {
-        if (md)
+        if (md != null)
             return md;
-        else if (sd)
+        else if (sd != null)
             return sd;
         else
             return ed;

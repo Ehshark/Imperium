@@ -44,6 +44,6 @@ public class UntapMinionListener : MonoBehaviour, IPointerDownHandler
     public void OnDestroy()
     {
         CardVisual cv = gameObject.GetComponent<CardVisual>();
-        GameManager.Instance.ChangeCardColour(gameObject, cv.GetCardData().Color);
+        GameManager.Instance.ChangeCardColour(gameObject, cv.cardBackground.color);
     }
 }

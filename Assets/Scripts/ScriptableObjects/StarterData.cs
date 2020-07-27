@@ -6,8 +6,6 @@ using UnityEngine;
 public class StarterData : Card
 {
     [SerializeField]
-    private Color color;
-    [SerializeField]
     private int starterID;
     [SerializeField]
     private int goldAndManaCost;
@@ -32,5 +30,16 @@ public class StarterData : Card
     public override int Health { get => health; set => health = value; }
     public override string EffectText2 { get => effectText2; set => effectText2 = value; }
     public override int EffectId2 { get => effectId2; set => effectId2 = value; }
-    public override Color Color { get => color; set => color = value; }
+
+    public void Init(StarterDataPhoton sdp)
+    {
+        StarterID = sdp.StarterID;
+        GoldAndManaCost = sdp.GoldAndManaCost;
+        EffectId1 = sdp.EffectId1;
+        EffectText1 = sdp.EffectText1;
+        AttackDamage = sdp.AttackDamage;
+        Health = sdp.Health;
+        EffectId2 = sdp.EffectId2;
+        EffectText2 = sdp.EffectText2;
+    }
 }

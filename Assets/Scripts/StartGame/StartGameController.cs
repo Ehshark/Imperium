@@ -85,8 +85,25 @@ public class StartGameController : MonoBehaviour
         {
             StartCoroutine(ShortGameSetup());
         }
-        else
+    }
+
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+    private void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        if (eventCode == 5)
+        {
             StartCoroutine(MultiplayerSetup());
+        }
     }
 
     private IEnumerator MultiplayerSetup()

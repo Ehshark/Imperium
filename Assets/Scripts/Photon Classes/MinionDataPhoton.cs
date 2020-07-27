@@ -6,7 +6,6 @@ using UnityEngine;
 [Serializable]
 public class MinionDataPhoton : CardPhoton
 {
-    private float[] color;
     private int minionID;    
     private int goldAndManaCost;
     private string conditionText;
@@ -21,7 +20,6 @@ public class MinionDataPhoton : CardPhoton
     private string allyClass;
     private int allyClassID;
 
-    public override float[] Color { get => color; set => color = value; }
     public override int GoldAndManaCost { get => goldAndManaCost; set => goldAndManaCost = value; }
     public override int MinionID { get => minionID; set => minionID = value; }
     public override string ConditionText { get => conditionText; set => conditionText = value; }
@@ -38,7 +36,6 @@ public class MinionDataPhoton : CardPhoton
 
     public MinionDataPhoton(MinionData minion)
     {
-        Color = new float[] { minion.Color.a, minion.Color.r, minion.Color.g, minion.Color.b };
         GoldAndManaCost = minion.GoldAndManaCost;
         MinionID = minion.MinionID;
         ConditionText = minion.ConditionText;

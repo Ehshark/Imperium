@@ -66,7 +66,8 @@ public class UIManager : MonoBehaviour
 
     public Transform enlargedCard;
 
-    //const byte START_MULTIPLAYER_MATCH_EVENT = 4;
+    const byte SEND_SHUFFLED_DECKS_EVENT = 4;
+    const byte START_MULTIPLAYER_MATCH_EVENT = 5;
 
     private void Awake()
     {
@@ -131,32 +132,102 @@ public class UIManager : MonoBehaviour
         LoadScriptableObjectsToLists();
 
         //Shuffle each list holding the scriptable objects
-        if (StartGameController.Instance != null && !StartGameController.Instance.tutorial)
+        if (StartGameController.Instance != null && !StartGameController.Instance.tutorial && PhotonNetwork.IsMasterClient)
         {
             Shuffle();
+
+            //Sort all the minion cards into 3 piles corresponding with their classes: warrior, rogue, mage
+            SortPiles();
+
+            dealtWarriorCards = new List<MinionData>();
+            dealtRogueCards = new List<MinionData>();
+            dealtMageCards = new List<MinionData>();
+
+            //Set the starter cards for both players
+            SetStarterDeck();
+
+            //Sets all 9 cards in the shop, 3 cards per pile
+            SetWarriorMinion();
+            SetRogueMinion();
+            SetMageMinion();
+            SetEssentials();
+
+            List<MinionDataPhoton> mdp = new List<MinionDataPhoton>();
+            List<StarterDataPhoton> sdp = new List<StarterDataPhoton>();
+            List<EssentialsDataPhoton> edp = new List<EssentialsDataPhoton>();
+
+            foreach (MinionData m in minions)
+            {
+                mdp.Add(new MinionDataPhoton(m));
+            }
+            foreach (StarterData s in starters)
+            {
+                sdp.Add(new StarterDataPhoton(s));
+            }
+            foreach (EssentialsData e in essentials)
+            {
+                edp.Add(new EssentialsDataPhoton(e));
+            }
+
+            byte[] mdpByte = DataHandler.Instance.ObjectToByteArray(mdp);
+            byte[] sdpByte = DataHandler.Instance.ObjectToByteArray(sdp);
+            byte[] edpByte = DataHandler.Instance.ObjectToByteArray(edp);
+
+            object[] data = new object[] { mdpByte, sdpByte, edpByte };
+
+            PhotonNetwork.RaiseEvent(SEND_SHUFFLED_DECKS_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
         }
-        currentEssential = essentials[0];
-        currentMinion = minions[0];
-        currentStarter = starters[0];
+    }
 
-        //Sort all the minion cards into 3 piles corresponding with their classes: warrior, rogue, mage
-        SortPiles();
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
 
-        dealtWarriorCards = new List<MinionData>();
-        dealtRogueCards = new List<MinionData>();
-        dealtMageCards = new List<MinionData>();
+    private void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
 
-        //Set the starter cards for both players
-        SetStarterDeck();
+    private void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        if (eventCode == SEND_SHUFFLED_DECKS_EVENT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            List<MinionDataPhoton> mdp = (List<MinionDataPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[0]);
+            for (int i = 0; i < mdp.Count; i++)
+            {
+                minions[i] = ScriptableObject.CreateInstance<MinionData>();
+                minions[i].Init(mdp[i]);
+            }
+            List<StarterDataPhoton> sdp = (List<StarterDataPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[1]);
+            for (int i = 0; i < sdp.Count; i++)
+            {
+                starters[i] = ScriptableObject.CreateInstance<StarterData>();
+                starters[i].Init(sdp[i]);
+            }
+            List<EssentialsDataPhoton> edp = (List<EssentialsDataPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[2]);
+            for (int i = 0; i < edp.Count; i++)
+            {
+                essentials[i] = ScriptableObject.CreateInstance<EssentialsData>();
+                essentials[i].Init(edp[i]);
+            }
 
-        //Sets all 9 cards in the shop, 3 cards per pile
-        SetWarriorMinion();
-        SetRogueMinion();
-        SetMageMinion();
-        SetEssentials();
+            SortPiles();
+            dealtWarriorCards = new List<MinionData>();
+            dealtRogueCards = new List<MinionData>();
+            dealtMageCards = new List<MinionData>();
+            SetStarterDeck();
+            SetWarriorMinion();
+            SetRogueMinion();
+            SetMageMinion();
+            SetEssentials();
 
-        //PhotonNetwork.RaiseEvent(START_MULTIPLAYER_MATCH_EVENT, null, new RaiseEventOptions { Receivers = ReceiverGroup.All }, 
-            //SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(START_MULTIPLAYER_MATCH_EVENT, null, new RaiseEventOptions { Receivers = ReceiverGroup.All },
+                SendOptions.SendReliable);
+        }
     }
 
     public void LoadScriptableObjectsToLists()
@@ -714,7 +785,7 @@ public class UIManager : MonoBehaviour
 
                 yield return new WaitForSeconds(10f); //wait for 10 seconds before removing the icon
 
-                if(iconQueue.Count > 0)
+                if (iconQueue.Count > 0)
                 {
                     iconQueue.Dequeue();
                     Destroy(tmpObj);

@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class StarterDataPhoton : CardPhoton
 {
-    private float[] color;
     private int starterID;
     private int goldAndManaCost;
     private string effectText1;
@@ -22,7 +23,6 @@ public class StarterDataPhoton : CardPhoton
     public override int Health { get => health; set => health = value; }
     public override string EffectText2 { get => effectText2; set => effectText2 = value; }
     public override int EffectId2 { get => effectId2; set => effectId2 = value; }
-    public override float[] Color { get => color; set => color = value; }
 
     public StarterDataPhoton(StarterData starter)
     {
@@ -34,6 +34,5 @@ public class StarterDataPhoton : CardPhoton
         Health = starter.Health;
         EffectId2 = starter.EffectId2;
         EffectText2 = starter.EffectText2;
-        Color = new float[] { starter.Color.a, starter.Color.r, starter.Color.g, starter.Color.b };
     }
 }

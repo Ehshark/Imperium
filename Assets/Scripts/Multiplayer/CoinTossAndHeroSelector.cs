@@ -85,7 +85,7 @@ public class CoinTossAndHeroSelector : MonoBehaviour
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
 
-    private void OnEvent(EventData photonEvent) //This code block will only be executed on the client, i.e. not the host
+    private void OnEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;
         if (eventCode == SHOW_COIN_TOSS_EVENT)

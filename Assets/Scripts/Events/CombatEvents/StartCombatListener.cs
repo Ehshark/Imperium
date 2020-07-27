@@ -18,13 +18,13 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
 
     private void TapMinion(CardVisual cv, GameObject card)
     {
-        if (cv.Md)
+        if (cv.Md != null)
         {
             if (cv.IsTapped)
             {
                 cv.IsTapped = false;
-                GameManager.Instance.ChangeCardColour(card, cv.Md.Color);
                 cv.particleGlow.gameObject.SetActive(false);
+                GameManager.Instance.ChangeCardColour(card, cv.cardBackground.color);
                 GameManager.Instance.MinionsAttacking.Remove(card);
             }
             else
@@ -37,7 +37,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
 
             HasAbilites(cv);
         }
-        else if (cv.Sd)
+        else if (cv.Sd != null)
         {
             if (cv.IsTapped)
             {

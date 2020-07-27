@@ -25,8 +25,8 @@ public class DiscardCardListener : MonoBehaviour, IPointerDownHandler
         else
         {
             GameManager.Instance.selectedDiscards.Remove(card);
-            GameManager.Instance.ChangeCardColour(card, cv.CardData.Color);
             cv.particleGlow.gameObject.SetActive(false);
+            GameManager.Instance.ChangeCardColour(card, cv.cardBackground.color);
         }
     }
 }
