@@ -1082,7 +1082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7f61b15ad0e204e8bea7584a71288e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTesting: 0
+  isTesting: 1
   coin: {fileID: 813119159}
   coinToss: {fileID: 1641953544}
   reactionText: {fileID: 187796305}
@@ -10350,6 +10350,9 @@ MonoBehaviour:
     type: 3}
   itemPrefab: {fileID: 5361649606923715719, guid: f53d67fcfa4cfac48b2e09198bb3be39,
     type: 3}
+  warriorMinions: []
+  rogueMinions: []
+  mageMinions: []
   allyDeck: []
   enemyDeck: []
   allyHand: []

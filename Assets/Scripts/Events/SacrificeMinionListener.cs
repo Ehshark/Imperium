@@ -10,7 +10,8 @@ public class SacrificeMinionListener : MonoBehaviour, IPointerDownHandler
     {
         //TODO: Highlight this minion properly
         CardVisual mv = gameObject.GetComponent<CardVisual>();
-        mv.cardBackground.color = Color.cyan;
+        //mv.cardBackground.color = Color.cyan;
+        mv.particleGlow.gameObject.SetActive(true);
     }
 
     public void OnPointerDown(PointerEventData eventData)

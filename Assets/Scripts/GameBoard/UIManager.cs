@@ -712,7 +712,7 @@ public class UIManager : MonoBehaviour
                 //append child sprite to the into the queue
                 iconQueue.Enqueue(tmp);
 
-                yield return new WaitForSeconds(3f); //wait for 3 seconds before removing the icon
+                yield return new WaitForSeconds(10f); //wait for 10 seconds before removing the icon
 
                 if(iconQueue.Count > 0)
                 {

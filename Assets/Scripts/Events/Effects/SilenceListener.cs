@@ -6,7 +6,8 @@ public class SilenceListener : MonoBehaviour, IPointerDownHandler
 {
     public void Start()
     {
-        GameManager.Instance.ChangeCardColour(gameObject, Color.cyan);
+        //GameManager.Instance.ChangeCardColour(gameObject, Color.cyan);
+        gameObject.GetComponent<CardVisual>().particleGlow.gameObject.SetActive(true);
     }
 
     public void OnPointerDown(PointerEventData eventData)

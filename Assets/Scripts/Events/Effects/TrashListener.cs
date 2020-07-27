@@ -27,7 +27,8 @@ public class TrashListener : MonoBehaviour, IPointerDownHandler
             GameManager.Instance.trashUI.GetComponent<TrashController>().Card = card;
             GameManager.Instance.trashUI.GetComponent<TrashController>().removeButton.interactable = true;
 
-            GameManager.Instance.ChangeCardColour(card, Color.cyan);
+            //GameManager.Instance.ChangeCardColour(card, Color.cyan);
+            cv.particleGlow.gameObject.SetActive(true);
         }
     }
 

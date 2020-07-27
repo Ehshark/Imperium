@@ -24,12 +24,14 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
             {
                 cv.IsTapped = false;
                 GameManager.Instance.ChangeCardColour(card, cv.Md.Color);
+                cv.particleGlow.gameObject.SetActive(false);
                 GameManager.Instance.MinionsAttacking.Remove(card);
             }
             else
             {
                 cv.IsTapped = true;
-                GameManager.Instance.ChangeCardColour(card, Color.cyan);
+                //GameManager.Instance.ChangeCardColour(card, Color.cyan);
+                cv.particleGlow.gameObject.SetActive(true);
                 GameManager.Instance.MinionsAttacking.Add(card);
             }
 
@@ -41,6 +43,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
             {
                 cv.IsTapped = false;
                 GameManager.Instance.ChangeCardColour(card, Color.gray);
+                cv.particleGlow.gameObject.SetActive(false);
 
                 //Decrease damage counter
                 GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) - cv.Sd.AttackDamage).ToString();
@@ -49,7 +52,8 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
             else
             {
                 cv.IsTapped = true;
-                GameManager.Instance.ChangeCardColour(card, Color.cyan);
+                //GameManager.Instance.ChangeCardColour(card, Color.cyan);
+                cv.particleGlow.gameObject.SetActive(true);
 
                 //Increase damage counter
                 GameManager.Instance.alliedDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedDamageCounter.text) + cv.Sd.AttackDamage).ToString();

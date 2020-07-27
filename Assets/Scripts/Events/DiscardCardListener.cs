@@ -19,12 +19,14 @@ public class DiscardCardListener : MonoBehaviour, IPointerDownHandler
         if (!GameManager.Instance.selectedDiscards.Contains(card))
         {
             GameManager.Instance.selectedDiscards.Add(card);
-            GameManager.Instance.ChangeCardColour(card, Color.cyan);
+            //GameManager.Instance.ChangeCardColour(card, Color.cyan);
+            cv.particleGlow.gameObject.SetActive(true);
         }
         else
         {
             GameManager.Instance.selectedDiscards.Remove(card);
             GameManager.Instance.ChangeCardColour(card, cv.CardData.Color);
+            cv.particleGlow.gameObject.SetActive(false);
         }
     }
 }
