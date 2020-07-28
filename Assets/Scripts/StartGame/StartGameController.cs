@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
+using System.Linq;
 
 public class StartGameController : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class StartGameController : MonoBehaviour
     public GameObject TutorialObject { get => tutorialObject; set => tutorialObject = value; }
     public bool HostFirst { get => EventManager.Instance.HostFirst; set => EventManager.Instance.HostFirst = value; }
     public bool HandDealt { get => handDealt; set => handDealt = value; }
+    public bool StartingPowerSelected { get => startingPowerSelected; set => startingPowerSelected = value; }
 
     //Components
     [SerializeField]
@@ -67,6 +69,7 @@ public class StartGameController : MonoBehaviour
 
     //Multiplayer
     private bool handDealt = false;
+    private bool startingPowerSelected = false;
     const byte MULLIGAN_EVENT = 6;
     const byte MULLIGAN_REFUSED_EVENT = 7;
     private bool bottomMullReady = false;
@@ -135,6 +138,36 @@ public class StartGameController : MonoBehaviour
         else if (eventCode == MULLIGAN_REFUSED_EVENT)
         {
             topMullReady = true;
+        }
+        else if (eventCode == 8)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int powerCount = (int)data[0];
+            int selection = (int)data[1];
+            Hero hero = GameManager.Instance.topHero;
+            foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
+            {
+                if (selection == entry.Key)
+                {
+                    if (powerCount == 1)
+                    {
+                        hero.GetComponent<Hero>().Ability1.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+                        hero.GetComponent<Hero>().Ability1.gameObject.SetActive(true);
+                    }
+                    else if (powerCount == 2)
+                    {
+                        hero.GetComponent<Hero>().Ability2.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+                        hero.GetComponent<Hero>().Ability2.gameObject.SetActive(true);
+                    }
+                    else if (powerCount == 3)
+                    {
+                        hero.GetComponent<Hero>().Ability3.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+                        hero.GetComponent<Hero>().Ability3.gameObject.SetActive(true);
+                    }
+                }
+            }
+
+            startingPowerSelected = true;
         }
     }
 
@@ -207,11 +240,20 @@ public class StartGameController : MonoBehaviour
         yield return new WaitUntil(() => (bottomMullReady == true && topMullReady == true));
         GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Both Mulligans Finished";
 
-        //if (GameManager.Instance.ActiveHero(true).Clan == 'W')
-        //{
-        //    InstantiateSkillTree();
-        //}
-        //GameManager.Instance.StartTurn();
+        if (GameManager.Instance.bottomHero.Clan == 'W' || GameManager.Instance.topHero.Clan == 'W')
+        {
+            if (GameManager.Instance.bottomHero.Clan == 'W')
+            {
+                InstantiateSkillTree();
+            }
+            else if (GameManager.Instance.topHero.Clan == 'W')
+            {
+                GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Opponent is choosing a power...";
+            }
+            yield return new WaitUntil(() => startingPowerSelected == true);
+        }
+
+        GameManager.Instance.StartTurn();
     }
 
     private IEnumerator ShortGameSetup()
@@ -531,6 +573,8 @@ public class StartGameController : MonoBehaviour
     public void MulliganRefused()
     {
         bottomMullReady = true;
+        PhotonNetwork.RaiseEvent(MULLIGAN_REFUSED_EVENT, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
         GameManager.Instance.mulliganButtons.gameObject.SetActive(false);
         GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Waiting for opponent...";
     }

@@ -137,7 +137,7 @@ public class UIManager : MonoBehaviour
         LoadScriptableObjectsToLists();
 
         //Shuffle each list holding the scriptable objects
-        if (StartGameController.Instance != null && !StartGameController.Instance.tutorial)// && PhotonNetwork.IsMasterClient)
+        if (StartGameController.Instance != null && !StartGameController.Instance.tutorial && PhotonNetwork.IsMasterClient)
         {
             Shuffle();
 
@@ -157,33 +157,33 @@ public class UIManager : MonoBehaviour
             SetMageMinion();
             SetEssentials();
 
-            //List<MinionDataPhoton> mdp = new List<MinionDataPhoton>();
-            //List<StarterDataPhoton> allySdp = new List<StarterDataPhoton>();
-            //List<StarterDataPhoton> enemySdp = new List<StarterDataPhoton>();
-            //List<EssentialsDataPhoton> edp = new List<EssentialsDataPhoton>();
+            List<MinionDataPhoton> mdp = new List<MinionDataPhoton>();
+            List<StarterDataPhoton> allySdp = new List<StarterDataPhoton>();
+            List<StarterDataPhoton> enemySdp = new List<StarterDataPhoton>();
+            List<EssentialsDataPhoton> edp = new List<EssentialsDataPhoton>();
 
-            //foreach (MinionData m in minions)
-            //    mdp.Add(new MinionDataPhoton(m));
+            foreach (MinionData m in minions)
+                mdp.Add(new MinionDataPhoton(m));
 
-            //foreach (StarterData s in AllyStarters)
-            //    allySdp.Add(new StarterDataPhoton(s));
+            foreach (StarterData s in AllyStarters)
+                allySdp.Add(new StarterDataPhoton(s));
 
-            //foreach (StarterData s in EnemyStarters)
-            //    enemySdp.Add(new StarterDataPhoton(s));
+            foreach (StarterData s in EnemyStarters)
+                enemySdp.Add(new StarterDataPhoton(s));
 
-            //foreach (EssentialsData e in essentials)
-            //    edp.Add(new EssentialsDataPhoton(e));
+            foreach (EssentialsData e in essentials)
+                edp.Add(new EssentialsDataPhoton(e));
 
 
-            //byte[] mdpByte = DataHandler.Instance.ObjectToByteArray(mdp);
-            //byte[] allySdpByte = DataHandler.Instance.ObjectToByteArray(allySdp);
-            //byte[] enemySdpByte = DataHandler.Instance.ObjectToByteArray(enemySdp);
-            //byte[] edpByte = DataHandler.Instance.ObjectToByteArray(edp);
+            byte[] mdpByte = DataHandler.Instance.ObjectToByteArray(mdp);
+            byte[] allySdpByte = DataHandler.Instance.ObjectToByteArray(allySdp);
+            byte[] enemySdpByte = DataHandler.Instance.ObjectToByteArray(enemySdp);
+            byte[] edpByte = DataHandler.Instance.ObjectToByteArray(edp);
 
-            //object[] data = new object[] { mdpByte, allySdpByte, enemySdpByte, edpByte };
+            object[] data = new object[] { mdpByte, allySdpByte, enemySdpByte, edpByte };
 
-            //PhotonNetwork.RaiseEvent(SEND_SHUFFLED_DECKS_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-            //SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(SEND_SHUFFLED_DECKS_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
         }
     }
 

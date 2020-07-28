@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
+using UnityEditor;
 
 public class SkillTreeController : MonoBehaviour
 {
@@ -31,6 +35,9 @@ public class SkillTreeController : MonoBehaviour
     private int selectedPower = 0;
 
     public int SelectedPower { get => selectedPower; set => selectedPower = value; }
+
+    //Multiplayer
+    const byte POWER_SELECTED_EVENT = 8;
 
     // Start is called before the first frame update
     void Start()
@@ -111,7 +118,7 @@ public class SkillTreeController : MonoBehaviour
             }
 
             int parentCnt = gameObject.transform.parent.childCount;
-            gameObject.transform.SetSiblingIndex(parentCnt-2);
+            gameObject.transform.SetSiblingIndex(parentCnt - 2);
 
             //StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
         }
@@ -151,6 +158,11 @@ public class SkillTreeController : MonoBehaviour
                     }
                 }
             }
+
+            object[] data = new object[] { hero.GetComponent<Hero>().PowerCount, selectedPower };
+            PhotonNetwork.RaiseEvent(POWER_SELECTED_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
+            StartGameController.Instance.StartingPowerSelected = true;
 
             Destroy(gameObject);
 
