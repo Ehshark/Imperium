@@ -26,7 +26,7 @@ public class LeaderboardController : MonoBehaviour
 
         int numOfRows = leaderboardList.Count();
         float rowHeight = 100;
-        float height = rowHeight * (numOfRows + 1);
+        float height = rowHeight * (numOfRows);
 
         RectTransform rt = GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(rt.sizeDelta.x, height);
@@ -108,6 +108,6 @@ public class LeaderboardController : MonoBehaviour
 
     public void BackClicked()
     {
-        SceneManager.LoadScene("MainMenu");
+        LevelLoader.Instance.LoadNextScene(0);
     }
 }

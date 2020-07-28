@@ -46,7 +46,7 @@ public class MenuController : MonoBehaviour
 
     public void LeaderboardClicked() 
     {
-        SceneManager.LoadScene("Leaderboard");
+        LevelLoader.Instance.LoadNextScene(4);
     }
 
     public void OptionsClicked()
