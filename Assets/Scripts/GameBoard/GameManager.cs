@@ -25,8 +25,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text allyDeckCounter;
     public TMP_Text enemyDeckCounter;
 
-    public Transform allyMulliganButton;
-    public Transform enemyMulliganButton;
+    public Transform mulliganButtons;
 
     public Transform alliedMinionZone;
     public Transform alliedHand;
@@ -357,7 +356,7 @@ public class GameManager : MonoBehaviour
 
                 UIManager.Instance.allyDiscards.Clear();
 
-                foreach (Transform t in GameManager.Instance.alliedDiscardPile)
+                foreach (Transform t in alliedDiscardPile)
                 {
                     Destroy(t.gameObject);
                 }
@@ -374,7 +373,7 @@ public class GameManager : MonoBehaviour
 
                 UIManager.Instance.enemyDiscards.Clear();
 
-                foreach (Transform t in GameManager.Instance.enemyDiscardPile)
+                foreach (Transform t in enemyDiscardPile)
                 {
                     Destroy(t.gameObject);
                 }
@@ -384,15 +383,12 @@ public class GameManager : MonoBehaviour
             }
 
             AdjustDeckHeight();
-
             //function calls itself to continue the draw since deck is no longer empty
-            //DrawCard(deck, playerHand);
-
+            DrawCard(deck, playerHand);
         }
 
         if (isActionPhase)
             EventManager.Instance.PostNotification(EVENT_TYPE.ACTION_DRAW);
-
     }
 
     //Shuffle deck
@@ -820,6 +816,11 @@ public class GameManager : MonoBehaviour
             tmp.GetComponent<CardVisual>().Ed = ed;
 
         tmp.SetActive(true);
+
+        if (t.name.Equals("Hand")) {
+            if (!StartGameController.Instance.HandDealt && t.childCount == 5)
+                StartGameController.Instance.HandDealt = true;
+        }
 
         StartCoroutine(FlipCard(tmp)); //calls card flip animation
     }

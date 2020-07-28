@@ -25,7 +25,6 @@ public class UIManager : MonoBehaviour
 
     private MinionData currentMinion;
     private EssentialsData currentEssential;
-    private StarterData currentStarter;
 
     private List<MinionData> dealtWarriorCards;
     private List<MinionData> dealtRogueCards;
@@ -63,6 +62,9 @@ public class UIManager : MonoBehaviour
 
     private GameObject lastSelectedCard;
     public GameObject LastSelectedCard { get => lastSelectedCard; set => lastSelectedCard = value; }
+    public List<StarterData> AllyStarters { get => allyStarters; set => allyStarters = value; }
+    public List<StarterData> EnemyStarters { get => enemyStarters; set => enemyStarters = value; }
+    public List<StarterData> Starters { get => starters; set => starters = value; }
 
     public Transform enlargedCard;
 
@@ -83,6 +85,9 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        AllyStarters = new List<StarterData>();
+        EnemyStarters = new List<StarterData>();
+
         minionConditions = new Dictionary<int, string>
         {
             {1,"bleed"},
@@ -153,27 +158,29 @@ public class UIManager : MonoBehaviour
             SetEssentials();
 
             //List<MinionDataPhoton> mdp = new List<MinionDataPhoton>();
-            //List<StarterDataPhoton> sdp = new List<StarterDataPhoton>();
+            //List<StarterDataPhoton> allySdp = new List<StarterDataPhoton>();
+            //List<StarterDataPhoton> enemySdp = new List<StarterDataPhoton>();
             //List<EssentialsDataPhoton> edp = new List<EssentialsDataPhoton>();
 
             //foreach (MinionData m in minions)
-            //{
             //    mdp.Add(new MinionDataPhoton(m));
-            //}
-            //foreach (StarterData s in starters)
-            //{
-            //    sdp.Add(new StarterDataPhoton(s));
-            //}
+
+            //foreach (StarterData s in AllyStarters)
+            //    allySdp.Add(new StarterDataPhoton(s));
+
+            //foreach (StarterData s in EnemyStarters)
+            //    enemySdp.Add(new StarterDataPhoton(s));
+
             //foreach (EssentialsData e in essentials)
-            //{
             //    edp.Add(new EssentialsDataPhoton(e));
-            //}
+
 
             //byte[] mdpByte = DataHandler.Instance.ObjectToByteArray(mdp);
-            //byte[] sdpByte = DataHandler.Instance.ObjectToByteArray(sdp);
+            //byte[] allySdpByte = DataHandler.Instance.ObjectToByteArray(allySdp);
+            //byte[] enemySdpByte = DataHandler.Instance.ObjectToByteArray(enemySdp);
             //byte[] edpByte = DataHandler.Instance.ObjectToByteArray(edp);
 
-            //object[] data = new object[] { mdpByte, sdpByte, edpByte };
+            //object[] data = new object[] { mdpByte, allySdpByte, enemySdpByte, edpByte };
 
             //PhotonNetwork.RaiseEvent(SEND_SHUFFLED_DECKS_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
             //SendOptions.SendReliable);
@@ -202,13 +209,21 @@ public class UIManager : MonoBehaviour
                 minions[i] = ScriptableObject.CreateInstance<MinionData>();
                 minions[i].Init(mdp[i]);
             }
-            List<StarterDataPhoton> sdp = (List<StarterDataPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[1]);
-            for (int i = 0; i < sdp.Count; i++)
+            List<StarterDataPhoton> allySdp = (List<StarterDataPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[1]);
+            for (int i = 0; i < allySdp.Count; i++)
             {
-                starters[i] = ScriptableObject.CreateInstance<StarterData>();
-                starters[i].Init(sdp[i]);
+                AllyStarters.Add(ScriptableObject.CreateInstance<StarterData>());
+                AllyStarters[i].Init(allySdp[i]);
             }
-            List<EssentialsDataPhoton> edp = (List<EssentialsDataPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[2]);
+
+            List<StarterDataPhoton> enemySdp = (List<StarterDataPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[2]);
+            for (int i = 0; i < enemySdp.Count; i++)
+            {
+                EnemyStarters.Add(ScriptableObject.CreateInstance<StarterData>());
+                EnemyStarters[i].Init(enemySdp[i]);
+            }
+
+            List<EssentialsDataPhoton> edp = (List<EssentialsDataPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[3]);
             for (int i = 0; i < edp.Count; i++)
             {
                 essentials[i] = ScriptableObject.CreateInstance<EssentialsData>();
@@ -372,12 +387,18 @@ public class UIManager : MonoBehaviour
             minions[i] = tempMinion;
         }
 
+        ShuffleStarterDeck();
+
         for (int i = 0; i < starters.Count; i++)
         {
-            int rnd = Random.Range(0, starters.Count);
-            tempStarter = starters[rnd];
-            starters[rnd] = starters[i];
-            starters[i] = tempStarter;
+            AllyStarters.Add(starters[i]); //create the bottom player's starting deck
+        }
+
+        ShuffleStarterDeck();
+
+        for (int i = 0; i < starters.Count; i++)
+        {
+            EnemyStarters.Add(starters[i]); //create the top player's starting deck
         }
     }
 
@@ -557,27 +578,26 @@ public class UIManager : MonoBehaviour
 
     public void SetStarterDeck()
     {
-        allyStarters = new List<StarterData>();
-        enemyStarters = new List<StarterData>();
         allyDeck = new List<Card>();
         enemyDeck = new List<Card>();
 
-        for (int i = 0; i < starters.Count; i++)
+        if (PhotonNetwork.IsMasterClient)
         {
-            allyStarters.Add(starters[i]);
-            allyDeck.Add(starters[i]); //add starter cards to decklist
+            for (int i = 0; i < starters.Count; i++)
+                allyDeck.Add(AllyStarters[i]); 
+
+            for (int i = 0; i < starters.Count; i++)
+                enemyDeck.Add(EnemyStarters[i]);
+        }
+        else
+        {
+            for (int i = 0; i < starters.Count; i++)
+                allyDeck.Add(EnemyStarters[i]); 
+
+            for (int i = 0; i < starters.Count; i++)
+                enemyDeck.Add(AllyStarters[i]);
         }
 
-        if (StartGameController.Instance != null && !StartGameController.Instance.tutorial)
-        {
-            ShuffleStarterDeck();
-        }
-
-        for (int i = 0; i < starters.Count; i++)
-        {
-            enemyStarters.Add(starters[i]);
-            enemyDeck.Add(starters[i]);
-        }
     }
 
     public void SetEssentials()
@@ -793,7 +813,6 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-
 
     public List<Card> GetActiveDeckList(bool activeWanted)
     {

@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using Photon.Pun;
 using ExitGames.Client.Photon;
+using Photon.Realtime;
 
 public class StartGameController : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class StartGameController : MonoBehaviour
     public GameObject TutorialUI { get => tutorialUI; set => tutorialUI = value; }
     public GameObject TutorialObject { get => tutorialObject; set => tutorialObject = value; }
     public bool HostFirst { get => EventManager.Instance.HostFirst; set => EventManager.Instance.HostFirst = value; }
+    public bool HandDealt { get => handDealt; set => handDealt = value; }
 
     //Components
     [SerializeField]
@@ -63,6 +65,13 @@ public class StartGameController : MonoBehaviour
     [SerializeField]
     private GameObject tutorialObject;
 
+    //Multiplayer
+    private bool handDealt = false;
+    const byte MULLIGAN_EVENT = 6;
+    const byte MULLIGAN_REFUSED_EVENT = 7;
+    private bool bottomMullReady = false;
+    private bool topMullReady = false;
+
     private void Awake()
     {
         if (Instance)
@@ -103,6 +112,29 @@ public class StartGameController : MonoBehaviour
         if (eventCode == 5)
         {
             StartCoroutine(MultiplayerSetup());
+        }
+        else if (eventCode == MULLIGAN_EVENT)
+        {
+            foreach (Transform child in GameManager.Instance.enemyHand)
+                Destroy(child.gameObject);
+            UIManager.Instance.enemyDeck = new List<Card>();
+            UIManager.Instance.enemyHand.Clear();
+
+            object[] data = (object[])photonEvent.CustomData;
+            List<StarterDataPhoton> enemySdp = (List<StarterDataPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[0]);
+            for (int i = 0; i < enemySdp.Count; i++)
+            {
+                UIManager.Instance.enemyDeck.Add(ScriptableObject.CreateInstance<StarterData>());
+                ((StarterData)UIManager.Instance.enemyDeck[i]).Init(enemySdp[i]);
+            }
+
+            for (int i = 0; i < GameManager.Instance.topHero.HandSize; i++)
+                GameManager.Instance.DrawCard(UIManager.Instance.enemyDeck, GameManager.Instance.enemyHand);
+            topMullReady = true;
+        }
+        else if (eventCode == MULLIGAN_REFUSED_EVENT)
+        {
+            topMullReady = true;
         }
     }
 
@@ -170,12 +202,16 @@ public class StartGameController : MonoBehaviour
         }
 
         InitialDraw();
-        //GameManager.Instance.StartTurn();
+        yield return new WaitUntil(() => handDealt == true);
+        GameManager.Instance.mulliganButtons.gameObject.SetActive(true);
+        yield return new WaitUntil(() => (bottomMullReady == true && topMullReady == true));
+        GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Both Mulligans Finished";
 
         //if (GameManager.Instance.ActiveHero(true).Clan == 'W')
         //{
         //    InstantiateSkillTree();
         //}
+        //GameManager.Instance.StartTurn();
     }
 
     private IEnumerator ShortGameSetup()
@@ -422,7 +458,7 @@ public class StartGameController : MonoBehaviour
             InitialDraw();
 
             //Determine which player has the mulligan button to show first
-            SetActiveMulligan();
+            //SetActiveMulligan();
         }
     }
 
@@ -464,46 +500,39 @@ public class StartGameController : MonoBehaviour
 
     public void Mulligan()
     {
-        for (int i = 0; i < GameManager.Instance.ActiveHero(true).HandSize; i++)
-        {
-            UIManager.Instance.GetActiveDeckList(true).Add(UIManager.Instance.GetActiveHandList(true)[i]);
-            Destroy(GameManager.Instance.GetActiveHand(true).GetChild(i).gameObject);
-        }
+        UIManager.Instance.ShuffleStarterDeck();
+        UIManager.Instance.allyDeck = new List<Card>();
 
-        UIManager.Instance.GetActiveHandList(true).Clear();
-        GameManager.Instance.ShuffleCurrentDeck(UIManager.Instance.GetActiveDeckList(true));
+        foreach (StarterData s in UIManager.Instance.Starters)
+            UIManager.Instance.allyDeck.Add(s);
 
-        for (int i = 0; i < GameManager.Instance.ActiveHero(true).HandSize; i++)
-        {
-            GameManager.Instance.DrawCard(UIManager.Instance.GetActiveDeckList(true), GameManager.Instance.GetActiveHand(true));
-        }
+        List<StarterDataPhoton> allySdp = new List<StarterDataPhoton>();
+        foreach (StarterData s in UIManager.Instance.allyDeck)
+            allySdp.Add(new StarterDataPhoton(s));
 
-        GameManager.Instance.SwitchTurn();
-        mulliganCount++;
-        SetActiveMulligan();
+        foreach (Transform child in GameManager.Instance.alliedHand)
+            Destroy(child.gameObject);
+
+        UIManager.Instance.allyHand.Clear();
+
+        for (int i = 0; i < GameManager.Instance.bottomHero.HandSize; i++)
+            GameManager.Instance.DrawCard(UIManager.Instance.allyDeck, GameManager.Instance.alliedHand);
+
+        bottomMullReady = true;
+
+        byte[] allySdpByte = DataHandler.Instance.ObjectToByteArray(allySdp);
+        object[] data = new object[] { allySdpByte };
+        PhotonNetwork.RaiseEvent(MULLIGAN_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
+        GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Waiting for opponent...";
+        GameManager.Instance.mulliganButtons.gameObject.SetActive(false);
     }
 
-    public void SetActiveMulligan()
+    public void MulliganRefused()
     {
-        if (mulliganCount < 2)
-        {
-            if (GameManager.Instance.GetCurrentPlayer() == 0)
-            {
-                GameManager.Instance.allyMulliganButton.gameObject.SetActive(true);
-            }
-
-            else
-            {
-                GameManager.Instance.enemyMulliganButton.gameObject.SetActive(true);
-            }
-        }
-
-        else
-        {
-            GameManager.Instance.allyMulliganButton.gameObject.SetActive(false);
-            GameManager.Instance.enemyMulliganButton.gameObject.SetActive(false);
-            UIManager.Instance.AttachPlayCard();
-        }
+        bottomMullReady = true;
+        GameManager.Instance.mulliganButtons.gameObject.SetActive(false);
+        GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Waiting for opponent...";
     }
 
     public void InstantiateSkillTree()
