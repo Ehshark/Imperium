@@ -3,8 +3,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
-public class PlayCard : MonoBehaviour
+public class PlayCard : MonoBehaviourPunCallbacks
 {
     private GameObject card;
     private GameObject summonPanel;
@@ -14,6 +17,11 @@ public class PlayCard : MonoBehaviour
     private TMP_Text instructionsText;
     private Button promoteButton;
     private Card thisCard;
+
+    private const byte PLAY_MINION = 8;
+    private const byte PLAY_RESOURCE = 9;
+    private const byte PROMOTE_MINION = 10;
+    private const byte REMOVE_MINION = 11;
 
     private void Start()
     {
@@ -181,10 +189,17 @@ public class PlayCard : MonoBehaviour
 
     private void MoveCardFromHand(bool isMinion)
     {
+        bool promote = false;
         DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true), 1f);
         dc.AddToQueue();
         card = gameObject;
         CardVisual cv = card.GetComponent<CardVisual>();
+
+        byte[] cardByte;
+        MinionDataPhoton mdp;
+        StarterDataPhoton sdp;
+        EssentialsDataPhoton edp;
+        string type;
 
         if (isMinion)
         {
@@ -202,6 +217,7 @@ public class PlayCard : MonoBehaviour
                 cv.AdjustHealth(2, true);
                 cv.IsPromoted = true;
                 cv.PromotedHealth = cv.CurrentHealth;
+                promote = true;
             }
 
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveMinionZone(true));
@@ -213,6 +229,29 @@ public class PlayCard : MonoBehaviour
                 GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Md = thisCard as MinionData;
                 GameManager.Instance.GetComponent<ConditionAndEffectAssigner>().Card = card;
                 EventManager.Instance.PostNotification(EVENT_TYPE.ASSIGN_CONDITIONS);
+            }
+
+            if (thisCard is MinionData)
+            {
+                mdp = new MinionDataPhoton(cv.Md);
+                cardByte = DataHandler.Instance.ObjectToByteArray(mdp);
+                type = "Minion";
+            }
+            else
+            {
+                sdp = new StarterDataPhoton(cv.Sd);
+                cardByte = DataHandler.Instance.ObjectToByteArray(sdp);
+                type = "Starter";
+            }
+
+            object[] data = new object[] { cardByte, type };
+            if (!promote)
+            {
+                PlayCardPun.Instance.SendData(PLAY_MINION, data);
+            }
+            else
+            {
+                PlayCardPun.Instance.SendData(PROMOTE_MINION, data);
             }
         }
         else
@@ -226,6 +265,22 @@ public class PlayCard : MonoBehaviour
             MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true));
             mc.AddToQueue();
             //GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
+
+            if (thisCard is StarterData)
+            {
+                sdp = new StarterDataPhoton(cv.Sd);
+                cardByte = DataHandler.Instance.ObjectToByteArray(sdp);
+                type = "Starter";
+            }
+            else
+            {
+                edp = new EssentialsDataPhoton(cv.Ed);
+                cardByte = DataHandler.Instance.ObjectToByteArray(edp);
+                type = "Essential";
+            }
+
+            object[] data = new object[] { cardByte, type };
+            PlayCardPun.Instance.SendData(PLAY_RESOURCE, data);
         }
 
         AdjustHeroResources();
@@ -241,6 +296,29 @@ public class PlayCard : MonoBehaviour
             GameManager.Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true));
         mc.AddToQueue();
         //GameManager.Instance.MoveCard(GameManager.Instance.MinionToSacrifice, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
+
+        CardVisual cv = GameManager.Instance.MinionToSacrifice.GetComponent<CardVisual>();
+        MinionDataPhoton mdp;
+        StarterDataPhoton sdp;
+        byte[] cardByte;
+        string type;
+
+        if (cv.Md != null)
+        {
+            mdp = new MinionDataPhoton(cv.Md);
+            cardByte = DataHandler.Instance.ObjectToByteArray(mdp);
+            type = "Minion";
+        }
+        else
+        {
+            sdp = new StarterDataPhoton(cv.Sd);
+            cardByte = DataHandler.Instance.ObjectToByteArray(sdp);
+            type = "Starter";
+        }
+
+        object[] data = new object[] { cardByte, type };
+        PlayCardPun.Instance.SendData(REMOVE_MINION, data);
+
         MoveCardFromHand(true);
     }
 

@@ -166,11 +166,6 @@ public class SkillTreeController : MonoBehaviour
 
             Destroy(gameObject);
 
-            if (GameManager.Instance.WarriorSetup)
-            {
-                GameManager.Instance.StartGameManager.GetComponent<StartGameController>().SwitchHeroChoosing();
-            }
-
             if (StartGameController.Instance.tutorial)
             {
                 StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();

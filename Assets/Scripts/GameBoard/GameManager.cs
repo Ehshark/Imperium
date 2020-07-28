@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
 public class GameManager : MonoBehaviour
 {
@@ -88,6 +91,7 @@ public class GameManager : MonoBehaviour
     private bool inHeroPower;
     private Color lastSelectedColor;
     private int removeCardAtIndex;
+    private bool firstTimeStartUp;
 
     public static GameManager Instance { get; private set; } = null;
     public bool IsPromoting { get => isPromoting; set => isPromoting = value; }
@@ -106,6 +110,11 @@ public class GameManager : MonoBehaviour
     public bool IsActionPhase { get => isActionPhase; set => isActionPhase = value; }
     public int RemoveCardAtIndex { get => removeCardAtIndex; set => removeCardAtIndex = value; }
 
+    private const byte END_TURN = 12;
+    private const byte DRAW_CARDS = 13;
+    private const byte PAY_TO_DISCARD = 14;
+    private const byte DISCARD_CARDS = 15;
+
     private void Awake()
     {
 
@@ -117,6 +126,111 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+    private void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        
+        if (eventCode == END_TURN)
+        {
+            ActiveHero(true).ResetMana();
+
+            if (bottomHero.MyTurn)
+            {
+                bottomHero.MyTurn = false;
+                topHero.MyTurn = true;
+            }
+            else
+            {
+                topHero.MyTurn = false;
+                bottomHero.MyTurn = true;
+            }
+
+            StartTurn();
+        }
+        else if (eventCode == DRAW_CARDS)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int drawNum = (int)data[0];
+
+            for (int i = 0; i < drawNum; i++)
+            {
+                DrawCard(UIManager.Instance.GetActiveDeckList(true), GetActiveHand(true));
+            }
+        }
+        else if (eventCode == PAY_TO_DISCARD)
+        {
+            DrawCard(UIManager.Instance.GetActiveDeckList(true), GetActiveHand(true));
+            ActiveHero(true).AdjustGold(1, false);
+        }
+        else if (eventCode == DISCARD_CARDS)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            List<CardPhoton> cardsToDiscards = (List<CardPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[0]);
+
+            foreach (CardPhoton card in cardsToDiscards)
+            {
+                if (card is MinionDataPhoton)
+                {
+                    MinionDataPhoton mdp = (MinionDataPhoton)card;
+                    foreach (Transform t in GetActiveHand(true))
+                    {
+                        CardVisual cv = t.GetComponent<CardVisual>();
+
+                        if (cv.Md != null)
+                        {
+                            if (cv.Md.MinionID == mdp.MinionID)
+                            {
+                                DiscardCard(t.gameObject);
+                            }
+                        }
+                    }
+                }
+                else if (card is StarterDataPhoton)
+                {
+                    StarterDataPhoton sdp = (StarterDataPhoton)card;
+                    foreach (Transform t in GetActiveHand(true))
+                    {
+                        CardVisual cv = t.GetComponent<CardVisual>();
+
+                        if (cv.Sd != null)
+                        {
+                            if (cv.Sd.StarterID == sdp.StarterID)
+                            {
+                                DiscardCard(t.gameObject);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    EssentialsDataPhoton edp = (EssentialsDataPhoton)card;
+                    foreach (Transform t in GetActiveHand(true))
+                    {
+                        CardVisual cv = t.GetComponent<CardVisual>();
+
+                        if (cv.Ed != null)
+                        {
+                            if (cv.Ed.Id == edp.Id)
+                            {
+                                DiscardCard(t.gameObject);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public GameObject MoveCard(GameObject card, Transform to, List<Card> list = null, bool returnCard = false, bool simple = false)
@@ -246,12 +360,25 @@ public class GameManager : MonoBehaviour
             bottomHero.MyTurn = true;
         }
 
-        StartTurn();
+        SendEndTurn();
 
         if (StartGameController.Instance.tutorial && GetActiveHand(true) == enemyHand)
         {
             StartGameController.Instance.TutorialObject.GetComponent<TutorialTextController>().ShowUI();
         }
+    }
+
+    public void SendEndTurn()
+    {
+        ActiveHero(false).ResetMana();
+        ActiveHero(false).AttackButton.parent.gameObject.SetActive(false);
+        UIManager.Instance.HighlightHeroPortraitAndName();
+        //UIManager.Instance.ShowHideAttackButton();
+        UIManager.Instance.GlowCards();
+        endButton.interactable = false;
+
+        PhotonNetwork.RaiseEvent(END_TURN, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
     }
 
     public void StartTurn()
@@ -282,8 +409,19 @@ public class GameManager : MonoBehaviour
         buyFirstCard = false;
         firstChangeShop = false;
         DisableExpressBuy();
+        endButton.interactable = true;
+        enemyDiscardPileButton.interactable = false;
 
-        GameManager.Instance.ActiveHero(true).AttackButton.gameObject.SetActive(true);
+        if (!firstTimeStartUp)
+        {
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                ActiveHero(true).AttackButton.parent.gameObject.SetActive(false);
+                endButton.interactable = false;
+            }
+
+            firstTimeStartUp = true;
+        }
 
         //TODO: Handle opponent discard logic here
         if (ActiveHero(true).HasToDiscard > 0)
@@ -413,7 +551,6 @@ public class GameManager : MonoBehaviour
         selectedDiscards = new List<GameObject>();
         hasSwitchedCard = false;
 
-        GameManager.Instance.ActiveHero(true).ResetMana();
         EnableOrDisablePlayerControl(false);
 
         foreach (Transform t in activeHand)
@@ -430,6 +567,10 @@ public class GameManager : MonoBehaviour
         else if (UIManager.Instance.GetActiveHandList(true).Count < handSize)
         {
             drawNum = handSize - UIManager.Instance.GetActiveHandList(true).Count;
+            object[] data = new object[] { drawNum };
+
+            PhotonNetwork.RaiseEvent(DRAW_CARDS, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
 
             for (int i = 0; i < drawNum; i++)
             {
@@ -455,6 +596,10 @@ public class GameManager : MonoBehaviour
     {
         submitDiscardsButton.gameObject.SetActive(true);
         ActiveHero(true).AdjustGold(1, false);
+
+        PhotonNetwork.RaiseEvent(PAY_TO_DISCARD, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
+
         DrawCard(UIManager.Instance.GetActiveDeckList(true), GetActiveHand(true));
         EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
         instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
@@ -469,6 +614,31 @@ public class GameManager : MonoBehaviour
 
         if (selectedDiscards.Count == discardNum)
         {
+            List<CardPhoton> cardsToDiscard = new List<CardPhoton>();
+
+            foreach (GameObject t in selectedDiscards)
+            {
+                CardVisual cv = t.GetComponent<CardVisual>();
+                if (cv.Md != null)
+                {
+                    cardsToDiscard.Add(new MinionDataPhoton(cv.Md));
+                }
+                else if (cv.Sd != null)
+                {
+                    cardsToDiscard.Add(new StarterDataPhoton(cv.Sd));
+                }
+                else
+                {
+                    cardsToDiscard.Add(new EssentialsDataPhoton(cv.Ed));
+                }
+            }
+
+            byte[] cardByte = DataHandler.Instance.ObjectToByteArray(cardsToDiscard);
+            object[] data = new object[] { cardByte };
+
+            PhotonNetwork.RaiseEvent(DISCARD_CARDS, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
+
             foreach (GameObject t in selectedDiscards)
             {
                 DiscardCard(t);

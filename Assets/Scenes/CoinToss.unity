@@ -3433,7 +3433,6 @@ GameObject:
   - component: {fileID: 2116526987832660909}
   - component: {fileID: 2116526987832660910}
   - component: {fileID: 2116526987832660907}
-  - component: {fileID: 2116526987832660897}
   m_Layer: 5
   m_Name: Coin
   m_TagString: Untagged
@@ -3441,21 +3440,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2116526987832660897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116526987832660896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d979abce759c7e48809e0090d9a50ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StartGameController: {fileID: 1739394062}
-  heads: {fileID: 2116526988158394203}
-  tails: {fileID: 2116526986432020478}
 --- !u!95 &2116526987832660907
 Animator:
   serializedVersion: 3

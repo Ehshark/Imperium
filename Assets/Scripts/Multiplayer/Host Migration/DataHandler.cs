@@ -12,10 +12,6 @@ public class DataHandler : MonoBehaviour
 {
     public static DataHandler Instance { get; private set; } = null;
 
-    private const byte PLAYER_REJOIN_EVENT = 0;
-    private const byte HOST_LEFT_EVENT = 1;
-    private const byte CLIENT_LEFT_EVENT = 2;
-
     private RaiseEventOptions raiseEventOptions;
 
     private void Awake()
@@ -46,32 +42,7 @@ public class DataHandler : MonoBehaviour
 
     private void OnEvent(EventData photonData)
     {
-        byte code = photonData.Code;
-
-        if (code == HOST_LEFT_EVENT)
-        {
-            object[] data = (object[])photonData.CustomData;
-            Manager Client = (Manager)ByteArrayToObject((byte[])data[0]);
-            //MinionDataPhoton[] minions = (MinionDataPhoton[])ByteArrayToObject((byte[])data[1]);
-
-            MigrationManager.Instance.Host = MigrationManager.Instance.Client;
-            MigrationManager.Instance.Client = Client;
-        }
-        else if (code == PLAYER_REJOIN_EVENT)
-        {
-            object[] data = (object[])photonData.CustomData;
-            Manager Client = (Manager)ByteArrayToObject((byte[])data[0]);
-
-            MigrationManager.Instance.Client = Client;
-            MigrationManager.Instance.buttonText.text = Client.val.ToString();
-        }
-        else if (code == CLIENT_LEFT_EVENT)
-        {
-            object[] data = (object[])photonData.CustomData;
-            Manager Client = (Manager)ByteArrayToObject((byte[])data[0]);
-
-            MigrationManager.Instance.Client = Client;
-        }
+        
     }
 
     public void SendData(byte byteCode, object data)
