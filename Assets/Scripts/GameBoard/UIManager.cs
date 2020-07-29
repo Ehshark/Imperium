@@ -642,7 +642,7 @@ public class UIManager : MonoBehaviour
         else
         {
             GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(true);
-            GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(false);
+            GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(true);
         }
     }
 

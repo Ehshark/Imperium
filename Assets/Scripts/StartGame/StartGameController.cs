@@ -168,6 +168,15 @@ public class StartGameController : MonoBehaviour
             }
 
             startingPowerSelected = true;
+             GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
+        }
+        else if (eventCode == 16)
+        {
+            GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Opponent Leveled Up! Power Selection is Progress...";
+
+            Hero hero = GameManager.Instance.ActiveHero(true);
+            hero.IncreaseLevel(1);
+            hero.IncreaseExp(6);
         }
     }
 
@@ -272,6 +281,37 @@ public class StartGameController : MonoBehaviour
         }
 
         GameManager.Instance.StartTurn();
+
+        if (EventManager.Instance.HostFirst)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(true);
+                GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(false);
+                GameManager.Instance.endButton.interactable = true;
+            }
+            else
+            {
+                GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(false);
+                GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(false);
+                GameManager.Instance.endButton.interactable = false;
+            }
+        }
+        else
+        {
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(true);
+                GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(false);
+                GameManager.Instance.endButton.interactable = true;
+            }
+            else
+            {
+                GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(false);
+                GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(false);
+                GameManager.Instance.endButton.interactable = false;
+            }
+        }
     }
 
     private IEnumerator ShortGameSetup()

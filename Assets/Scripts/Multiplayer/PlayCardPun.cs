@@ -256,7 +256,7 @@ public class PlayCardPun : MonoBehaviour
         if (starter.EffectId1 == 18)
         {
             hero.AdjustGold(2, true);
-            hero.GainExp(1);
+            hero.EnemyGainExp(1);
             hero.AdjustMana(1, false);
         }
         else if (starter.EffectId1 == 20)

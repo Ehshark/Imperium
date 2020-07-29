@@ -1,3 +1,6 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -140,6 +143,8 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public int DamageBonus { get => damageBonus; set => damageBonus = value; }
     public Transform Abilities { get => abilities; set => abilities = value; }
 
+    const byte LEVEL_UP = 16;
+
     private void Start()
     {
         dmgAbsorbed = new Damage();
@@ -259,6 +264,36 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             }
 
             EventManager.Instance.PostNotification(EVENT_TYPE.LEVEL_UP);
+            PhotonNetwork.RaiseEvent(LEVEL_UP, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
+
+            //Increase experience if there is experience to increase afterwards
+            if (expToIncreaseAfter > 0 && level != HeroManager.Instance.MaxLevel)
+            {
+                experience += expToIncreaseAfter;
+            }
+        }
+
+        SetExp();
+    }
+
+    public void EnemyGainExp(int amount)
+    {
+        int total = amount + experience;
+
+        if (total < RequredExp)
+        {
+            experience += amount;
+        }
+        else
+        {
+            //Get the total amount of experience to increase after level up
+            int expToIncreaseAfter = total - RequredExp;
+
+            if (level != HeroManager.Instance.MaxLevel)
+            {
+                experience += amount;
+            }
 
             //Increase experience if there is experience to increase afterwards
             if (expToIncreaseAfter > 0 && level != HeroManager.Instance.MaxLevel)

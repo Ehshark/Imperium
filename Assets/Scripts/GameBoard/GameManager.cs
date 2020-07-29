@@ -371,11 +371,18 @@ public class GameManager : MonoBehaviour
     public void SendEndTurn()
     {
         ActiveHero(false).ResetMana();
-        ActiveHero(false).AttackButton.parent.gameObject.SetActive(false);
+        bottomHero.AttackButton.parent.gameObject.SetActive(false);
+        bottomHero.AttackButton.gameObject.SetActive(false);
         UIManager.Instance.HighlightHeroPortraitAndName();
-        //UIManager.Instance.ShowHideAttackButton();
         UIManager.Instance.GlowCards();
         endButton.interactable = false;
+
+        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
+        {
+            CardVisual cv = t.GetComponent<CardVisual>();
+            cv.IsTapped = false;
+            cv.ChangeTappedAppearance();
+        }
 
         PhotonNetwork.RaiseEvent(END_TURN, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
             SendOptions.SendReliable);
@@ -402,26 +409,16 @@ public class GameManager : MonoBehaviour
         }
 
         UIManager.Instance.HighlightHeroPortraitAndName();
-        UIManager.Instance.ShowHideAttackButton();
         UIManager.Instance.GlowCards();
         UIManager.Instance.AttachPlayCard();
         EnableOrDisablePlayerControl(true);
+        bottomHero.AttackButton.parent.gameObject.SetActive(true);
+        bottomHero.AttackButton.gameObject.SetActive(true);
         buyFirstCard = false;
         firstChangeShop = false;
         DisableExpressBuy();
         endButton.interactable = true;
         enemyDiscardPileButton.interactable = false;
-
-        if (!firstTimeStartUp)
-        {
-            if (!PhotonNetwork.IsMasterClient)
-            {
-                ActiveHero(true).AttackButton.parent.gameObject.SetActive(false);
-                endButton.interactable = false;
-            }
-
-            firstTimeStartUp = true;
-        }
 
         //TODO: Handle opponent discard logic here
         if (ActiveHero(true).HasToDiscard > 0)

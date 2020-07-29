@@ -237,7 +237,8 @@ public class DefendListener : MonoBehaviour, IListener
                 {
                     EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_STEALTH);
                 }
-                heroDamageAmount++;
+
+                heroDamageAmount += entry.Value;
             }
         }
 
