@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class DefendListener : MonoBehaviour, IListener
 {
+    private const byte ASSIGN_DEFENDING_DAMAGE = 18;
+
     private string damageSelected;
     public string DamageSelected { get => damageSelected; }
 
@@ -60,9 +62,9 @@ public class DefendListener : MonoBehaviour, IListener
         }
     }
 
-    private void ChangeUiForDefense(bool isDefending)
+    public void ChangeUiForDefense(bool isDefending)
     {
-        GameManager.Instance.ActiveHero(true).AttackButton.parent.gameObject.SetActive(!isDefending);
+        //GameManager.Instance.ActiveHero(true).AttackButton.parent.gameObject.SetActive(!isDefending);
         GameManager.Instance.ActiveHero(false).AttackButton.gameObject.SetActive(!isDefending);
         if (isDefending)
         {
@@ -175,11 +177,15 @@ public class DefendListener : MonoBehaviour, IListener
 
     private void AssignDamageToDefenders()
     {
+        List<DamagePhoton> damageToSend = new List<DamagePhoton>();
+        int index = 0;
+
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
             if (t.gameObject.activeSelf)
             {
                 CardVisual cv = t.GetComponent<CardVisual>();
+                int damage = 0;
                 foreach (KeyValuePair<string, int> entry in cv.DmgAbsorbed.DamageAbsorbed)
                 {
                     if (entry.Value != 0)
@@ -197,6 +203,8 @@ public class DefendListener : MonoBehaviour, IListener
 
                             cv.AdjustHealth(entry.Value, false);
                         }
+
+                        damage += entry.Value;
                     }
                 }
                 if (t.GetComponent<CardVisual>().CurrentHealth > 0)
@@ -204,9 +212,13 @@ public class DefendListener : MonoBehaviour, IListener
                     t.GetComponent<CardVisual>().DmgAbsorbed.ResetDamageAbsorbed();
                     t.GetComponent<CardVisual>().ResetDamageObjectsUI();
                 }
+
+                damageToSend.Add(new DamagePhoton(index, damage));
+                index++;
             }
         }
 
+        int heroDamageAmount = 0;
         foreach (KeyValuePair<string, int> entry in GameManager.Instance.ActiveHero(false).GetComponent<Hero>().DmgAbsorbed.DamageAbsorbed)
         {
             if (entry.Value != 0)
@@ -225,16 +237,29 @@ public class DefendListener : MonoBehaviour, IListener
                 {
                     EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_STEALTH);
                 }
+                heroDamageAmount++;
             }
         }
 
         GameManager.Instance.ActiveHero(false).DmgAbsorbed.ResetDamageAbsorbed();
         GameManager.Instance.ActiveHero(false).ResetDamageObjectsUI();
+
+        //Send the data to Attacker
+        byte[] damageByte = DataHandler.Instance.ObjectToByteArray(damageToSend);
+        object[] data = new object[] { damageByte, heroDamageAmount };
+        StartCombatPun.Instance.SendData(ASSIGN_DEFENDING_DAMAGE, data);
+
         // TODO: End the game if the hero's health is 0.
     }
 
-    private void ResetDamageUI()
+    public void ResetDamageUI()
     {
+        damageSelected = "";
+        foreach (Transform t in GameManager.Instance.StartCombatDamageUI)
+        {
+            t.gameObject.GetComponentInChildren<Button>().interactable = true;
+        }
+
         GameManager.Instance.alliedDamageCounter.text = "0";
         GameManager.Instance.alliedLifestealDamageCounter.text = "0";
         GameManager.Instance.alliedPoisonTouchDamageCounter.text = "0";

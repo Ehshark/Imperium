@@ -5,9 +5,14 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Linq;
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class StartCombat : MonoBehaviour
 {
+    private const byte START_COMBAT = 17;
+
     public Dictionary<string, int> totalDamage = new Dictionary<string, int>
     {
         { "stealth", 0 },
@@ -38,6 +43,7 @@ public class StartCombat : MonoBehaviour
         }
 
         GameManager.Instance.shopButton.interactable = false;
+        GameManager.Instance.endButton.interactable = false;
 
         AssignAllyDamageBonus(true);
     }
@@ -61,7 +67,7 @@ public class StartCombat : MonoBehaviour
                 }
                 else
                 {
-                    GameManager.Instance.ChangeCardColour(t.gameObject, Color.gray);
+                    GameManager.Instance.ChangeCardColour(t.gameObject, cv.cardBackground.color);
                 }
             }
         }
@@ -107,6 +113,7 @@ public class StartCombat : MonoBehaviour
             GameManager.Instance.MinionsAttacking = new List<GameObject>();
 
             GameManager.Instance.shopButton.interactable = true;
+            GameManager.Instance.endButton.interactable = true;
         }
 
         AssignAllyDamageBonus(false);
@@ -159,13 +166,36 @@ public class StartCombat : MonoBehaviour
             totalDamage["poisonTouch"] = Int32.Parse(GameManager.Instance.alliedPoisonTouchDamageCounter.text);
             totalDamage["damage"] = Int32.Parse(GameManager.Instance.alliedDamageCounter.text);
 
-            EventManager.Instance.PostNotification(EVENT_TYPE.DEFEND_AGAINST);
+            GameManager.Instance.IsDefending = true;
             CancelCombat();
+
+            GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Waiting for Opponent...";
+            GameManager.Instance.StartCombatDamageUI.gameObject.SetActive(false);
+            GameManager.Instance.ActiveHero(true).SubmitButton.gameObject.SetActive(false);
+            GameManager.Instance.ActiveHero(true).CancelButton.gameObject.SetActive(false);
+
+            List<CardPhoton> cards = new List<CardPhoton>();
             foreach (GameObject g in GameManager.Instance.MinionsAttacking)
             {
                 cv = g.GetComponent<CardVisual>();
                 cv.ChangeTappedAppearance();
+                cv.particleGlow.gameObject.SetActive(false);
+
+                if (cv.Md != null)
+                {
+                    cards.Add(new MinionDataPhoton(cv.Md));
+                }
+                else
+                {
+                    cards.Add(new StarterDataPhoton(cv.Sd));
+                }
             }
+
+            int[] totalDamageToSend = new int[] { totalDamage["stealth"], totalDamage["lifesteal"], totalDamage["poisonTouch"], totalDamage["damage"] };
+            byte[] cardByte = DataHandler.Instance.ObjectToByteArray(cards);
+            object[] data = new object[] { totalDamageToSend, cardByte };
+
+            StartCombatPun.Instance.SendData(START_COMBAT, data);
         }
         else
         {
@@ -175,13 +205,14 @@ public class StartCombat : MonoBehaviour
     }
     public void AssignDamageToAttackers()
     {
-        foreach (GameObject card in GameManager.Instance.MinionsAttacking)
+        foreach (Transform card in GameManager.Instance.GetActiveMinionZone(true))
         {
             CardVisual cv = card.GetComponent<CardVisual>();
-            cv.AdjustHealth(1, false);
+            if (cv.IsTapped)
+            {
+                cv.AdjustHealth(1, false);
+            }
         }
-
-        GameManager.Instance.MinionsAttacking.Clear();
     }
 
     private void AssignAllyDamageBonus(bool increase)
