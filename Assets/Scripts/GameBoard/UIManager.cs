@@ -35,7 +35,7 @@ public class UIManager : MonoBehaviour
 
     private List<StarterData> starters;
     private List<EssentialsData> essentials;
-    private List<MinionData> minions;
+    public List<MinionData> minions;
 
     public List<Card> allyDeck; //decklist to test adding starters
     public List<Card> enemyDeck;

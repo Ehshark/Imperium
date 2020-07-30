@@ -14,8 +14,8 @@ public class PopulateCardCollection : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-         LoadCards();
-        FillCards();
+        LoadWarriorCards();
+       // FillCards();
         // PopulateCards();
     }
 
@@ -54,14 +54,10 @@ public class PopulateCardCollection : MonoBehaviour
     {
         GameObject g = Instantiate(UIManager.Instance.minionPrefab);
         // if(filteredCard.GetComponent<CardVisual>().Md.CardClass == "Warrior"){
-        //change to forloop 
-        foreach (MinionData w in UIManager.Instance.warriorMinions)
+        foreach (MinionData w in UIManager.Instance.minions)
         {
-            //g.GetComponent<CardVisual>().Md = UIManager.Instance.warriorMinions[0];
-            //Debug.Log(g);
-            Debug.Log(w);
 
-            //GameManager.Instance.SpawnCard();
+            GameManager.Instance.SpawnCard(content.transform, w);
 
         }
     }

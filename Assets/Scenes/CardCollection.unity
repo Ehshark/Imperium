@@ -2156,7 +2156,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33a68258f87868448b56e6050e82abf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  longBoardSetup: 0
   instructionsObj: {fileID: 0}
   canvas: {fileID: 0}
   skillTree: {fileID: 0}
@@ -2169,12 +2168,7 @@ MonoBehaviour:
   alliedPoisonTouchDamageCounter: {fileID: 0}
   allyDeckCounter: {fileID: 0}
   enemyDeckCounter: {fileID: 0}
-  allyDeckVisual: {fileID: 0}
-  enemyDeckVisual: {fileID: 0}
-  allyDeckCover: {fileID: 0}
-  enemyDeckCover: {fileID: 0}
-  allyMulliganButton: {fileID: 0}
-  enemyMulliganButton: {fileID: 0}
+  mulliganButtons: {fileID: 0}
   alliedMinionZone: {fileID: 0}
   alliedHand: {fileID: 0}
   alliedDeck: {fileID: 0}
@@ -2200,6 +2194,7 @@ MonoBehaviour:
   menu: {fileID: 0}
   pMenu: {fileID: 0}
   trashUI: {fileID: 0}
+  EffectIconQueue: {fileID: 0}
   bottomHero: {fileID: 0}
   topHero: {fileID: 0}
   buyButton: {fileID: 0}
@@ -2231,6 +2226,7 @@ MonoBehaviour:
   warriorMinions: []
   rogueMinions: []
   mageMinions: []
+  minions: []
   allyDeck: []
   enemyDeck: []
   allyHand: []
@@ -2328,7 +2324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab: {fileID: 5361649606923715719, guid: eefefb9f2c5af18409cebc6556cf53cc, type: 3}
-  content: {fileID: 0}
+  content: {fileID: 1892386717}
   NumberToCreate: 0
 --- !u!114 &1892386721
 MonoBehaviour:
