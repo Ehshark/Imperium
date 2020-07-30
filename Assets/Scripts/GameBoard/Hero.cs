@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Hero : MonoBehaviour
+public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private int currentHealth;
     private int totalHealth;
@@ -29,6 +30,8 @@ public class Hero : MonoBehaviour
     private bool isAttacking;
     private bool startedCombat;
 
+    private Transform cardComponent;
+
     //Components
     [SerializeField]
     private Transform attackButton;
@@ -42,6 +45,8 @@ public class Hero : MonoBehaviour
     private Transform damageObjects;
     [SerializeField]
     private Transform abilities;
+    [SerializeField]
+    private Transform textBack;
 
     [SerializeField]
     private TMP_Text healthText;
@@ -65,11 +70,11 @@ public class Hero : MonoBehaviour
     private Image heroImage;
     [SerializeField]
     private Image heroClan;
+
     [SerializeField]
     private TMP_Text damageText;
     [SerializeField]
     private TMP_Text discardText;
-
     [SerializeField]
     private TMP_Text regDmgAbs;
     [SerializeField]
@@ -78,6 +83,8 @@ public class Hero : MonoBehaviour
     private TMP_Text stealthDmgAbs;
     [SerializeField]
     private TMP_Text lifestealDmgAbs;
+    [SerializeField]
+    private TMP_Text desc;
 
     [SerializeField]
     private Button increaseDmgAbsorbed;
@@ -501,6 +508,42 @@ public class Hero : MonoBehaviour
                     t2.GetComponent<TMP_Text>().text = "0";
                 }
             }
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (textBack != null && desc != null)
+        {
+            cardComponent = eventData.pointerCurrentRaycast.gameObject.transform;
+            if (cardComponent.name.Contains("Exp"))
+                desc.text = "Gain experience to level up and unlock powers";
+            else if (cardComponent.name.Contains("Health"))
+                desc.text = "If your health reaches 0, you lose";
+            else if (cardComponent.name.Contains("Mana"))
+                desc.text = "Mana is required to play cards";
+            else if (cardComponent.name.Contains("Mana"))
+                desc.text = "Mana is required to play cards";
+            else if (cardComponent.name.Contains("Level") || cardComponent.name.Equals("BorderBack"))
+                desc.text = "Your hero's level and unlocked powers";
+            else if (cardComponent.name.Contains("Gold"))
+                desc.text = "Your hero's gold";
+            else if (cardComponent.name.Contains("Discard"))
+                desc.text = "Discard these many cards at the start of your next turn";
+            else if (cardComponent.name.Contains("Damage"))
+                desc.text = "Your hero's damage in combat";
+
+            if (!desc.text.Equals(""))
+                textBack.gameObject.SetActive(true);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (textBack != null && desc != null)
+        {
+            textBack.gameObject.SetActive(false);
+            desc.text = "";
         }
     }
 }

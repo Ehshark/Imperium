@@ -5192,6 +5192,7 @@ MonoBehaviour:
   defendButton: {fileID: 3771721541825939520}
   damageObjects: {fileID: 8167364546857323914}
   abilities: {fileID: 7585996841300467737}
+  textBack: {fileID: 0}
   healthText: {fileID: 8124066200353885645}
   healthBar: {fileID: 4432892574771221335}
   expText: {fileID: 241996328680027349}
@@ -5209,6 +5210,7 @@ MonoBehaviour:
   poisonDmgAbs: {fileID: 4378505053020784809}
   stealthDmgAbs: {fileID: 3361701450903739524}
   lifestealDmgAbs: {fileID: 6694600841857249439}
+  desc: {fileID: 0}
   increaseDmgAbsorbed: {fileID: 5410059263730985734}
   decreaseDmgAbsorbed: {fileID: 3024405523049689538}
   ability1: {fileID: 2114492051688211621}
