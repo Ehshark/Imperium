@@ -40,6 +40,8 @@ public class Hero : MonoBehaviour
     private Transform defendButton;
     [SerializeField]
     private Transform damageObjects;
+    [SerializeField]
+    private Transform abilities;
 
     [SerializeField]
     private TMP_Text healthText;
@@ -129,6 +131,7 @@ public class Hero : MonoBehaviour
     public Image Ability3 { get => ability3; set => ability3 = value; }
     public Image HeroImage { get => heroImage; set => heroImage = value; }
     public int DamageBonus { get => damageBonus; set => damageBonus = value; }
+    public Transform Abilities { get => abilities; set => abilities = value; }
 
     private void Start()
     {

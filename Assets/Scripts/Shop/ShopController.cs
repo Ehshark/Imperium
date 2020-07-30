@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
 public class ShopController : MonoBehaviour
 {
@@ -24,16 +27,21 @@ public class ShopController : MonoBehaviour
     //Current Effect Card
     private GameObject card;
     public GameObject Card { get => card; set => card = value; }
+    public GameObject BigShopCard { get => bigShopCard; set => bigShopCard = value; }
 
     public Transform warriorDeck;
     public Transform rogueDeck;
     public Transform mageDeck;
     public Transform goldPileIcon;
 
-    public void OnEnable()
+    //Multiplayer
+    const byte BUY_CARD_SYNC_EVENT = 21;
+    const byte CHANGE_SHOP_SYNC_EVENT = 22;
+
+    private void OnEnable()
     {
         //Update Hero's Current Gold in Shop
-        Hero active = GameManager.Instance.ActiveHero(true);
+        Hero active = GameManager.Instance.bottomHero;
         herosGold.text = active.Gold.ToString();
     }
 
@@ -41,6 +49,13 @@ public class ShopController : MonoBehaviour
     {
         exitGlow.gameObject.SetActive(false);
         gameObject.SetActive(false);
+        goldPileIcon.GetComponent<Image>().color = Color.white;
+
+        if (bigShopCard != null)
+        {
+            Destroy(bigShopCard.gameObject);
+            bigShopCard = null;
+        }
 
         if (StartGameController.Instance.tutorial)
         {
@@ -107,11 +122,16 @@ public class ShopController : MonoBehaviour
 
             if (active.Gold >= costForCard)
             {
+                goldPileIcon.GetComponent<Image>().color = Color.white;
                 GameManager.Instance.buyButton.interactable = false;
                 DelayCommand dc = new DelayCommand(goldPileIcon, 1f);
                 dc.AddToQueue();
                 //Get the Purchased Minion
                 CardVisual minion = selectedCard.GetComponent<CardVisual>();
+
+                object[] data = new object[] { minion.Md.CardClass, minion.Md.MinionID };
+                PhotonNetwork.RaiseEvent(BUY_CARD_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                        SendOptions.SendReliable);
 
                 if (selectedCard.GetComponent<CardVisual>().Md != null)
                 {
@@ -177,7 +197,7 @@ public class ShopController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Cannot Buy");
+                goldPileIcon.GetComponent<Image>().color = Color.red;
             }
         }
     }
@@ -197,11 +217,14 @@ public class ShopController : MonoBehaviour
 
             if (active.Gold >= costToChangeCard)
             {
-                Debug.Log(selectedCard.GetComponent<CardVisual>().Md.CardClass);
-
                 //Compare if there is Card's to change the shop
                 if (UIManager.Instance.CanChangeShopCard(selectedCard.GetComponent<CardVisual>().Md.CardClass))
                 {
+                    goldPileIcon.GetComponent<Image>().color = Color.white;
+                    object[] data = new object[] { selectedCard.GetComponent<CardVisual>().Md.CardClass, selectedCard.GetComponent<CardVisual>().Md.MinionID };
+                    PhotonNetwork.RaiseEvent(CHANGE_SHOP_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                            SendOptions.SendReliable);
+
                     //Delay on Gold Coin
                     DelayCommand dc = new DelayCommand(goldPileIcon, 1f);
                     dc.AddToQueue();
@@ -249,7 +272,7 @@ public class ShopController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Cannot Change Card");
+                goldPileIcon.GetComponent<Image>().color = Color.red;
             }
         }
     }
@@ -281,7 +304,7 @@ public class ShopController : MonoBehaviour
         bigShopCard = null;
     }
 
-    private void SpawnShopMinion(string cardType, bool change, MinionData minionData = null)
+    public void SpawnShopMinion(string cardType, bool change, MinionData minionData = null)
     {
         GameObject tmp;
 

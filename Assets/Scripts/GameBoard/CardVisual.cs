@@ -208,7 +208,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            if (ed.EffectId1 == 18) 
+            if (ed.EffectId1 == 18)
                 cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/chest");
             else if (ed.EffectId1 == 20)
                 cardBackground.sprite = Resources.Load<Sprite>("VisualAssets/CardArt/healthPotion");
@@ -335,6 +335,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
             UIManager.Instance.LastSelectedCard = gameObject;
         }
+
         else if (eventData.button == PointerEventData.InputButton.Left &&
             GameManager.Instance.ActiveHero(true).CanPlayCards && (gameObject.GetComponent<TutorialPlayCard>() != null))
         {
@@ -343,6 +344,17 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
                 tpc.ShowSummonPanel();
 
             UIManager.Instance.LastSelectedCard = gameObject;
+        }
+
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            if (UIManager.Instance.enlargedCard.childCount > 0)
+            {
+                foreach (Transform t in UIManager.Instance.enlargedCard)
+                {
+                    Destroy(t.gameObject);
+                }
+            }
         }
     }
 

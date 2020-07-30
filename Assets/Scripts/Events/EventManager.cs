@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -106,18 +108,87 @@ public class EventManager : MonoBehaviour
     {
         //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
         SceneManager.sceneLoaded += OnLevelFinishedLoading;
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
     }
 
     void OnDisable()
     {
         //Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled. Remember to always have an unsubscription for every delegate you subscribe to!
         SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
 
     //Called on scene change. Clean up dictionary
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         RemoveRedundancies();
+    }
+    //Multiplayer: Sync changes to shop
+    private void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        if (eventCode == 21) //sync buy card
+        {
+            Transform shopPile;
+            object[] data = (object[])photonEvent.CustomData;
+            string cardType = (string)data[0];
+            int id = (int)data[1];
+
+            if (cardType.Equals("Warrior"))
+                shopPile = GameManager.Instance.warriorShopPile;
+            else if (cardType.Equals("Rogue"))
+                shopPile = GameManager.Instance.rogueShopPile;
+            else
+                shopPile = GameManager.Instance.mageShopPile;
+
+            foreach (Transform child in shopPile)
+            {
+                CardVisual cv = child.GetComponent<CardVisual>();
+                if (cv != null && cv.Md.MinionID == id)
+                {
+                    GameManager.Instance.topHero.AdjustGold(cv.Md.GoldAndManaCost, false);
+                    GameManager.Instance.shop.GetComponent<ShopController>().SpawnShopMinion(cardType, false);
+                    GameManager.Instance.MoveCard(child.gameObject, GameManager.Instance.enemyDiscardPile, UIManager.Instance.enemyDiscards);
+                }
+            }
+
+            if (GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard != null)
+            {
+                Destroy(GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard.gameObject);
+                GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard = null;
+            }
+        }
+        else if (eventCode == 22) //sync change shop
+        {
+            Transform shopPile;
+            object[] data = (object[])photonEvent.CustomData;
+            string cardType = (string)data[0];
+            int id = (int)data[1];
+
+            if (cardType.Equals("Warrior"))
+                shopPile = GameManager.Instance.warriorShopPile;
+            else if (cardType.Equals("Rogue"))
+                shopPile = GameManager.Instance.rogueShopPile;
+            else
+                shopPile = GameManager.Instance.mageShopPile;
+
+            foreach (Transform child in shopPile)
+            {
+                CardVisual cv = child.GetComponent<CardVisual>();
+                if (cv != null && cv.Md.MinionID == id)
+                {
+                    GameManager.Instance.topHero.AdjustGold(int.Parse(cv.cost.text) / 2, false);
+                    GameManager.Instance.shop.GetComponent<ShopController>().SpawnShopMinion(cardType, true, cv.Md);
+                    Destroy(child.gameObject);
+                }
+            }
+
+            if (GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard != null)
+            {
+                Destroy(GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard.gameObject);
+                GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard = null;
+            }
+        }
     }
 
 }

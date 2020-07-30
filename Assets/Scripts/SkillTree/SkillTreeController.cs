@@ -37,7 +37,7 @@ public class SkillTreeController : MonoBehaviour
     public int SelectedPower { get => selectedPower; set => selectedPower = value; }
 
     //Multiplayer
-    const byte POWER_SELECTED_EVENT = 8;
+    const byte POWER_SELECTED_EVENT = 20;
 
     // Start is called before the first frame update
     void Start()
@@ -129,32 +129,32 @@ public class SkillTreeController : MonoBehaviour
         if (selectedPower != 0)
         {
             GameObject hero = GameManager.Instance.ActiveHero(true).gameObject;
-
-            hero.AddComponent<HeroPowerListener>();
+            Hero heroScript = hero.GetComponent<Hero>();
+            HeroPowerListener hpl = hero.AddComponent<HeroPowerListener>();
 
             foreach (KeyValuePair<int, string> entry in UIManager.Instance.minionEffects)
             {
                 if (selectedPower == entry.Key)
                 {
-                    hero.GetComponent<HeroPowerListener>().PowerEffect = PowerEffects.Where(x => x.Key == entry.Key).SingleOrDefault().Value;
-                    hero.GetComponent<HeroPowerListener>().enabled = true;
-                    hero.GetComponent<Hero>().PowerCount++;
-                    hero.GetComponent<Hero>().Powers.Add(entry.Key);
+                    hpl.PowerEffect = PowerEffects.Where(x => x.Key == entry.Key).SingleOrDefault().Value;
+                    hpl.enabled = true;
+                    heroScript.PowerCount++;
+                    heroScript.Powers.Add(entry.Key);
 
-                    if (hero.GetComponent<Hero>().PowerCount == 1)
+                    if (heroScript.PowerCount == 1)
                     {
-                        hero.GetComponent<Hero>().Ability1.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-                        hero.GetComponent<Hero>().Ability1.gameObject.SetActive(true);
+                        heroScript.Ability1.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+                        heroScript.Ability1.gameObject.SetActive(true);
                     }
-                    else if (hero.GetComponent<Hero>().PowerCount == 2)
+                    else if (heroScript.PowerCount == 2)
                     {
-                        hero.GetComponent<Hero>().Ability2.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-                        hero.GetComponent<Hero>().Ability2.gameObject.SetActive(true);
+                        heroScript.Ability2.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+                        heroScript.Ability2.gameObject.SetActive(true);
                     }
                     else if (hero.GetComponent<Hero>().PowerCount == 3)
                     {
-                        hero.GetComponent<Hero>().Ability3.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
-                        hero.GetComponent<Hero>().Ability3.gameObject.SetActive(true);
+                        heroScript.Ability3.sprite = UIManager.Instance.allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+                        heroScript.Ability3.gameObject.SetActive(true);
                     }
                 }
             }

@@ -112,7 +112,7 @@ public class StartGameController : MonoBehaviour
     private void OnEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;
-        if (eventCode == 5)
+        if (eventCode == 5) //start multiplayer match
         {
             StartCoroutine(MultiplayerSetup());
         }
@@ -139,7 +139,7 @@ public class StartGameController : MonoBehaviour
         {
             topMullReady = true;
         }
-        else if (eventCode == 8)
+        else if (eventCode == 20) //sync starting power selection
         {
             object[] data = (object[])photonEvent.CustomData;
             int powerCount = (int)data[0];
@@ -187,17 +187,26 @@ public class StartGameController : MonoBehaviour
             {
                 GameManager.Instance.bottomHero.MyTurn = false;
                 GameManager.Instance.topHero.MyTurn = true;
+                GameManager.Instance.buyButton.interactable = false;
+                GameManager.Instance.changeButton.interactable = false;
+                GameManager.Instance.endButton.interactable = false;
             }
 
             if (EventManager.Instance.HostChoice == 1)
+            {
                 GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
+                GameManager.Instance.bottomHero.Abilities.GetChild(2).gameObject.SetActive(true);
+            }
             else if (EventManager.Instance.HostChoice == 2)
                 GameManager.Instance.bottomHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
             else if (EventManager.Instance.HostChoice == 3)
                 GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
 
             if (EventManager.Instance.ClientChoice == 1)
+            {
                 GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
+                GameManager.Instance.topHero.Abilities.GetChild(2).gameObject.SetActive(true);
+            }
             else if (EventManager.Instance.ClientChoice == 2)
                 GameManager.Instance.topHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
             else if (EventManager.Instance.ClientChoice == 3)
@@ -212,6 +221,9 @@ public class StartGameController : MonoBehaviour
             {
                 GameManager.Instance.bottomHero.MyTurn = false;
                 GameManager.Instance.topHero.MyTurn = true;
+                GameManager.Instance.buyButton.interactable = false;
+                GameManager.Instance.changeButton.interactable = false;
+                GameManager.Instance.endButton.interactable = false;
             }
             else
             {
@@ -220,14 +232,20 @@ public class StartGameController : MonoBehaviour
             }
 
             if (EventManager.Instance.HostChoice == 1)
+            {
                 GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
+                GameManager.Instance.topHero.Abilities.GetChild(2).gameObject.SetActive(true);
+            }
             else if (EventManager.Instance.HostChoice == 2)
                 GameManager.Instance.topHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
             else if (EventManager.Instance.HostChoice == 3)
                 GameManager.Instance.topHero.SetHero(4, 4, 1, 6, 6, 'M', mageImage);
 
             if (EventManager.Instance.ClientChoice == 1)
+            {
                 GameManager.Instance.bottomHero.SetHero(4, 4, 1, 6, 5, 'W', warriorImage);
+                GameManager.Instance.bottomHero.Abilities.GetChild(2).gameObject.SetActive(true);
+            }
             else if (EventManager.Instance.ClientChoice == 2)
                 GameManager.Instance.bottomHero.SetHero(4, 4, 2, 6, 5, 'R', rogueImage);
             else if (EventManager.Instance.ClientChoice == 3)
