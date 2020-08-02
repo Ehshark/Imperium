@@ -5,33 +5,108 @@ using UnityEngine.UI;
 
 public class PopulateCardCollection : MonoBehaviour
 {
-    public GameObject Prefab;
     public GameObject content;
-    public int NumberToCreate = 15;
     private List<Card> deck = new List<Card>();
 
 
     // Start is called before the first frame update
     void Start()
     {
-        LoadWarriorCards();
+        LoadEssentialCards();
        // FillCards();
         // PopulateCards();
     }
 
-    public void FillCards()
+    public void LoadAllMinionCards()
     {
-        GameObject newObj;
-           
-        //tester function to fill 
-        for (int i = 0; i < 15; i++)
+        ClearCards();
+        GameObject g = Instantiate(UIManager.Instance.minionPrefab);
+        foreach (MinionData w in UIManager.Instance.minions)
         {
-            newObj = Instantiate(Prefab, transform);
-            newObj.GetComponent<Image>().color = Random.ColorHSV();
-            
+           
+                GameManager.Instance.SpawnCard(content.transform, w);
+
         }
-        
     }
+
+
+    public void LoadWarriorCards()
+    {
+        ClearCards();
+        GameObject g = Instantiate(UIManager.Instance.minionPrefab);
+        foreach (MinionData w in UIManager.Instance.minions)
+        {
+            if (w.CardClass == "Warrior")
+            {
+                GameManager.Instance.SpawnCard(content.transform, w);
+            }
+
+        }
+    }
+
+    public void LoadRogueCards()
+    {
+        ClearCards();
+        GameObject g = Instantiate(UIManager.Instance.minionPrefab);
+        foreach (MinionData w in UIManager.Instance.minions)
+        {
+            if (w.CardClass == "Rogue")
+            {
+                GameManager.Instance.SpawnCard(content.transform, w);
+            }
+
+        }
+    }
+
+
+    public void LoadMageCards()
+    {
+        ClearCards();
+        GameObject g = Instantiate(UIManager.Instance.minionPrefab);
+        foreach (MinionData w in UIManager.Instance.minions)
+        {
+            if (w.CardClass == "Mage")
+            {
+                GameManager.Instance.SpawnCard(content.transform, w);
+            }
+
+        }
+    }
+
+    public void LoadEssentialCards()
+    {
+        ClearCards();
+        foreach (EssentialsData w in UIManager.Instance.essentials)
+        {
+                GameManager.Instance.SpawnCard(content.transform, w);
+        }
+    }
+
+    public void LoadStarterCards()
+    {
+        ClearCards();
+        foreach (StarterData w in UIManager.Instance.starters)
+        {
+                GameManager.Instance.SpawnCard(content.transform, w);
+        }
+    }
+
+    public void ClearCards()
+    {
+        Debug.Log(content);
+        Debug.Log(content.transform);
+        
+        foreach (Transform cards in content.transform)
+        {
+            Destroy(cards.gameObject);
+        }
+        //foreach (Transform w in content)
+        //{
+        //    Destroy(w);
+        //}
+    }
+
+
 
 
     public void LoadCards()
@@ -48,38 +123,6 @@ public class PopulateCardCollection : MonoBehaviour
         LoadWarriorCards();
 
         //UIManager.Instance.SortPiles();
-
-    }
-    public void LoadWarriorCards()
-    {
-        GameObject g = Instantiate(UIManager.Instance.minionPrefab);
-        // if(filteredCard.GetComponent<CardVisual>().Md.CardClass == "Warrior"){
-        foreach (MinionData w in UIManager.Instance.minions)
-        {
-
-            GameManager.Instance.SpawnCard(content.transform, w);
-
-        }
-    }
-
-    public void LoadRogueCards()
-    {
-
-    }
-
-
-    public void LoadMageCards()
-    {
-
-    }
-
-    public void LoadStarterCards()
-    {
-
-    }
-
-    public void ClearCards()
-    {
 
     }
 }
