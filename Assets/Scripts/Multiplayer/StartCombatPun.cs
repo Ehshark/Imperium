@@ -42,6 +42,13 @@ public class StartCombatPun : MonoBehaviour
             object[] data = (object[])photonEvent.CustomData;
             int[] damages = (int[])data[0];
             List<CardPhoton> cards = (List<CardPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[1]);
+            bool heroAttacking = (bool)data[2];
+
+            if (heroAttacking)
+            {
+                GameManager.Instance.ActiveHero(true).AdjustMana(GameManager.Instance.ActiveHero(true).Damage, false);
+            }
+
             TapMinions(cards);
 
             GameManager.Instance.StartCombatDamageUI.gameObject.SetActive(true);
@@ -92,13 +99,13 @@ public class StartCombatPun : MonoBehaviour
 
     private void TapMinions(List<CardPhoton> cards)
     {
-        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
+        foreach (CardPhoton card in cards)
         {
-            CardVisual cv = t.GetComponent<CardVisual>();
-
-            if (cv.Md != null)
+            foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
             {
-                foreach (CardPhoton card in cards)
+                CardVisual cv = t.GetComponent<CardVisual>();
+
+                if (cv.Md != null && card is MinionDataPhoton)
                 {
                     MinionDataPhoton mdp = (MinionDataPhoton)card;
                     if (mdp.MinionID == cv.Md.MinionID)
@@ -107,10 +114,7 @@ public class StartCombatPun : MonoBehaviour
                         cv.ChangeTappedAppearance();
                     }
                 }
-            }
-            else
-            {
-                foreach (CardPhoton card in cards)
+                else if (cv.Sd != null && card is StarterDataPhoton)
                 {
                     StarterDataPhoton sdp = (StarterDataPhoton)card;
                     if (sdp.StarterID == cv.Sd.StarterID)

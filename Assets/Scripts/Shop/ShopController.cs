@@ -6,6 +6,7 @@ using TMPro;
 using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
+using System.Linq;
 
 public class ShopController : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class ShopController : MonoBehaviour
     //Multiplayer
     const byte BUY_CARD_SYNC_EVENT = 21;
     const byte CHANGE_SHOP_SYNC_EVENT = 22;
+    const byte BUY_ESSENTIAL_SYNC_EVENT = 23;
 
     private void OnEnable()
     {
@@ -127,41 +129,51 @@ public class ShopController : MonoBehaviour
                 DelayCommand dc = new DelayCommand(goldPileIcon, 1f);
                 dc.AddToQueue();
                 //Get the Purchased Minion
-                CardVisual minion = selectedCard.GetComponent<CardVisual>();
-
-                object[] data = new object[] { minion.Md.CardClass, minion.Md.MinionID };
-                PhotonNetwork.RaiseEvent(BUY_CARD_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-                        SendOptions.SendReliable);
+                CardVisual card = selectedCard.GetComponent<CardVisual>();
 
                 if (selectedCard.GetComponent<CardVisual>().Md != null)
                 {
                     //Spawn a new card from the correct deck
-                    SpawnShopMinion(minion.Md.CardClass, false);
+                    SpawnShopMinion(card.Md.CardClass, false);
 
+                    string to = "";
                     if (GameManager.Instance.HasExpressBuy)
                     {
                         MoveShopCardToHand(selectedCard);
+                        to = "Hand";
                     }
                     else
                     {
                         //Move Card to the Correct Discard Pile
                         MoveShopCardToDiscard(selectedCard);
+                        to = "Discard";
                     }
+
+                    object[] data = new object[] { card.Md.CardClass, card.Md.MinionID, to };
+                    PhotonNetwork.RaiseEvent(BUY_CARD_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                            SendOptions.SendReliable);
 
                     //Destroy minion card the big card objects
                     RemoveCard(true);
                 }
                 else if (selectedCard.GetComponent<CardVisual>().Ed != null)
                 {
+                    string to = "";
                     if (GameManager.Instance.HasExpressBuy)
                     {
                         MoveShopCardToHand(selectedCard);
+                        to = "Hand";
                     }
                     else
                     {
                         //Move Card to the Correct Discard Pile
                         MoveShopCardToDiscard(selectedCard);
+                        to = "Discard";
                     }
+
+                    object[] data = new object[] { card.Ed.Id, to };
+                    PhotonNetwork.RaiseEvent(BUY_ESSENTIAL_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                            SendOptions.SendReliable);
 
                     //Destroy only the big card object
                     RemoveCard(false);
@@ -358,11 +370,14 @@ public class ShopController : MonoBehaviour
 
     private void MoveShopCardToHand(GameObject card)
     {
+        CardVisual cv = card.GetComponent<CardVisual>();
+        cv.inShop = false;
+        cv.costImage.sprite = UIManager.Instance.allSprites.Where(x => x.name == "mana").SingleOrDefault();
+
         MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveHand(true), null);
         mc.AddToQueue();
         //GameObject shopCard = GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.GetActiveHand(true), null, true);
         //shopCard.AddComponent<PlayCard>();
-        card.GetComponent<CardVisual>().inShop = false;
         UIManager.Instance.GetActiveHandList(true).Add(card.GetComponent<CardVisual>().CardData);
         GameManager.Instance.DisableExpressBuy();
         //EventManager.Instance.PostNotification(EVENT_TYPE.POWER_EXPRESS_BUY);

@@ -102,6 +102,23 @@ public class PlayCardPun : MonoBehaviour
                     }
                 }
             }
+            else if (type == "Essential")
+            {
+                EssentialsDataPhoton edp = (EssentialsDataPhoton)DataHandler.Instance.ByteArrayToObject((byte[])data[0]);
+
+                foreach (Transform t in GameManager.Instance.GetActiveHand(true))
+                {
+                    CardVisual cv = t.GetComponent<CardVisual>();
+                    if (cv.Ed != null)
+                    {
+                        if (cv.Ed.Id == edp.Id)
+                        {
+                            StartCoroutine(PlayResource(t, cv.Ed));
+                            break;
+                        }
+                    }
+                }
+            }
         }
         else if (eventCode == REMOVE_MINION)
         {
@@ -232,10 +249,10 @@ public class PlayCardPun : MonoBehaviour
         card.Find("CardBack").gameObject.SetActive(false);
     }
 
-    private IEnumerator PlayResource(Transform card, StarterData starter)
+    private IEnumerator PlayResource(Transform card, Card cardData)
     {
         card.Find("CardBack").gameObject.SetActive(false);
-        AdjustHeroResources(starter);
+        AdjustHeroResources(cardData);
 
         DelayCommand dc = new DelayCommand(GameManager.Instance.GetActiveHand(true), 1f);
         dc.AddToQueue();
@@ -245,27 +262,64 @@ public class PlayCardPun : MonoBehaviour
         MoveCardCommand mc = new MoveCardCommand(card.gameObject, GameManager.Instance.GetActiveDiscardPile(true));
         mc.AddToQueue();
 
-        RemoveCardFromHand(starter);
-        AddCardToDiscardPile(starter);
+        if (cardData is StarterData)
+        {
+            StarterData sd = (StarterData)cardData;
+            RemoveCardFromHand(sd);
+            AddCardToDiscardPile(sd);
+        }
+        else if (cardData is EssentialsData)
+        {
+            EssentialsData ed = (EssentialsData)cardData;
+            RemoveCardFromHand(ed);
+            AddCardToDiscardPile(ed);            
+        }
     }
 
-    private void AdjustHeroResources(StarterData starter)
+    private void AdjustHeroResources(Card card)
     {
         Hero hero = GameManager.Instance.ActiveHero(true);
 
-        if (starter.EffectId1 == 18)
+        if (card is StarterData)
         {
-            hero.AdjustGold(2, true);
-            hero.EnemyGainExp(1);
-            hero.AdjustMana(1, false);
+            StarterData starter = (StarterData)card;
+            if (starter.EffectId1 == 18)
+            {
+                hero.AdjustGold(2, true);
+                hero.AdjustMana(1, false);
+                hero.EnemyGainExp(1);
+            }
+            else if (starter.EffectId1 == 20)
+            {
+                hero.AdjustHealth(1, true);
+            }
+            else if (starter.EffectId1 == 21)
+            {
+                hero.AdjustMana(1, true);
+            }
         }
-        else if (starter.EffectId1 == 20)
+        else if (card is EssentialsData)
         {
-            hero.AdjustHealth(1, true);
-        }
-        else if (starter.EffectId1 == 21)
-        {
-            hero.AdjustMana(1, true);
+            EssentialsData essentials = (EssentialsData)card;
+            if (essentials.EffectId1 == 18)
+            {
+                hero.AdjustGold(4, true);
+                hero.GainExp(2);
+                hero.AdjustMana(2, false);
+            }
+            else if (essentials.EffectId1 == 20)
+            {
+                hero.AdjustHealth(2, true);
+            }
+            else if (essentials.EffectId1 == 21)
+            {
+                hero.AdjustMana(2, true);
+            }
+            else if (essentials.EffectId1 == 14)
+            {
+                hero.AdjustDamage(1, true);
+                hero.AdjustMana(2, false);
+            }
         }
     }
 

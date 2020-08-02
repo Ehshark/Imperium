@@ -237,7 +237,7 @@ public class PlayCard : MonoBehaviourPunCallbacks
                 cardByte = DataHandler.Instance.ObjectToByteArray(mdp);
                 type = "Minion";
             }
-            else
+            else 
             {
                 sdp = new StarterDataPhoton(cv.Sd);
                 cardByte = DataHandler.Instance.ObjectToByteArray(sdp);

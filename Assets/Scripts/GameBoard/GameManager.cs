@@ -146,6 +146,13 @@ public class GameManager : MonoBehaviour
         {
             ActiveHero(true).ResetMana();
 
+            if (topHero.DamageBonus > 0)
+            {
+                topHero.Damage -= topHero.DamageBonus;
+                topHero.SetDamage();
+                topHero.DamageBonus = 0;
+            }
+
             if (bottomHero.MyTurn)
             {
                 bottomHero.MyTurn = false;
@@ -275,6 +282,14 @@ public class GameManager : MonoBehaviour
 
                 Destroy(card);
             }
+            
+            if (cv.Ed != null)
+            {
+                if (card.transform.parent != essentialsPile)
+                {
+                    Destroy(card);
+                }
+            }
 
             if (returnCard)
             {
@@ -386,6 +401,13 @@ public class GameManager : MonoBehaviour
             cv.ChangeTappedAppearance();
         }
 
+        if (bottomHero.DamageBonus > 0)
+        {
+            bottomHero.Damage -= bottomHero.DamageBonus;
+            bottomHero.SetDamage();
+            bottomHero.DamageBonus = 0;
+        }
+
         PhotonNetwork.RaiseEvent(END_TURN, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
             SendOptions.SendReliable);
     }
@@ -403,12 +425,6 @@ public class GameManager : MonoBehaviour
             ResetDamage(t);
             if (cv.Md)
                 cv.ActivateSilence(false);
-        }
-
-        if (ActiveHero(true).DamageBonus > 0)
-        {
-            ActiveHero(true).Damage -= ActiveHero(true).DamageBonus;
-            ActiveHero(true).DamageBonus = 0;
         }
 
         UIManager.Instance.HighlightHeroPortraitAndName();
@@ -706,6 +722,10 @@ public class GameManager : MonoBehaviour
             if (inShop)
             {
                 tmp.GetComponent<CardVisual>().inShop = true;
+            }
+            else
+            {
+                tmp.GetComponent<CardVisual>().inShop = false;
             }
 
             tmp.SetActive(true);

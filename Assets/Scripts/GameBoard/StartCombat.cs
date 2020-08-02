@@ -156,6 +156,12 @@ public class StartCombat : MonoBehaviour
         GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
         if (GameManager.Instance.MinionsAttacking.Count != 0 || GameManager.Instance.ActiveHero(true).IsAttacking)
         {
+            bool heroAttacking = false;
+            if (GameManager.Instance.ActiveHero(true).IsAttacking)
+            {
+                heroAttacking = true;
+            }
+
             //Set current Hero is false
             GameManager.Instance.ActiveHero(true).IsAttacking = false;
 
@@ -202,7 +208,7 @@ public class StartCombat : MonoBehaviour
 
             int[] totalDamageToSend = new int[] { totalDamage["stealth"], totalDamage["lifesteal"], totalDamage["poisonTouch"], totalDamage["damage"] };
             byte[] cardByte = DataHandler.Instance.ObjectToByteArray(cards);
-            object[] data = new object[] { totalDamageToSend, cardByte };
+            object[] data = new object[] { totalDamageToSend, cardByte, heroAttacking };
 
             StartCombatPun.Instance.SendData(START_COMBAT, data);
         }

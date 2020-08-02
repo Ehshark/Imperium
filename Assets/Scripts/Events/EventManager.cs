@@ -134,6 +134,7 @@ public class EventManager : MonoBehaviour
             object[] data = (object[])photonEvent.CustomData;
             string cardType = (string)data[0];
             int id = (int)data[1];
+            string to = (string)data[2];
 
             if (cardType.Equals("Warrior"))
                 shopPile = GameManager.Instance.warriorShopPile;
@@ -149,7 +150,11 @@ public class EventManager : MonoBehaviour
                 {
                     GameManager.Instance.topHero.AdjustGold(cv.Md.GoldAndManaCost, false);
                     GameManager.Instance.shop.GetComponent<ShopController>().SpawnShopMinion(cardType, false);
-                    GameManager.Instance.MoveCard(child.gameObject, GameManager.Instance.enemyDiscardPile, UIManager.Instance.enemyDiscards);
+
+                    if (to.Equals("Discard"))
+                        GameManager.Instance.MoveCard(child.gameObject, GameManager.Instance.enemyDiscardPile, UIManager.Instance.enemyDiscards);
+                    else
+                        GameManager.Instance.MoveCard(child.gameObject, GameManager.Instance.enemyHand, UIManager.Instance.enemyHand);
                 }
             }
 
@@ -218,6 +223,32 @@ public class EventManager : MonoBehaviour
             {
                 UIManager.Instance.enemyDiscards.RemoveAt(discardIndex);
                 Destroy(GameManager.Instance.enemyDiscardPile.GetChild(destroyIndex));
+            }
+        }
+        else if (eventCode == 23)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int id = (int)data[0];
+            string to = (string)data[1];
+
+            foreach (Transform child in GameManager.Instance.essentialsPile)
+            {
+                CardVisual cv = child.GetComponent<CardVisual>();
+                if (cv != null && cv.Ed.Id == id)
+                {
+                    GameManager.Instance.topHero.AdjustGold(cv.Ed.GoldAndManaCost, false);
+
+                    if (to.Equals("Discard"))
+                        GameManager.Instance.MoveCard(child.gameObject, GameManager.Instance.enemyDiscardPile, UIManager.Instance.enemyDiscards);
+                    else
+                        GameManager.Instance.MoveCard(child.gameObject, GameManager.Instance.enemyHand, UIManager.Instance.enemyHand);
+                }
+            }
+
+            if (GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard != null)
+            {
+                Destroy(GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard.gameObject);
+                GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard = null;
             }
         }
     }
