@@ -60,14 +60,18 @@ public class StartCombat : MonoBehaviour
             {
                 CardVisual cv = t.GetComponent<CardVisual>();
                 Destroy(scl);
+                GameManager.Instance.ActiveHero(true).canAttackParticle.Stop(); //stops the "can attack" particle effect on hero
+                GameManager.Instance.ActiveHero(true).canAttackParticle.gameObject.SetActive(false); //hides the particle system
 
                 if (cv.Md != null)
                 {
                     GameManager.Instance.ChangeCardColour(t.gameObject, cv.cardBackground.color);
+                    cv.particleGlow.gameObject.SetActive(false);
                 }
                 else
                 {
                     GameManager.Instance.ChangeCardColour(t.gameObject, cv.cardBackground.color);
+                    cv.particleGlow.gameObject.SetActive(false);
                 }
             }
         }
@@ -95,6 +99,8 @@ public class StartCombat : MonoBehaviour
         if (schl)
         {
             Destroy(schl);
+            GameManager.Instance.ActiveHero(true).canAttackParticle.Stop(); //stops the "can attack" particle effect on hero
+            GameManager.Instance.ActiveHero(true).canAttackParticle.gameObject.SetActive(false); //hides the particle system
         }
 
         //Reset the counter if combat was cancelled
@@ -152,6 +158,9 @@ public class StartCombat : MonoBehaviour
         {
             //Set current Hero is false
             GameManager.Instance.ActiveHero(true).IsAttacking = false;
+
+            GameManager.Instance.ActiveHero(true).canAttackParticle.Stop(); //stops the "can attack" particle effect on hero
+            GameManager.Instance.ActiveHero(true).canAttackParticle.gameObject.SetActive(false); //hides the particle system
 
             if (CheckForVictory())
             {

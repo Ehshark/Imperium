@@ -103,6 +103,8 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     [SerializeField]
     private Image heroImageBorder;
+
+    public ParticleSystem canAttackParticle;
     public Image HeroImageBorder { get => heroImageBorder; set => heroImageBorder = value; }
 
     [SerializeField]

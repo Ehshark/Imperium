@@ -23,6 +23,8 @@ public class StartCombatEventDistributor : MonoBehaviour, IListener
         }
 
         GameManager.Instance.ActiveHero(true).HeroImage.gameObject.AddComponent<StartCombatHeroListener>();
+        GameManager.Instance.ActiveHero(true).canAttackParticle.gameObject.SetActive(true); //sets the "can attack" particle effect on
+        GameManager.Instance.ActiveHero(true).canAttackParticle.Play(); //plays the particle system
     }
 
     

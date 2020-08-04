@@ -42,7 +42,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
             if (cv.IsTapped)
             {
                 cv.IsTapped = false;
-                GameManager.Instance.ChangeCardColour(card, Color.gray);
+                //GameManager.Instance.ChangeCardColour(card, Color.gray);
                 cv.particleGlow.gameObject.SetActive(false);
 
                 //Decrease damage counter

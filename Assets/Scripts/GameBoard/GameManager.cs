@@ -435,7 +435,7 @@ public class GameManager : MonoBehaviour
         ActiveHero(true).AdjustDiscard(false);
         isForcedDiscard = false;
 
-        AdjustDeckHeight();
+        //AdjustDeckHeight();
     }
 
     public int GetCurrentPlayer()
@@ -477,7 +477,7 @@ public class GameManager : MonoBehaviour
                 enemyDeckCounter.text = deck.Count.ToString();
             }
 
-            AdjustDeckHeight();
+            //AdjustDeckHeight();
         }
 
         else //no cards left in the deck, add the discard pile, reshuffle and continue the draw
@@ -517,7 +517,7 @@ public class GameManager : MonoBehaviour
                 enemyDeckCounter.text = deck.Count.ToString();
             }
 
-            AdjustDeckHeight();
+            //AdjustDeckHeight();
             //function calls itself to continue the draw since deck is no longer empty
             DrawCard(deck, playerHand);
         }
