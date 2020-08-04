@@ -143,7 +143,7 @@ public class PlayCard : MonoBehaviourPunCallbacks
             promoteButton.colors = cb;
 
             promoteButtonText.text = "Cancel";
-            instructionsText.text = "Please select an enemy minion to sacrifice";
+            instructionsText.text = "Please select an allied minion to sacrifice";
             GameManager.Instance.EnableOrDisablePlayerControl(!promoting);
             GameManager.Instance.IsPromoting = promoting;
             EventManager.Instance.PostNotification(EVENT_TYPE.SACRIFICE_MINION);

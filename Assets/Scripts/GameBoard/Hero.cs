@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -145,7 +146,35 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public int DamageBonus { get => damageBonus; set => damageBonus = value; }
     public Transform Abilities { get => abilities; set => abilities = value; }
 
+    //Multiplayer
     const byte LEVEL_UP = 16;
+    const byte ADJUST_DISCARD_SYNC_EVENT = 25;
+
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+    private void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        if (eventCode == ADJUST_DISCARD_SYNC_EVENT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            bool increase = (bool)data[0];
+            if (increase)
+                hasToDiscard++;
+            else
+                hasToDiscard = 0;
+
+            discardText.text = HasToDiscard.ToString();
+        }
+    }
 
     private void Start()
     {
@@ -439,6 +468,10 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             hasToDiscard = 0;
 
         discardText.text = HasToDiscard.ToString();
+
+        object[] data = new object[] { increase };
+        PhotonNetwork.RaiseEvent(ADJUST_DISCARD_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
     }
 
     public void AssignDamageAbsorbed(bool isIncrease)

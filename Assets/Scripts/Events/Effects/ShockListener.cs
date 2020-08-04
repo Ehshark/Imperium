@@ -7,7 +7,6 @@ public class ShockListener : MonoBehaviour, IPointerDownHandler
 {
     public void Start()
     {
-        //GameManager.Instance.ChangeCardColour(gameObject, Color.cyan);
         gameObject.GetComponent<CardVisual>().particleGlow.gameObject.SetActive(true);
     }
 
@@ -51,14 +50,6 @@ public class ShockListener : MonoBehaviour, IPointerDownHandler
 
     public void OnDestroy()
     {
-        CardVisual cv = gameObject.GetComponent<CardVisual>();
-        if (cv.Md != null)
-        {
-            GameManager.Instance.ChangeCardColour(gameObject, cv.cardBackground.color);
-        }
-        else if (cv.Sd != null)
-        {
-            GameManager.Instance.ChangeCardColour(gameObject, cv.cardBackground.color);
-        }
+        gameObject.GetComponent<CardVisual>().particleGlow.gameObject.SetActive(false);
     }
 }

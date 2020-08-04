@@ -21,18 +21,12 @@ public class RecycleListener : MonoBehaviour, IPointerClickHandler
             {
                 if (gameObject != UIManager.Instance.LastSelectedCard)
                 {
-                    if (UIManager.Instance.LastSelectedCard)
-                        GameManager.Instance.ChangeCardColour(UIManager.Instance.LastSelectedCard, GameManager.Instance.LastSelectedColor);
-
-                    GameManager.Instance.LastSelectedColor = cv.cardBackground.color;
-                    //GameManager.Instance.ChangeCardColour(card, Color.cyan);
                     cv.particleGlow.gameObject.SetActive(true);
                     UIManager.Instance.LastSelectedCard = gameObject;
                     GameManager.Instance.RemoveCardAtIndex = index;
                 }
                 else
                 {
-                    cv.cardBackground.color = GameManager.Instance.LastSelectedColor;
                     cv.particleGlow.gameObject.SetActive(false);
                     UIManager.Instance.LastSelectedCard = null;
                     GameManager.Instance.RemoveCardAtIndex = -1;

@@ -23,15 +23,6 @@ public class SacrificeMinionListener : MonoBehaviour, IPointerDownHandler
     private void OnDestroy()
     {
         CardVisual cv = gameObject.GetComponent<CardVisual>();
-        
-        if (cv.Md != null)
-        {
-            cv.cardBackground.color = cv.cardBackground.color;
-        }
-        else
-        {
-            cv.cardBackground.color = cv.cardBackground.color;
-        }
-
+        cv.particleGlow.gameObject.SetActive(false);
     }
 }

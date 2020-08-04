@@ -1,13 +1,18 @@
-﻿using System.Collections;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class UntapMinionListener : MonoBehaviour, IPointerDownHandler
 {
+    //Multiplayer
+    const byte UNTAP_SYNC_EVENT = 31;
+
     public void Start()
     {
-        //GameManager.Instance.ChangeCardColour(gameObject, Color.cyan);
         gameObject.GetComponent<CardVisual>().particleGlow.gameObject.SetActive(true);
     }
 
@@ -27,6 +32,9 @@ public class UntapMinionListener : MonoBehaviour, IPointerDownHandler
             cv.IsTapped = false;
             cv.ChangeTappedAppearance();
 
+            PhotonNetwork.RaiseEvent(UNTAP_SYNC_EVENT, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
+
             //removes all untap listeners from all minions on the active player's board
             foreach (Transform t in alliedMinions)
             {
@@ -43,7 +51,6 @@ public class UntapMinionListener : MonoBehaviour, IPointerDownHandler
 
     public void OnDestroy()
     {
-        CardVisual cv = gameObject.GetComponent<CardVisual>();
-        GameManager.Instance.ChangeCardColour(gameObject, cv.cardBackground.color);
+        transform.Find("ParticleGlow").gameObject.SetActive(false);
     }
 }

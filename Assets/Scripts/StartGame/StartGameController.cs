@@ -18,8 +18,8 @@ public class StartGameController : MonoBehaviour
     public GameObject TutorialUI { get => tutorialUI; set => tutorialUI = value; }
     public GameObject TutorialObject { get => tutorialObject; set => tutorialObject = value; }
     public bool HostFirst { get => EventManager.Instance.HostFirst; set => EventManager.Instance.HostFirst = value; }
-    public bool HandDealt { get => handDealt; set => handDealt = value; }
     public bool StartingPowerSelected { get => startingPowerSelected; set => startingPowerSelected = value; }
+    public bool FirstTurn { get => firstTurn; set => firstTurn = value; }
 
     //Components
     [SerializeField]
@@ -28,7 +28,6 @@ public class StartGameController : MonoBehaviour
     private GameObject coinToss;
     [SerializeField]
     private TextMeshProUGUI reactionText;
-    private Animator animator;
 
     public GameObject overallUI;
     [SerializeField]
@@ -40,6 +39,8 @@ public class StartGameController : MonoBehaviour
     [SerializeField]
     private GameObject mage;
 
+    private bool firstTurn = true;
+
     public Sprite warriorImage;
     public Sprite rogueImage;
     public Sprite mageImage;
@@ -47,18 +48,10 @@ public class StartGameController : MonoBehaviour
     public GameObject bottomHero;
     public GameObject topHero;
 
-    private int turn = 0;
-    private int cnt = 0;
-    private int mulliganCount = 0;
-
     [SerializeField]
     private Button tailsButton;
     [SerializeField]
     private Button headsButton;
-
-    //Variables 
-    private enum Coin { IDLE, TAILS, HEADS }
-    private Coin coinValue;
 
     //Tutorial
     public bool tutorial;
@@ -68,7 +61,6 @@ public class StartGameController : MonoBehaviour
     private GameObject tutorialObject;
 
     //Multiplayer
-    private bool handDealt = false;
     private bool startingPowerSelected = false;
     const byte MULLIGAN_EVENT = 6;
     const byte MULLIGAN_REFUSED_EVENT = 7;
@@ -168,7 +160,7 @@ public class StartGameController : MonoBehaviour
             }
 
             startingPowerSelected = true;
-             GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
+            GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
         }
         else if (eventCode == 16)
         {
@@ -178,6 +170,8 @@ public class StartGameController : MonoBehaviour
             hero.IncreaseLevel(1);
             hero.IncreaseExp(6);
         }
+        else if (eventCode == 32)
+            firstTurn = false;
     }
 
     private IEnumerator MultiplayerSetup()
@@ -262,7 +256,7 @@ public class StartGameController : MonoBehaviour
         }
 
         InitialDraw();
-        yield return new WaitUntil(() => handDealt == true);
+        yield return new WaitForSeconds(2.5f);
         GameManager.Instance.mulliganButtons.gameObject.SetActive(true);
         yield return new WaitUntil(() => (bottomMullReady == true && topMullReady == true));
         //GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Both Mulligans Finished";
@@ -280,38 +274,12 @@ public class StartGameController : MonoBehaviour
             yield return new WaitUntil(() => startingPowerSelected == true);
         }
 
-        GameManager.Instance.StartTurn();
+        GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
 
-        if (EventManager.Instance.HostFirst)
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(true);
-                GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(false);
-                GameManager.Instance.endButton.interactable = true;
-            }
-            else
-            {
-                GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(false);
-                GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(false);
-                GameManager.Instance.endButton.interactable = false;
-            }
-        }
-        else
-        {
-            if (!PhotonNetwork.IsMasterClient)
-            {
-                GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(true);
-                GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(false);
-                GameManager.Instance.endButton.interactable = true;
-            }
-            else
-            {
-                GameManager.Instance.bottomHero.AttackButton.parent.gameObject.SetActive(false);
-                GameManager.Instance.topHero.AttackButton.parent.gameObject.SetActive(false);
-                GameManager.Instance.endButton.interactable = false;
-            }
-        }
+        if (PhotonNetwork.IsMasterClient && EventManager.Instance.HostFirst)
+            GameManager.Instance.StartTurn();
+        else if (!PhotonNetwork.IsMasterClient && !EventManager.Instance.HostFirst)
+            GameManager.Instance.StartTurn();
     }
 
     private IEnumerator ShortGameSetup()

@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     public GameObject minionPrefab;
     public GameObject starterPrefab;
     public GameObject itemPrefab;
+    private GameObject tmpObj; //Only used for the effect icon queue
 
     public List<MinionData> warriorMinions;
     public List<MinionData> rogueMinions;
@@ -29,10 +30,8 @@ public class UIManager : MonoBehaviour
     private List<MinionData> dealtWarriorCards;
     private List<MinionData> dealtRogueCards;
     private List<MinionData> dealtMageCards;
-
     private List<StarterData> allyStarters;
     private List<StarterData> enemyStarters;
-
     private List<StarterData> starters;
     private List<EssentialsData> essentials;
     public List<MinionData> minions;
@@ -51,6 +50,7 @@ public class UIManager : MonoBehaviour
 
     private bool allyDiscardClosed = true;
     private bool enemyDiscardClosed = true;
+    private bool removeEffectIcon = false;
 
     public Dictionary<int, string> minionConditions;
     public Dictionary<int, string> minionEffects;
@@ -65,11 +65,15 @@ public class UIManager : MonoBehaviour
     public List<StarterData> AllyStarters { get => allyStarters; set => allyStarters = value; }
     public List<StarterData> EnemyStarters { get => enemyStarters; set => enemyStarters = value; }
     public List<StarterData> Starters { get => starters; set => starters = value; }
+    public bool RemoveEffectIcon { get => removeEffectIcon; set => removeEffectIcon = value; }
 
     public Transform enlargedCard;
 
+    //Multiplayer
     const byte SEND_SHUFFLED_DECKS_EVENT = 4;
     const byte START_MULTIPLAYER_MATCH_EVENT = 5;
+    const byte ICON_QUEUE_ENQUEUE_EVENT = 26;
+    const byte ICON_QUEUE_DEQUEUE_EVENT = 27;
 
     private void Awake()
     {
@@ -138,9 +142,9 @@ public class UIManager : MonoBehaviour
 
         //Shuffle each list holding the scriptable objects
         if (StartGameController.Instance != null && !StartGameController.Instance.tutorial && PhotonNetwork.IsMasterClient)
-        {
             Shuffle();
 
+        {
             //Sort all the minion cards into 3 piles corresponding with their classes: warrior, rogue, mage
             SortPiles();
 
@@ -242,6 +246,38 @@ public class UIManager : MonoBehaviour
 
             PhotonNetwork.RaiseEvent(START_MULTIPLAYER_MATCH_EVENT, null, new RaiseEventOptions { Receivers = ReceiverGroup.All },
                 SendOptions.SendReliable);
+        }
+
+        else if (eventCode == ICON_QUEUE_ENQUEUE_EVENT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int key = (int)data[0];
+            tmpObj = new GameObject();
+            tmpObj.transform.SetParent(GameManager.Instance.EffectIconQueue);
+            tmpObj.transform.position = GameManager.Instance.EffectIconQueue.position;
+            tmpObj.transform.localScale = GameManager.Instance.EffectIconQueue.localScale;
+            Image tmp = tmpObj.AddComponent<Image>();
+
+            foreach (KeyValuePair<int, string> entry in minionEffects)
+            {
+                if (key == entry.Key)
+                {
+                    //finds the correct icon based on the name
+                    tmp.sprite = allSprites.Where(x => x.name == entry.Value).SingleOrDefault();
+
+                    //append child sprite to the into the queue
+                    iconQueue.Enqueue(tmp);
+                }
+            }
+        }
+
+        else if (eventCode == ICON_QUEUE_DEQUEUE_EVENT)
+        {
+            if (iconQueue.Count > 0)
+            {
+                iconQueue.Dequeue();
+                Destroy(tmpObj);
+            }
         }
     }
 
@@ -744,6 +780,7 @@ public class UIManager : MonoBehaviour
             }
 
             allyDiscardClosed = false; //sets shop to "open" state
+            GameManager.Instance.allyDiscardPileButton.interactable = false;
         }
         else
         {
@@ -754,6 +791,7 @@ public class UIManager : MonoBehaviour
 
             allyDiscardClosed = true; //sets shop to "closed" state
             GameManager.Instance.alliedDiscardUI.gameObject.SetActive(false);
+            GameManager.Instance.allyDiscardPileButton.interactable = true;
         }
     }
 
@@ -771,6 +809,7 @@ public class UIManager : MonoBehaviour
             }
 
             enemyDiscardClosed = false; //sets shop to "open" state
+            GameManager.Instance.enemyDiscardPileButton.interactable = false;
         }
         else
         {
@@ -780,13 +819,14 @@ public class UIManager : MonoBehaviour
             }
 
             enemyDiscardClosed = true; //sets shop to "closed" state
+            GameManager.Instance.enemyDiscardPileButton.interactable = true;
         }
     }
 
     //used to set visual effect icon queue
     public IEnumerator SetEffectIconQueue(int key)
     {
-        GameObject tmpObj = new GameObject();
+        tmpObj = new GameObject();
         tmpObj.transform.SetParent(GameManager.Instance.EffectIconQueue);
         tmpObj.transform.position = GameManager.Instance.EffectIconQueue.position;
         tmpObj.transform.localScale = GameManager.Instance.EffectIconQueue.localScale;
@@ -802,14 +842,21 @@ public class UIManager : MonoBehaviour
 
                 //append child sprite to the into the queue
                 iconQueue.Enqueue(tmp);
+                object[] data = new object[] { key };
+                PhotonNetwork.RaiseEvent(ICON_QUEUE_ENQUEUE_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                    SendOptions.SendReliable);
 
-                yield return new WaitForSeconds(10f); //wait for 10 seconds before removing the icon
+                yield return new WaitUntil(() => removeEffectIcon == true);
+                removeEffectIcon = false;
 
                 if (iconQueue.Count > 0)
                 {
                     iconQueue.Dequeue();
                     Destroy(tmpObj);
                 }
+
+                PhotonNetwork.RaiseEvent(ICON_QUEUE_DEQUEUE_EVENT, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                    SendOptions.SendReliable);
             }
         }
     }

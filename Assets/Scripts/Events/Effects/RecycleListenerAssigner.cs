@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,7 +15,10 @@ public class RecycleListenerAssigner : MonoBehaviour
     private Transform DiscardPile;
     public Button recycleButton;
     private List<Card> deckList = new List<Card>();
-    TMP_Text titleText;    
+    TMP_Text titleText;
+
+    //Multiplayer
+    const byte RECYCLE_SYNC_EVENT = 28;
 
     private void Awake()
     {
@@ -70,6 +76,10 @@ public class RecycleListenerAssigner : MonoBehaviour
     {
         if (UIManager.Instance.LastSelectedCard)
         {
+            object[] data = new object[] { GameManager.Instance.RemoveCardAtIndex };
+            PhotonNetwork.RaiseEvent(RECYCLE_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
+
             CardVisual cv = UIManager.Instance.LastSelectedCard.GetComponent<CardVisual>();
             //move the selected card to top of the deck. 
             deckList = UIManager.Instance.GetActiveDeckList(true);

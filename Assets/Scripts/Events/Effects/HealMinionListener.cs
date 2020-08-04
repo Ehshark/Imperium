@@ -5,6 +5,11 @@ using UnityEngine.EventSystems;
 
 public class HealMinionListener : MonoBehaviour, IPointerDownHandler
 {
+    private void Start()
+    {
+        transform.Find("ParticleGlow").gameObject.SetActive(true);
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         GameObject card = eventData.pointerCurrentRaycast.gameObject.transform.parent.gameObject;
@@ -61,5 +66,10 @@ public class HealMinionListener : MonoBehaviour, IPointerDownHandler
 
         //Call the Next Power in the Queue
         InvokeEventCommand.InvokeNextEvent();
+    }
+
+    private void OnDestroy()
+    {
+        transform.Find("ParticleGlow").gameObject.SetActive(false);
     }
 }

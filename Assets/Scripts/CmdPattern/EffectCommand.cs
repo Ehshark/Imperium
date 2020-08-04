@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 public class EffectCommand : MonoBehaviour
 {
@@ -34,7 +35,8 @@ public class EffectCommand : MonoBehaviour
 
             EVENT_TYPE effect = EffectQueue.Dequeue();
 
-            EventManager.Instance.PostNotification(effect);
+            if (effect != EVENT_TYPE.TAP_MINION)
+                EventManager.Instance.PostNotification(effect);
 
             InvokeEventCommand.InvokeNextEvent();
         }
@@ -42,6 +44,7 @@ public class EffectCommand : MonoBehaviour
 
     public void ContinueExecution()
     {
+        UIManager.Instance.RemoveEffectIcon = true;
         if (EffectQueue.Count != 0 && !inEffect)
         {
             if (CanEffectBeCalled())
@@ -49,6 +52,8 @@ public class EffectCommand : MonoBehaviour
                 StartCommandExecution();
             }
         }
+        else
+            GameManager.Instance.EffectIconQueue.gameObject.SetActive(false);
     }
 
     public bool CanEffectBeCalled()

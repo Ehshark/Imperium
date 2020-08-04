@@ -5,6 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 using UnityEngine.EventSystems;
+using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
+using UnityEditor;
 
 public class CardVisual : MonoBehaviour, IPointerClickHandler
 {
@@ -75,6 +79,12 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     public Image silenceImage;
 
     public ParticleSystem particleGlow;
+
+    //Multiplayer
+    const byte ADJUST_DAMAGE_SYNC_EVENT = 23;
+    const byte ADJUST_HEALTH_SYNC_EVENT = 24;
+    const byte ACTIVATE_SILENCE_SYNC_EVENT = 29;
+
     void OnEnable()
     {
         dmgAbsorbed = new Damage();
@@ -145,6 +155,84 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             text.text = cardData.EffectText1;
             text = descriptions[5].GetComponent<TMP_Text>();
             text.text = cardData.EffectText2;
+        }
+
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    private void OnDestroy()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+    private void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        if (eventCode == ADJUST_DAMAGE_SYNC_EVENT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int amount = (int)data[0];
+            bool add = (bool)data[1];
+            if (add)
+            {
+                currentDamage += amount;
+                damage.color = Color.green;
+            }
+            else
+            {
+                currentDamage -= amount;
+                damage.color = Color.white;
+
+                if (currentDamage < 0)
+                {
+                    currentDamage = 0;
+                }
+            }
+
+            damage.text = currentDamage.ToString();
+        }
+        else if (eventCode == ADJUST_HEALTH_SYNC_EVENT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int amount = (int)data[0];
+            bool add = (bool)data[1];
+            if (add)
+            {
+                currentHealth += amount;
+            }
+            else
+            {
+                currentHealth -= amount;
+
+                if (currentHealth <= 0)
+                {
+                    DestroyMinion();
+                }
+            }
+
+            health.text = currentHealth.ToString();
+        }
+        else if (eventCode == ACTIVATE_SILENCE_SYNC_EVENT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            bool activate = (bool)data[0];
+            if (activate)
+            {
+                isSilenced = true;
+                silenceImage.enabled = true;
+            }
+            else
+            {
+                isSilenced = false;
+                silenceImage.enabled = false;
+            }
+        }
+        else if (eventCode == 31) //Untap Sync
+        {
+            isTapped = false;
+            Color originalColor = cardBackground.color;
+            originalColor.a = 1f;
+            cardBackground.color = originalColor;
         }
     }
 
@@ -377,6 +465,10 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             }
 
             health.text = currentHealth.ToString();
+
+            object[] data = new object[] { amount, add };
+            PhotonNetwork.RaiseEvent(ADJUST_HEALTH_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
         }
     }
 
@@ -530,6 +622,9 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         }
 
         damage.text = currentDamage.ToString();
+        object[] data = new object[] { amount, add };
+        PhotonNetwork.RaiseEvent(ADJUST_DAMAGE_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
     }
 
     public void ResetDamage()
@@ -593,6 +688,10 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             isSilenced = false;
             silenceImage.enabled = false;
         }
+
+        object[] data = new object[] { activate };
+        PhotonNetwork.RaiseEvent(ACTIVATE_SILENCE_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
     }
 
     public void ResetDamageObjectsUI()

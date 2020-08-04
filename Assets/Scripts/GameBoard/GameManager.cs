@@ -89,7 +89,6 @@ public class GameManager : MonoBehaviour
     private bool isActionPhase = false;
     private bool warriorSetup;
     private bool inHeroPower;
-    private Color lastSelectedColor;
     private int removeCardAtIndex;
     private bool firstTimeStartUp;
 
@@ -106,14 +105,15 @@ public class GameManager : MonoBehaviour
     public bool HasExpressBuy { get => hasExpressBuy; set => hasExpressBuy = value; }
     public bool WarriorSetup { get => warriorSetup; set => warriorSetup = value; }
     public bool InHeroPower { get => inHeroPower; set => inHeroPower = value; }
-    public Color LastSelectedColor { get => lastSelectedColor; set => lastSelectedColor = value; }
     public bool IsActionPhase { get => isActionPhase; set => isActionPhase = value; }
     public int RemoveCardAtIndex { get => removeCardAtIndex; set => removeCardAtIndex = value; }
 
+    //Multiplayer
     private const byte END_TURN = 12;
     private const byte DRAW_CARDS = 13;
     private const byte PAY_TO_DISCARD = 14;
     private const byte DISCARD_CARDS = 15;
+    const byte FIRST_TURN_SYNC_EVENT = 32;
 
     private void Awake()
     {
@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
     private void OnEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;
-        
+
         if (eventCode == END_TURN)
         {
             ActiveHero(true).ResetMana();
@@ -320,8 +320,8 @@ public class GameManager : MonoBehaviour
 
     public void EnableOrDisablePlayerControl(bool enable)
     {
-        if (enable)
-            instructionsObj.GetComponent<TMP_Text>().text = "";
+        //if (enable)
+        //    instructionsObj.GetComponent<TMP_Text>().text = "";
 
         if (!StartGameController.Instance.tutorial)
         {
@@ -329,19 +329,21 @@ public class GameManager : MonoBehaviour
             allyDiscardPileButton.interactable = enable;
             enemyDiscardPileButton.interactable = enable;
         }
-
-        ActiveHero(true).CanPlayCards = enable;
-        if (enable)
+        if (bottomHero.MyTurn)
         {
-            UIManager.Instance.GlowCards();
-        }
-        else
-        {
-            foreach (Transform m in GetActiveHand(true))
+            ActiveHero(true).CanPlayCards = enable;
+            if (enable)
             {
-                if (m != null)
+                UIManager.Instance.GlowCards();
+            }
+            else
+            {
+                foreach (Transform m in GetActiveHand(true))
                 {
-                    m.Find("GlowPanel").gameObject.SetActive(false);
+                    if (m != null)
+                    {
+                        m.Find("GlowPanel").gameObject.SetActive(false);
+                    }
                 }
             }
         }
@@ -399,7 +401,8 @@ public class GameManager : MonoBehaviour
             cv.CombatEffectActivated(false);
             UnTapMinions(t);
             ResetDamage(t);
-            cv.ActivateSilence(false);
+            if (cv.Md)
+                cv.ActivateSilence(false);
         }
 
         if (ActiveHero(true).DamageBonus > 0)
@@ -412,13 +415,16 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.GlowCards();
         UIManager.Instance.AttachPlayCard();
         EnableOrDisablePlayerControl(true);
-        bottomHero.AttackButton.parent.gameObject.SetActive(true);
-        bottomHero.AttackButton.gameObject.SetActive(true);
+        if (!StartGameController.Instance.FirstTurn)
+        {
+            ActiveHero(true).AttackButton.parent.gameObject.SetActive(true);
+            ActiveHero(true).AttackButton.gameObject.SetActive(true);
+        }
         buyFirstCard = false;
         firstChangeShop = false;
         DisableExpressBuy();
         endButton.interactable = true;
-        enemyDiscardPileButton.interactable = false;
+        //enemyDiscardPileButton.interactable = false;
 
         //TODO: Handle opponent discard logic here
         if (ActiveHero(true).HasToDiscard > 0)
@@ -541,6 +547,8 @@ public class GameManager : MonoBehaviour
     //End phase, player draws/selects cards to discard until hand size is 5, then prompt player to spend 1 gold to draw 1 card and discard 1 card 
     public void EndTurn()
     {
+        buyButton.interactable = false;
+        changeButton.interactable = false;
         isActionPhase = false;
         Transform activeHand = GetActiveHand(true);
         int handSize = ActiveHero(true).HandSize;
@@ -574,6 +582,14 @@ public class GameManager : MonoBehaviour
                 DrawCard(UIManager.Instance.GetActiveDeckList(true), activeHand);
             }
         }
+
+        if (StartGameController.Instance.FirstTurn)
+        {
+            StartGameController.Instance.FirstTurn = false;
+            PhotonNetwork.RaiseEvent(FIRST_TURN_SYNC_EVENT, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
+        }
+
         if (ActiveHero(true).Gold > 0)
         {
             instructionsObj.GetComponent<TMP_Text>().text = "Do you want to trade 1 gold to switch an additional card?";
@@ -584,7 +600,7 @@ public class GameManager : MonoBehaviour
         else
         {
             SwitchTurn();
-            instructionsObj.GetComponent<TMP_Text>().text = "No cards needed to discard and no gold. Passing Turn";
+            instructionsObj.GetComponent<TMP_Text>().text = "Opponent's Turn...";
         }
     }
 
@@ -649,7 +665,7 @@ public class GameManager : MonoBehaviour
             selectedDiscards.Clear();
 
             submitDiscardsButton.gameObject.SetActive(false);
-
+            instructionsObj.GetComponent<TMP_Text>().text = "";
             if (!isActionPhase)
                 isActionPhase = true;
 
@@ -663,6 +679,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 hasSwitchedCard = false; //resets if player switch card check
+                instructionsObj.GetComponent<TMP_Text>().text = "Opponent's Turn...";
                 SwitchTurn();
             }
         }
@@ -818,7 +835,7 @@ public class GameManager : MonoBehaviour
     //used for rotating card animation
     public IEnumerator FlipCard(GameObject card)
     {
-        for(float i = 0f; i <= 360f; i+=10)
+        for (float i = 0f; i <= 360f; i += 10)
         {
             card.transform.rotation = Quaternion.Euler(0f, i, 0f);
             yield return new WaitForSeconds(0f);
@@ -983,11 +1000,6 @@ public class GameManager : MonoBehaviour
             tmp.GetComponent<CardVisual>().Ed = ed;
 
         tmp.SetActive(true);
-
-        if (t.name.Equals("Hand")) {
-            if (!StartGameController.Instance.HandDealt && t.childCount == 5)
-                StartGameController.Instance.HandDealt = true;
-        }
 
         StartCoroutine(FlipCard(tmp)); //calls card flip animation
     }

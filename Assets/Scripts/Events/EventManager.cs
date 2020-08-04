@@ -2,6 +2,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -187,6 +188,36 @@ public class EventManager : MonoBehaviour
             {
                 Destroy(GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard.gameObject);
                 GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard = null;
+            }
+        }
+
+        else if (eventCode == 28) //Recycle Sync
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int index = (int)data[0];
+            CardVisual cv = GameManager.Instance.enemyDiscardPile.GetChild(index).GetComponent<CardVisual>();
+            UIManager.Instance.enemyDeck.Insert(0, cv.GetCardData());
+            TMP_Text deckCounter = GameManager.Instance.enemyDeck.transform.Find("DeckCounter").GetComponent<TMP_Text>();
+            deckCounter.text = UIManager.Instance.enemyDeck.Count.ToString();
+            Destroy(GameManager.Instance.enemyDiscardPile.GetChild(index).gameObject);
+            UIManager.Instance.enemyDiscards.RemoveAt(index);
+        }
+
+        else if (eventCode == 30) //Trash sync
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int handIndex = (int)data[0];
+            int discardIndex = (int)data[1];
+            int destroyIndex = (int)data[2];
+            if (handIndex > -1)
+            {
+                UIManager.Instance.enemyHand.RemoveAt(handIndex);
+                Destroy(GameManager.Instance.enemyHand.GetChild(destroyIndex));
+            }
+            else
+            {
+                UIManager.Instance.enemyDiscards.RemoveAt(discardIndex);
+                Destroy(GameManager.Instance.enemyDiscardPile.GetChild(destroyIndex));
             }
         }
     }

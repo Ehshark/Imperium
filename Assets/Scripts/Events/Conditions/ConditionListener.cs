@@ -85,6 +85,9 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                         {
                             Type effectType = EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value.GetType();
 
+                            if (!GameManager.Instance.EffectIconQueue.gameObject.activeSelf)
+                                GameManager.Instance.EffectIconQueue.gameObject.SetActive(true);
+
                             MethodInfo startEvent = effectType.GetMethod("StartEvent");
                             InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, card);
                             invokeEvent.AddToQueue();
