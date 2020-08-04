@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class DefendListener : MonoBehaviour, IListener
 {
     private const byte ASSIGN_DEFENDING_DAMAGE = 18;
+    private const byte END_GAME_DEFENDER = 41;
 
     private string damageSelected;
     public string DamageSelected { get => damageSelected; }
@@ -251,6 +252,11 @@ public class DefendListener : MonoBehaviour, IListener
         StartCombatPun.Instance.SendData(ASSIGN_DEFENDING_DAMAGE, data);
 
         // TODO: End the game if the hero's health is 0.
+        if (GameManager.Instance.ActiveHero(false).CurrentHealth == 0)
+        {
+            EndGamePun.Instance.SendData(END_GAME_DEFENDER);
+            EndGamePun.Instance.LoseEvent();
+        }
     }
 
     public void ResetDamageUI()

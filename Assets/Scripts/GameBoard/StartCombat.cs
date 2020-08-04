@@ -12,6 +12,7 @@ using Photon.Realtime;
 public class StartCombat : MonoBehaviour
 {
     private const byte START_COMBAT = 17;
+    private const byte END_GAME = 40;
 
     public Dictionary<string, int> totalDamage = new Dictionary<string, int>
     {
@@ -171,7 +172,9 @@ public class StartCombat : MonoBehaviour
             if (CheckForVictory())
             {
                 CancelCombat();
-                StartCoroutine(GameManager.Instance.SetInstructionsText("Attacking player has won the game."));
+                //StartCoroutine(GameManager.Instance.SetInstructionsText("Attacking player has won the game."));
+                EndGamePun.Instance.SendData(END_GAME);
+                EndGamePun.Instance.WinEvent();
                 return;
             }
 
