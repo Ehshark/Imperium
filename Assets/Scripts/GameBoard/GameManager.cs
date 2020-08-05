@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviour
     public Button enemyDiscardPileButton;
     public Image expressBuyImage;
 
+    public TMP_Text effectText;
+
     private bool isPromoting = false;
     private bool isDefending = false;
     private bool hasExpressBuy = false;
@@ -810,6 +812,7 @@ public class GameManager : MonoBehaviour
             if ((cv.Md != null || cv.Sd != null) && cv.IsTapped)
             {
                 cv.IsTapped = false;
+                cv.TapEffect = false;
                 cv.ChangeTappedAppearance();
             }
         }

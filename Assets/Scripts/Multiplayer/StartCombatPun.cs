@@ -74,9 +74,21 @@ public class StartCombatPun : MonoBehaviour
             object[] data = (object[])photonEvent.CustomData;
             List<DamagePhoton> damageToAssign = (List<DamagePhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[0]);
             int heroDamage = (int)data[1];
+            bool minionDefeated = (bool)data[2];
 
             AssignDamageToDefenders(damageToAssign);
             GameManager.Instance.ActiveHero(false).AdjustHealth(heroDamage, false);
+            if (heroDamage > 0)
+            {
+                //Add Bleed to the queue
+                EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.BLEED);
+            }
+            if (minionDefeated)
+            {
+                //Add Minion Defeated to the queue
+                EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.MINION_DEFEATED);
+            }
+
             GameManager.Instance.IsDefending = false;
             AssignDamageToAttackers();
 

@@ -38,7 +38,7 @@ public class ShopController : MonoBehaviour
     //Multiplayer
     const byte BUY_CARD_SYNC_EVENT = 21;
     const byte CHANGE_SHOP_SYNC_EVENT = 22;
-    const byte BUY_ESSENTIAL_SYNC_EVENT = 23;
+    const byte BUY_ESSENTIAL_SYNC_EVENT = 42;
 
     private void OnEnable()
     {
@@ -364,16 +364,16 @@ public class ShopController : MonoBehaviour
 
     private void MoveShopCardToDiscard(GameObject card)
     {
+        CardVisual cv = card.GetComponent<CardVisual>();
+        cv.inShop = false;
+        cv.costImage.sprite = UIManager.Instance.allSprites.Where(x => x.name == "mana").SingleOrDefault();
+
         MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true));
         mc.AddToQueue();
     }
 
     private void MoveShopCardToHand(GameObject card)
     {
-        CardVisual cv = card.GetComponent<CardVisual>();
-        cv.inShop = false;
-        cv.costImage.sprite = UIManager.Instance.allSprites.Where(x => x.name == "mana").SingleOrDefault();
-
         MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveHand(true), null);
         mc.AddToQueue();
         //GameObject shopCard = GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.GetActiveHand(true), null, true);

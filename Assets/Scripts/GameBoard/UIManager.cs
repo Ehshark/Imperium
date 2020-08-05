@@ -142,9 +142,9 @@ public class UIManager : MonoBehaviour
 
         //Shuffle each list holding the scriptable objects
         if (StartGameController.Instance != null && !StartGameController.Instance.tutorial && PhotonNetwork.IsMasterClient)
+        {
             Shuffle();
 
-        {
             //Sort all the minion cards into 3 piles corresponding with their classes: warrior, rogue, mage
             SortPiles();
 
@@ -619,17 +619,21 @@ public class UIManager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
+            allyDeck.Add(Resources.Load("Minions/3") as MinionData);
             for (int i = 0; i < starters.Count; i++)
-                allyDeck.Add(AllyStarters[i]); 
+                allyDeck.Add(AllyStarters[i]);
 
+            enemyDeck.Add(Resources.Load("Minions/3") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 enemyDeck.Add(EnemyStarters[i]);
         }
         else
         {
+            allyDeck.Add(Resources.Load("Minions/3") as MinionData);
             for (int i = 0; i < starters.Count; i++)
-                allyDeck.Add(EnemyStarters[i]); 
+                allyDeck.Add(EnemyStarters[i]);
 
+            enemyDeck.Add(Resources.Load("Minions/3") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 enemyDeck.Add(AllyStarters[i]);
         }

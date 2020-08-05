@@ -225,7 +225,7 @@ public class EventManager : MonoBehaviour
                 Destroy(GameManager.Instance.enemyDiscardPile.GetChild(destroyIndex));
             }
         }
-        else if (eventCode == 23)
+        else if (eventCode == 42)
         {
             object[] data = (object[])photonEvent.CustomData;
             int id = (int)data[0];

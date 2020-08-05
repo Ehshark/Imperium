@@ -33,6 +33,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     private bool isPromoted;
     private bool isTapped;
     private bool healEffect;
+    private bool tapEffect;
 
     private bool isSilenced = false;
     private bool IsSilenced { get => isTapped; set => isTapped = value; }
@@ -51,6 +52,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     public int TotalHealth { get => totalHealth; set => totalHealth = value; }
     public bool IsPromoted { get => isPromoted; set => isPromoted = value; }
     public int PromotedHealth { get => promotedHealth; set => promotedHealth = value; }
+    public bool TapEffect { get => tapEffect; set => tapEffect = value; }
 
     public TMP_Text cost;
     public TMP_Text health;
@@ -80,9 +82,9 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     public ParticleSystem particleGlow;
 
-    //Multiplayer
-    const byte ADJUST_DAMAGE_SYNC_EVENT = 23;
-    const byte ADJUST_HEALTH_SYNC_EVENT = 24;
+    ////Multiplayer
+    //const byte ADJUST_DAMAGE_SYNC_EVENT = 23;
+    //const byte ADJUST_HEALTH_SYNC_EVENT = 24;
     const byte ACTIVATE_SILENCE_SYNC_EVENT = 29;
 
     void OnEnable()
@@ -167,73 +169,73 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     private void OnEvent(EventData photonEvent)
     {
-        byte eventCode = photonEvent.Code;
-        if (eventCode == ADJUST_DAMAGE_SYNC_EVENT)
-        {
-            object[] data = (object[])photonEvent.CustomData;
-            int amount = (int)data[0];
-            bool add = (bool)data[1];
-            if (add)
-            {
-                currentDamage += amount;
-                damage.color = Color.green;
-            }
-            else
-            {
-                currentDamage -= amount;
-                damage.color = Color.white;
+        //byte eventCode = photonEvent.Code;
+        //if (eventCode == ADJUST_DAMAGE_SYNC_EVENT)
+        //{
+        //    object[] data = (object[])photonEvent.CustomData;
+        //    int amount = (int)data[0];
+        //    bool add = (bool)data[1];
+        //    if (add)
+        //    {
+        //        currentDamage += amount;
+        //        damage.color = Color.green;
+        //    }
+        //    else
+        //    {
+        //        currentDamage -= amount;
+        //        damage.color = Color.white;
 
-                if (currentDamage < 0)
-                {
-                    currentDamage = 0;
-                }
-            }
+        //        if (currentDamage < 0)
+        //        {
+        //            currentDamage = 0;
+        //        }
+        //    }
 
-            damage.text = currentDamage.ToString();
-        }
-        else if (eventCode == ADJUST_HEALTH_SYNC_EVENT)
-        {
-            object[] data = (object[])photonEvent.CustomData;
-            int amount = (int)data[0];
-            bool add = (bool)data[1];
-            if (add)
-            {
-                currentHealth += amount;
-            }
-            else
-            {
-                currentHealth -= amount;
+        //    damage.text = currentDamage.ToString();
+        //}
+        //else if (eventCode == ADJUST_HEALTH_SYNC_EVENT)
+        //{
+        //    object[] data = (object[])photonEvent.CustomData;
+        //    int amount = (int)data[0];
+        //    bool add = (bool)data[1];
+        //    if (add)
+        //    {
+        //        currentHealth += amount;
+        //    }
+        //    else
+        //    {
+        //        currentHealth -= amount;
 
-                if (currentHealth <= 0)
-                {
-                    DestroyMinion();
-                }
-            }
+        //        if (currentHealth <= 0)
+        //        {
+        //            DestroyMinion();
+        //        }
+        //    }
 
-            health.text = currentHealth.ToString();
-        }
-        else if (eventCode == ACTIVATE_SILENCE_SYNC_EVENT)
-        {
-            object[] data = (object[])photonEvent.CustomData;
-            bool activate = (bool)data[0];
-            if (activate)
-            {
-                isSilenced = true;
-                silenceImage.enabled = true;
-            }
-            else
-            {
-                isSilenced = false;
-                silenceImage.enabled = false;
-            }
-        }
-        else if (eventCode == 31) //Untap Sync
-        {
-            isTapped = false;
-            Color originalColor = cardBackground.color;
-            originalColor.a = 1f;
-            cardBackground.color = originalColor;
-        }
+        //    health.text = currentHealth.ToString();
+        //}
+        //else if (eventCode == ACTIVATE_SILENCE_SYNC_EVENT)
+        //{
+        //    object[] data = (object[])photonEvent.CustomData;
+        //    bool activate = (bool)data[0];
+        //    if (activate)
+        //    {
+        //        isSilenced = true;
+        //        silenceImage.enabled = true;
+        //    }
+        //    else
+        //    {
+        //        isSilenced = false;
+        //        silenceImage.enabled = false;
+        //    }
+        //}
+        //else if (eventCode == 31) //Untap Sync
+        //{
+        //    isTapped = false;
+        //    Color originalColor = cardBackground.color;
+        //    originalColor.a = 1f;
+        //    cardBackground.color = originalColor;
+        //}
     }
 
     void PopulateCard()
@@ -466,9 +468,9 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
             health.text = currentHealth.ToString();
 
-            object[] data = new object[] { amount, add };
-            PhotonNetwork.RaiseEvent(ADJUST_HEALTH_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-                SendOptions.SendReliable);
+            //object[] data = new object[] { amount, add };
+            //PhotonNetwork.RaiseEvent(ADJUST_HEALTH_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            //    SendOptions.SendReliable);
         }
     }
 
@@ -622,9 +624,9 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         }
 
         damage.text = currentDamage.ToString();
-        object[] data = new object[] { amount, add };
-        PhotonNetwork.RaiseEvent(ADJUST_DAMAGE_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-            SendOptions.SendReliable);
+        //object[] data = new object[] { amount, add };
+        //PhotonNetwork.RaiseEvent(ADJUST_DAMAGE_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+        //    SendOptions.SendReliable);
     }
 
     public void ResetDamage()
@@ -690,8 +692,8 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         }
 
         object[] data = new object[] { activate };
-        PhotonNetwork.RaiseEvent(ACTIVATE_SILENCE_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-            SendOptions.SendReliable);
+        //PhotonNetwork.RaiseEvent(ACTIVATE_SILENCE_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+        //    SendOptions.SendReliable);
     }
 
     public void ResetDamageObjectsUI()

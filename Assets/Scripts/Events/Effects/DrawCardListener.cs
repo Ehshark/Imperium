@@ -1,13 +1,19 @@
-﻿using System.Collections;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DrawCardListener : MonoBehaviour
 {
+    private const byte DRAW_CARDS = 13;
+
     public void StartEvent()
     {
-        //Debug.Log("Draw Card Effect");
-        StartCoroutine(GameManager.Instance.SetInstructionsText("Draw Card Effect"));
+        object[] data = new object[] { 1 };
+        PhotonNetwork.RaiseEvent(DRAW_CARDS, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
 
         GameManager.Instance.DrawCard(UIManager.Instance.GetActiveDeckList(true), GameManager.Instance.GetActiveHand(true));
 

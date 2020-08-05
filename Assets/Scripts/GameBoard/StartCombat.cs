@@ -226,7 +226,7 @@ public class StartCombat : MonoBehaviour
         foreach (Transform card in GameManager.Instance.GetActiveMinionZone(true))
         {
             CardVisual cv = card.GetComponent<CardVisual>();
-            if (cv.IsTapped)
+            if (cv.IsTapped && !cv.TapEffect)
             {
                 cv.AdjustHealth(1, false);
             }

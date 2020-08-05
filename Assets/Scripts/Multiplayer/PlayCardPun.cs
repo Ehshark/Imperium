@@ -61,6 +61,7 @@ public class PlayCardPun : MonoBehaviour
                         if (cv.Md.MinionID == mdp.MinionID)
                         {
                             StartCoroutine(MoveCard(t, cv));
+                            break;
                         }
                     }
                 }

@@ -129,11 +129,13 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             CardVisual cv = card.GetComponent<CardVisual>();
 
             if (!cv.IsTapped)
-            {                 
+            {
+                //EffectCommand.Instance.EffectQueue.Enqueue(ConditionEvent);
+                OnEvent(ConditionEvent);
                 EffectCommand.Instance.EffectQueue.Enqueue(ConditionEvent);
                 cv.IsTapped = true;
+                cv.TapEffect = true;
                 cv.ChangeTappedAppearance();
-                cv.AdjustHealth(1, false);
             }
         }
     }

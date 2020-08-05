@@ -52,7 +52,7 @@ public class DefendListener : MonoBehaviour, IListener
     {
         if (!GameManager.Instance.IsDefending)
         {
-            GameManager.Instance.ActiveHero(false).DefendButton.GetComponentInChildren<Button>().onClick.AddListener(SubmitDefenseButtonFunc);
+            //GameManager.Instance.ActiveHero(false).DefendButton.GetComponentInChildren<Button>().onClick.AddListener(SubmitDefenseButtonFunc);
             GameManager.Instance.IsDefending = true;
             ChangeUiForDefense(GameManager.Instance.IsDefending);
             
@@ -180,6 +180,7 @@ public class DefendListener : MonoBehaviour, IListener
     {
         List<DamagePhoton> damageToSend = new List<DamagePhoton>();
         int index = 0;
+        bool minionDefeated = false;
 
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
@@ -194,13 +195,12 @@ public class DefendListener : MonoBehaviour, IListener
                         if (entry.Key.Equals("poisonTouch") && cv.Md.EffectId1 != 9)
                         {
                             cv.AdjustHealth(cv.CurrentHealth, false);
-                            //EventManager.Instance.PostNotification(EVENT_TYPE.MINION_DEFEATED);
-                            EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.MINION_DEFEATED);
+                            minionDefeated = true;
                         }
                         else
                         {
                             if ((cv.CurrentHealth - entry.Value) == 0)
-                                EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.MINION_DEFEATED);
+                                minionDefeated = true;
 
                             cv.AdjustHealth(entry.Value, false);
                         }
@@ -248,7 +248,7 @@ public class DefendListener : MonoBehaviour, IListener
 
         //Send the data to Attacker
         byte[] damageByte = DataHandler.Instance.ObjectToByteArray(damageToSend);
-        object[] data = new object[] { damageByte, heroDamageAmount };
+        object[] data = new object[] { damageByte, heroDamageAmount, minionDefeated };
         StartCombatPun.Instance.SendData(ASSIGN_DEFENDING_DAMAGE, data);
 
         // TODO: End the game if the hero's health is 0.

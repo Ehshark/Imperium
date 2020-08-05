@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +11,8 @@ public class PeekShopEventStarter : MonoBehaviour
 {
     public List<MinionData> moveCards = new List<MinionData>();
     private GameObject card;
+
+    const byte PEEK_SHOP_SYNC_EVENT = 44;
 
     public void StartEvent()
     {
@@ -119,6 +124,17 @@ public class PeekShopEventStarter : MonoBehaviour
 
         //Re-enable the shop view
         EnableShop();
+
+        //Call the effect on the other screen
+        List<int> minionList = new List<int>();
+        foreach (MinionData minion in moveCards)
+        {
+            minionList.Add(minion.MinionID);
+        }
+
+        object[] data = new object[] { moveCards.First().CardClass, minionList };
+        PhotonNetwork.RaiseEvent(PEEK_SHOP_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            SendOptions.SendReliable);
 
         //Delete all objects in moveCards
         moveCards.Clear();
