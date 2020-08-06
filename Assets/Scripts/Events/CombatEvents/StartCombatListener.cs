@@ -68,7 +68,7 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
         {
             if (cv.IsTapped)
             {
-                GameManager.Instance.alliedStealthDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text) + cv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedStealthDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedStealthDamageCounter.text) + cv.CurrentDamage).ToString();
             }
             else
             {
@@ -79,22 +79,22 @@ public class StartCombatListener : MonoBehaviour, IPointerDownHandler
         {
             if (cv.IsTapped)
             {
-                GameManager.Instance.alliedLifestealDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedLifestealDamageCounter.text) + cv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedLifestealDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedLifestealDamageCounter.text) + cv.CurrentDamage).ToString();
             }
             else
             {
-                GameManager.Instance.alliedLifestealDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedLifestealDamageCounter.text) - cv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedLifestealDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedLifestealDamageCounter.text) - cv.CurrentDamage).ToString();
             }
         }
         else if (cv.Md.EffectId1 == 7 && cv.IsCombatEffectActivated)
         {
             if (cv.IsTapped)
             {
-                GameManager.Instance.alliedPoisonTouchDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedPoisonTouchDamageCounter.text) + cv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedPoisonTouchDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedPoisonTouchDamageCounter.text) + cv.CurrentDamage).ToString();
             }
             else
             {
-                GameManager.Instance.alliedPoisonTouchDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedPoisonTouchDamageCounter.text) - cv.Md.AttackDamage).ToString();
+                GameManager.Instance.alliedPoisonTouchDamageCounter.text = (Int32.Parse(GameManager.Instance.alliedPoisonTouchDamageCounter.text) - cv.CurrentDamage).ToString();
             }
         }
         else

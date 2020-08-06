@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class ShockListener : MonoBehaviour, IPointerDownHandler
 {
+    const byte ADJUST_HEALTH_SYNC_EVENT = 24;
+
     public void Start()
     {
         gameObject.GetComponent<CardVisual>().particleGlow.gameObject.SetActive(true);
@@ -21,6 +23,11 @@ public class ShockListener : MonoBehaviour, IPointerDownHandler
         }
 
         cv.AdjustHealth(1, false);
+
+        //Multiplayer
+        int position = gameObject.transform.GetSiblingIndex();
+        object[] data = new object[] { position, 1, false, false };
+        EffectCommandPun.Instance.SendData(ADJUST_HEALTH_SYNC_EVENT, data);
 
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {

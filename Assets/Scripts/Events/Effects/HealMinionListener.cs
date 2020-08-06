@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class HealMinionListener : MonoBehaviour, IPointerDownHandler
 {
+    const byte ADJUST_HEALTH_SYNC_EVENT = 24;
+
     private void Start()
     {
         transform.Find("ParticleGlow").gameObject.SetActive(true);
@@ -47,6 +49,11 @@ public class HealMinionListener : MonoBehaviour, IPointerDownHandler
 
     IEnumerator RemoveListener()
     {
+        //Multiplayer
+        int position = gameObject.transform.GetSiblingIndex();
+        object[] data = new object[] { position, 1, true, true };
+        EffectCommandPun.Instance.SendData(ADJUST_HEALTH_SYNC_EVENT, data);
+
         yield return new WaitForSeconds(2);
 
         GameManager.Instance.EnableOrDisablePlayerControl(true);

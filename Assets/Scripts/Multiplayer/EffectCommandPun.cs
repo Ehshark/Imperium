@@ -16,7 +16,10 @@ public class EffectCommandPun : MonoBehaviour
     const byte ACTIVATE_SILENCE_SYNC_EVENT = 29;
     const byte TAP_ANIMATION_SYNC_EVENT = 43;
     const byte ANIMATION_SYNC_EVENT = 44;
-    const byte PEEK_SHOP_SYNC_EVENT = 44;
+    const byte PEEK_SHOP_SYNC_EVENT = 45;
+    const byte ADJUST_GOLD_SYNC_EVENT = 47;
+    const byte ADJUST_EXP_SYNC_EVENT = 48;
+    const byte ADJUST_HERO_HEALTH_SYNC_EVENT = 49;
 
     private void Awake()
     {
@@ -81,7 +84,7 @@ public class EffectCommandPun : MonoBehaviour
         {
             object[] data = (object[])photonData.CustomData;
             string cardClass = (string)data[0];
-            List<int> cards = (List<int>)data[1];
+            int[] cards = (int[])data[1];
             List<MinionData> cardList = new List<MinionData>();
 
             foreach (int id in cards)
@@ -92,9 +95,53 @@ public class EffectCommandPun : MonoBehaviour
 
             UIManager.Instance.MoveTopCardsToBottom(cardClass, cardList);
         }
+        else if (eventCode == ADJUST_HEALTH_SYNC_EVENT)
+        {
+            object[] data = (object[])photonData.CustomData;
+            int position = (int)data[0];
+            int healthAmount = (int)data[1];
+            bool increaseOrDecrease = (bool)data[2];
+            bool activeOrInactive = (bool)data[3];
+
+            Transform card = GameManager.Instance.GetActiveMinionZone(activeOrInactive).GetChild(position);
+            CardVisual cv = card.GetComponent<CardVisual>();
+            cv.AdjustHealth(healthAmount, increaseOrDecrease);
+        }
+        else if (eventCode == ADJUST_DAMAGE_SYNC_EVENT)
+        {
+            object[] data = (object[])photonData.CustomData;
+            int position = (int)data[0];
+            int damageAmount = (int)data[1];
+            bool increaseOrDecrease = (bool)data[2];
+
+            Transform card = GameManager.Instance.GetActiveMinionZone(true).GetChild(position);
+            CardVisual cv = card.GetComponent<CardVisual>();
+            cv.AdjustDamage(damageAmount, increaseOrDecrease);
+        }
+        else if (eventCode == ADJUST_GOLD_SYNC_EVENT)
+        {
+            object[] data = (object[])photonData.CustomData;
+            int amount = (int)data[0];
+
+            GameManager.Instance.ActiveHero(true).AdjustGold(2, true);
+        }
+        else if (eventCode == ADJUST_EXP_SYNC_EVENT)
+        {
+            object[] data = (object[])photonData.CustomData;
+            int amount = (int)data[0];
+
+            GameManager.Instance.ActiveHero(true).EnemyGainExp(2);
+        }
+        else if (eventCode == ADJUST_HERO_HEALTH_SYNC_EVENT)
+        {
+            object[] data = (object[])photonData.CustomData;
+            int amount = (int)data[0];
+
+            GameManager.Instance.ActiveHero(false).AdjustHealth(amount, false);
+        }
     }
 
-    private IEnumerator ShowEffectAnimation()
+    public IEnumerator ShowEffectAnimation()
     {
         GameManager.Instance.effectText.gameObject.SetActive(true);
         yield return new WaitForSeconds(2.5f);

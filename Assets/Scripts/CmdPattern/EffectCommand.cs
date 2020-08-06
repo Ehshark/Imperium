@@ -106,7 +106,7 @@ public class EffectCommand : MonoBehaviour
         iec.method.Invoke(iec.cardType, new object[] { });
 
         CardVisual cv = iec.card.GetComponent<CardVisual>();
-        if (cl.ConditionEvent == EVENT_TYPE.TAP_MINION)
+        if (cl.ConditionEvent == EVENT_TYPE.TAP_MINION && InvokeEventCommand.InvokeEventQueue.Count == 0)
         {
             cv.AdjustHealth(1, false);
         }

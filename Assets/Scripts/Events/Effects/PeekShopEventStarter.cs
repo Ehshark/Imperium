@@ -12,7 +12,7 @@ public class PeekShopEventStarter : MonoBehaviour
     public List<MinionData> moveCards = new List<MinionData>();
     private GameObject card;
 
-    const byte PEEK_SHOP_SYNC_EVENT = 44;
+    const byte PEEK_SHOP_SYNC_EVENT = 45;
 
     public void StartEvent()
     {
@@ -126,10 +126,10 @@ public class PeekShopEventStarter : MonoBehaviour
         EnableShop();
 
         //Call the effect on the other screen
-        List<int> minionList = new List<int>();
-        foreach (MinionData minion in moveCards)
+        int[] minionList = new int[moveCards.Count];
+        for (int i = 0; i < moveCards.Count; i++)
         {
-            minionList.Add(minion.MinionID);
+            minionList[i] = moveCards[i].MinionID;
         }
 
         object[] data = new object[] { moveCards.First().CardClass, minionList };

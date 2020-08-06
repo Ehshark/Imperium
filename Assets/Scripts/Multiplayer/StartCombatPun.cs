@@ -8,9 +8,13 @@ using UnityEngine;
 public class StartCombatPun : MonoBehaviour
 {
     public static StartCombatPun Instance { get; private set; } = null;
+    public bool attackAfter = false;
 
     private const byte START_COMBAT = 17;
     private const byte ASSIGN_DEFENDING_DAMAGE = 18;
+    private const byte ASSIGN_AFTER_EFFECT_SYNC_EVENT = 46;
+
+    private List<CardVisual> minionsLeft = new List<CardVisual>();
 
     private void Awake()
     {
@@ -92,7 +96,6 @@ public class StartCombatPun : MonoBehaviour
                 EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.MINION_DEFEATED);
             }
 
-            GameManager.Instance.IsDefending = false;
             AssignDamageToAttackers();
 
             DefendListener dl = GameManager.Instance.GetComponent<DefendListener>();
@@ -109,6 +112,23 @@ public class StartCombatPun : MonoBehaviour
                 { "poisonTouch", 0 },
                 { "damage", 0 }
             };
+        }
+        else if (eventCode == ASSIGN_AFTER_EFFECT_SYNC_EVENT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int[] minions = (int[])data[0];
+
+            int i = 0;
+            foreach (Transform card in GameManager.Instance.GetActiveMinionZone(true))
+            {
+                CardVisual cv = card.GetComponent<CardVisual>();
+                if (cv.Md.MinionID == minions[i])
+                {
+                    cv.AdjustHealth(1, false);
+                }
+
+                i++;
+            }
         }
     }
 
@@ -198,10 +218,56 @@ public class StartCombatPun : MonoBehaviour
         foreach (GameObject card in GameManager.Instance.MinionsAttacking)
         {
             CardVisual cv = card.GetComponent<CardVisual>();
-            cv.AdjustHealth(1, false);
+            ConditionListener cl = card.GetComponent<ConditionListener>();
+
+            if (cv.Md != null && cl != null)
+            {
+                if ((cl.ConditionEvent == EVENT_TYPE.BLEED || cl.ConditionEvent == EVENT_TYPE.MINION_DEFEATED) && (cv.CurrentHealth - 1) == 0)
+                {
+                    minionsLeft.Add(cv);
+                }
+                else
+                {
+                    cv.AdjustHealth(1, false);
+                }
+            }
+            else
+            {
+                cv.AdjustHealth(1, false);
+            }
+        }
+
+        if (minionsLeft.Count > 0)
+        {
+            attackAfter = true;
         }
 
         GameManager.Instance.MinionsAttacking.Clear();
+    }
+
+    public void DamageDelay()
+    {
+        StartCoroutine(AssignDamageToAttackersAfter());
+    }
+
+    public IEnumerator AssignDamageToAttackersAfter()
+    {
+        int[] attackingMinions = new int[minionsLeft.Count];
+        for (int i = 0; i < minionsLeft.Count; i++)
+        {
+            attackingMinions[i] = minionsLeft[i].Md.MinionID;
+        }
+
+        object[] data = new object[] { attackingMinions };
+        SendData(ASSIGN_AFTER_EFFECT_SYNC_EVENT, data);
+
+        foreach (CardVisual card in minionsLeft)
+        {
+            card.AdjustHealth(1, false);
+            yield return new WaitForSeconds(1f);
+        }
+
+        minionsLeft.Clear();
     }
 
     public void SendData(byte byteCode, object data)

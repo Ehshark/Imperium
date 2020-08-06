@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ShockListenerStarter : MonoBehaviour
 {
+    const byte ADJUST_HERO_HEALTH_SYNC_EVENT = 49;
+
     public void StartEvent()
     {
         //No Minions
@@ -13,6 +15,10 @@ public class ShockListenerStarter : MonoBehaviour
 
             //Shock oppenent's Hero
             GameManager.Instance.ActiveHero(false).AdjustHealth(1, false);
+
+            //Multiplayer
+            object[] data = new object[] { 1 };
+            EffectCommandPun.Instance.SendData(ADJUST_HERO_HEALTH_SYNC_EVENT, data);
 
             //Call the Next Power in the Queue
             InvokeEventCommand.InvokeNextEvent();
@@ -28,7 +34,7 @@ public class ShockListenerStarter : MonoBehaviour
             }
         }
 
-        //Call the Next Effect in the Queue
-        InvokeEventCommand.InvokeNextEvent();
+        ////Call the Next Effect in the Queue
+        //InvokeEventCommand.InvokeNextEvent();
     }
 }

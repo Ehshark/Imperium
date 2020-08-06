@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class BuffMinionListener : MonoBehaviour, IPointerDownHandler
 {
+    const byte ADJUST_DAMAGE_SYNC_EVENT = 23;
+
     private void Start()
     {
         transform.Find("ParticleGlow").gameObject.SetActive(true);
@@ -25,6 +27,11 @@ public class BuffMinionListener : MonoBehaviour, IPointerDownHandler
 
     IEnumerator RemoveListener()
     {
+        //Multiplayer
+        int position = gameObject.transform.GetSiblingIndex();
+        object[] data = new object[] { position, 1, true };
+        EffectCommandPun.Instance.SendData(ADJUST_DAMAGE_SYNC_EVENT, data);
+
         yield return new WaitForSeconds(2);
 
         GameManager.Instance.EnableOrDisablePlayerControl(true);

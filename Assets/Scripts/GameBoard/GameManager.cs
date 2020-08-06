@@ -401,6 +401,7 @@ public class GameManager : MonoBehaviour
             CardVisual cv = t.GetComponent<CardVisual>();
             cv.IsTapped = false;
             cv.ChangeTappedAppearance();
+            ResetDamage(t);
         }
 
         if (bottomHero.DamageBonus > 0)

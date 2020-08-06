@@ -228,7 +228,17 @@ public class StartCombat : MonoBehaviour
             CardVisual cv = card.GetComponent<CardVisual>();
             if (cv.IsTapped && !cv.TapEffect)
             {
-                cv.AdjustHealth(1, false);
+                if (cv.Md != null)
+                {
+                    if ((cv.Md.ConditionID == 1 && (cv.CurrentHealth - 1) == 0) || (cv.Md.ConditionID == 3 && (cv.CurrentHealth - 1) == 0))
+                        continue;
+                    else
+                        cv.AdjustHealth(1, false);
+                }
+                else
+                {
+                    cv.AdjustHealth(1, false);
+                }
             }
         }
     }

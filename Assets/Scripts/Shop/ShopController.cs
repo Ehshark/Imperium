@@ -220,7 +220,7 @@ public class ShopController : MonoBehaviour
         {
             if (GameManager.Instance.IsEffect)
             {
-                ChangeShopEffect();
+                StartCoroutine(ChangeShopEffect());
                 return;
             }
 
@@ -289,15 +289,32 @@ public class ShopController : MonoBehaviour
         }
     }
 
-    private void ChangeShopEffect()
+    private IEnumerator ChangeShopEffect()
     {
+        //Delay on Gold Coin
+        goldPileIcon.GetComponent<Image>().color = Color.white;
+        DelayCommand dc = new DelayCommand(goldPileIcon, 1f);
+        dc.AddToQueue();
+        yield return new WaitForSeconds(1f);
+
+        //Delay on Pile
+        DelayOnPile();
+        yield return new WaitForSeconds(1f);
+
         //Spawn a new card from the correct deck
         SpawnShopMinion(selectedCard.GetComponent<CardVisual>().Md.CardClass, true, selectedCard.GetComponent<CardVisual>().Md);
+
+        //Send the card being changed
+        object[] data = new object[] { selectedCard.GetComponent<CardVisual>().Md.CardClass, selectedCard.GetComponent<CardVisual>().Md.MinionID };
+        PhotonNetwork.RaiseEvent(CHANGE_SHOP_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
 
         //Destroy the Object
         RemoveCard(true);
 
+        //Enable Shop
         card.GetComponent<ChangeShopListener>().EnableShop();
+        GameManager.Instance.shopButton.interactable = true;
     }
 
     public void RemoveCard(bool destroyMinion)
@@ -376,12 +393,10 @@ public class ShopController : MonoBehaviour
     {
         MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveHand(true), null);
         mc.AddToQueue();
-        //GameObject shopCard = GameManager.Instance.MoveCard(selectedCard, GameManager.Instance.GetActiveHand(true), null, true);
-        //shopCard.AddComponent<PlayCard>();
         UIManager.Instance.GetActiveHandList(true).Add(card.GetComponent<CardVisual>().CardData);
         GameManager.Instance.DisableExpressBuy();
-        //EventManager.Instance.PostNotification(EVENT_TYPE.POWER_EXPRESS_BUY);
         EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_EXPRESS_BUY);
+        UIManager.Instance.AttachPlayCard();
     }
 
     private void DelayOnPile()
