@@ -192,7 +192,7 @@ public class DefendListener : MonoBehaviour, IListener
                 {
                     if (entry.Value != 0)
                     {
-                        if (entry.Key.Equals("poisonTouch") && cv.Md.EffectId1 != 9)
+                        if (entry.Key.Equals("poisonTouch") && (cv.Sd || cv.Md.EffectId1 != 9))
                         {
                             cv.AdjustHealth(cv.CurrentHealth, false);
                             minionDefeated = true;
@@ -208,14 +208,15 @@ public class DefendListener : MonoBehaviour, IListener
                         damage += entry.Value;
                     }
                 }
-                if (t.GetComponent<CardVisual>().CurrentHealth > 0)
-                {
-                    t.GetComponent<CardVisual>().DmgAbsorbed.ResetDamageAbsorbed();
-                    t.GetComponent<CardVisual>().ResetDamageObjectsUI();
-                }
 
-                damageToSend.Add(new DamagePhoton(index, damage));
+                damageToSend.Add(new DamagePhoton(index, cv.DmgAbsorbed.DamageAbsorbed));
                 index++;
+
+                if (cv.CurrentHealth > 0)
+                {
+                    cv.DmgAbsorbed.ResetDamageAbsorbed();
+                    cv.ResetDamageObjectsUI();
+                }
             }
         }
 
@@ -243,13 +244,14 @@ public class DefendListener : MonoBehaviour, IListener
             }
         }
 
-        GameManager.Instance.ActiveHero(false).DmgAbsorbed.ResetDamageAbsorbed();
-        GameManager.Instance.ActiveHero(false).ResetDamageObjectsUI();
-
         //Send the data to Attacker
         byte[] damageByte = DataHandler.Instance.ObjectToByteArray(damageToSend);
-        object[] data = new object[] { damageByte, heroDamageAmount, minionDefeated };
+        byte[] heroDamageByte = DataHandler.Instance.ObjectToByteArray(GameManager.Instance.ActiveHero(false).GetComponent<Hero>().DmgAbsorbed.DamageAbsorbed);
+        object[] data = new object[] { damageByte, heroDamageByte, minionDefeated };
         StartCombatPun.Instance.SendData(ASSIGN_DEFENDING_DAMAGE, data);
+
+        GameManager.Instance.ActiveHero(false).DmgAbsorbed.ResetDamageAbsorbed();
+        GameManager.Instance.ActiveHero(false).ResetDamageObjectsUI();
 
         // TODO: End the game if the hero's health is 0.
         if (GameManager.Instance.ActiveHero(false).CurrentHealth == 0)

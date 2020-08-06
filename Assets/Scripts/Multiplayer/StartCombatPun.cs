@@ -73,12 +73,15 @@ public class StartCombatPun : MonoBehaviour
         {
             object[] data = (object[])photonEvent.CustomData;
             List<DamagePhoton> damageToAssign = (List<DamagePhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[0]);
-            int heroDamage = (int)data[1];
+            Dictionary<string, int> heroDamage = (Dictionary<string, int>)DataHandler.Instance.ByteArrayToObject((byte[])data[1]);
             bool minionDefeated = (bool)data[2];
-
-            AssignDamageToDefenders(damageToAssign);
-            GameManager.Instance.ActiveHero(false).AdjustHealth(heroDamage, false);
-            if (heroDamage > 0)
+            int totalHeroDamage = 0;
+            foreach (KeyValuePair<string, int> entry in heroDamage)
+            {
+                totalHeroDamage += entry.Value;
+            }
+            AssignDamageToDefenders(damageToAssign, heroDamage);
+            if (totalHeroDamage > 0)
             {
                 //Add Bleed to the queue
                 EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.BLEED);
@@ -139,16 +142,54 @@ public class StartCombatPun : MonoBehaviour
         }
     }
 
-    private void AssignDamageToDefenders(List<DamagePhoton> damages)
+    private void AssignDamageToDefenders(List<DamagePhoton> damages, Dictionary<string, int> heroDamage)
     {
         int i = 0;
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {
             CardVisual cv = t.GetComponent<CardVisual>();
             DamagePhoton damage = damages[i];
-
-            cv.AdjustHealth(damage.GetDamage(), false);
+            foreach (KeyValuePair<string, int> entry in damage.DamageAbsorbed)
+            {
+                if (entry.Value != 0)
+                {
+                    if (entry.Key.Equals("poisonTouch") && (cv.Sd || cv.Md.EffectId1 != 9))
+                    {
+                        cv.AdjustHealth(cv.CurrentHealth, false);
+                    }
+                    else
+                    {
+                        cv.AdjustHealth(entry.Value, false);
+                    }
+                }
+            }
+            if (cv.CurrentHealth > 0)
+            {
+                cv.DmgAbsorbed.ResetDamageAbsorbed();
+                cv.ResetDamageObjectsUI();
+            }
             i++;
+        }
+
+        foreach (KeyValuePair<string, int> entry in heroDamage)
+        {
+            if (entry.Value != 0)
+            {
+                GameManager.Instance.ActiveHero(false).AdjustHealth(entry.Value, false);
+                if (entry.Key.Equals("lifesteal"))
+                {
+                    GameManager.Instance.ActiveHero(true).AdjustHealth(entry.Value, true);
+                    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_LIFESTEAL);
+                }
+                else if (entry.Key.Equals("poisonTouch"))
+                {
+                    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_POISON_TOUCH);
+                }
+                else if (entry.Key.Equals("stealth"))
+                {
+                    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_STEALTH);
+                }
+            }
         }
     }
 

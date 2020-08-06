@@ -28,6 +28,7 @@ public class SilenceListener : MonoBehaviour, IPointerDownHandler
 
         EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_SILENCE);
         InvokeEventCommand.InvokeNextEvent();
+        UIManager.Instance.RemoveEffectIcon = true;
     }
 
     public void OnDestroy()

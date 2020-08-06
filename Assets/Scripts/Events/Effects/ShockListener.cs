@@ -40,6 +40,7 @@ public class ShockListener : MonoBehaviour, IPointerDownHandler
         {
             //Call the Next Power in the Queue
             InvokeEventCommand.InvokeNextEvent();
+            UIManager.Instance.RemoveEffectIcon = true;
         }
 
         if (StartGameController.Instance.tutorial)

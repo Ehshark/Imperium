@@ -44,6 +44,8 @@ public class BuffMinionListener : MonoBehaviour, IPointerDownHandler
 
         //Call the Next Power in the Queue
         InvokeEventCommand.InvokeNextEvent();
+
+        UIManager.Instance.RemoveEffectIcon = true;
     }
 
     private void OnDestroy()

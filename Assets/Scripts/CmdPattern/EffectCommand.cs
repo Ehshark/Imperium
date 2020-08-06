@@ -50,7 +50,6 @@ public class EffectCommand : MonoBehaviour
 
     public void ContinueExecution()
     {
-        UIManager.Instance.RemoveEffectIcon = true;
         if (EffectQueue.Count != 0 && !inEffect)
         {
             if (CanEffectBeCalled())
@@ -58,8 +57,6 @@ public class EffectCommand : MonoBehaviour
                 StartCommandExecution();
             }
         }
-        else
-            GameManager.Instance.EffectIconQueue.gameObject.SetActive(false);
     }
 
     public bool CanEffectBeCalled()

@@ -40,5 +40,7 @@ public class ChangeShopListener : MonoBehaviour
         {
             t.gameObject.AddComponent<ShowShopCard>();
         }
+
+        UIManager.Instance.RemoveEffectIcon = true;
     }
 }

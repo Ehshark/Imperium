@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,10 +65,13 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             { 17, card.GetComponent<TrashStarter>() },
             { 18, card.GetComponent<EssentialListener>() },
             { 19, card.GetComponent<EssentialListener>() },
-            { 15, card.GetComponent<OpponentDiscardStarter>() }, 
+            { 15, card.GetComponent<OpponentDiscardStarter>() },
             { 12, card.GetComponent<SilenceMinionStarter>() }
         };
     }
+
+    //Multiplayer
+    const byte ENABLE_ICON_QUEUE_EVENT = 60;
 
     public void OnEvent(EVENT_TYPE ConditionEvent)
     {
@@ -86,7 +92,11 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                             Type effectType = EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value.GetType();
 
                             if (!GameManager.Instance.EffectIconQueue.gameObject.activeSelf)
+                            {
                                 GameManager.Instance.EffectIconQueue.gameObject.SetActive(true);
+                                PhotonNetwork.RaiseEvent(ENABLE_ICON_QUEUE_EVENT, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                                    SendOptions.SendReliable);
+                            }
 
                             MethodInfo startEvent = effectType.GetMethod("StartEvent");
                             InvokeEventCommand invokeEvent = new InvokeEventCommand(startEvent, EffectCardData.Where(t => t.Key == md.EffectId1).SingleOrDefault().Value, card);

@@ -32,7 +32,17 @@ public class UntapMinionListener : MonoBehaviour, IPointerDownHandler
             cv.IsTapped = false;
             cv.ChangeTappedAppearance();
 
-            PhotonNetwork.RaiseEvent(UNTAP_SYNC_EVENT, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+            bool isMinion = false;
+            int cardId;
+            if (cv.Md) {
+                isMinion = true;
+                cardId = cv.Md.MinionID;
+            }
+            else
+                cardId = cv.Sd.StarterID;
+
+            object[] data = new object[] { isMinion, cardId };
+            PhotonNetwork.RaiseEvent(UNTAP_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
                 SendOptions.SendReliable);
 
             //removes all untap listeners from all minions on the active player's board
@@ -42,6 +52,8 @@ public class UntapMinionListener : MonoBehaviour, IPointerDownHandler
             }
 
             InvokeEventCommand.InvokeNextEvent();
+
+            UIManager.Instance.RemoveEffectIcon = true;
         }
         else
         {

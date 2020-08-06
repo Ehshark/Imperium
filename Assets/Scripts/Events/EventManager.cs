@@ -217,12 +217,42 @@ public class EventManager : MonoBehaviour
             if (handIndex > -1)
             {
                 UIManager.Instance.enemyHand.RemoveAt(handIndex);
-                Destroy(GameManager.Instance.enemyHand.GetChild(destroyIndex));
+                Destroy(GameManager.Instance.enemyHand.GetChild(destroyIndex).gameObject);
             }
             else
             {
                 UIManager.Instance.enemyDiscards.RemoveAt(discardIndex);
-                Destroy(GameManager.Instance.enemyDiscardPile.GetChild(destroyIndex));
+                Destroy(GameManager.Instance.enemyDiscardPile.GetChild(destroyIndex).gameObject);
+            }
+        }
+        else if (eventCode == 31) //Untap sync
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            bool isMinion = (bool)data[0];
+            int id = (int)data[1];
+
+            if (isMinion)
+            {
+                foreach (Transform t in GameManager.Instance.enemyMinionZone)
+                {
+                    CardVisual cv = t.GetComponent<CardVisual>();
+                    if (cv.Md.MinionID == id)
+                    {
+                        cv.IsTapped = false;
+                        cv.ChangeTappedAppearance();
+                    }
+                }
+            }
+            else {
+                foreach (Transform t in GameManager.Instance.enemyMinionZone)
+                {
+                    CardVisual cv = t.GetComponent<CardVisual>();
+                    if (cv.Sd.StarterID == id)
+                    {
+                        cv.IsTapped = false;
+                        cv.ChangeTappedAppearance();
+                    }
+                }
             }
         }
         else if (eventCode == 42)
@@ -250,6 +280,14 @@ public class EventManager : MonoBehaviour
                 Destroy(GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard.gameObject);
                 GameManager.Instance.shop.GetComponent<ShopController>().BigShopCard = null;
             }
+        }
+        else if (eventCode == 60) //Enable GameManager Effect Icon Queue
+        {
+            GameManager.Instance.EffectIconQueue.gameObject.SetActive(true);
+        }
+        else if (eventCode == 61) //Disable GameManager Effect Icon Queue
+        {
+            GameManager.Instance.EffectIconQueue.gameObject.SetActive(false);
         }
     }
 

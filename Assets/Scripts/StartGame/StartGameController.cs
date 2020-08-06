@@ -395,4 +395,9 @@ public class StartGameController : MonoBehaviour
         GameObject tree = Instantiate(GameManager.Instance.skillTreePrefab);
         tree.transform.SetParent(GameManager.Instance.canvas, false);
     }
+
+    private void DetermineGameBackground() {
+        UIManager.Instance.ChosenBack = Random.Range(0, 9);
+
+    }
 }

@@ -14,6 +14,10 @@ using ExitGames.Client.Photon;
 public class UIManager : MonoBehaviour
 {
     public List<Sprite> allSprites;
+    public List<Sprite> backgroundSprites;
+
+    public Image background;
+    private int chosenBack;
 
     public GameObject minionPrefab;
     public GameObject starterPrefab;
@@ -66,6 +70,7 @@ public class UIManager : MonoBehaviour
     public List<StarterData> EnemyStarters { get => enemyStarters; set => enemyStarters = value; }
     public List<StarterData> Starters { get => starters; set => starters = value; }
     public bool RemoveEffectIcon { get => removeEffectIcon; set => removeEffectIcon = value; }
+    public int ChosenBack { get => chosenBack; set => chosenBack = value; }
 
     public Transform enlargedCard;
 
@@ -456,6 +461,10 @@ public class UIManager : MonoBehaviour
         loadedIcons = Resources.LoadAll("VisualAssets/game-icons-net/Game-UI", typeof(Sprite));
         for (int i = 0; i < loadedIcons.Length; i++)
             allSprites.Add((Sprite)loadedIcons[i]);
+
+        loadedIcons = Resources.LoadAll("VisualAssets/Backgrounds", typeof(Sprite));
+        for (int i = 0; i < loadedIcons.Length; i++)
+            backgroundSprites.Add((Sprite)loadedIcons[i]);
     }
 
     public void SortPiles()
@@ -619,21 +628,25 @@ public class UIManager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
-            allyDeck.Add(Resources.Load("Minions/3") as MinionData);
+            allyDeck.Add(Resources.Load("Minions/40") as MinionData);
+            allyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 allyDeck.Add(AllyStarters[i]);
 
-            enemyDeck.Add(Resources.Load("Minions/3") as MinionData);
+            enemyDeck.Add(Resources.Load("Minions/40") as MinionData);
+            enemyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 enemyDeck.Add(EnemyStarters[i]);
         }
         else
         {
-            allyDeck.Add(Resources.Load("Minions/3") as MinionData);
+            allyDeck.Add(Resources.Load("Minions/40") as MinionData);
+            allyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 allyDeck.Add(EnemyStarters[i]);
 
-            enemyDeck.Add(Resources.Load("Minions/3") as MinionData);
+            enemyDeck.Add(Resources.Load("Minions/40") as MinionData);
+            enemyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 enemyDeck.Add(AllyStarters[i]);
         }
@@ -850,7 +863,11 @@ public class UIManager : MonoBehaviour
                 PhotonNetwork.RaiseEvent(ICON_QUEUE_ENQUEUE_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
                     SendOptions.SendReliable);
 
-                yield return new WaitUntil(() => removeEffectIcon == true);
+                if (key == 2 || key == 3 || key == 5 || key == 6 || key == 11 || key == 12 || key == 13 || key == 14 || key == 17)
+                    yield return new WaitUntil(() => removeEffectIcon == true);
+                else
+                    yield return new WaitForSeconds(2.5f);
+
                 removeEffectIcon = false;
 
                 if (iconQueue.Count > 0)

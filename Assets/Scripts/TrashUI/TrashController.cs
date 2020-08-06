@@ -133,5 +133,7 @@ public class TrashController : MonoBehaviour
 
         //Call the Next Effect in the Queue
         InvokeEventCommand.InvokeNextEvent();
+
+        UIManager.Instance.RemoveEffectIcon = true;
     }
 }

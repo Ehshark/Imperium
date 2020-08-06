@@ -103,6 +103,8 @@ public class RecycleListenerAssigner : MonoBehaviour
 
         //Call the Next Effect in the Queue
         InvokeEventCommand.InvokeNextEvent();
+
+        UIManager.Instance.RemoveEffectIcon = true;
     }
 }
 

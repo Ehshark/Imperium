@@ -145,5 +145,7 @@ public class PeekShopEventStarter : MonoBehaviour
 
         //Call the Next Power in the Queue
         InvokeEventCommand.InvokeNextEvent();
+
+        UIManager.Instance.RemoveEffectIcon = true;
     }
 }

@@ -7,12 +7,22 @@ using System;
 public class DamagePhoton
 {
     private int index;
-    private int damageAmount;
+    //private int damageAmount;
+    private Dictionary<string, int> damageAbsorbed =  new Dictionary<string, int>
+        {
+            { "stealth", 0 },
+            { "lifesteal", 0 },
+            { "poisonTouch", 0 },
+            { "damage", 0 }
+        };
 
-    public DamagePhoton(int index, int damageAmount)
+    public Dictionary<string, int> DamageAbsorbed { get => damageAbsorbed; set => damageAbsorbed = value; }
+
+    public DamagePhoton(int index, Dictionary<string, int> d)
     {
         this.index = index;
-        this.damageAmount = damageAmount;
+        //this.damageAmount = damageAmount;
+        damageAbsorbed = d;
     }
 
     public int GetIndex()
@@ -20,8 +30,19 @@ public class DamagePhoton
         return index;
     }
 
-    public int GetDamage()
+    //public int GetDamage()
+    //{
+    //    return damageAmount;
+    //}
+
+    public void ResetDamageAbsorbed()
     {
-        return damageAmount;
+        damageAbsorbed = new Dictionary<string, int>
+        {
+            { "stealth", 0 },
+            { "lifesteal", 0 },
+            { "poisonTouch", 0 },
+            { "damage", 0 }
+        };
     }
 }

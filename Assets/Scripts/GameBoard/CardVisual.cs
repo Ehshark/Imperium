@@ -82,11 +82,6 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     public ParticleSystem particleGlow;
 
-    ////Multiplayer
-    //const byte ADJUST_DAMAGE_SYNC_EVENT = 23;
-    //const byte ADJUST_HEALTH_SYNC_EVENT = 24;
-    const byte ACTIVATE_SILENCE_SYNC_EVENT = 29;
-
     void OnEnable()
     {
         dmgAbsorbed = new Damage();
@@ -467,10 +462,6 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             }
 
             health.text = currentHealth.ToString();
-
-            //object[] data = new object[] { amount, add };
-            //PhotonNetwork.RaiseEvent(ADJUST_HEALTH_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-            //    SendOptions.SendReliable);
         }
     }
 
@@ -593,7 +584,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         bool canAssignDamage = false;
         if (damageType.Equals("stealth"))
         {
-            if (md.EffectId1 == 9)
+            if (md && md.EffectId1 == 9)
             {
                 canAssignDamage = true;
             }
@@ -624,9 +615,6 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         }
 
         damage.text = currentDamage.ToString();
-        //object[] data = new object[] { amount, add };
-        //PhotonNetwork.RaiseEvent(ADJUST_DAMAGE_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-        //    SendOptions.SendReliable);
     }
 
     public void ResetDamage()
@@ -690,10 +678,6 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             isSilenced = false;
             silenceImage.enabled = false;
         }
-
-        object[] data = new object[] { activate };
-        //PhotonNetwork.RaiseEvent(ACTIVATE_SILENCE_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-        //    SendOptions.SendReliable);
     }
 
     public void ResetDamageObjectsUI()
