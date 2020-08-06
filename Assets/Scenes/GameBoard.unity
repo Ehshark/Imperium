@@ -4457,6 +4457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bbc984afe741bb4294b48cf47c772a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackAfter: 0
 --- !u!4 &1106476451
 Transform:
   m_ObjectHideFlags: 0
@@ -18840,6 +18841,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3682188039121233623, guid: e6f77932480081246bddc16c8cdd8bd1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3704319085693426465, guid: e6f77932480081246bddc16c8cdd8bd1,
         type: 3}

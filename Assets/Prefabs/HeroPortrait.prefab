@@ -3439,7 +3439,7 @@ GameObject:
   - component: {fileID: 8621248883892182703}
   - component: {fileID: 4706435756196527425}
   - component: {fileID: 4584331277254374776}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8156,8 +8156,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1138613887
-  m_SortingLayer: 0
+  m_SortingLayerID: -567550441
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
