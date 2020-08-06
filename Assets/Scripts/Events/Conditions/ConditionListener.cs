@@ -83,7 +83,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
         {
             if (md != null)
             {
-                if (md.EffectId1 != 0 && !md.IsSilenced)
+                if (md.EffectId1 != 0 && !cv.IsSilenced)
                 {
                     foreach (KeyValuePair<int, object> entry in EffectCardData)
                     {
@@ -119,7 +119,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
                     }
                 }
 
-                if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 9 || cv.Md.EffectId1 == 10 && !md.IsSilenced)
+                if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 9 || cv.Md.EffectId1 == 10 && !cv.IsSilenced)
                 {
                     cv.IsCombatEffectActivated = true;
                     cv.CombatEffectActivated(true);
@@ -138,7 +138,7 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
         {
             CardVisual cv = card.GetComponent<CardVisual>();
 
-            if (!cv.IsTapped)
+            if (!cv.IsTapped && !cv.IsSilenced)
             {
                 //EffectCommand.Instance.EffectQueue.Enqueue(ConditionEvent);
                 OnEvent(ConditionEvent);

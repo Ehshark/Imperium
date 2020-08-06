@@ -59,7 +59,7 @@ public class ConditionAndEffectAssigner : MonoBehaviour, IListener
             { 17, "TrashStarter" },
             { 18, "EssentialListener" },
             { 19, "EssentialListener" },
-            { 12, "SilenceListenerStarter" }
+            { 12, "SilenceMinionStarter" }
         };
 
         EventManager.Instance.AddListener(EVENT_TYPE.ASSIGN_CONDITIONS, this);

@@ -36,7 +36,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
     private bool tapEffect;
 
     private bool isSilenced = false;
-    private bool IsSilenced { get => isTapped; set => isTapped = value; }
+    public bool IsSilenced { get => isSilenced; set => isSilenced = value; }
 
     public bool IsTapped { get => isTapped; set => isTapped = value; }
 
@@ -79,10 +79,9 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     public GameObject damageObjects;
     public Image silenceImage;
+ 
 
     public ParticleSystem particleGlow;
-
-    const byte ACTIVATE_SILENCE_SYNC_EVENT = 29;
 
     void OnEnable()
     {

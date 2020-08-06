@@ -150,32 +150,6 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     const byte LEVEL_UP = 16;
     const byte ADJUST_DISCARD_SYNC_EVENT = 25;
 
-    private void OnEnable()
-    {
-        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
-    }
-
-    private void OnDisable()
-    {
-        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
-    }
-
-    private void OnEvent(EventData photonEvent)
-    {
-        byte eventCode = photonEvent.Code;
-        if (eventCode == ADJUST_DISCARD_SYNC_EVENT)
-        {
-            object[] data = (object[])photonEvent.CustomData;
-            bool increase = (bool)data[0];
-            if (increase)
-                hasToDiscard++;
-            else
-                hasToDiscard = 0;
-
-            discardText.text = HasToDiscard.ToString();
-        }
-    }
-
     private void Start()
     {
         dmgAbsorbed = new Damage();
@@ -466,6 +440,16 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         object[] data = new object[] { increase };
         PhotonNetwork.RaiseEvent(ADJUST_DISCARD_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
             SendOptions.SendReliable);
+    }
+
+    public void AdjustEnemyDiscard(bool increase)
+    {
+        if (increase)
+            hasToDiscard++;
+        else
+            hasToDiscard = 0;
+
+        discardText.text = HasToDiscard.ToString();
     }
 
     public void AssignDamageAbsorbed(bool isIncrease)

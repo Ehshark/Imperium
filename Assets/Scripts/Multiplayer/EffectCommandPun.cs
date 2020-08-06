@@ -13,6 +13,7 @@ public class EffectCommandPun : MonoBehaviour
     //Multiplayer
     const byte ADJUST_DAMAGE_SYNC_EVENT = 23;
     const byte ADJUST_HEALTH_SYNC_EVENT = 24;
+    const byte ADJUST_DISCARD_SYNC_EVENT = 25;
     const byte ACTIVATE_SILENCE_SYNC_EVENT = 29;
     const byte TAP_ANIMATION_SYNC_EVENT = 43;
     const byte ANIMATION_SYNC_EVENT = 44;
@@ -20,6 +21,7 @@ public class EffectCommandPun : MonoBehaviour
     const byte ADJUST_GOLD_SYNC_EVENT = 47;
     const byte ADJUST_EXP_SYNC_EVENT = 48;
     const byte ADJUST_HERO_HEALTH_SYNC_EVENT = 49;
+    const byte DRAW_DISCARD_SYNC_EVENT = 50;
 
     private void Awake()
     {
@@ -138,6 +140,30 @@ public class EffectCommandPun : MonoBehaviour
             int amount = (int)data[0];
 
             GameManager.Instance.ActiveHero(false).AdjustHealth(amount, false);
+        }
+        else if (eventCode == DRAW_DISCARD_SYNC_EVENT)
+        {
+            object[] data = (object[])photonData.CustomData;
+            int position = (int)data[0];
+
+            Transform card = GameManager.Instance.GetActiveHand(true).GetChild(position);
+            GameManager.Instance.DiscardCard(card.gameObject);
+        }
+        else if (eventCode == ACTIVATE_SILENCE_SYNC_EVENT)
+        {
+            object[] data = (object[])photonData.CustomData;
+            int position = (int)data[0];
+
+            Transform card = GameManager.Instance.GetActiveMinionZone(false).GetChild(position);
+            CardVisual cv = card.GetComponent<CardVisual>();
+            cv.ActivateSilence(true);
+        }
+        else if (eventCode == ADJUST_DISCARD_SYNC_EVENT)
+        {
+            object[] data = (object[])photonData.CustomData;
+            bool increase = (bool)data[0];
+
+            GameManager.Instance.ActiveHero(false).AdjustEnemyDiscard(increase);
         }
     }
 

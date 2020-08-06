@@ -15,6 +15,10 @@ public class DiscardCardEventDistributor : MonoBehaviour, IListener
     {
         foreach (Transform t in GameManager.Instance.GetActiveHand(true))
         {
+            PlayCard pc = t.gameObject.GetComponent<PlayCard>();
+            if (pc)
+                Destroy(pc);
+
             t.gameObject.AddComponent<DiscardCardListener>();
         }
     }

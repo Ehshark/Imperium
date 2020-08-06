@@ -396,12 +396,19 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.GlowCards();
         endButton.interactable = false;
 
-        foreach (Transform t in GameManager.Instance.GetActiveMinionZone(true))
+        foreach (Transform t in GetActiveMinionZone(true))
         {
             CardVisual cv = t.GetComponent<CardVisual>();
             cv.IsTapped = false;
             cv.ChangeTappedAppearance();
             ResetDamage(t);
+        }
+
+        foreach (Transform t in GetActiveMinionZone(false))
+        {
+            CardVisual cv = t.GetComponent<CardVisual>();
+            if (cv.Md && cv.IsSilenced)
+                cv.ActivateSilence(false);
         }
 
         if (bottomHero.DamageBonus > 0)
@@ -426,7 +433,12 @@ public class GameManager : MonoBehaviour
             cv.CombatEffectActivated(false);
             UnTapMinions(t);
             ResetDamage(t);
-            if (cv.Md)
+        }
+
+        foreach (Transform t in GetActiveMinionZone(false))
+        {
+            cv = t.GetComponent<CardVisual>();
+            if (cv.Md && cv.IsSilenced)
                 cv.ActivateSilence(false);
         }
 
@@ -457,7 +469,7 @@ public class GameManager : MonoBehaviour
         else
             isActionPhase = true;
 
-        ActiveHero(true).AdjustDiscard(false);
+        //ActiveHero(true).AdjustDiscard(false);
         isForcedDiscard = false;
 
         //AdjustDeckHeight();
@@ -644,7 +656,7 @@ public class GameManager : MonoBehaviour
         Transform activeHand = GetActiveHand(true);
         int discardNum = UIManager.Instance.GetActiveHandList(true).Count - ActiveHero(true).HandSize;
 
-        if (selectedDiscards.Count == discardNum)
+        if (selectedDiscards.Count == discardNum || selectedDiscards.Count == ActiveHero(true).HasToDiscard)
         {
             List<CardPhoton> cardsToDiscard = new List<CardPhoton>();
 
@@ -687,6 +699,16 @@ public class GameManager : MonoBehaviour
             instructionsObj.GetComponent<TMP_Text>().text = "";
             if (!isActionPhase)
                 isActionPhase = true;
+            
+            if (ActiveHero(true).HasToDiscard > 0)
+            {
+                ActiveHero(true).AdjustDiscard(false);
+                foreach (Transform t in activeHand)
+                {
+                    t.gameObject.AddComponent<PlayCard>();
+                }
+                return;
+            }
 
             if (!hasSwitchedCard && !isForcedDiscard)
             {
