@@ -194,6 +194,26 @@ public class UIManager : MonoBehaviour
             PhotonNetwork.RaiseEvent(SEND_SHUFFLED_DECKS_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
             SendOptions.SendReliable);
         }
+        else if (StartGameController.Instance.tutorial)
+        {
+            Shuffle();
+
+            //Sort all the minion cards into 3 piles corresponding with their classes: warrior, rogue, mage
+            SortPiles();
+
+            dealtWarriorCards = new List<MinionData>();
+            dealtRogueCards = new List<MinionData>();
+            dealtMageCards = new List<MinionData>();
+
+            //Set the starter cards for both players
+            SetStarterDeck();
+
+            //Sets all 9 cards in the shop, 3 cards per pile
+            SetWarriorMinion();
+            SetRogueMinion();
+            SetMageMinion();
+            SetEssentials();
+        }
     }
 
     private void OnEnable()
@@ -418,24 +438,30 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.pMenu.gameObject.SetActive(true);
         GameManager.Instance.option.gameObject.SetActive(false);
     }
+
     private void Shuffle()
     {
-        for (int i = 0; i < minions.Count; i++)
+        if (!StartGameController.Instance.tutorial)
         {
-            int rnd = Random.Range(0, minions.Count);
-            tempMinion = minions[rnd];
-            minions[rnd] = minions[i];
-            minions[i] = tempMinion;
+            for (int i = 0; i < minions.Count; i++)
+            {
+                int rnd = Random.Range(0, minions.Count);
+                tempMinion = minions[rnd];
+                minions[rnd] = minions[i];
+                minions[i] = tempMinion;
+            }
         }
 
-        ShuffleStarterDeck();
+        if (!StartGameController.Instance.tutorial)
+            ShuffleStarterDeck();
 
         for (int i = 0; i < starters.Count; i++)
         {
             AllyStarters.Add(starters[i]); //create the bottom player's starting deck
         }
 
-        ShuffleStarterDeck();
+        if (!StartGameController.Instance.tutorial)
+            ShuffleStarterDeck();
 
         for (int i = 0; i < starters.Count; i++)
         {
@@ -628,25 +654,25 @@ public class UIManager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
-            allyDeck.Add(Resources.Load("Minions/39") as MinionData);
-            allyDeck.Add(Resources.Load("Minions/48") as MinionData);
+            //allyDeck.Add(Resources.Load("Minions/39") as MinionData);
+            //allyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 allyDeck.Add(AllyStarters[i]);
 
-            enemyDeck.Add(Resources.Load("Minions/39") as MinionData);
-            enemyDeck.Add(Resources.Load("Minions/48") as MinionData);
+            //enemyDeck.Add(Resources.Load("Minions/39") as MinionData);
+            //enemyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 enemyDeck.Add(EnemyStarters[i]);
         }
         else
         {
-            allyDeck.Add(Resources.Load("Minions/39") as MinionData);
-            allyDeck.Add(Resources.Load("Minions/48") as MinionData);
+            //allyDeck.Add(Resources.Load("Minions/39") as MinionData);
+            //allyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 allyDeck.Add(EnemyStarters[i]);
 
-            enemyDeck.Add(Resources.Load("Minions/39") as MinionData);
-            enemyDeck.Add(Resources.Load("Minions/48") as MinionData);
+            //enemyDeck.Add(Resources.Load("Minions/39") as MinionData);
+            //enemyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 enemyDeck.Add(AllyStarters[i]);
         }

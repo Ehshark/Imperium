@@ -5835,7 +5835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameboardMusic: {fileID: 1931294849}
   titleMusic: {fileID: 1931294852}
-  skipToMain: 0
+  skipToMain: 1
 --- !u!4 &1931294851
 Transform:
   m_ObjectHideFlags: 0

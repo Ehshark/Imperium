@@ -131,34 +131,52 @@ public class TutorialTextController : MonoBehaviour
             { new KeyValuePair<string, Action>("", delegate { ExitTutorial(); }) },
         };
 
-        //tutorialText = new List<KeyValuePair<string, Action>>
-        //{
-        //    { new KeyValuePair<string, Action>("If the condition was achieved, the effect or effects of that minion will activate.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("To show you, I will add one minion to your hand and increase some mana for you. Play the glowing minion.", delegate { SetupMinion(4); }) },
-        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
-        //    { new KeyValuePair<string, Action>("The minion summoned has the condition called tap. If you tap or select this minion, the minion's effect will activate.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("There are over 100 cards to buy from the shop, each minion having a different condition and different effect.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("Buy the right cards from the shop to activate a chain of effects.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("Alright there is one more thing I have to show you, powers. When a hero levels up, based on their level, we can equip the hero with one power.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("Each power will have the same effect but triggering the power will be different everytime.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("To demonstrate powers, I will give your hero 2 Exp. That should be good to level up your hero.", delegate { LevelUpHero(); }) },
-        //    { new KeyValuePair<string, Action>("This here is the skill tree. In the skill tree, you can select one power to give to your Hero. Each power will trigger differently based on the condition.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("Every Condition in the skill tree is an effect. Meaning, if you trigger an effect, the power with that condition will trigger as well.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("You see the effect that just flashed? That effect is called Buff Minion; it allows you to increase the damage of one minion for that turn.", delegate { DelayOnHero("SkillEffect", 2f); }) },
-        //    { new KeyValuePair<string, Action>("Click on that effect and then select unlock. I'll explain more after.", delegate { EnablePower(); }) },
-        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
-        //    { new KeyValuePair<string, Action>("Awesome! So now our hero has a power, when the Buff Minion Effect is triggered the power will trigger as well.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("Alright, so let's demonstrate this. I will give you one minion with the Buff Minion Effect and I will refill your hero's mana.", delegate { SetupMinion(101); }) },
-        //    { new KeyValuePair<string, Action>("When ready, play the newly added minion.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
-        //    { new KeyValuePair<string, Action>("Oh look! This minion has two effects, Buff Minion and +2 Gold. Most minion's who have a second will either be +2 Gold or +2 Exp.", delegate { ButtonDelay(); DestroyPlayCard(); }) },
-        //    { new KeyValuePair<string, Action>("Alright, so when the Tap Minion condition is activated we should see the Buff Minion effect, the +2 Gold effect and then our power.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("When ready, tap the minion to activate it's effect.", delegate { SetupCondition(); }) },
-        //    { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
-        //    { new KeyValuePair<string, Action>("As we experienced, his minion was chosen to take one damage. The effect of the power, shock will either target the hero or the opponent's minions if they have any.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("And with that, I have shown you everything you need to know about Imperium. Please play through the tutorial again if you need any help.", delegate { ButtonDelay(); }) },
-        //    { new KeyValuePair<string, Action>("Click on the next button to return to the Main Menu.", delegate { ButtonDelay(); }) },
-        //};
+        tutorialText = new List<KeyValuePair<string, Action>>
+        {
+            { new KeyValuePair<string, Action>("In our hand currently, we have four Fetch Quest cards and one Starter Minion.", delegate { DelayOnHero("Hand", 2f); }) },
+            { new KeyValuePair<string, Action>("Let's start out by playing two Fetch Quest Cards and our Starting Minion",  delegate { AttachForFetchAndMinion(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("Excellent! In every turn, we want to get rid of many cards possible.", delegate { DestroyPlayCard(); }) },
+            { new KeyValuePair<string, Action>("Because our mana counter is at zero, we cannot play anymore cards this turn.", delegate { DelayOnHero("Mana", 2f); }) },
+            { new KeyValuePair<string, Action>("Wait, something is different. Both are Gold counter and our Exp counter got increased.", delegate { DelayOnHero("Gold", 1f); DelayOnHero("Exp", 1f); }) },
+            { new KeyValuePair<string, Action>("When Fetch Quest is played, our Hero will gain +1 Experience and +1 Gold.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Now that we have some gold, let's buy a Card from the shop.", delegate { EnableShop(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("While in the shop, you can buy Minion or Essentinel Cards using the Gold your Hero obtains.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Cards that you buy in the shop are used to build your deck. Different strategies can be used from the cards you buy.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Let's try to buy a card now! See that card glowing? Use your Gold to buy it.", delegate { BuyCardTutorial(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("Excellent! When you buy a card from the shop the card will be sent to the discard pile. The shop will then be replaced with a new card.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("When you run out of cards from your deck, all cards from the discard pile will be removed and reshuffled. Making your new deck.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Other than buying cards, the shop also allows you to change a card as well.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Change Shop allows the player to change a shop card from a pile. This card will then be replaced by a new card.", delegate { DelayOnHero("ChangeButton", 2f); }) },
+            { new KeyValuePair<string, Action>("To do a change shop, your gold needs to be higher than half of the selected minion's gold price.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("We have one gold left, let's try to change a card from the shop. Try it on the card that's glowing.", delegate { ChangeShopTutorial(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("Excellent! We bought a card and also did a change shop. Because our gold counter is at zero, let's exit the shop.", delegate { ExitShop(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("We learned how to play cards and we learned how to use the shop. How about we attack next.", delegate { ButtonDelay(); GameManager.Instance.shopButton.interactable = false; }) },
+            { new KeyValuePair<string, Action>("Once per turn, each player is allowed to enter the combat phase and attack. Player's can use any summoned minion or their hero to attack.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("If a player uses their hero to attack, the hero must pay mana equal to half of their hero's current damage.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("If a player uses their minion(s) to attack, all attacking minions must pay one health at the end of the combat phase.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Alright let's attack! Select the Attack button to start your combat phase.", delegate { SetupAttack(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("In the combat phase, you're allowed to select both your hero and as many minions on the field to attack.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Once your selection has been made, select the Submit Button to attack your opponent.", delegate { DelayOnHero("Submit", 2f); }) },
+            { new KeyValuePair<string, Action>("To cancel your combat phase, select the Cancel Button to return to your Action Phase.", delegate { DelayOnHero("Cancel", 2f); }) },
+            { new KeyValuePair<string, Action>("Currently, we only have one minion summoned in the minion area. Because he has two health, he will not be destroyed after combat.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Alright let's attack; select the minion to attack with. After that, select the Submit Button.", delegate { ActivateAttack(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+            { new KeyValuePair<string, Action>("Excellent! In the defending phase, the defending player has the ability to assign damage to their hero and defending minions.", delegate { DisableGlowOnMinion(); }) },
+            { new KeyValuePair<string, Action>("In this case, our opponent can only assign damage to their hero. Let's take a look.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("", delegate { ActivateEnemyAI(); }) },
+            { new KeyValuePair<string, Action>("There we go! The opponent's hero took one damage and the control was placed back to you.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Oh, what happened to our Minion? After the combat phase, each minion that was selected to attack will be tapped until your next turn.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Any minions that are tapped cannot delcare an attack or defend against an attack.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Alright, now that our turn is over, let's give our opponent control.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("Press the End Turn Button to end our turn.", delegate { ActivateEndTurn(); }) },
+            { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
+        };
 
         enemyAI = new List<Action>
         {
@@ -220,7 +238,8 @@ public class TutorialTextController : MonoBehaviour
         }
         else if (type.Equals("ResourcesAndLevel"))
         {
-            DelayCommand dc = new DelayCommand(hero.Find("HeroDamage"), time);
+            Transform topObject = hero.Find("TopUiElements");
+            DelayCommand dc = new DelayCommand(topObject.Find("HeroDamage"), time);
             dc.AddToQueue();
             dc = new DelayCommand(hero.Find("HealthBarBorder"), time);
             dc.AddToQueue();
@@ -231,12 +250,14 @@ public class TutorialTextController : MonoBehaviour
         }
         else if (type.Equals("Damage"))
         {
-            DelayCommand dc = new DelayCommand(hero.Find("HeroDamage"), time);
+            Transform topObject = hero.Find("TopUiElements");
+            DelayCommand dc = new DelayCommand(topObject.Find("HeroDamage"), time);
             dc.AddToQueue();
         }
         else if (type.Equals("Gold"))
         {
-            DelayCommand dc = new DelayCommand(hero.Find("GoldOwned"), time);
+            Transform topObject = hero.Find("TopUiElements");
+            DelayCommand dc = new DelayCommand(topObject.Find("GoldOwned"), time);
             dc.AddToQueue();
         }
         else if (type.Equals("Shop"))

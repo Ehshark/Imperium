@@ -346,6 +346,7 @@ public class StartGameController : MonoBehaviour
 
         //Set Tutorial Stuff
         tutorialUI.SetActive(true);
+        GameManager.Instance.ActiveHero(true).AttackButton.gameObject.SetActive(true);
         GameManager.Instance.ActiveHero(true).AttackButton.Find("AttackIcon").GetComponent<Button>().interactable = false;
         GameManager.Instance.shopButton.interactable = false;
         GameManager.Instance.endButton.interactable = false;

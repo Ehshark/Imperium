@@ -61,8 +61,12 @@ public class StartCombat : MonoBehaviour
             {
                 CardVisual cv = t.GetComponent<CardVisual>();
                 Destroy(scl);
-                GameManager.Instance.ActiveHero(true).canAttackParticle.Stop(); //stops the "can attack" particle effect on hero
-                GameManager.Instance.ActiveHero(true).canAttackParticle.gameObject.SetActive(false); //hides the particle system
+
+                if (!StartGameController.Instance.tutorial)
+                {
+                    GameManager.Instance.ActiveHero(true).canAttackParticle.Stop(); //stops the "can attack" particle effect on hero
+                    GameManager.Instance.ActiveHero(true).canAttackParticle.gameObject.SetActive(false); //hides the particle system
+                }
 
                 if (cv.Md != null)
                 {
@@ -166,8 +170,11 @@ public class StartCombat : MonoBehaviour
             //Set current Hero is false
             GameManager.Instance.ActiveHero(true).IsAttacking = false;
 
-            GameManager.Instance.ActiveHero(true).canAttackParticle.Stop(); //stops the "can attack" particle effect on hero
-            GameManager.Instance.ActiveHero(true).canAttackParticle.gameObject.SetActive(false); //hides the particle system
+            if (!StartGameController.Instance.tutorial)
+            {
+                GameManager.Instance.ActiveHero(true).canAttackParticle.Stop(); //stops the "can attack" particle effect on hero
+                GameManager.Instance.ActiveHero(true).canAttackParticle.gameObject.SetActive(false); //hides the particle system
+            }
 
             if (CheckForVictory())
             {
@@ -187,7 +194,6 @@ public class StartCombat : MonoBehaviour
             GameManager.Instance.IsDefending = true;
             CancelCombat();
 
-            GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Waiting for Opponent...";
             GameManager.Instance.StartCombatDamageUI.gameObject.SetActive(false);
             GameManager.Instance.ActiveHero(true).SubmitButton.gameObject.SetActive(false);
             GameManager.Instance.ActiveHero(true).CancelButton.gameObject.SetActive(false);
@@ -209,11 +215,19 @@ public class StartCombat : MonoBehaviour
                 }
             }
 
-            int[] totalDamageToSend = new int[] { totalDamage["stealth"], totalDamage["lifesteal"], totalDamage["poisonTouch"], totalDamage["damage"] };
-            byte[] cardByte = DataHandler.Instance.ObjectToByteArray(cards);
-            object[] data = new object[] { totalDamageToSend, cardByte, heroAttacking };
+            if (StartGameController.Instance.tutorial)
+            {
+                EventManager.Instance.PostNotification(EVENT_TYPE.DEFEND_AGAINST);
+            }
+            else
+            {
+                int[] totalDamageToSend = new int[] { totalDamage["stealth"], totalDamage["lifesteal"], totalDamage["poisonTouch"], totalDamage["damage"] };
+                byte[] cardByte = DataHandler.Instance.ObjectToByteArray(cards);
+                object[] data = new object[] { totalDamageToSend, cardByte, heroAttacking };
 
-            StartCombatPun.Instance.SendData(START_COMBAT, data);
+                GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Waiting for Opponent...";
+                StartCombatPun.Instance.SendData(START_COMBAT, data);
+            }
         }
         else
         {
