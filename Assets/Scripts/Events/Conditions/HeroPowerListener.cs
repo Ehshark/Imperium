@@ -7,6 +7,8 @@ public class HeroPowerListener : MonoBehaviour, IListener
     private EVENT_TYPE powerEffect;
     public EVENT_TYPE PowerEffect { get => powerEffect; set => powerEffect = value; }
 
+    const byte ADJUST_HERO_HEALTH_SYNC_EVENT = 49;
+
     public void Awake()
     {
         enabled = false;
@@ -23,12 +25,14 @@ public class HeroPowerListener : MonoBehaviour, IListener
 
         if (parent == GameManager.Instance.ActiveHero(true).transform)
         {
-            StartCoroutine(GameManager.Instance.SetInstructionsText("Power Activated!"));
+            StartCoroutine(EffectCommand.Instance.ShowEffectAnimation("Power Activated!"));
 
             //No Minions
             if (GameManager.Instance.GetActiveMinionZone(false).childCount == 0)
             {
                 //Shock oppenent's Hero
+                object[] data = new object[] { 1 };
+                EffectCommandPun.Instance.SendData(ADJUST_HERO_HEALTH_SYNC_EVENT, data);
                 GameManager.Instance.ActiveHero(false).AdjustHealth(1, false);
                 EffectCommand.Instance.inEffect = false;
             }

@@ -96,6 +96,8 @@ public class StartCombatPun : MonoBehaviour
                 EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.MINION_DEFEATED);
             }
 
+            GameManager.Instance.IsDefending = false;
+
             AssignDamageToAttackers();
 
             DefendListener dl = GameManager.Instance.GetComponent<DefendListener>();

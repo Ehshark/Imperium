@@ -229,16 +229,16 @@ public class DefendListener : MonoBehaviour, IListener
                 if (entry.Key.Equals("lifesteal"))
                 {
                     GameManager.Instance.ActiveHero(true).AdjustHealth(entry.Value, true);
-                    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_LIFESTEAL);
+                    //EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_LIFESTEAL);
                 }
-                else if (entry.Key.Equals("poisonTouch"))
-                {
-                    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_POISON_TOUCH);
-                }
-                else if (entry.Key.Equals("stealth"))
-                {
-                    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_STEALTH);
-                }
+                //else if (entry.Key.Equals("poisonTouch"))
+                //{
+                //    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_POISON_TOUCH);
+                //}
+                //else if (entry.Key.Equals("stealth"))
+                //{
+                //    EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_STEALTH);
+                //}
 
                 heroDamageAmount += entry.Value;
             }

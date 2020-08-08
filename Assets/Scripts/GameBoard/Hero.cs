@@ -260,11 +260,11 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             if (level != HeroManager.Instance.MaxLevel)
             {
                 experience += amount;
-            }
 
-            EventManager.Instance.PostNotification(EVENT_TYPE.LEVEL_UP);
-            PhotonNetwork.RaiseEvent(LEVEL_UP, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-                SendOptions.SendReliable);
+                EventManager.Instance.PostNotification(EVENT_TYPE.LEVEL_UP);
+                PhotonNetwork.RaiseEvent(LEVEL_UP, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                    SendOptions.SendReliable);
+            }
 
             //Increase experience if there is experience to increase afterwards
             if (expToIncreaseAfter > 0 && level != HeroManager.Instance.MaxLevel)

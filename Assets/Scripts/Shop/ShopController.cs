@@ -393,10 +393,14 @@ public class ShopController : MonoBehaviour
     {
         MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveHand(true), null);
         mc.AddToQueue();
+        Transform newCard = GameManager.Instance.GetActiveHand(true).GetChild(GameManager.Instance.GetActiveHand(true).childCount - 1);
+        newCard.gameObject.AddComponent<PlayCard>();
+
         UIManager.Instance.GetActiveHandList(true).Add(card.GetComponent<CardVisual>().CardData);
         GameManager.Instance.DisableExpressBuy();
+
         EffectCommand.Instance.EffectQueue.Enqueue(EVENT_TYPE.POWER_EXPRESS_BUY);
-        UIManager.Instance.AttachPlayCard();
+        exitGlow.gameObject.SetActive(true);
     }
 
     private void DelayOnPile()

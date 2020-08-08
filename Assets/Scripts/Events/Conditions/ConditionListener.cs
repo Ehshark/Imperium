@@ -20,6 +20,8 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
 
     public Dictionary<int, object> EffectCardData;
 
+    private const byte COMBAT_EFFECT_SYNC_EVENT = 52;
+
     private void Awake()
     {
         enabled = false;
@@ -68,6 +70,17 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
             { 15, card.GetComponent<OpponentDiscardStarter>() },
             { 12, card.GetComponent<SilenceMinionStarter>() }
         };
+
+        CardVisual cv = card.GetComponent<CardVisual>();
+        if (cv.Md.ConditionID == 7)
+        {
+            int position = card.transform.GetSiblingIndex();
+            object[] data = new object[] { position, true, "Hand" };
+            EffectCommandPun.Instance.SendData(COMBAT_EFFECT_SYNC_EVENT, data);
+
+            cv.IsCombatEffectActivated = true;
+            cv.CombatEffectActivated(true);
+        }
     }
 
     //Multiplayer
@@ -121,6 +134,10 @@ public class ConditionListener : MonoBehaviour, IListener, IPointerDownHandler
 
                 if (cv.Md.EffectId1 == 7 || cv.Md.EffectId1 == 8 || cv.Md.EffectId1 == 9 || cv.Md.EffectId1 == 10 && !cv.IsSilenced)
                 {
+                    int position = card.transform.GetSiblingIndex();
+                    object[] data = new object[] { position, true, "Zone" };
+                    EffectCommandPun.Instance.SendData(COMBAT_EFFECT_SYNC_EVENT, data);
+
                     cv.IsCombatEffectActivated = true;
                     cv.CombatEffectActivated(true);
                 }

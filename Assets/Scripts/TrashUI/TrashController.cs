@@ -76,8 +76,13 @@ public class TrashController : MonoBehaviour
         }
     }
 
-    public void OnDisable()
+    public void DestroyCards()
     {
+        foreach (Transform t in handPile)
+        {
+            Destroy(t.gameObject);
+        }
+
         foreach (Transform t in discardPile)
         {
             Destroy(t.gameObject);
@@ -126,6 +131,7 @@ public class TrashController : MonoBehaviour
             Destroy(tmp.gameObject);
         }
 
+        DestroyCards();
         gameObject.SetActive(false);
 
         //Call the next power or condition

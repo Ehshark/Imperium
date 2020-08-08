@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
     private const byte DRAW_CARDS = 13;
     private const byte PAY_TO_DISCARD = 14;
     private const byte DISCARD_CARDS = 15;
-    const byte FIRST_TURN_SYNC_EVENT = 32;
+    private const byte FIRST_TURN_SYNC_EVENT = 32;
 
     private void Awake()
     {
@@ -186,58 +186,12 @@ public class GameManager : MonoBehaviour
         else if (eventCode == DISCARD_CARDS)
         {
             object[] data = (object[])photonEvent.CustomData;
-            List<CardPhoton> cardsToDiscards = (List<CardPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[0]);
+            int[] cards = (int[])data[0];
 
-            foreach (CardPhoton card in cardsToDiscards)
+            foreach (int position in cards)
             {
-                if (card is MinionDataPhoton)
-                {
-                    MinionDataPhoton mdp = (MinionDataPhoton)card;
-                    foreach (Transform t in GetActiveHand(true))
-                    {
-                        CardVisual cv = t.GetComponent<CardVisual>();
-
-                        if (cv.Md != null)
-                        {
-                            if (cv.Md.MinionID == mdp.MinionID)
-                            {
-                                DiscardCard(t.gameObject);
-                            }
-                        }
-                    }
-                }
-                else if (card is StarterDataPhoton)
-                {
-                    StarterDataPhoton sdp = (StarterDataPhoton)card;
-                    foreach (Transform t in GetActiveHand(true))
-                    {
-                        CardVisual cv = t.GetComponent<CardVisual>();
-
-                        if (cv.Sd != null)
-                        {
-                            if (cv.Sd.StarterID == sdp.StarterID)
-                            {
-                                DiscardCard(t.gameObject);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    EssentialsDataPhoton edp = (EssentialsDataPhoton)card;
-                    foreach (Transform t in GetActiveHand(true))
-                    {
-                        CardVisual cv = t.GetComponent<CardVisual>();
-
-                        if (cv.Ed != null)
-                        {
-                            if (cv.Ed.Id == edp.Id)
-                            {
-                                DiscardCard(t.gameObject);
-                            }
-                        }
-                    }
-                }
+                Transform t = GetActiveHand(true).GetChild(position);
+                DiscardCard(t.gameObject);
             }
         }
     }
@@ -409,6 +363,8 @@ public class GameManager : MonoBehaviour
             CardVisual cv = t.GetComponent<CardVisual>();
             if (cv.Md && cv.IsSilenced)
                 cv.ActivateSilence(false);
+            if (cv.Md && cv.IsCombatEffectActivated)
+                DisableCombatEffect(cv);
         }
 
         if (bottomHero.DamageBonus > 0)
@@ -424,13 +380,13 @@ public class GameManager : MonoBehaviour
 
     public void StartTurn()
     {
+        StartGameController.Instance.StartingPowerSelected = true;
         isActionPhase = false;
         CardVisual cv;
         foreach (Transform t in GetActiveMinionZone(true))
         {
             cv = t.GetComponent<CardVisual>();
-            cv.IsCombatEffectActivated = false;
-            cv.CombatEffectActivated(false);
+            DisableCombatEffect(cv);
             UnTapMinions(t);
             ResetDamage(t);
         }
@@ -440,6 +396,8 @@ public class GameManager : MonoBehaviour
             cv = t.GetComponent<CardVisual>();
             if (cv.Md && cv.IsSilenced)
                 cv.ActivateSilence(false);
+            if (cv.Md && cv.IsCombatEffectActivated)
+                DisableCombatEffect(cv);
         }
 
         UIManager.Instance.HighlightHeroPortraitAndName();
@@ -454,7 +412,10 @@ public class GameManager : MonoBehaviour
         buyFirstCard = false;
         firstChangeShop = false;
         DisableExpressBuy();
+
         endButton.interactable = true;
+        buyButton.interactable = true;
+        changeButton.interactable = true;
         //enemyDiscardPileButton.interactable = false;
 
         //TODO: Handle opponent discard logic here
@@ -599,6 +560,7 @@ public class GameManager : MonoBehaviour
             instructionsObj.GetComponent<TMP_Text>().text = "Please Select A Card To Discard";
             EventManager.Instance.PostNotification(EVENT_TYPE.DISCARD_CARD);
             submitDiscardsButton.gameObject.SetActive(true);
+            return;
         }
         else if (UIManager.Instance.GetActiveHandList(true).Count < handSize)
         {
@@ -658,27 +620,16 @@ public class GameManager : MonoBehaviour
 
         if (selectedDiscards.Count == discardNum || selectedDiscards.Count == ActiveHero(true).HasToDiscard)
         {
-            List<CardPhoton> cardsToDiscard = new List<CardPhoton>();
+            int[] cards = new int[discardNum];
 
+            int i = 0;
             foreach (GameObject t in selectedDiscards)
             {
-                CardVisual cv = t.GetComponent<CardVisual>();
-                if (cv.Md != null)
-                {
-                    cardsToDiscard.Add(new MinionDataPhoton(cv.Md));
-                }
-                else if (cv.Sd != null)
-                {
-                    cardsToDiscard.Add(new StarterDataPhoton(cv.Sd));
-                }
-                else
-                {
-                    cardsToDiscard.Add(new EssentialsDataPhoton(cv.Ed));
-                }
+                int position = t.transform.GetSiblingIndex();
+                cards[i] = position;
             }
 
-            byte[] cardByte = DataHandler.Instance.ObjectToByteArray(cardsToDiscard);
-            object[] data = new object[] { cardByte };
+            object[] data = new object[] { cards };
 
             PhotonNetwork.RaiseEvent(DISCARD_CARDS, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
                 SendOptions.SendReliable);
@@ -712,10 +663,13 @@ public class GameManager : MonoBehaviour
 
             if (!hasSwitchedCard && !isForcedDiscard)
             {
-                instructionsObj.GetComponent<TMP_Text>().text = "Pay 1 gold to draw and discard a card?";
-                cardSwitchButtonYes.gameObject.SetActive(true);
-                cardSwitchButtonNo.gameObject.SetActive(true);
-                hasSwitchedCard = true;
+                if (ActiveHero(true).Gold > 0)
+                {
+                    instructionsObj.GetComponent<TMP_Text>().text = "Pay 1 gold to draw and discard a card?";
+                    cardSwitchButtonYes.gameObject.SetActive(true);
+                    cardSwitchButtonNo.gameObject.SetActive(true);
+                    hasSwitchedCard = true;
+                }
             }
             else
             {
@@ -845,6 +799,15 @@ public class GameManager : MonoBehaviour
     {
         CardVisual cv = t.GetComponent<CardVisual>();
         cv.ResetDamage();
+    }
+
+    private void DisableCombatEffect(CardVisual cv)
+    {
+        if (cv.Md != null && cv.Md.ConditionID != 7)
+        {
+            cv.IsCombatEffectActivated = false;
+            cv.CombatEffectActivated(false);
+        }
     }
 
     public void DisableExpressBuy()

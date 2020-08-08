@@ -128,7 +128,15 @@ public class SkillTreeController : MonoBehaviour
     {
         if (selectedPower != 0)
         {
-            GameObject hero = GameManager.Instance.ActiveHero(true).gameObject;
+            GameObject hero;
+
+            if (StartGameController.Instance.StartingPowerSelected)
+                hero = GameManager.Instance.ActiveHero(true).gameObject;
+            else
+            {
+                hero = GameManager.Instance.bottomHero.gameObject;
+            }
+
             Hero heroScript = hero.GetComponent<Hero>();
             HeroPowerListener hpl = hero.AddComponent<HeroPowerListener>();
 

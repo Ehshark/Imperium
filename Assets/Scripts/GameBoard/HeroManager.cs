@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -17,6 +20,8 @@ public class HeroManager : MonoBehaviour, IListener
     public int MaxLevel { get => maxLevel; set => maxLevel = value;  }
 
     public static HeroManager Instance { get; private set; } = null;
+
+    private const byte HERO_RESOURCE_SYNC_EVENT = 53;
 
     private void Awake()
     {
@@ -95,6 +100,10 @@ public class HeroManager : MonoBehaviour, IListener
             {
                 resources = (MageLevelStats.Where(l => l.Key == hero.Level).SingleOrDefault().Value).Split('/');
             }
+
+            object[] data = new object[] { int.Parse(resources[0]), int.Parse(resources[1]), int.Parse(resources[2]) };
+            PhotonNetwork.RaiseEvent(HERO_RESOURCE_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
 
             hero.ChangeResources(int.Parse(resources[0]), int.Parse(resources[1]), int.Parse(resources[2]));
 

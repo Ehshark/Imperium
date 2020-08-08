@@ -3243,7 +3243,7 @@ Transform:
   m_LocalScale: {x: 74.50748, y: 74.50748, z: 74.50748}
   m_Children: []
   m_Father: {fileID: 7585996841627639047}
-  m_RootOrder: 11
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &1974972929296428963
 ParticleSystem:
@@ -9859,7 +9859,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 7585996841496605538}
   m_FillRect: {fileID: 7585996841516036796}
   m_HandleRect: {fileID: 0}
@@ -10375,7 +10375,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 7585996841810143323}
   m_FillRect: {fileID: 7585996841638880381}
   m_HandleRect: {fileID: 0}
@@ -10502,7 +10502,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 7585996841858036302}
   m_FillRect: {fileID: 7585996840967875771}
   m_HandleRect: {fileID: 0}

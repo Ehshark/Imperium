@@ -16,6 +16,7 @@ public class EffectCommand : MonoBehaviour
 
     const byte TAP_ANIMATION_SYNC_EVENT = 43;
     const byte ANIMATION_SYNC_EVENT = 44;
+    const byte ANIMATION_MESSAGE_SYNC_EVENT = 51;
 
     private void Awake()
     {
@@ -110,5 +111,17 @@ public class EffectCommand : MonoBehaviour
         {
             cv.AdjustHealth(1, false);
         }
+    }
+
+    public IEnumerator ShowEffectAnimation(string message)
+    {
+        object[] data = new object[] { message };
+        EffectCommandPun.Instance.SendData(ANIMATION_MESSAGE_SYNC_EVENT, data);
+
+        GameManager.Instance.effectText.gameObject.SetActive(true);
+        GameManager.Instance.effectText.text = message;
+        yield return new WaitForSeconds(2.5f);
+        GameManager.Instance.effectText.text = "Effect Activated!";
+        GameManager.Instance.effectText.gameObject.SetActive(false);
     }
 }

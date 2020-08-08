@@ -64,6 +64,8 @@ public class StartGameController : MonoBehaviour
     private bool startingPowerSelected = false;
     const byte MULLIGAN_EVENT = 6;
     const byte MULLIGAN_REFUSED_EVENT = 7;
+    const byte HERO_RESOURCE_SYNC_EVENT = 53;
+
     private bool bottomMullReady = false;
     private bool topMullReady = false;
 
@@ -164,14 +166,35 @@ public class StartGameController : MonoBehaviour
         }
         else if (eventCode == 16)
         {
-            GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Opponent Leveled Up! Power Selection is Progress...";
-
             Hero hero = GameManager.Instance.ActiveHero(true);
-            hero.IncreaseLevel(1);
-            hero.IncreaseExp(6);
+
+            if ((hero.Level + 1) != HeroManager.Instance.MaxLevel)
+            {
+                GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Opponent Leveled Up! Power Selection is Progress...";
+                hero.IncreaseLevel(1);
+                hero.IncreaseExp(6);
+            }
+            else
+            {
+                hero.Level = HeroManager.Instance.MaxLevel;
+                hero.Experience = 6;
+                hero.SetExp();
+                hero.SetLevel();
+            }
         }
         else if (eventCode == 32)
+        {
             firstTurn = false;
+        }
+        else if (eventCode == HERO_RESOURCE_SYNC_EVENT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int health = (int)data[0];
+            int mana = (int)data[1];
+            int damage = (int)data[2];
+
+            GameManager.Instance.ActiveHero(true).ChangeResources(health, mana, damage);
+        }
     }
 
     private IEnumerator MultiplayerSetup()
@@ -280,6 +303,8 @@ public class StartGameController : MonoBehaviour
             GameManager.Instance.StartTurn();
         else if (!PhotonNetwork.IsMasterClient && !EventManager.Instance.HostFirst)
             GameManager.Instance.StartTurn();
+        else
+            UIManager.Instance.HighlightHeroPortraitAndName();
     }
 
     private IEnumerator ShortGameSetup()

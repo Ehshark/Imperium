@@ -22,6 +22,8 @@ public class EffectCommandPun : MonoBehaviour
     const byte ADJUST_EXP_SYNC_EVENT = 48;
     const byte ADJUST_HERO_HEALTH_SYNC_EVENT = 49;
     const byte DRAW_DISCARD_SYNC_EVENT = 50;
+    const byte ANIMATION_MESSAGE_SYNC_EVENT = 51;
+    const byte COMBAT_EFFECT_SYNC_EVENT = 52;
 
     private void Awake()
     {
@@ -165,12 +167,46 @@ public class EffectCommandPun : MonoBehaviour
 
             GameManager.Instance.ActiveHero(false).AdjustEnemyDiscard(increase);
         }
+        else if (eventCode == ANIMATION_MESSAGE_SYNC_EVENT)
+        {
+            object[] data = (object[])photonData.CustomData;
+            string message = (string)data[0];
+
+            StartCoroutine(ShowEffectAnimation(message));
+        }
+        else if (eventCode == COMBAT_EFFECT_SYNC_EVENT)
+        {
+            object[] data = (object[])photonData.CustomData;
+            int position = (int)data[0];
+            bool enableOrDisable = (bool)data[1];
+            string to = (string)data[2];
+
+            Transform card;
+            if (to.Equals("Hand"))
+                card = GameManager.Instance.GetActiveHand(true).GetChild(position);
+            else
+                card = GameManager.Instance.GetActiveMinionZone(true).GetChild(position);
+
+            CardVisual cv = card.GetComponent<CardVisual>();
+
+            cv.IsCombatEffectActivated = enableOrDisable;
+            cv.CombatEffectActivated(enableOrDisable);
+        }
     }
 
     public IEnumerator ShowEffectAnimation()
     {
         GameManager.Instance.effectText.gameObject.SetActive(true);
         yield return new WaitForSeconds(2.5f);
+        GameManager.Instance.effectText.gameObject.SetActive(false);
+    }
+
+    public IEnumerator ShowEffectAnimation(string message)
+    {
+        GameManager.Instance.effectText.gameObject.SetActive(true);
+        GameManager.Instance.effectText.text = message;
+        yield return new WaitForSeconds(2.5f);
+        GameManager.Instance.effectText.text = "Effect Activated!";
         GameManager.Instance.effectText.gameObject.SetActive(false);
     }
 
