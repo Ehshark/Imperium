@@ -14,7 +14,10 @@ public class BackgroundController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            LevelLoader.Instance.LoadNextScene(3);
+            if (!Music.Instance.skipToMain)
+                LevelLoader.Instance.LoadNextScene(1);
+            else
+                LevelLoader.Instance.LoadNextScene(2);
         }
     }
 }

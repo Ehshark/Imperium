@@ -108,6 +108,6 @@ public class LeaderboardController : MonoBehaviour
 
     public void BackClicked()
     {
-        LevelLoader.Instance.LoadNextScene(0);
+        LevelLoader.Instance.LoadNextScene(2);
     }
 }

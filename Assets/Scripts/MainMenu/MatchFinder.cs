@@ -125,8 +125,8 @@ public class MatchFinder : MonoBehaviourPunCallbacks
         seconds--;
         if (seconds == 0)
         {
-            LevelLoader.Instance.LoadNextScene(1);
-            //Music.Instance.PlayGameboardMusic();
+            LevelLoader.Instance.LoadNextScene(3);
+            Music.Instance.PlayGameboardMusic();
         }
     }
 

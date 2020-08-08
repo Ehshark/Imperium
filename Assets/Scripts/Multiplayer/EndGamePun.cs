@@ -87,8 +87,11 @@ public class EndGamePun : MonoBehaviour
             count--;
         }
 
-        LevelLoader.Instance.LoadNextScene(0);
-        PhotonNetwork.Disconnect();
+        LevelLoader.Instance.LoadNextScene(2);
+        if (Music.Instance.skipToMain)
+        {
+            PhotonNetwork.Disconnect();
+        }
     }
 
     public void SendData(byte byteCode)

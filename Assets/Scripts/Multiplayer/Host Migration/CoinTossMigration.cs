@@ -8,7 +8,7 @@ public class CoinTossMigration : MonoBehaviourPunCallbacks
 {
     public GameObject kickObject;
     public TMP_Text kickText;
-    public TMP_Text instructionsText;
+    public TMP_Text instructionText;
 
     private IEnumerator KickPlayer()
     {
@@ -20,14 +20,19 @@ public class CoinTossMigration : MonoBehaviourPunCallbacks
             count--;
         }
 
-        LevelLoader.Instance.LoadNextScene(0);
-        PhotonNetwork.Disconnect();
+        PhotonNetwork.LeaveRoom();
+        LevelLoader.Instance.LoadNextScene(2);
+        Music.Instance.PlayTitleMusic();
+        if (Music.Instance.skipToMain)
+        {
+            PhotonNetwork.Disconnect();
+        }
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);
-        instructionsText.text = "";
+        instructionText.text = "";
         kickObject.SetActive(true);
         StartCoroutine(KickPlayer());
     }

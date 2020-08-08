@@ -7,6 +7,8 @@ public class Music : MonoBehaviour
     public AudioSource gameboardMusic;
     public AudioSource titleMusic;
 
+    public bool skipToMain;
+
     public static Music Instance { get; private set; } = null;
 
     private void Awake()

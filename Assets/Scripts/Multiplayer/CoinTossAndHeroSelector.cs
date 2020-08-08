@@ -143,7 +143,7 @@ public class CoinTossAndHeroSelector : MonoBehaviour
 
         else if (eventCode == GO_TO_GAMEBOARD_EVENT)
         {
-            PhotonNetwork.LoadLevel(2);
+            PhotonNetwork.LoadLevel(4);
         }
     }
     public void StartCoinTossAnimation(bool choice)

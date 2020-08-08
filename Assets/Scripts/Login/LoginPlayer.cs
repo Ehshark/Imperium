@@ -6,8 +6,10 @@ using MySql.Data.MySqlClient;
 using System.Text;
 using System;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class LoginPlayer : MonoBehaviour
+public class LoginPlayer : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private InputField emailInput = null;
@@ -25,6 +27,8 @@ public class LoginPlayer : MonoBehaviour
     //Crypto
     private Crypto crypto = new Crypto();
 
+    public string gameVersion = "0.0.1";
+
     public void PlayerLogin()
     {
         //Get the email and password from the InputFields
@@ -41,7 +45,12 @@ public class LoginPlayer : MonoBehaviour
             {
                 tmp.LEADERBOARD_LEVEL = SQLManager.GetLeaderboardLevel(tmp.PLAYER_ID);
                 GameManager.player = tmp;
-                LevelLoader.Instance.LoadNextScene(0);
+
+                PhotonNetwork.NickName = GameManager.player.PLAYER_USERNAME;
+                Debug.Log("Connecting to Photon...");
+                PhotonNetwork.AutomaticallySyncScene = true;
+                PhotonNetwork.GameVersion = gameVersion;
+                PhotonNetwork.ConnectUsingSettings();
             }
             else
             {
@@ -67,5 +76,17 @@ public class LoginPlayer : MonoBehaviour
     public void ForgotPassword()
     {
         Application.OpenURL("https://imperium-site.herokuapp.com/Account/ForgotPassword");
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        Debug.Log("Connected to server");
+        LevelLoader.Instance.LoadNextScene(2);
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.Log("Disconnected from server for reason " + cause.ToString());
+        errorText.text = "Couldn't Connect to the Photon Server. Please try Again.";
     }
 }
