@@ -217,6 +217,7 @@ public class StartCombat : MonoBehaviour
 
             if (StartGameController.Instance.tutorial)
             {
+                GameManager.Instance.IsDefending = false;
                 EventManager.Instance.PostNotification(EVENT_TYPE.DEFEND_AGAINST);
             }
             else

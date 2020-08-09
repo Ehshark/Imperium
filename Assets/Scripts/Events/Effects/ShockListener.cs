@@ -26,8 +26,11 @@ public class ShockListener : MonoBehaviour, IPointerDownHandler
 
         //Multiplayer
         int position = gameObject.transform.GetSiblingIndex();
-        object[] data = new object[] { position, 1, false, false };
-        EffectCommandPun.Instance.SendData(ADJUST_HEALTH_SYNC_EVENT, data);
+        if (!StartGameController.Instance.tutorial)
+        {
+            object[] data = new object[] { position, 1, false, false };
+            EffectCommandPun.Instance.SendData(ADJUST_HEALTH_SYNC_EVENT, data);
+        }
 
         foreach (Transform t in GameManager.Instance.GetActiveMinionZone(false))
         {

@@ -116,6 +116,7 @@ public class GameManager : MonoBehaviour
     private const byte PAY_TO_DISCARD = 14;
     private const byte DISCARD_CARDS = 15;
     private const byte FIRST_TURN_SYNC_EVENT = 32;
+    private const byte REBUILD_DECKS_SYNC_EVENT = 54;
 
     private void Awake()
     {
@@ -192,6 +193,49 @@ public class GameManager : MonoBehaviour
             {
                 Transform t = GetActiveHand(true).GetChild(position);
                 DiscardCard(t.gameObject);
+            }
+        }
+        else if (eventCode == REBUILD_DECKS_SYNC_EVENT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            List<CardPhoton> newCards = (List<CardPhoton>)DataHandler.Instance.ByteArrayToObject((byte[])data[0]);
+
+            List<Card> newDeck = new List<Card>();
+            for (int i = 0; i < newCards.Count; i ++)
+            {
+                if (newCards[i] is StarterDataPhoton)
+                {
+                    StarterData sd = ScriptableObject.CreateInstance<StarterData>();
+                    sd.Init((StarterDataPhoton)newCards[i]);
+                    newDeck.Add(sd);
+                }
+                else if (newCards[i] is MinionDataPhoton)
+                {
+                    MinionData md = ScriptableObject.CreateInstance<MinionData>();
+                    md.Init((MinionDataPhoton)newCards[i]);
+                    newDeck.Add(md);
+                }
+                else if (newCards[i] is EssentialsDataPhoton)
+                {
+                    EssentialsData ed = ScriptableObject.CreateInstance<EssentialsData>();
+                    ed.Init((EssentialsDataPhoton)newCards[i]);
+                    newDeck.Add(ed);
+                }
+            }
+
+            UIManager.Instance.enemyDeck = newDeck;
+
+            int drawAmount = ActiveHero(true).HandSize - UIManager.Instance.GetActiveHandList(true).Count;
+            for (int i = 0; i < drawAmount; i++)
+            {
+                DrawCard(UIManager.Instance.GetActiveDeckList(true), GetActiveHand(true));
+            }
+
+            UIManager.Instance.GetActiveDiscardList(true).Clear();
+
+            foreach (Transform card in GetActiveDiscardPile(true))
+            {
+                Destroy(card.gameObject);
             }
         }
     }
@@ -496,28 +540,54 @@ public class GameManager : MonoBehaviour
 
                 ShuffleCurrentDeck(deck);
                 allyDeckCounter.text = deck.Count.ToString();
-            }
-            else
-            {
-                for (int i = 0; i < UIManager.Instance.enemyDiscards.Count; i++)
+
+                List<CardPhoton> deckToSend = new List<CardPhoton>();
+                foreach (Card card in deck)
                 {
-                    deck.Add(UIManager.Instance.enemyDiscards[i]);
+                    if (card is MinionData)
+                    {
+                        deckToSend.Add(new MinionDataPhoton((MinionData)card));
+                    }
+                    else if (card is StarterData)
+                    {
+                        deckToSend.Add(new StarterDataPhoton((StarterData)card));
+                    }
+                    else if (card is EssentialsData)
+                    {
+                        deckToSend.Add(new EssentialsDataPhoton((EssentialsData)card));
+                    }
                 }
 
-                UIManager.Instance.enemyDiscards.Clear();
+                byte[] cardByte = DataHandler.Instance.ObjectToByteArray(deckToSend);
+                object[] data = new object[] { cardByte };
 
-                foreach (Transform t in enemyDiscardPile)
-                {
-                    Destroy(t.gameObject);
-                }
+                PhotonNetwork.RaiseEvent(REBUILD_DECKS_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                    SendOptions.SendReliable);
 
-                ShuffleCurrentDeck(deck);
-                enemyDeckCounter.text = deck.Count.ToString();
+                //function calls itself to continue the draw since deck is no longer empty
+                DrawCard(deck, playerHand);
             }
+            //else
+            //{
+            //    for (int i = 0; i < UIManager.Instance.enemyDiscards.Count; i++)
+            //    {
+            //        deck.Add(UIManager.Instance.enemyDiscards[i]);
+            //    }
+
+            //    UIManager.Instance.enemyDiscards.Clear();
+
+            //    foreach (Transform t in enemyDiscardPile)
+            //    {
+            //        Destroy(t.gameObject);
+            //    }
+
+            //    ShuffleCurrentDeck(deck);
+            //    enemyDeckCounter.text = deck.Count.ToString();
+            //}
 
             //AdjustDeckHeight();
-            //function calls itself to continue the draw since deck is no longer empty
-            DrawCard(deck, playerHand);
+            ////function calls itself to continue the draw since deck is no longer empty
+            //DrawCard(deck, playerHand);
         }
 
         if (isActionPhase)

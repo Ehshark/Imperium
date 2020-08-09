@@ -245,10 +245,13 @@ public class DefendListener : MonoBehaviour, IListener
         }
 
         //Send the data to Attacker
-        byte[] damageByte = DataHandler.Instance.ObjectToByteArray(damageToSend);
-        byte[] heroDamageByte = DataHandler.Instance.ObjectToByteArray(GameManager.Instance.ActiveHero(false).GetComponent<Hero>().DmgAbsorbed.DamageAbsorbed);
-        object[] data = new object[] { damageByte, heroDamageByte, minionDefeated };
-        StartCombatPun.Instance.SendData(ASSIGN_DEFENDING_DAMAGE, data);
+        if (!StartGameController.Instance.tutorial)
+        {
+            byte[] damageByte = DataHandler.Instance.ObjectToByteArray(damageToSend);
+            byte[] heroDamageByte = DataHandler.Instance.ObjectToByteArray(GameManager.Instance.ActiveHero(false).GetComponent<Hero>().DmgAbsorbed.DamageAbsorbed);
+            object[] data = new object[] { damageByte, heroDamageByte, minionDefeated };
+            StartCombatPun.Instance.SendData(ASSIGN_DEFENDING_DAMAGE, data);
+        }
 
         GameManager.Instance.ActiveHero(false).DmgAbsorbed.ResetDamageAbsorbed();
         GameManager.Instance.ActiveHero(false).ResetDamageObjectsUI();

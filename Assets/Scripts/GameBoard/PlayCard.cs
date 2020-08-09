@@ -231,27 +231,30 @@ public class PlayCard : MonoBehaviourPunCallbacks
                 EventManager.Instance.PostNotification(EVENT_TYPE.ASSIGN_CONDITIONS);
             }
 
-            if (thisCard is MinionData)
+            if (!StartGameController.Instance.tutorial)
             {
-                mdp = new MinionDataPhoton(cv.Md);
-                cardByte = DataHandler.Instance.ObjectToByteArray(mdp);
-                type = "Minion";
-            }
-            else 
-            {
-                sdp = new StarterDataPhoton(cv.Sd);
-                cardByte = DataHandler.Instance.ObjectToByteArray(sdp);
-                type = "Starter";
-            }
+                if (thisCard is MinionData)
+                {
+                    mdp = new MinionDataPhoton(cv.Md);
+                    cardByte = DataHandler.Instance.ObjectToByteArray(mdp);
+                    type = "Minion";
+                }
+                else
+                {
+                    sdp = new StarterDataPhoton(cv.Sd);
+                    cardByte = DataHandler.Instance.ObjectToByteArray(sdp);
+                    type = "Starter";
+                }
 
-            object[] data = new object[] { cardByte, type };
-            if (!promote)
-            {
-                PlayCardPun.Instance.SendData(PLAY_MINION, data);
-            }
-            else
-            {
-                PlayCardPun.Instance.SendData(PROMOTE_MINION, data);
+                object[] data = new object[] { cardByte, type };
+                if (!promote)
+                {
+                    PlayCardPun.Instance.SendData(PLAY_MINION, data);
+                }
+                else
+                {
+                    PlayCardPun.Instance.SendData(PROMOTE_MINION, data);
+                }
             }
         }
         else
@@ -262,25 +265,28 @@ public class PlayCard : MonoBehaviourPunCallbacks
                 UIManager.Instance.GetActiveHandList(true).Remove(cardData);
             }
 
-            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true));
-            mc.AddToQueue();
             //GameManager.Instance.MoveCard(card, GameManager.Instance.GetActiveDiscardPile(true), GameManager.Instance.GetActiveDiscardPileList(true), true);
 
+            int position = 0;
             if (thisCard is StarterData)
             {
-                sdp = new StarterDataPhoton(cv.Sd);
-                cardByte = DataHandler.Instance.ObjectToByteArray(sdp);
+                position = gameObject.transform.GetSiblingIndex();
                 type = "Starter";
             }
             else
             {
-                edp = new EssentialsDataPhoton(cv.Ed);
-                cardByte = DataHandler.Instance.ObjectToByteArray(edp);
+                position = gameObject.transform.GetSiblingIndex();
                 type = "Essential";
             }
 
-            object[] data = new object[] { cardByte, type };
-            PlayCardPun.Instance.SendData(PLAY_RESOURCE, data);
+            if (!StartGameController.Instance.tutorial)
+            {
+                object[] data = new object[] { position, type };
+                PlayCardPun.Instance.SendData(PLAY_RESOURCE, data);
+            }
+
+            MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveDiscardPile(true), UIManager.Instance.GetActiveDiscardList(true));
+            mc.AddToQueue();
         }
 
         AdjustHeroResources();

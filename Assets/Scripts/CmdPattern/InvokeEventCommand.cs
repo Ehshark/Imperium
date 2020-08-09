@@ -54,10 +54,13 @@ public class InvokeEventCommand : Command
             if (!playingQueue)
                 GameManager.Instance.EnableOrDisablePlayerControl(true);
 
-            if (StartCombatPun.Instance.attackAfter && EffectCommand.Instance.EffectQueue.Count == 0)
+            if (!StartGameController.Instance.tutorial)
             {
-                StartCombatPun.Instance.attackAfter = false;
-                StartCombatPun.Instance.DamageDelay();
+                if (StartCombatPun.Instance.attackAfter && EffectCommand.Instance.EffectQueue.Count == 0)
+                {
+                    StartCombatPun.Instance.attackAfter = false;
+                    StartCombatPun.Instance.DamageDelay();
+                }
             }
         }
     }

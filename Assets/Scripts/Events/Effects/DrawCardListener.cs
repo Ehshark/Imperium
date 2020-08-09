@@ -11,9 +11,12 @@ public class DrawCardListener : MonoBehaviour
 
     public void StartEvent()
     {
-        object[] data = new object[] { 1 };
-        PhotonNetwork.RaiseEvent(DRAW_CARDS, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-            SendOptions.SendReliable);
+        if (!StartGameController.Instance.tutorial)
+        {
+            object[] data = new object[] { 1 };
+            PhotonNetwork.RaiseEvent(DRAW_CARDS, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
+        }
 
         StartCoroutine(Delay());
     }

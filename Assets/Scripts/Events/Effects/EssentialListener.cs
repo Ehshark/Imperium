@@ -18,8 +18,11 @@ public class EssentialListener : MonoBehaviour
             {
                 GameManager.Instance.ActiveHero(true).AdjustGold(2, true);
 
-                object[] data = new object[] { 2 };
-                EffectCommandPun.Instance.SendData(ADJUST_GOLD_SYNC_EVENT, data);
+                if (!StartGameController.Instance.tutorial)
+                {
+                    object[] data = new object[] { 2 };
+                    EffectCommandPun.Instance.SendData(ADJUST_GOLD_SYNC_EVENT, data);
+                }
             }
             else if (type == "Exp")
             {

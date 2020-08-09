@@ -86,15 +86,18 @@ public class EffectCommand : MonoBehaviour
         int position = iec.card.transform.GetSiblingIndex();
         object[] data = new object[] { position };
 
-        if (cl.ConditionEvent == EVENT_TYPE.TAP_MINION)
+        if (!StartGameController.Instance.tutorial)
         {
-            PhotonNetwork.RaiseEvent(TAP_ANIMATION_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-            SendOptions.SendReliable);
-        }
-        else
-        {
-            PhotonNetwork.RaiseEvent(ANIMATION_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
-            SendOptions.SendReliable);
+            if (cl.ConditionEvent == EVENT_TYPE.TAP_MINION)
+            {
+                PhotonNetwork.RaiseEvent(TAP_ANIMATION_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
+            }
+            else
+            {
+                PhotonNetwork.RaiseEvent(ANIMATION_SYNC_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
+                SendOptions.SendReliable);
+            }
         }
 
         DelayCommand dc = new DelayCommand(iec.card.transform, 2f);
@@ -107,16 +110,29 @@ public class EffectCommand : MonoBehaviour
         iec.method.Invoke(iec.cardType, new object[] { });
 
         CardVisual cv = iec.card.GetComponent<CardVisual>();
-        if (cl.ConditionEvent == EVENT_TYPE.TAP_MINION && InvokeEventCommand.InvokeEventQueue.Count == 0)
+        if (!StartGameController.Instance.tutorial)
         {
-            cv.AdjustHealth(1, false);
+            if (cl.ConditionEvent == EVENT_TYPE.TAP_MINION && InvokeEventCommand.InvokeEventQueue.Count == 0)
+            {
+                cv.AdjustHealth(1, false);
+            }
+        }
+        else
+        {
+            if (InvokeEventCommand.InvokeEventQueue.Count == 0)
+            {
+                cv.AdjustHealth(1, false);
+            }
         }
     }
 
     public IEnumerator ShowEffectAnimation(string message)
     {
-        object[] data = new object[] { message };
-        EffectCommandPun.Instance.SendData(ANIMATION_MESSAGE_SYNC_EVENT, data);
+        if (!StartGameController.Instance.tutorial)
+        {
+            object[] data = new object[] { message };
+            EffectCommandPun.Instance.SendData(ANIMATION_MESSAGE_SYNC_EVENT, data);
+        }
 
         GameManager.Instance.effectText.gameObject.SetActive(true);
         GameManager.Instance.effectText.text = message;

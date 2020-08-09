@@ -85,40 +85,20 @@ public class PlayCardPun : MonoBehaviour
         else if (eventCode == PLAY_RESOURCE)
         {
             object[] data = (object[])photonData.CustomData;
+            int position = (int)data[0];
             string type = (string)data[1];
 
             if (type == "Starter")
             {
-                StarterDataPhoton sdp = (StarterDataPhoton)DataHandler.Instance.ByteArrayToObject((byte[])data[0]);
-
-                foreach (Transform t in GameManager.Instance.GetActiveHand(true))
-                {
-                    CardVisual cv = t.GetComponent<CardVisual>();
-                    if (cv.Sd != null)
-                    {
-                        if (cv.Sd.StarterID == sdp.StarterID)
-                        {
-                            StartCoroutine(PlayResource(t, cv.Sd));
-                        }
-                    }
-                }
+                Transform card = GameManager.Instance.GetActiveHand(true).GetChild(position);
+                CardVisual cv = card.GetComponent<CardVisual>();
+                StartCoroutine(PlayResource(card, cv.Sd));
             }
             else if (type == "Essential")
             {
-                EssentialsDataPhoton edp = (EssentialsDataPhoton)DataHandler.Instance.ByteArrayToObject((byte[])data[0]);
-
-                foreach (Transform t in GameManager.Instance.GetActiveHand(true))
-                {
-                    CardVisual cv = t.GetComponent<CardVisual>();
-                    if (cv.Ed != null)
-                    {
-                        if (cv.Ed.Id == edp.Id)
-                        {
-                            StartCoroutine(PlayResource(t, cv.Ed));
-                            break;
-                        }
-                    }
-                }
+                Transform card = GameManager.Instance.GetActiveHand(true).GetChild(position);
+                CardVisual cv = card.GetComponent<CardVisual>();
+                StartCoroutine(PlayResource(card, cv.Ed));
             }
         }
         else if (eventCode == REMOVE_MINION)

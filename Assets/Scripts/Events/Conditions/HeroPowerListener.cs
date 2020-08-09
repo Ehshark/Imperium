@@ -31,8 +31,12 @@ public class HeroPowerListener : MonoBehaviour, IListener
             if (GameManager.Instance.GetActiveMinionZone(false).childCount == 0)
             {
                 //Shock oppenent's Hero
-                object[] data = new object[] { 1 };
-                EffectCommandPun.Instance.SendData(ADJUST_HERO_HEALTH_SYNC_EVENT, data);
+                if (!StartGameController.Instance.tutorial)
+                {
+                    object[] data = new object[] { 1 };
+                    EffectCommandPun.Instance.SendData(ADJUST_HERO_HEALTH_SYNC_EVENT, data);
+                }
+
                 GameManager.Instance.ActiveHero(false).AdjustHealth(1, false);
                 EffectCommand.Instance.inEffect = false;
             }

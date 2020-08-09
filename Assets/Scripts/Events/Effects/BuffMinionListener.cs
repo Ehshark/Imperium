@@ -28,9 +28,12 @@ public class BuffMinionListener : MonoBehaviour, IPointerDownHandler
     IEnumerator RemoveListener()
     {
         //Multiplayer
-        int position = gameObject.transform.GetSiblingIndex();
-        object[] data = new object[] { position, 1, true };
-        EffectCommandPun.Instance.SendData(ADJUST_DAMAGE_SYNC_EVENT, data);
+        if (!StartGameController.Instance.tutorial)
+        {
+            int position = gameObject.transform.GetSiblingIndex();
+            object[] data = new object[] { position, 1, true };
+            EffectCommandPun.Instance.SendData(ADJUST_DAMAGE_SYNC_EVENT, data);
+        }
 
         yield return new WaitForSeconds(2);
 

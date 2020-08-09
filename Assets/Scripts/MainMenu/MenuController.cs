@@ -211,4 +211,10 @@ public class MenuController : MonoBehaviourPunCallbacks
     {
         Application.Quit();
     }
+
+    public void TutorialClicked()
+    {
+        Music.Instance.PlayGameboardMusic();
+        LevelLoader.Instance.LoadNextScene(6);
+    }
 }
