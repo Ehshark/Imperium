@@ -87,6 +87,7 @@ public class EndGamePun : MonoBehaviour
             count--;
         }
 
+        Music.Instance.PlayTitleMusic();
         LevelLoader.Instance.LoadNextScene(2);
         if (Music.Instance.skipToMain)
         {
@@ -97,5 +98,13 @@ public class EndGamePun : MonoBehaviour
     public void SendData(byte byteCode)
     {
         PhotonNetwork.RaiseEvent(byteCode, null, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    private void UpdateDatabase()
+    {
+        if (DatabaseManager.connection != null)
+        {
+            
+        }
     }
 }

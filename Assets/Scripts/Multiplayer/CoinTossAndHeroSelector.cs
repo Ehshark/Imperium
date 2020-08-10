@@ -143,6 +143,11 @@ public class CoinTossAndHeroSelector : MonoBehaviour
 
         else if (eventCode == GO_TO_GAMEBOARD_EVENT)
         {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                SQLManager.CreateBattle(PhotonNetwork.NickName, pTwoNameText.text);
+            }
+
             PhotonNetwork.LoadLevel(4);
         }
     }

@@ -149,6 +149,7 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     //Multiplayer
     const byte LEVEL_UP = 16;
     const byte ADJUST_DISCARD_SYNC_EVENT = 25;
+    private const byte END_GAME_DEFENDER = 41;
 
     private void Start()
     {
@@ -221,6 +222,13 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
 
         SetHealth();
+
+        // TODO: End the game if the hero's health is 0.
+        if (CurrentHealth == 0)
+        {
+            EndGamePun.Instance.SendData(END_GAME_DEFENDER);
+            EndGamePun.Instance.LoseEvent();
+        }
     }
 
     public void ResetMana()

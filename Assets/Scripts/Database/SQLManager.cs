@@ -130,6 +130,67 @@ public class SQLManager : MonoBehaviour
         }
     }
 
+    public static Player GetPlayerByUsername(string username)
+    {
+        MySqlDataAdapter da = new MySqlDataAdapter();
+        MySqlCommand cmd;
+        MySqlDataReader rdr;
+
+        try
+        {
+            da = new MySqlDataAdapter();
+
+            //Create the SelectCommand
+            string sql = "SELECT * " +
+                         "FROM Players " +
+                         "WHERE PLAYER_USERNAME='" + username + "'";
+
+            cmd = new MySqlCommand(sql, DatabaseManager.connection);
+            rdr = cmd.ExecuteReader();
+
+            //Create a temp Player
+            Player tmpPlayer = new Player();
+
+            //Read and Store the Player if found
+            while (rdr.Read())
+            {
+                tmpPlayer.PLAYER_ID = int.Parse(rdr[0].ToString());
+                tmpPlayer.PLAYER_USERNAME = rdr[1].ToString();
+
+                if (!DBNull.Value.Equals(rdr[2]))
+                {
+                    tmpPlayer.PLAYER_AVATAR = (byte[])rdr[2];
+                }
+
+                if (!DBNull.Value.Equals(rdr[3]))
+                {
+                    tmpPlayer.PLAYER_AVATARTYPE = rdr[3].ToString();
+                }
+
+                tmpPlayer.PLAYER_PASSWORD = rdr[4].ToString();
+                //tmpPlayer.PLAYER_PASSWORDCOUNT = int.Parse(rdr[5].ToString());
+                tmpPlayer.PLAYER_EMAIL = rdr[6].ToString();
+                tmpPlayer.PLAYER_LOGGEDON = (bool)rdr[7];
+                tmpPlayer.PLAYER_INGAME = (bool)rdr[8];
+                tmpPlayer.PLAYER_DATEREGISTERED = (DateTime)rdr[9];
+            }
+
+            //Close the Reader
+            rdr.Close();
+
+            //Return the Player
+            return tmpPlayer;
+        }
+        catch
+        {
+            //Create a temp Player
+            Player tmpPlayer = new Player();
+
+            //Return the Player
+            return tmpPlayer;
+        }
+    }
+
     public static int GetLeaderboardLevel(int id)
     {
         int level = 0;
@@ -247,5 +308,78 @@ public class SQLManager : MonoBehaviour
         }
 
         return leaderboard;
+    }
+
+    public static bool CreateBattle(string player1Username, string player2Username)
+    {
+        Player player1 = GetPlayerByUsername(player1Username);
+        Player player2 = GetPlayerByUsername(player2Username);
+
+        MySqlDataAdapter da = new MySqlDataAdapter();
+        MySqlCommand cmd;
+        MySqlDataReader rdr;
+
+        try
+        {
+            string sql = "INSERT INTO Battle (BATTLE_ID, PLAYER_1, PLAYER_2, STATUS) " +
+                "VALUES (NULL, '" + player1.PLAYER_ID.ToString() + "', '" + player2.PLAYER_ID.ToString() + "', 0)";
+
+            cmd = new MySqlCommand(sql, DatabaseManager.connection);
+            rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                
+            }
+
+            //Close the Reader
+            rdr.Close();
+
+            return true;
+        }
+        catch (MySqlException ex)
+        {
+            return false;
+        }
+    }
+
+    public static Battle GetCurrentBattle(string player1Username, string player2Username)
+    {
+        MySqlDataAdapter da = new MySqlDataAdapter();
+        MySqlCommand cmd;
+        MySqlDataReader rdr;
+
+        Player player1 = GetPlayerByUsername(player1Username);
+        Player player2 = GetPlayerByUsername(player2Username);
+
+        Battle battle = new Battle();
+
+        try
+        {
+            string sql = "SELECT * " +
+                         "FROM Battle " +
+                         "WHERE PLAYER_1 = " + player1.PLAYER_ID.ToString() + " AND PLAYER_2 = " + player2.PLAYER_ID.ToString() +
+                         " ORDER BY BATTLE_ID DESC LIMIT 1";
+
+            cmd = new MySqlCommand(sql, DatabaseManager.connection);
+            rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                battle.BATTLE_ID = int.Parse(rdr[0].ToString());
+                battle.PLAYER_1 = int.Parse(rdr[1].ToString());
+                battle.PLAYER_2 = int.Parse(rdr[2].ToString());
+                battle.STATUS = int.Parse(rdr[3].ToString());
+            }
+
+            //Close the Reader
+            rdr.Close();
+        }
+        catch (Exception)
+        {
+            battle = new Battle();
+        }
+
+        return battle;
     }
 }
