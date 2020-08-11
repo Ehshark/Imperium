@@ -97,8 +97,11 @@ public class ShopController : MonoBehaviour
 
                 if (!StartGameController.Instance.tutorial)
                 {
-                    //Set ChangeShop to active 
-                    changeShop.interactable = true;
+                    if (GameManager.Instance.GetActiveHand(true) == GameManager.Instance.alliedHand)
+                    {
+                        //Set ChangeShop to active 
+                        changeShop.interactable = true;
+                    }
                 }
             }
             else if (selectedVisual.Ed != null)
@@ -139,7 +142,7 @@ public class ShopController : MonoBehaviour
                     string to = "";
                     if (GameManager.Instance.HasExpressBuy)
                     {
-                        MoveShopCardToHand(selectedCard);
+                        StartCoroutine(MoveShopCardToHand(selectedCard));
                         to = "Hand";
                     }
                     else
@@ -161,7 +164,7 @@ public class ShopController : MonoBehaviour
                     string to = "";
                     if (GameManager.Instance.HasExpressBuy)
                     {
-                        MoveShopCardToHand(selectedCard);
+                        StartCoroutine(MoveShopCardToHand(selectedCard));
                         to = "Hand";
                     }
                     else
@@ -389,10 +392,13 @@ public class ShopController : MonoBehaviour
         mc.AddToQueue();
     }
 
-    private void MoveShopCardToHand(GameObject card)
+    private IEnumerator MoveShopCardToHand(GameObject card)
     {
         MoveCardCommand mc = new MoveCardCommand(card, GameManager.Instance.GetActiveHand(true), null);
         mc.AddToQueue();
+
+        yield return new WaitForSeconds(1f);
+
         Transform newCard = GameManager.Instance.GetActiveHand(true).GetChild(GameManager.Instance.GetActiveHand(true).childCount - 1);
         newCard.gameObject.AddComponent<PlayCard>();
 

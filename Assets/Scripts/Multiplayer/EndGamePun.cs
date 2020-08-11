@@ -100,11 +100,11 @@ public class EndGamePun : MonoBehaviour
         PhotonNetwork.RaiseEvent(byteCode, null, raiseEventOptions, SendOptions.SendReliable);
     }
 
-    private void UpdateDatabase()
-    {
-        if (DatabaseManager.connection != null)
-        {
+    //private void UpdateDatabase()
+    //{
+    //    if (DatabaseManager.connection != null)
+    //    {
             
-        }
-    }
+    //    }
+    //}
 }

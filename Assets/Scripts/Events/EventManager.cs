@@ -154,7 +154,12 @@ public class EventManager : MonoBehaviour
                     if (to.Equals("Discard"))
                         GameManager.Instance.MoveCard(child.gameObject, GameManager.Instance.enemyDiscardPile, UIManager.Instance.enemyDiscards);
                     else
-                        GameManager.Instance.MoveCard(child.gameObject, GameManager.Instance.enemyHand, UIManager.Instance.enemyHand);
+                    {
+                        GameObject card = GameManager.Instance.MoveCard(child.gameObject, GameManager.Instance.enemyHand, UIManager.Instance.enemyHand, true);
+                        card.GetComponent<CardVisual>().gameObject.SetActive(false);
+                        card.GetComponent<CardVisual>().gameObject.SetActive(true);
+                        card.transform.Find("CardBack").gameObject.SetActive(true);
+                    }
                 }
             }
 

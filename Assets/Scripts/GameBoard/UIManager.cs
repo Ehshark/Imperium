@@ -660,25 +660,25 @@ public class UIManager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
-            allyDeck.Add(Resources.Load("Minions/2") as MinionData);
-            allyDeck.Add(Resources.Load("Minions/67") as MinionData);
+            //allyDeck.Add(Resources.Load("Minions/15") as MinionData);
+            //allyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 allyDeck.Add(AllyStarters[i]);
 
-            enemyDeck.Add(Resources.Load("Minions/2") as MinionData);
-            enemyDeck.Add(Resources.Load("Minions/67") as MinionData);
+            //enemyDeck.Add(Resources.Load("Minions/15") as MinionData);
+            //enemyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 enemyDeck.Add(EnemyStarters[i]);
         }
         else
         {
-            allyDeck.Add(Resources.Load("Minions/2") as MinionData);
-            allyDeck.Add(Resources.Load("Minions/67") as MinionData);
+            //allyDeck.Add(Resources.Load("Minions/15") as MinionData);
+            //allyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 allyDeck.Add(EnemyStarters[i]);
 
-            enemyDeck.Add(Resources.Load("Minions/2") as MinionData);
-            enemyDeck.Add(Resources.Load("Minions/67") as MinionData);
+            //enemyDeck.Add(Resources.Load("Minions/15") as MinionData);
+            //enemyDeck.Add(Resources.Load("Minions/48") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 enemyDeck.Add(AllyStarters[i]);
         }

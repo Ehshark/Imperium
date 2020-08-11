@@ -70,7 +70,7 @@ public class TutorialTextController : MonoBehaviour
             { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },
             { new KeyValuePair<string, Action>("We learned how to play cards and we learned how to use the shop. How about we attack next.", delegate { ButtonDelay(); GameManager.Instance.shopButton.interactable = false; }) },
             { new KeyValuePair<string, Action>("Once per turn, each player is allowed to enter the combat phase and attack. Player's can use any summoned minion or their hero to attack.", delegate { ButtonDelay(); }) },
-            { new KeyValuePair<string, Action>("If a player uses their hero to attack, the hero must pay mana equal to half of their hero's current damage.", delegate { ButtonDelay(); }) },
+            { new KeyValuePair<string, Action>("If a player uses their hero to attack, the hero must pay mana equal to their hero's current damage.", delegate { ButtonDelay(); }) },
             { new KeyValuePair<string, Action>("If a player uses their minion(s) to attack, all attacking minions must pay one health at the end of the combat phase.", delegate { ButtonDelay(); }) },
             { new KeyValuePair<string, Action>("Alright let's attack! Select the Attack button to start your combat phase.", delegate { SetupAttack(); }) },
             { new KeyValuePair<string, Action>("", delegate { CloseUI(); }) },

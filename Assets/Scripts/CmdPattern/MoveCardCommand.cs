@@ -35,7 +35,7 @@ public class MoveCardCommand : Command
         {
             card.AddComponent<PlayCard>();
         }
-        if (!GameManager.Instance.buyButton.interactable)
+        if (!GameManager.Instance.buyButton.interactable && GameManager.Instance.GetActiveHand(true) == GameManager.Instance.alliedHand)
         {
             GameManager.Instance.buyButton.interactable = true;
         }

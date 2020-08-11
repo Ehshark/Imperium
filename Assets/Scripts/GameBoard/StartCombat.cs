@@ -51,6 +51,8 @@ public class StartCombat : MonoBehaviour
 
     public void CancelCombat()
     {
+        GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
+
         SwitchButtons();
 
         //Remove all Combat Listener scripts from each card

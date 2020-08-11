@@ -224,7 +224,7 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         SetHealth();
 
         // TODO: End the game if the hero's health is 0.
-        if (CurrentHealth == 0)
+        if (CurrentHealth == 0 && GameManager.Instance.GetActiveHand(true) == GameManager.Instance.enemyHand) 
         {
             EndGamePun.Instance.SendData(END_GAME_DEFENDER);
             EndGamePun.Instance.LoseEvent();
@@ -588,6 +588,10 @@ public class Hero : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 desc.text = "Discard these many cards at the start of your next turn";
             else if (cardComponent.name.Contains("Damage"))
                 desc.text = "Your hero's damage in combat";
+            else if (cardComponent.name.Contains("Attack"))
+                desc.text = "Attack your opponent with your Hero or Minions";
+            else if (cardComponent.name.Contains("Defend"))
+                desc.text = "Use your Hero or Minions to absorb the incoming damage";
 
             if (!desc.text.Equals(""))
                 textBack.gameObject.SetActive(true);

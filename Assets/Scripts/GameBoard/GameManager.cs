@@ -280,6 +280,11 @@ public class GameManager : MonoBehaviour
                 tmpCv.health.text = tmpCv.CurrentHealth.ToString();
                 tmpCv.damage.text = tmpCv.CurrentDamage.ToString();
 
+                if ((to.name.Equals("DiscardPile") || to.name.Equals("EnemyDiscardPile")) && cv.IsPromoted)
+                {
+                    tmpCv.CurrentHealth = tmpCv.TotalHealth;   
+                }
+
                 Destroy(card);
             }
             
@@ -342,7 +347,7 @@ public class GameManager : MonoBehaviour
         {
             shopButton.interactable = enable;
             allyDiscardPileButton.interactable = enable;
-            enemyDiscardPileButton.interactable = enable;
+            //enemyDiscardPileButton.interactable = enable;
         }
         if (bottomHero.MyTurn)
         {
@@ -365,7 +370,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void SwitchTurn()
-    {
+    {        
         if (bottomHero.MyTurn)
         {
             bottomHero.MyTurn = false;
@@ -418,12 +423,29 @@ public class GameManager : MonoBehaviour
             bottomHero.DamageBonus = 0;
         }
 
+        instructionsObj.GetComponent<TMP_Text>().text = "";
+        StartCoroutine(TurnAnimation("Turn Ended!", "Opponent's Turn..."));
+
         PhotonNetwork.RaiseEvent(END_TURN, null, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
             SendOptions.SendReliable);
     }
 
+    private IEnumerator TurnAnimation(string message, string afterMessage)
+    {
+        StartCoroutine(EffectCommandPun.Instance.ShowEffectAnimation(message));
+        yield return new WaitForSeconds(2.5f);
+
+        if (afterMessage != "")
+        {
+            instructionsObj.GetComponent<TMP_Text>().text = afterMessage;
+        }
+    }
+
     public void StartTurn()
     {
+        instructionsObj.GetComponent<TMP_Text>().text = "";
+        StartCoroutine(TurnAnimation("Turn Started!", ""));
+
         StartGameController.Instance.StartingPowerSelected = true;
         isActionPhase = false;
         CardVisual cv;
@@ -609,8 +631,6 @@ public class GameManager : MonoBehaviour
     //End phase, player draws/selects cards to discard until hand size is 5, then prompt player to spend 1 gold to draw 1 card and discard 1 card 
     public void EndTurn()
     {
-        buyButton.interactable = false;
-        changeButton.interactable = false;
         isActionPhase = false;
         Transform activeHand = GetActiveHand(true);
         int handSize = ActiveHero(true).HandSize;
@@ -619,6 +639,9 @@ public class GameManager : MonoBehaviour
         hasSwitchedCard = false;
 
         EnableOrDisablePlayerControl(false);
+        shopButton.interactable = true;
+        buyButton.interactable = false;
+        changeButton.interactable = false;
 
         foreach (Transform t in activeHand)
         {
@@ -663,7 +686,6 @@ public class GameManager : MonoBehaviour
         else
         {
             SwitchTurn();
-            instructionsObj.GetComponent<TMP_Text>().text = "Opponent's Turn...";
         }
     }
 

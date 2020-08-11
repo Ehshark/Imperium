@@ -300,13 +300,17 @@ public class StartGameController : MonoBehaviour
         }
 
         GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
+        GameManager.Instance.enemyDiscardPileButton.interactable = false;
 
         if (PhotonNetwork.IsMasterClient && EventManager.Instance.HostFirst)
             GameManager.Instance.StartTurn();
         else if (!PhotonNetwork.IsMasterClient && !EventManager.Instance.HostFirst)
             GameManager.Instance.StartTurn();
         else
+        {
             UIManager.Instance.HighlightHeroPortraitAndName();
+            GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "Opponent's Turn...";
+        }
     }
 
     private IEnumerator ShortGameSetup()

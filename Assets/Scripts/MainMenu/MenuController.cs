@@ -16,6 +16,12 @@ public class MenuController : MonoBehaviourPunCallbacks
     private TextMeshProUGUI levelText;
     [SerializeField]
     private RawImage avatarImage;
+    [SerializeField]
+    private GameObject skipLayer;
+    [SerializeField]
+    private GameObject mainLayer;
+    [SerializeField]
+    private GameObject optionsMenu;
 
     //Match
     [SerializeField]
@@ -199,7 +205,16 @@ public class MenuController : MonoBehaviourPunCallbacks
 
     public void OptionsClicked()
     {
+        if (Music.Instance.skipToMain)
+        {
+            skipLayer.SetActive(false);
+        }
+        else
+        {
+            mainLayer.SetActive(false);
+        }
 
+        optionsMenu.SetActive(true);
     }
 
     public void CreditsClicked()

@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class StartCombatPun : MonoBehaviour
@@ -114,6 +115,8 @@ public class StartCombatPun : MonoBehaviour
                 { "poisonTouch", 0 },
                 { "damage", 0 }
             };
+
+            GameManager.Instance.instructionsObj.GetComponent<TMP_Text>().text = "";
         }
         else if (eventCode == ASSIGN_AFTER_EFFECT_SYNC_EVENT)
         {

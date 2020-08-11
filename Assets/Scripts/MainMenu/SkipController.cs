@@ -14,6 +14,9 @@ public class SkipController : MonoBehaviour
     [SerializeField]
     private GameObject mainMenu;
 
+    [SerializeField]
+    private GameObject optionsMenu;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +32,20 @@ public class SkipController : MonoBehaviour
             inputField.SetActive(false);
             skipMenu.SetActive(false);
             userName.SetActive(true);
+            mainMenu.SetActive(true);
+        }
+    }
+
+    public void OptionsBackClicked()
+    {
+        optionsMenu.SetActive(false);
+
+        if (Music.Instance.skipToMain)
+        {
+            skipMenu.SetActive(true);
+        }
+        else
+        {
             mainMenu.SetActive(true);
         }
     }
