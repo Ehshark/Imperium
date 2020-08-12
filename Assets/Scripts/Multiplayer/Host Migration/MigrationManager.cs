@@ -51,6 +51,18 @@ public class MigrationManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);
+
+        if (DatabaseManager.connection != null)
+        {
+            SQLManager.UpdatePlayerWins(PhotonNetwork.NickName);
+            SQLManager.UpdatePlayerLose(otherPlayer.NickName);
+            SQLManager.UpdatePlayerInBattle(PhotonNetwork.NickName, false);
+            SQLManager.UpdatePlayerInBattle(otherPlayer.NickName, false);
+
+            Battle battle = SQLManager.GetCurrentBattle(PhotonNetwork.NickName, otherPlayer.NickName);
+            SQLManager.UpdateBattleStatus(battle.BATTLE_ID);
+        }
+
         StartCoroutine(GameManager.Instance.SetInstructionsText(""));
         kickObject.SetActive(true);
         StartCoroutine(KickPlayer());

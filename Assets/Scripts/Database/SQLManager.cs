@@ -8,6 +8,10 @@ using System.Linq;
 
 public class SQLManager : MonoBehaviour
 {
+    ///////////////////////////////////////////////////////////////////////
+    ///                          PLAYER                                 ///
+    ///////////////////////////////////////////////////////////////////////
+
     public static Player GetPlayer(int id)
     {
         MySqlDataAdapter da = new MySqlDataAdapter();
@@ -191,6 +195,94 @@ public class SQLManager : MonoBehaviour
         }
     }
 
+    public static bool UpdatePlayerInBattle(string username, bool inBattle)
+    {
+        MySqlDataAdapter da = new MySqlDataAdapter();
+        MySqlCommand cmd;
+        MySqlDataReader rdr;
+
+        try
+        {
+            string sql;
+
+            if (inBattle)
+            {
+                sql = "UPDATE Players " +
+                      "SET PLAYER_INGAME = 1 " +
+                      "WHERE PLAYER_USERNAME = '" + username + "'";
+            }
+            else
+            {
+                sql = "UPDATE Players " +
+                      "SET PLAYER_INGAME = 0 " +
+                      "WHERE PLAYER_USERNAME = '" + username + "'";
+            }
+
+            cmd = new MySqlCommand(sql, DatabaseManager.connection);
+            rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+
+            }
+
+            //Close the Reader
+            rdr.Close();
+
+            return true;
+        }
+        catch (MySqlException ex)
+        {
+            return false;
+        }
+    }
+
+    public static bool UpdatePlayerLoggedIn(string username, bool inBattle)
+    {
+        MySqlDataAdapter da = new MySqlDataAdapter();
+        MySqlCommand cmd;
+        MySqlDataReader rdr;
+
+        try
+        {
+            string sql;
+
+            if (inBattle)
+            {
+                sql = "UPDATE Players " +
+                      "SET PLAYER_LOGGEDON = 1 " +
+                      "WHERE PLAYER_USERNAME = '" + username + "'";
+            }
+            else
+            {
+                sql = "UPDATE Players " +
+                      "SET PLAYER_LOGGEDON = 0 " +
+                      "WHERE PLAYER_USERNAME = '" + username + "'";
+            }
+
+            cmd = new MySqlCommand(sql, DatabaseManager.connection);
+            rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+
+            }
+
+            //Close the Reader
+            rdr.Close();
+
+            return true;
+        }
+        catch (MySqlException ex)
+        {
+            return false;
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///                         LEADERBOARD                             ///
+    ///////////////////////////////////////////////////////////////////////
+
     public static int GetLeaderboardLevel(int id)
     {
         int level = 0;
@@ -265,8 +357,8 @@ public class SQLManager : MonoBehaviour
         }
 
         leaderboardList = leaderboards.OrderByDescending(l => l.LEADERBOARD_LEVEL)
-                                      .ThenByDescending(l => l.LEADERBOARD_WINRATE)
-                                      .ThenByDescending(l => l.LEADERBOARD_WINS);
+                                      .ThenByDescending(l => l.LEADERBOARD_WINS)
+                                      .ThenByDescending(l => l.LEADERBOARD_WINRATE);
 
         return leaderboardList;
     }
@@ -309,6 +401,92 @@ public class SQLManager : MonoBehaviour
 
         return leaderboard;
     }
+
+    public static bool UpdatePlayerWins(string playerUsername)
+    {
+        MySqlDataAdapter da = new MySqlDataAdapter();
+        MySqlCommand cmd;
+        MySqlDataReader rdr;
+
+        Player player = GetPlayerByUsername(playerUsername);
+        Leaderboard leaderboard = LeaderboardGetOne(player.PLAYER_ID);
+
+        try
+        {
+            int wins = leaderboard.LEADERBOARD_WINS + 1;
+            int gamesPlayed = leaderboard.LEADERBOARD_GAMESPLAYED + 1;
+            double percentage = ((double)wins / (double)gamesPlayed) * 100;
+            int winrate = (int)percentage;
+
+            string sql = "UPDATE Leaderboard " +
+                         "SET LEADERBOARD_WINS = " + wins + ", " +
+                             "LEADERBOARD_GAMESPLAYED = " + gamesPlayed + ", " +
+                             "LEADERBOARD_WINRATE = " + winrate + " " +
+                         "WHERE PLAYER_ID = " + leaderboard.PLAYER_ID;
+
+            cmd = new MySqlCommand(sql, DatabaseManager.connection);
+            rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                
+            }
+
+            //Close the Reader
+            rdr.Close();
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;   
+        }
+    }
+
+    public static bool UpdatePlayerLose(string playerUsername)
+    {
+        MySqlDataAdapter da = new MySqlDataAdapter();
+        MySqlCommand cmd;
+        MySqlDataReader rdr;
+
+        Player player = GetPlayerByUsername(playerUsername);
+        Leaderboard leaderboard = LeaderboardGetOne(player.PLAYER_ID);
+
+        try
+        {
+            int losses = leaderboard.LEADERBOARD_LOSSES + 1;
+            int gamesPlayed = leaderboard.LEADERBOARD_GAMESPLAYED + 1;
+            double percentage = ((double)leaderboard.LEADERBOARD_WINS / (double)gamesPlayed) * 100;
+            int winrate = (int)percentage;
+
+            string sql = "UPDATE Leaderboard " +
+                         "SET LEADERBOARD_LOSSES = " + losses + ", " +
+                             "LEADERBOARD_GAMESPLAYED = " + gamesPlayed + ", " +
+                             "LEADERBOARD_WINRATE = " + winrate + " " +
+                         "WHERE PLAYER_ID = " + leaderboard.PLAYER_ID;
+
+            cmd = new MySqlCommand(sql, DatabaseManager.connection);
+            rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+
+            }
+
+            //Close the Reader
+            rdr.Close();
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///                          BATTLE                                 ///
+    ///////////////////////////////////////////////////////////////////////
 
     public static bool CreateBattle(string player1Username, string player2Username)
     {
@@ -358,8 +536,9 @@ public class SQLManager : MonoBehaviour
         {
             string sql = "SELECT * " +
                          "FROM Battle " +
-                         "WHERE PLAYER_1 = " + player1.PLAYER_ID.ToString() + " AND PLAYER_2 = " + player2.PLAYER_ID.ToString() +
-                         " ORDER BY BATTLE_ID DESC LIMIT 1";
+                         "WHERE PLAYER_1 IN (" + player1.PLAYER_ID.ToString() + ", " + player2.PLAYER_ID.ToString() + ") " +
+                            "OR PLAYER_2 IN (" + player1.PLAYER_ID.ToString() + ", " + player2.PLAYER_ID.ToString() + ") " +
+                         "ORDER BY BATTLE_ID DESC LIMIT 1";
 
             cmd = new MySqlCommand(sql, DatabaseManager.connection);
             rdr = cmd.ExecuteReader();
@@ -381,5 +560,36 @@ public class SQLManager : MonoBehaviour
         }
 
         return battle;
+    }
+
+    public static bool UpdateBattleStatus(int battleId)
+    {
+        MySqlDataAdapter da = new MySqlDataAdapter();
+        MySqlCommand cmd;
+        MySqlDataReader rdr;
+
+        try
+        {
+            string sql = "UPDATE Battle " +
+                         "SET STATUS = 1 " +
+                         "WHERE BATTLE_ID = " + battleId.ToString();
+
+            cmd = new MySqlCommand(sql, DatabaseManager.connection);
+            rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                
+            }
+
+            //Close the Reader
+            rdr.Close();
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 }

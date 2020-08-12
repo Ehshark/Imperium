@@ -82,6 +82,10 @@ public class LoginPlayer : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connected to server");
         LevelLoader.Instance.LoadNextScene(2);
+        if (DatabaseManager.connection != null)
+        {
+            SQLManager.UpdatePlayerLoggedIn(PhotonNetwork.NickName, true);
+        }
     }
 
     public override void OnDisconnected(DisconnectCause cause)

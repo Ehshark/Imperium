@@ -66,6 +66,7 @@ public class EndGamePun : MonoBehaviour
         GameManager.Instance.EnableOrDisablePlayerControl(false);
         endGameObject.SetActive(true);
         loseText.text = "You Win!";
+        UpdateDatabase(true);
         StartCoroutine(KickPlayer());
     }
 
@@ -74,6 +75,7 @@ public class EndGamePun : MonoBehaviour
         GameManager.Instance.EnableOrDisablePlayerControl(false);
         endGameObject.SetActive(true);
         loseText.text = "You Lose!";
+        UpdateDatabase(false);
         StartCoroutine(KickPlayer());
     }
 
@@ -100,11 +102,31 @@ public class EndGamePun : MonoBehaviour
         PhotonNetwork.RaiseEvent(byteCode, null, raiseEventOptions, SendOptions.SendReliable);
     }
 
-    //private void UpdateDatabase()
-    //{
-    //    if (DatabaseManager.connection != null)
-    //    {
-            
-    //    }
-    //}
+    private void UpdateDatabase(bool win)
+    {
+        if (DatabaseManager.connection != null)
+        {
+            string player1 = PhotonNetwork.NickName;
+            string player2 = PhotonNetwork.PlayerListOthers[0].NickName;
+
+            Battle battle = SQLManager.GetCurrentBattle(player1, player2);
+
+            if (battle.BATTLE_ID != 0)
+            {   
+                if (win)
+                {
+                    //Update the battle status
+                    SQLManager.UpdateBattleStatus(battle.BATTLE_ID);
+                    //Update the Player's wins
+                    SQLManager.UpdatePlayerWins(player1);
+                }
+                else
+                {
+                    SQLManager.UpdatePlayerLose(player1);
+                }
+
+                SQLManager.UpdatePlayerInBattle(player1, false);
+            }
+        }
+    }
 }

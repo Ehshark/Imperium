@@ -4,6 +4,7 @@ using UnityEngine;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using UnityEngine.Windows;
+using Photon.Pun;
 
 public class DatabaseManager : MonoBehaviour
 {
@@ -29,6 +30,12 @@ public class DatabaseManager : MonoBehaviour
 
     public void OnApplicationQuit()
     {
+        //Log the player out 
+        if (PhotonNetwork.IsConnected)
+        {
+            SQLManager.UpdatePlayerLoggedIn(PhotonNetwork.NickName, false);
+        }
+
         bool result = CloseConnection();
         connection = null;
 
