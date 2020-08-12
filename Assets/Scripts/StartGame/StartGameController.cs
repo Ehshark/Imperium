@@ -44,6 +44,7 @@ public class StartGameController : MonoBehaviour
     public Sprite warriorImage;
     public Sprite rogueImage;
     public Sprite mageImage;
+    public Image background;
 
     public GameObject bottomHero;
     public GameObject topHero;
@@ -200,6 +201,7 @@ public class StartGameController : MonoBehaviour
     private IEnumerator MultiplayerSetup()
     {
         yield return new WaitForSeconds(1f);
+        background.sprite = UIManager.Instance.backgroundSprites[UIManager.Instance.ChosenBack];
         if (PhotonNetwork.IsMasterClient)
         {
             GameManager.Instance.bottomHero.SetPlayerName(PhotonNetwork.NickName + " - Host");
@@ -420,10 +422,5 @@ public class StartGameController : MonoBehaviour
     {
         GameObject tree = Instantiate(GameManager.Instance.skillTreePrefab);
         tree.transform.SetParent(GameManager.Instance.canvas, false);
-    }
-
-    private void DetermineGameBackground() {
-        UIManager.Instance.ChosenBack = Random.Range(0, 9);
-
     }
 }

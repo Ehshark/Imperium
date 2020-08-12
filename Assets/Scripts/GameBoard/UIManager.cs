@@ -65,12 +65,14 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; } = null;
 
     private GameObject lastSelectedCard;
+    private GameObject lastEnlargedCard;
     public GameObject LastSelectedCard { get => lastSelectedCard; set => lastSelectedCard = value; }
     public List<StarterData> AllyStarters { get => allyStarters; set => allyStarters = value; }
     public List<StarterData> EnemyStarters { get => enemyStarters; set => enemyStarters = value; }
     public List<StarterData> Starters { get => starters; set => starters = value; }
     public bool RemoveEffectIcon { get => removeEffectIcon; set => removeEffectIcon = value; }
     public int ChosenBack { get => chosenBack; set => chosenBack = value; }
+    public GameObject LastEnlargedCard { get => lastEnlargedCard; set => lastEnlargedCard = value; }
 
     public Transform enlargedCard;
 
@@ -189,7 +191,7 @@ public class UIManager : MonoBehaviour
             byte[] enemySdpByte = DataHandler.Instance.ObjectToByteArray(enemySdp);
             byte[] edpByte = DataHandler.Instance.ObjectToByteArray(edp);
 
-            object[] data = new object[] { mdpByte, allySdpByte, enemySdpByte, edpByte };
+            object[] data = new object[] { mdpByte, allySdpByte, enemySdpByte, edpByte, chosenBack };
 
             PhotonNetwork.RaiseEvent(SEND_SHUFFLED_DECKS_EVENT, data, new RaiseEventOptions { Receivers = ReceiverGroup.Others },
             SendOptions.SendReliable);
@@ -258,6 +260,8 @@ public class UIManager : MonoBehaviour
                 essentials[i] = ScriptableObject.CreateInstance<EssentialsData>();
                 essentials[i].Init(edp[i]);
             }
+
+            chosenBack = (int)data[4];
 
             SortPiles();
             dealtWarriorCards = new List<MinionData>();
@@ -467,6 +471,8 @@ public class UIManager : MonoBehaviour
         {
             EnemyStarters.Add(starters[i]); //create the top player's starting deck
         }
+
+        chosenBack = Random.Range(0, 9);
     }
 
     public void LoadSprites()
@@ -654,25 +660,25 @@ public class UIManager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
-            //allyDeck.Add(Resources.Load("Minions/39") as MinionData);
-            //allyDeck.Add(Resources.Load("Minions/48") as MinionData);
+            allyDeck.Add(Resources.Load("Minions/2") as MinionData);
+            allyDeck.Add(Resources.Load("Minions/67") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 allyDeck.Add(AllyStarters[i]);
 
-            //enemyDeck.Add(Resources.Load("Minions/39") as MinionData);
-            //enemyDeck.Add(Resources.Load("Minions/48") as MinionData);
+            enemyDeck.Add(Resources.Load("Minions/2") as MinionData);
+            enemyDeck.Add(Resources.Load("Minions/67") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 enemyDeck.Add(EnemyStarters[i]);
         }
         else
         {
-            //allyDeck.Add(Resources.Load("Minions/39") as MinionData);
-            //allyDeck.Add(Resources.Load("Minions/48") as MinionData);
+            allyDeck.Add(Resources.Load("Minions/2") as MinionData);
+            allyDeck.Add(Resources.Load("Minions/67") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 allyDeck.Add(EnemyStarters[i]);
 
-            //enemyDeck.Add(Resources.Load("Minions/39") as MinionData);
-            //enemyDeck.Add(Resources.Load("Minions/48") as MinionData);
+            enemyDeck.Add(Resources.Load("Minions/2") as MinionData);
+            enemyDeck.Add(Resources.Load("Minions/67") as MinionData);
             for (int i = 0; i < starters.Count; i++)
                 enemyDeck.Add(AllyStarters[i]);
         }

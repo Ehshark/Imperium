@@ -79,7 +79,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
     public GameObject damageObjects;
     public Image silenceImage;
- 
+
 
     public ParticleSystem particleGlow;
 
@@ -271,33 +271,21 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
             }
         }
 
-        isEnlarged = false;
+        UIManager.Instance.LastEnlargedCard = null;
     }
 
     void EnlargeMinionCard()
     {
-        if (gameObject.transform.parent.name.Equals("Hand"))
+        if (gameObject.transform.parent.name.Equals("EnemyHand"))
         {
-            foreach (Transform t in GameManager.Instance.alliedHand)
-            {
-                t.GetComponent<CardVisual>().isEnlarged = false;
-            }
+            return;
         }
-        else if (gameObject.transform.parent.name.Equals("EnemyHand"))
-        {
-            foreach (Transform t in GameManager.Instance.enemyHand)
-            {
-                t.GetComponent<CardVisual>().isEnlarged = false;
-            }
-        }
-        if (UIManager.Instance.enlargedCard.childCount > 0)
-        {
-            foreach (Transform t in UIManager.Instance.enlargedCard)
-            {
-                Destroy(t.gameObject);
-            }
-        }
+        if (UIManager.Instance.LastEnlargedCard)
+            CollapseMinionCard();
         GameObject go = Instantiate(gameObject);
+        CardVisual cv = go.GetComponent<CardVisual>();
+        cv.currentDamage = currentDamage;
+        cv.currentHealth = currentHealth;
         go.transform.SetParent(UIManager.Instance.enlargedCard, false);
         go.transform.position = UIManager.Instance.enlargedCard.position;
         go.GetComponent<RectTransform>().pivot = new Vector3(UIManager.Instance.enlargedCard.GetComponent<RectTransform>().
@@ -313,12 +301,15 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         foreach (Transform t in go.transform)
         {
             if (t.name.Equals("CardBack") || t.name.Equals("SummonPanel") || t.name.Equals("DamageObjects") ||
-                t.name.Equals("GlowPanel") || t.name.Equals("UsePanel"))
+                t.name.Equals("GlowPanel") || t.name.Equals("UsePanel") || t.name.Equals("ParticleGlow"))
             {
                 t.gameObject.SetActive(false);
             }
         }
+        if (UIManager.Instance.LastEnlargedCard)
+            UIManager.Instance.LastEnlargedCard.GetComponent<CardVisual>().isEnlarged = false;
         isEnlarged = true;
+        UIManager.Instance.LastEnlargedCard = gameObject;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -327,7 +318,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
         {
             if (!transform.parent.name.Equals("EnlargedCard"))
             {
-                if (!isEnlarged)
+                if (UIManager.Instance.LastEnlargedCard == null || UIManager.Instance.LastEnlargedCard != gameObject)
                     EnlargeMinionCard();
                 else
                     CollapseMinionCard();
@@ -356,13 +347,7 @@ public class CardVisual : MonoBehaviour, IPointerClickHandler
 
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (UIManager.Instance.enlargedCard.childCount > 0)
-            {
-                foreach (Transform t in UIManager.Instance.enlargedCard)
-                {
-                    Destroy(t.gameObject);
-                }
-            }
+            CollapseMinionCard();
         }
     }
 
