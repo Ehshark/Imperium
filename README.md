@@ -1,5 +1,5 @@
 # Imperium - Final Project
-This project served as the final accumulative assessment of PRJ666 at Seneca College's Computer Programming and Analysis(CPA) program. PRJ666 is a 6th semester course used to assess students on the various other courses throughout the previous semesters. This course implements a project, previously designed and planned by the students in PRJ566, as "a project they would be proud to show employers". Imperium is a multiplayer deck-building card game. This project was created by Anshu Nair, John Bae, Callum Dodge and Eric Huynh.
+This project served as the final accumulative assessment of PRJ666 at Seneca College's Computer Programming and Analysis(CPA) program. PRJ666 is a 6th semester course used to assess students on the various other courses throughout the previous semesters. This course implements a project, previously designed and planned by the students in PRJ566, as "a project they would be proud to show employers". Imperium is a multiplayer deck-building card game. This project was created by Anshu Nair, John Bae, Callum Dodge and Eric Huynh. This project taught us a lot about working with Unity and C# as well as working with Git has a team.
 
 ### Imperium Homepage ###
 **Game website developed by Callum Dodge**
